@@ -9,11 +9,13 @@ pnpm dev          # Start development server (localhost:3000)
 pnpm build        # Production build
 pnpm lint         # Run ESLint
 pnpm start        # Start production server
+pnpm seed:admin   # Seed admin user
 
 # Database
-npx prisma generate   # Regenerate Prisma client (output: src/lib/generated/prisma)
+npx prisma generate                    # Regenerate Prisma client (output: src/lib/generated/prisma)
 npx prisma migrate dev --name <name>   # Create and apply migration
-npx prisma db push    # Push schema changes without migration
+npx prisma db push                     # Push schema changes without migration
+npx prisma studio                      # Open database GUI
 ```
 
 ## Architecture
@@ -26,72 +28,85 @@ npx prisma db push    # Push schema changes without migration
 - **Zod 4** for validation
 - **Tailwind CSS 4** with shadcn/ui components
 
+### Domain Model
+
+This is a church event registration system with hierarchical organization:
+
+```
+Division (1) ──── Coordinator (1:1)
+    │
+    └── Church (many) ──── Pastor (1:1)
+            │
+            └── President (User with PRESIDENT role)
+                    │
+                    └── Registration (per event)
+                            ├── Delegates (many)
+                            └── Cooks (many)
+```
+
+**User Roles**: `USER`, `ADMIN`, `PRESIDENT` (defined in Prisma schema)
+- ADMIN → `/admin/dashboard` - manages divisions, churches, coordinators, pastors, events
+- PRESIDENT → `/president/dashboard` - registers delegates/cooks for their church
+- USER → `/dashboard` - basic user access
+
 ### Authentication Flow
-- Server auth config: `src/lib/auth.ts` - Better Auth instance with Prisma adapter, rate limiting, and social providers
-- Client auth: `src/lib/auth-client.ts` - Better Auth React client with typed exports
-- Server helpers: `src/lib/auth-server.ts` - Server-side session helpers (requireAuth, requireRole)
-- API route: `src/app/api/auth/[...all]/route.ts` - Catch-all handler
-- Rate limiting: Custom in-memory implementation in `src/lib/auth-rate-limit.ts`
-- Proxy: `src/proxy.ts` - Optimistic route protection (UX only, not security)
 
-### Auth State Management
-Client-side hooks in `src/hooks/`:
-- `useAuth()` - Main hook wrapping Better Auth's useSession with derived states (isAdmin, isProvider, isUser) and cross-tab signOut sync
-- `useRequireAuth()` - Redirect hook for protected pages with optional role requirement
+| File | Purpose |
+|------|---------|
+| `src/lib/auth.ts` | Better Auth server instance with Prisma adapter and rate limiting |
+| `src/lib/auth-client.ts` | Better Auth React client with typed exports |
+| `src/lib/auth-server.ts` | Server-side helpers: `requireAuth()`, `requireRole()`, `getServerSession()` |
+| `src/proxy.ts` | Optimistic route protection middleware (UX only, not security) |
+| `src/config/auth.ts` | Role redirect paths configuration |
 
-Server-side helpers in `src/lib/auth-server.ts`:
-- `getServerSession()` - Get session in Server Components
-- `requireAuth()` - Require auth, redirect if not authenticated
-- `requireRole(role)` - Require specific role, redirect if wrong role
+### Server Actions Pattern
 
-Components in `src/components/auth/`:
-- `<AuthGuard>` - Conditional rendering based on auth/role
-- `<AdminOnly>`, `<ProviderOnly>`, `<UserOnly>` - Role-specific wrappers
+All server actions use `ActionResponse<T>` from `src/types/api.ts`:
 
-### User Roles
-Three roles defined in Prisma schema: `USER`, `ADMIN`, `PROVIDER`. Role-based redirects after login (configured in `src/config/auth.ts`):
-- ADMIN → `/admin/dashboard`
-- PROVIDER → `/provider/dashboard`
-- USER → `/dashboard`
-
-### Project Structure
+```typescript
+type ActionResponse<T> =
+  | { success: true; data: T }
+  | { success: false; error: string; fieldErrors?: Record<string, string[]> }
 ```
-src/
-├── actions/auth/     # Server actions for auth (signIn, signUp, signUpProvider)
-├── app/
-│   ├── (auth)/       # Auth pages (login, register, register-provider)
-│   ├── (landing)/    # Landing page
-│   ├── (user)/       # User dashboard (protected)
-│   └── api/auth/     # Better Auth API routes
-├── components/
-│   ├── auth/         # Auth form + guard components
-│   └── ui/           # shadcn/ui components
-├── config/
-│   └── auth.ts       # Centralized auth config (role redirects, routes)
-├── context/          # React Query provider
-├── hooks/            # Custom hooks (useAuth, useRequireAuth)
-├── lib/
-│   ├── generated/prisma/  # Prisma client (auto-generated)
-│   ├── auth.ts       # Better Auth server config
-│   ├── auth-client.ts    # Better Auth React client
-│   ├── auth-server.ts    # Server-side auth helpers
-│   ├── auth-rate-limit.ts
-│   └── db.ts         # Prisma singleton
-├── schema/           # Zod schemas (user.schema.ts)
-├── types/            # TypeScript types (ActionResponse, auth types)
-└── proxy.ts          # Route protection (optimistic, Next.js 16+)
+
+Server actions are organized by entity in `src/actions/`:
+- Each entity has CRUD operations with role protection via `requireRole()`
+- Zod schemas from `src/schemas/` are shared between client and server validation
+- Use `revalidatePath()` after mutations
+
+Example pattern (from divisions):
+```typescript
+export async function createDivision(input: DivisionInput): Promise<ActionResponse<{ id: string }>> {
+  await requireRole("ADMIN");
+  const validated = divisionSchema.safeParse(input);
+  // ... validation, creation, revalidatePath
+}
 ```
+
+### Key Directories
+
+| Path | Purpose |
+|------|---------|
+| `src/actions/` | Server actions organized by entity (divisions, churches, coordinators, pastors) |
+| `src/schemas/` | Zod validation schemas (barrel exported from index.ts) |
+| `src/components/admin/` | Admin CRUD components (tables, forms, columns) |
+| `src/components/dashboard/` | Shared dashboard components (sidebar, header, stats) |
+| `src/hooks/` | `useAuth()` hook with role helpers (isAdmin, isPresident) |
 
 ### Patterns
-- **Server Actions**: Use `ActionResponse<T>` type from `src/types/api.ts` for consistent return shape
-- **Form Validation**: Zod schemas in `src/schema/` shared between client and server
+
 - **Path Alias**: `@/*` maps to `./src/*`
 - **Prisma Client**: Generated to `src/lib/generated/prisma`, imported via singleton in `src/lib/db.ts`
+- **Form Validation**: Zod schemas exported with inferred types (e.g., `DivisionInput = z.infer<typeof divisionSchema>`)
+- **Tables**: Use column definitions in `*-columns.tsx`, table component in `*-table.tsx`, form in `*-form.tsx`
 
-### Environment Variables Required
+### Environment Variables
+
 ```
 DATABASE_URL              # PostgreSQL connection string
-GOOGLE_CLIENT_ID          # Google OAuth
-GOOGLE_CLIENT_SECRET      # Google OAuth
-NEXT_PUBLIC_APP_URL       # App URL (optional, defaults to http://localhost:3000)
+BETTER_AUTH_SECRET        # Auth secret (min 32 chars)
+BETTER_AUTH_URL           # App URL for auth
+GOOGLE_CLIENT_ID          # Google OAuth (optional)
+GOOGLE_CLIENT_SECRET      # Google OAuth (optional)
+NEXT_PUBLIC_APP_URL       # Public app URL
 ```

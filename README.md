@@ -1,25 +1,70 @@
-# Next.js 16 + Better Auth + Prisma 7 Starter Kit
+# SCMD Online Registration System
 
-A production-ready authentication starter kit built with the latest Next.js 16, Better Auth, and Prisma 7. Features role-based access control, Google OAuth, and a clean, scalable architecture.
+A modern web application for managing church event registrations within the SCMD (Southern California Metropolitan District) network. Built with Next.js 16, Better Auth, and Prisma 7.
 
-**[Live Demo](https://nextjs16-betterauth-prisma-starterk.vercel.app/)**
+---
+
+## Table of Contents
+
+- [About](#about)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Clone the Repository](#clone-the-repository)
+  - [Install Dependencies](#install-dependencies)
+  - [Environment Setup](#environment-setup)
+  - [Database Setup](#database-setup)
+  - [Run the Application](#run-the-application)
+- [Project Structure](#project-structure)
+- [User Roles](#user-roles)
+- [Database Schema](#database-schema)
+- [Available Scripts](#available-scripts)
+- [Deployment](#deployment)
+- [Contributing](#contributing)
+- [License](#license)
+
+---
+
+## About
+
+The SCMD Online Registration System streamlines the process of managing church event registrations. It provides a centralized platform for:
+
+- **Administrators** to manage divisions, churches, coordinators, pastors, and events
+- **Church Presidents** to register delegates and cooks for upcoming events
+- **Users** to view event information and registration status
+
+The system handles the complete registration lifecycle from event creation to delegate management, with built-in approval workflows and status tracking.
 
 ---
 
 ## Features
 
-- **Next.js 16** with App Router and React 19
-- **Better Auth** for authentication (email/password + Google OAuth)
-- **Prisma 7** with PostgreSQL (using driver adapters)
-- **Role-Based Access Control** (USER, ADMIN, PROVIDER)
-- **Route Protection** with optimistic proxy (Next.js 16+ feature)
-- **TanStack Query** for client-side data fetching
-- **Zod 4** for form validation
-- **Tailwind CSS 4** with shadcn/ui components
-- **Rate Limiting** built-in for auth endpoints
-- **Session Cookie Caching** for reduced database calls
-- **Cross-Tab Sign Out Sync**
-- **TypeScript** throughout
+### Organization Management
+- **Multi-Division Support** - Organize churches across multiple divisions with dedicated coordinators
+- **Church Profiles** - Manage church information including pastor details and division assignments
+- **Coordinator Management** - Assign coordinators to oversee divisions
+- **Pastor Directory** - Maintain pastor records linked to their churches
+
+### Event & Registration
+- **Event Scheduling** - Create events with customizable dates, locations, and registration periods
+- **Flexible Pricing** - Set pre-registration, on-site registration, and cook registration fees
+- **Delegate Management** - Register delegates with details (name, nickname, age, gender)
+- **Cook Registration** - Separate registration track for event cooks
+- **Registration Deadlines** - Automated deadline enforcement
+
+### Workflow & Access
+- **Approval Workflow** - Review, approve, or reject registrations with remarks
+- **Role-Based Access Control** - Separate dashboards for Admin, President, and User roles
+- **Status Tracking** - Real-time registration status updates (Pending, Approved, Rejected)
+- **Event Status Management** - Track events from Upcoming to Completed
+
+### Technical Features
+- **Modern Authentication** - Email/password and Google OAuth via Better Auth
+- **Route Protection** - Optimistic proxy-based route protection
+- **Rate Limiting** - Built-in protection for auth endpoints
+- **Cross-Tab Sync** - Session synchronization across browser tabs
+- **Responsive Design** - Mobile-friendly UI with Tailwind CSS
 
 ---
 
@@ -27,14 +72,19 @@ A production-ready authentication starter kit built with the latest Next.js 16, 
 
 | Category | Technology |
 |----------|------------|
-| Framework | Next.js 16 |
-| Authentication | Better Auth |
-| Database ORM | Prisma 7 |
-| Database | PostgreSQL |
-| Styling | Tailwind CSS 4 + shadcn/ui |
-| Forms | React Hook Form + Zod 4 |
-| Data Fetching | TanStack Query |
-| Language | TypeScript |
+| **Framework** | [Next.js 16](https://nextjs.org/) (App Router) |
+| **Runtime** | [React 19](https://react.dev/) |
+| **Authentication** | [Better Auth](https://better-auth.com/) |
+| **Database ORM** | [Prisma 7](https://prisma.io/) |
+| **Database** | PostgreSQL |
+| **Styling** | [Tailwind CSS 4](https://tailwindcss.com/) |
+| **UI Components** | [shadcn/ui](https://ui.shadcn.com/) |
+| **Forms** | [React Hook Form](https://react-hook-form.com/) |
+| **Validation** | [Zod 4](https://zod.dev/) |
+| **Data Fetching** | [TanStack Query](https://tanstack.com/query) |
+| **Icons** | [Lucide React](https://lucide.dev/) |
+| **Notifications** | [Sonner](https://sonner.emilkowal.ski/) |
+| **Language** | TypeScript |
 
 ---
 
@@ -42,249 +92,210 @@ A production-ready authentication starter kit built with the latest Next.js 16, 
 
 ### Prerequisites
 
-- Node.js 18+
-- pnpm (recommended) or npm/yarn
-- PostgreSQL database (see [Database Providers](#database-providers))
+Before you begin, ensure you have the following installed:
 
-### 1. Clone the Repository
+- **Node.js** 18.0 or higher
+- **pnpm** (recommended) or npm/yarn
+- **PostgreSQL** database (local or cloud-hosted)
+- **Git** for version control
+
+### Clone the Repository
 
 ```bash
-git clone https://github.com/rogenecarl/nextjs16-betterauth-prisma-starterkit.git
-cd nextjs16-betterauth-prisma-starterkit
+# Clone the repository
+git clone https://github.com/your-username/scmd-online-registration.git
+
+# Navigate to the project directory
+cd scmd-online-registration
 ```
 
-### 2. Install Dependencies
+### Install Dependencies
 
 ```bash
+# Install dependencies using pnpm (recommended)
 pnpm install
+
+# Or using npm
+npm install
+
+# Or using yarn
+yarn install
 ```
 
-### 3. Set Up Environment Variables
+### Environment Setup
 
-Copy the example environment file:
+1. Create a `.env` file in the root directory:
 
 ```bash
 cp .env.example .env
 ```
 
-Edit `.env` with your values:
+2. Configure the following environment variables in your `.env` file:
 
 ```env
-# Database (PostgreSQL connection string)
-DATABASE_URL="postgresql://user:password@host:5432/database?sslmode=require"
+# Database Connection
+DATABASE_URL="postgresql://username:password@host:5432/database_name?sslmode=require"
 
-# Better Auth
-BETTER_AUTH_SECRET="generate-a-strong-secret-at-least-32-characters"
+# Better Auth Configuration
+BETTER_AUTH_SECRET="your-secret-key-at-least-32-characters"
 BETTER_AUTH_URL="http://localhost:3000"
 
-# Google OAuth (optional)
+# Google OAuth (Optional)
 GOOGLE_CLIENT_ID="your-google-client-id"
 GOOGLE_CLIENT_SECRET="your-google-client-secret"
 
-# App URL
+# Application URL
 NEXT_PUBLIC_APP_URL="http://localhost:3000"
 ```
 
-Generate a secure secret:
+3. Generate a secure secret for `BETTER_AUTH_SECRET`:
 
 ```bash
 openssl rand -base64 32
 ```
 
-### 4. Set Up the Database
+### Database Setup
 
-Generate the Prisma client and push the schema to your database:
+1. Generate the Prisma client:
 
 ```bash
-# Generate Prisma client
 npx prisma generate
-
-# Push schema to database (creates tables)
-npx prisma db push
 ```
 
-Or create a migration for version control:
+2. Push the schema to your database:
 
 ```bash
+# Push schema (creates tables)
+npx prisma db push
+
+# Or create a migration for version control
 npx prisma migrate dev --name init
 ```
 
-### 5. Run the Development Server
+3. (Optional) Seed an admin user:
 
 ```bash
+pnpm seed:admin
+```
+
+### Run the Application
+
+```bash
+# Start the development server
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
-
----
-
-## Database Providers
-
-This starter kit supports multiple PostgreSQL providers. Update your `DATABASE_URL` accordingly:
-
-### Neon (Recommended for Vercel)
-
-```env
-DATABASE_URL="postgresql://user:pass@ep-xxx-pooler.region.aws.neon.tech/dbname?sslmode=require"
-```
-
-### Supabase
-
-```env
-DATABASE_URL="postgresql://postgres.[project-ref]:[password]@aws-0-[region].pooler.supabase.com:6543/postgres"
-```
-
-### Railway
-
-```env
-DATABASE_URL="postgresql://postgres:[password]@[host].railway.app:5432/railway"
-```
-
-### Render
-
-```env
-DATABASE_URL="postgresql://user:pass@[host].render.com:5432/dbname?sslmode=require"
-```
-
-### Self-Hosted / Docker
-
-```env
-DATABASE_URL="postgresql://postgres:password@localhost:5432/mydb"
-```
+Open [http://localhost:3000](http://localhost:3000) in your browser to view the application.
 
 ---
 
 ## Project Structure
 
 ```
-src/
-├── actions/auth/         # Server actions (signIn, signUp, signUpProvider)
-├── app/
-│   ├── (auth)/           # Auth pages (login, register, register-provider)
-│   ├── (landing)/        # Landing page
-│   ├── (user)/           # User dashboard (protected)
-│   ├── admin/            # Admin dashboard (protected)
-│   ├── provider/         # Provider dashboard (protected)
-│   └── api/auth/         # Better Auth API routes
-├── components/
-│   ├── auth/             # Auth components (forms, guards)
-│   └── ui/               # shadcn/ui components
-├── config/
-│   └── auth.ts           # Centralized auth config (role redirects)
-├── context/              # React Query provider
-├── hooks/                # Custom hooks (useAuth, useRequireAuth)
-├── lib/
-│   ├── generated/prisma/ # Prisma client (auto-generated)
-│   ├── auth.ts           # Better Auth server config
-│   ├── auth-client.ts    # Better Auth React client
-│   ├── auth-server.ts    # Server-side auth helpers
-│   └── db.ts             # Prisma singleton
-├── schema/               # Zod validation schemas
-├── types/                # TypeScript types
-└── proxy.ts              # Route protection (optimistic)
+scmd-online-registration/
+├── prisma/
+│   └── schema.prisma          # Database schema
+├── src/
+│   ├── actions/               # Server actions
+│   │   └── auth/              # Authentication actions
+│   ├── app/
+│   │   ├── (auth)/            # Auth pages (login, register)
+│   │   ├── (landing)/         # Public landing page
+│   │   ├── (user)/            # User dashboard
+│   │   ├── admin/             # Admin dashboard & management
+│   │   ├── president/         # President dashboard
+│   │   ├── provider/          # Provider dashboard
+│   │   └── api/auth/          # Better Auth API routes
+│   ├── components/
+│   │   ├── admin/             # Admin-specific components
+│   │   ├── auth/              # Auth components (forms, guards)
+│   │   ├── dashboard/         # Dashboard components
+│   │   ├── landing/           # Landing page components
+│   │   ├── president/         # President components
+│   │   ├── shared/            # Shared/reusable components
+│   │   └── ui/                # shadcn/ui components
+│   ├── config/                # App configuration
+│   ├── context/               # React context providers
+│   ├── hooks/                 # Custom React hooks
+│   ├── lib/
+│   │   ├── generated/prisma/  # Generated Prisma client
+│   │   ├── auth.ts            # Better Auth server config
+│   │   ├── auth-client.ts     # Better Auth client
+│   │   ├── auth-server.ts     # Server-side auth helpers
+│   │   └── db.ts              # Prisma singleton
+│   ├── schema/                # Zod validation schemas
+│   ├── types/                 # TypeScript types
+│   └── proxy.ts               # Route protection middleware
+├── .env.example               # Environment variables template
+├── package.json               # Dependencies and scripts
+└── README.md                  # Project documentation
 ```
 
 ---
 
-## Authentication
+## User Roles
 
-### User Roles
+The system supports three user roles with distinct access levels:
 
-Three roles are available out of the box:
-
-| Role | Dashboard | Description |
+| Role | Dashboard | Permissions |
 |------|-----------|-------------|
-| `USER` | `/dashboard` | Default role for regular users |
-| `ADMIN` | `/admin/dashboard` | Administrative access |
-| `PROVIDER` | `/provider/dashboard` | Service provider access |
-
-### Auth Pages
-
-- `/login` - Sign in with email/password or Google
-- `/register` - User registration
-- `/register-provider` - Provider registration
-- `/choose-role` - Role selection (if applicable)
-
-### Server-Side Helpers
-
-```typescript
-// In Server Components
-import { requireAuth, requireRole, getServerSession } from "@/lib/auth-server"
-
-// Require authentication
-export default async function ProtectedPage() {
-  const session = await requireAuth()
-  return <div>Hello {session.user.name}</div>
-}
-
-// Require specific role
-export default async function AdminPage() {
-  const session = await requireRole("ADMIN")
-  return <div>Admin Panel</div>
-}
-```
-
-### Client-Side Hooks
-
-```typescript
-// In Client Components
-import { useAuth } from "@/hooks"
-
-export function MyComponent() {
-  const { user, isAuthenticated, isAdmin, signOut, isPending } = useAuth()
-
-  if (isPending) return <Loading />
-  if (!isAuthenticated) return <LoginPrompt />
-
-  return <div>Hello {user.name}</div>
-}
-```
-
-### Auth Guard Components
-
-```tsx
-import { AuthGuard, AdminOnly, ProviderOnly, UserOnly } from "@/components/auth/auth-guard"
-
-// Basic authentication guard
-<AuthGuard fallback={<Loading />}>
-  <ProtectedContent />
-</AuthGuard>
-
-// Role-specific guards
-<AdminOnly>
-  <AdminPanel />
-</AdminOnly>
-
-<ProviderOnly>
-  <ProviderDashboard />
-</ProviderOnly>
-```
+| **ADMIN** | `/admin/dashboard` | Full access: manage divisions, churches, coordinators, pastors, events, and registrations |
+| **PRESIDENT** | `/president/dashboard` | Church-specific access: register delegates and cooks for events |
+| **USER** | `/dashboard` | View-only access: view events and registration information |
 
 ---
 
-## Google OAuth Setup
+## Database Schema
 
-1. Go to [Google Cloud Console](https://console.cloud.google.com/apis/credentials)
-2. Create a new OAuth 2.0 Client ID
-3. Add authorized redirect URI: `{YOUR_APP_URL}/api/auth/callback/google`
-4. Copy the Client ID and Client Secret to your `.env` file
+### Core Models
+
+```
+Division ─────┬───── Coordinator (1:1)
+              │
+              └───── Church ─────┬───── Pastor (1:1)
+                                 │
+                                 └───── President (User)
+                                 │
+                                 └───── Registration ─────┬───── Delegate
+                                                          └───── Cook
+
+Event ───── Registration
+```
+
+### Key Entities
+
+- **Division** - Organizational unit grouping multiple churches
+- **Church** - Individual church with pastor and president
+- **Coordinator** - Division overseer (one per division)
+- **Pastor** - Church pastor (one per church)
+- **Event** - Church event with registration periods and fees
+- **Registration** - Church registration for an event
+- **Delegate** - Event attendee
+- **Cook** - Event cook/helper
 
 ---
 
 ## Available Scripts
 
 ```bash
-pnpm dev          # Start development server
-pnpm build        # Production build
-pnpm start        # Start production server
-pnpm lint         # Run ESLint
+# Development
+pnpm dev              # Start development server (localhost:3000)
+
+# Build & Production
+pnpm build            # Create production build
+pnpm start            # Start production server
+
+# Code Quality
+pnpm lint             # Run ESLint
 
 # Database
-npx prisma generate              # Regenerate Prisma client
-npx prisma migrate dev --name    # Create migration
-npx prisma db push               # Push schema changes
-npx prisma studio                # Open Prisma Studio GUI
+npx prisma generate           # Regenerate Prisma client
+npx prisma migrate dev        # Create and apply migration
+npx prisma db push            # Push schema without migration
+npx prisma studio             # Open Prisma Studio GUI
+
+# Seeding
+pnpm seed:admin               # Seed admin user
 ```
 
 ---
@@ -293,98 +304,52 @@ npx prisma studio                # Open Prisma Studio GUI
 
 ### Vercel (Recommended)
 
-1. Push your code to GitHub
+1. Push your code to a GitHub repository
+
 2. Import the repository in [Vercel](https://vercel.com)
-3. Add environment variables in Vercel dashboard
+
+3. Add environment variables in the Vercel dashboard:
+   - `DATABASE_URL`
+   - `BETTER_AUTH_SECRET`
+   - `BETTER_AUTH_URL`
+   - `NEXT_PUBLIC_APP_URL`
+   - `GOOGLE_CLIENT_ID` (optional)
+   - `GOOGLE_CLIENT_SECRET` (optional)
+
 4. Deploy
 
 The `postinstall` script automatically runs `prisma generate` during deployment.
 
-### Environment Variables for Production
+### Database Providers
 
-Make sure to set these in your deployment platform:
+The application supports various PostgreSQL providers:
 
-- `DATABASE_URL` - Your production PostgreSQL connection string
-- `BETTER_AUTH_SECRET` - A strong, unique secret (different from development)
-- `BETTER_AUTH_URL` - Your production URL (e.g., `https://yourdomain.com`)
-- `NEXT_PUBLIC_APP_URL` - Same as `BETTER_AUTH_URL`
-- `GOOGLE_CLIENT_ID` - Google OAuth client ID
-- `GOOGLE_CLIENT_SECRET` - Google OAuth client secret
-
----
-
-## Customization
-
-### Adding a New Role
-
-1. Update the `UserRole` enum in `prisma/schema.prisma`:
-
-```prisma
-enum UserRole {
-  USER
-  ADMIN
-  PROVIDER
-  MODERATOR  // Add new role
-}
+**Neon (Recommended for Vercel)**
+```env
+DATABASE_URL="postgresql://user:pass@ep-xxx.region.aws.neon.tech/dbname?sslmode=require"
 ```
 
-2. Run `npx prisma db push` or create a migration
-
-3. Add the role redirect in `src/config/auth.ts`:
-
-```typescript
-export const ROLE_REDIRECTS: Record<Role, string> = {
-  ADMIN: "/admin/dashboard",
-  PROVIDER: "/provider/dashboard",
-  USER: "/dashboard",
-  MODERATOR: "/moderator/dashboard",  // Add redirect
-}
+**Supabase**
+```env
+DATABASE_URL="postgresql://postgres.[ref]:[password]@aws-0-[region].pooler.supabase.com:6543/postgres"
 ```
 
-4. Update `src/proxy.ts` if needed for route protection
-
-### Adding Social Providers
-
-Better Auth supports multiple OAuth providers. Add them in `src/lib/auth.ts`:
-
-```typescript
-socialProviders: {
-  google: { ... },
-  github: {
-    clientId: process.env.GITHUB_CLIENT_ID!,
-    clientSecret: process.env.GITHUB_CLIENT_SECRET!,
-  },
-}
+**Railway**
+```env
+DATABASE_URL="postgresql://postgres:[password]@[host].railway.app:5432/railway"
 ```
-
----
-
-## Rate Limiting
-
-Built-in rate limiting protects auth endpoints:
-
-| Endpoint | Window | Max Requests |
-|----------|--------|--------------|
-| `/sign-in/email` | 5 min | 5 |
-| `/sign-up/email` | 5 min | 5 |
-| `/forget-password` | 5 min | 3 |
-| `/reset-password` | 5 min | 5 |
-| `/get-session` | 1 min | 20 |
-
-Configure in `src/lib/auth.ts`.
-
----
-
-## Author
-
-**Rogene Carl**
-- GitHub: [@rogenecarl](https://github.com/rogenecarl)
 
 ---
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are welcome! Please follow these steps:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ---
 
@@ -396,8 +361,9 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ## Acknowledgments
 
-- [Next.js](https://nextjs.org/)
-- [Better Auth](https://better-auth.com/)
-- [Prisma](https://prisma.io/)
-- [shadcn/ui](https://ui.shadcn.com/)
-- [TanStack Query](https://tanstack.com/query)
+- [Next.js](https://nextjs.org/) - The React Framework
+- [Better Auth](https://better-auth.com/) - Authentication library
+- [Prisma](https://prisma.io/) - Database ORM
+- [shadcn/ui](https://ui.shadcn.com/) - UI components
+- [TanStack Query](https://tanstack.com/query) - Data fetching
+- [Tailwind CSS](https://tailwindcss.com/) - Styling
