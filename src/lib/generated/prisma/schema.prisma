@@ -191,14 +191,14 @@ model Event {
   endDate              DateTime @map("end_date")
   registrationDeadline DateTime @map("registration_deadline")
 
-  // Pre-registration period
-  preRegistrationFee   Decimal  @map("pre_registration_fee") @db.Decimal(10, 2)
+  // Pre-registration period (fees in Philippine Peso - whole numbers)
+  preRegistrationFee   Int      @map("pre_registration_fee")
   preRegistrationStart DateTime @map("pre_registration_start")
   preRegistrationEnd   DateTime @map("pre_registration_end")
 
-  // On-site & Cook registration fees
-  onsiteRegistrationFee Decimal @map("onsite_registration_fee") @db.Decimal(10, 2)
-  cookRegistrationFee   Decimal @map("cook_registration_fee") @db.Decimal(10, 2)
+  // On-site & Cook registration fees (in Philippine Peso - whole numbers)
+  onsiteRegistrationFee Int @map("onsite_registration_fee")
+  cookRegistrationFee   Int @map("cook_registration_fee")
 
   status    EventStatus @default(UPCOMING)
   createdAt DateTime    @default(now()) @map("created_at")

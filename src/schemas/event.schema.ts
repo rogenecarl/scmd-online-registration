@@ -1,16 +1,16 @@
 import { z } from "zod";
 import { EventStatusEnum } from "./enums";
 
-// Helper for decimal/currency validation
-const currencySchema = z
+// Helper for PHP currency validation (whole numbers only)
+const pesoSchema = z
   .union([z.string(), z.number()])
   .transform((val) => {
-    const num = typeof val === "string" ? parseFloat(val) : val;
+    const num = typeof val === "string" ? parseInt(val, 10) : Math.round(val);
     if (isNaN(num)) throw new Error("Invalid number");
     return num;
   })
   .refine((val) => val >= 0, "Amount must be 0 or greater")
-  .refine((val) => val <= 999999.99, "Amount too large");
+  .refine((val) => val <= 9999999, "Amount too large (max ₱9,999,999)");
 
 // Base event schema (shared fields)
 const eventBaseSchema = z.object({
@@ -52,8 +52,8 @@ export const createEventSchema = eventBaseSchema
       .transform((val) => (typeof val === "string" ? new Date(val) : val))
       .refine((date) => !isNaN(date.getTime()), "Invalid registration deadline"),
 
-    // Pre-registration fields
-    preRegistrationFee: currencySchema,
+    // Pre-registration fields (in Philippine Peso)
+    preRegistrationFee: pesoSchema,
     preRegistrationStart: z
       .union([z.string(), z.date()])
       .transform((val) => (typeof val === "string" ? new Date(val) : val))
@@ -63,9 +63,9 @@ export const createEventSchema = eventBaseSchema
       .transform((val) => (typeof val === "string" ? new Date(val) : val))
       .refine((date) => !isNaN(date.getTime()), "Invalid pre-registration end date"),
 
-    // Other fees
-    onsiteRegistrationFee: currencySchema,
-    cookRegistrationFee: currencySchema,
+    // Other fees (in Philippine Peso)
+    onsiteRegistrationFee: pesoSchema,
+    cookRegistrationFee: pesoSchema,
 
     status: EventStatusEnum.default("UPCOMING"),
   })
@@ -100,6 +100,10 @@ export const updateEventStatusSchema = z.object({
   status: EventStatusEnum,
 });
 
+// Output types (after transformation) - used by server actions
 export type CreateEventInput = z.infer<typeof createEventSchema>;
 export type UpdateEventInput = z.infer<typeof updateEventSchema>;
 export type UpdateEventStatusInput = z.infer<typeof updateEventStatusSchema>;
+
+// Input type (before transformation) - used by forms
+export type EventFormInput = z.input<typeof createEventSchema>;

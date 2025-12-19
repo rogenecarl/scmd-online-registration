@@ -10940,15 +10940,15 @@ export namespace Prisma {
   }
 
   export type EventAvgAggregateOutputType = {
-    preRegistrationFee: Decimal | null
-    onsiteRegistrationFee: Decimal | null
-    cookRegistrationFee: Decimal | null
+    preRegistrationFee: number | null
+    onsiteRegistrationFee: number | null
+    cookRegistrationFee: number | null
   }
 
   export type EventSumAggregateOutputType = {
-    preRegistrationFee: Decimal | null
-    onsiteRegistrationFee: Decimal | null
-    cookRegistrationFee: Decimal | null
+    preRegistrationFee: number | null
+    onsiteRegistrationFee: number | null
+    cookRegistrationFee: number | null
   }
 
   export type EventMinAggregateOutputType = {
@@ -10960,11 +10960,11 @@ export namespace Prisma {
     startDate: Date | null
     endDate: Date | null
     registrationDeadline: Date | null
-    preRegistrationFee: Decimal | null
+    preRegistrationFee: number | null
     preRegistrationStart: Date | null
     preRegistrationEnd: Date | null
-    onsiteRegistrationFee: Decimal | null
-    cookRegistrationFee: Decimal | null
+    onsiteRegistrationFee: number | null
+    cookRegistrationFee: number | null
     status: $Enums.EventStatus | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -10979,11 +10979,11 @@ export namespace Prisma {
     startDate: Date | null
     endDate: Date | null
     registrationDeadline: Date | null
-    preRegistrationFee: Decimal | null
+    preRegistrationFee: number | null
     preRegistrationStart: Date | null
     preRegistrationEnd: Date | null
-    onsiteRegistrationFee: Decimal | null
-    cookRegistrationFee: Decimal | null
+    onsiteRegistrationFee: number | null
+    cookRegistrationFee: number | null
     status: $Enums.EventStatus | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -11175,11 +11175,11 @@ export namespace Prisma {
     startDate: Date
     endDate: Date
     registrationDeadline: Date
-    preRegistrationFee: Decimal
+    preRegistrationFee: number
     preRegistrationStart: Date
     preRegistrationEnd: Date
-    onsiteRegistrationFee: Decimal
-    cookRegistrationFee: Decimal
+    onsiteRegistrationFee: number
+    cookRegistrationFee: number
     status: $Enums.EventStatus
     createdAt: Date
     updatedAt: Date
@@ -11304,11 +11304,11 @@ export namespace Prisma {
       startDate: Date
       endDate: Date
       registrationDeadline: Date
-      preRegistrationFee: Prisma.Decimal
+      preRegistrationFee: number
       preRegistrationStart: Date
       preRegistrationEnd: Date
-      onsiteRegistrationFee: Prisma.Decimal
-      cookRegistrationFee: Prisma.Decimal
+      onsiteRegistrationFee: number
+      cookRegistrationFee: number
       status: $Enums.EventStatus
       createdAt: Date
       updatedAt: Date
@@ -11744,11 +11744,11 @@ export namespace Prisma {
     readonly startDate: FieldRef<"Event", 'DateTime'>
     readonly endDate: FieldRef<"Event", 'DateTime'>
     readonly registrationDeadline: FieldRef<"Event", 'DateTime'>
-    readonly preRegistrationFee: FieldRef<"Event", 'Decimal'>
+    readonly preRegistrationFee: FieldRef<"Event", 'Int'>
     readonly preRegistrationStart: FieldRef<"Event", 'DateTime'>
     readonly preRegistrationEnd: FieldRef<"Event", 'DateTime'>
-    readonly onsiteRegistrationFee: FieldRef<"Event", 'Decimal'>
-    readonly cookRegistrationFee: FieldRef<"Event", 'Decimal'>
+    readonly onsiteRegistrationFee: FieldRef<"Event", 'Int'>
+    readonly cookRegistrationFee: FieldRef<"Event", 'Int'>
     readonly status: FieldRef<"Event", 'EventStatus'>
     readonly createdAt: FieldRef<"Event", 'DateTime'>
     readonly updatedAt: FieldRef<"Event", 'DateTime'>
@@ -15903,16 +15903,16 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Decimal'
+   * Reference to a field of type 'Int'
    */
-  export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
+  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
     
 
 
   /**
-   * Reference to a field of type 'Decimal[]'
+   * Reference to a field of type 'Int[]'
    */
-  export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
+  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
 
 
@@ -15941,20 +15941,6 @@ export namespace Prisma {
    * Reference to a field of type 'RegistrationStatus[]'
    */
   export type ListEnumRegistrationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RegistrationStatus[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'Int'
-   */
-  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
-    
-
-
-  /**
-   * Reference to a field of type 'Int[]'
-   */
-  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
 
 
@@ -16534,11 +16520,11 @@ export namespace Prisma {
     startDate?: DateTimeFilter<"Event"> | Date | string
     endDate?: DateTimeFilter<"Event"> | Date | string
     registrationDeadline?: DateTimeFilter<"Event"> | Date | string
-    preRegistrationFee?: DecimalFilter<"Event"> | Decimal | DecimalJsLike | number | string
+    preRegistrationFee?: IntFilter<"Event"> | number
     preRegistrationStart?: DateTimeFilter<"Event"> | Date | string
     preRegistrationEnd?: DateTimeFilter<"Event"> | Date | string
-    onsiteRegistrationFee?: DecimalFilter<"Event"> | Decimal | DecimalJsLike | number | string
-    cookRegistrationFee?: DecimalFilter<"Event"> | Decimal | DecimalJsLike | number | string
+    onsiteRegistrationFee?: IntFilter<"Event"> | number
+    cookRegistrationFee?: IntFilter<"Event"> | number
     status?: EnumEventStatusFilter<"Event"> | $Enums.EventStatus
     createdAt?: DateTimeFilter<"Event"> | Date | string
     updatedAt?: DateTimeFilter<"Event"> | Date | string
@@ -16577,11 +16563,11 @@ export namespace Prisma {
     startDate?: DateTimeFilter<"Event"> | Date | string
     endDate?: DateTimeFilter<"Event"> | Date | string
     registrationDeadline?: DateTimeFilter<"Event"> | Date | string
-    preRegistrationFee?: DecimalFilter<"Event"> | Decimal | DecimalJsLike | number | string
+    preRegistrationFee?: IntFilter<"Event"> | number
     preRegistrationStart?: DateTimeFilter<"Event"> | Date | string
     preRegistrationEnd?: DateTimeFilter<"Event"> | Date | string
-    onsiteRegistrationFee?: DecimalFilter<"Event"> | Decimal | DecimalJsLike | number | string
-    cookRegistrationFee?: DecimalFilter<"Event"> | Decimal | DecimalJsLike | number | string
+    onsiteRegistrationFee?: IntFilter<"Event"> | number
+    cookRegistrationFee?: IntFilter<"Event"> | number
     status?: EnumEventStatusFilter<"Event"> | $Enums.EventStatus
     createdAt?: DateTimeFilter<"Event"> | Date | string
     updatedAt?: DateTimeFilter<"Event"> | Date | string
@@ -16624,11 +16610,11 @@ export namespace Prisma {
     startDate?: DateTimeWithAggregatesFilter<"Event"> | Date | string
     endDate?: DateTimeWithAggregatesFilter<"Event"> | Date | string
     registrationDeadline?: DateTimeWithAggregatesFilter<"Event"> | Date | string
-    preRegistrationFee?: DecimalWithAggregatesFilter<"Event"> | Decimal | DecimalJsLike | number | string
+    preRegistrationFee?: IntWithAggregatesFilter<"Event"> | number
     preRegistrationStart?: DateTimeWithAggregatesFilter<"Event"> | Date | string
     preRegistrationEnd?: DateTimeWithAggregatesFilter<"Event"> | Date | string
-    onsiteRegistrationFee?: DecimalWithAggregatesFilter<"Event"> | Decimal | DecimalJsLike | number | string
-    cookRegistrationFee?: DecimalWithAggregatesFilter<"Event"> | Decimal | DecimalJsLike | number | string
+    onsiteRegistrationFee?: IntWithAggregatesFilter<"Event"> | number
+    cookRegistrationFee?: IntWithAggregatesFilter<"Event"> | number
     status?: EnumEventStatusWithAggregatesFilter<"Event"> | $Enums.EventStatus
     createdAt?: DateTimeWithAggregatesFilter<"Event"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Event"> | Date | string
@@ -17459,11 +17445,11 @@ export namespace Prisma {
     startDate: Date | string
     endDate: Date | string
     registrationDeadline: Date | string
-    preRegistrationFee: Decimal | DecimalJsLike | number | string
+    preRegistrationFee: number
     preRegistrationStart: Date | string
     preRegistrationEnd: Date | string
-    onsiteRegistrationFee: Decimal | DecimalJsLike | number | string
-    cookRegistrationFee: Decimal | DecimalJsLike | number | string
+    onsiteRegistrationFee: number
+    cookRegistrationFee: number
     status?: $Enums.EventStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -17479,11 +17465,11 @@ export namespace Prisma {
     startDate: Date | string
     endDate: Date | string
     registrationDeadline: Date | string
-    preRegistrationFee: Decimal | DecimalJsLike | number | string
+    preRegistrationFee: number
     preRegistrationStart: Date | string
     preRegistrationEnd: Date | string
-    onsiteRegistrationFee: Decimal | DecimalJsLike | number | string
-    cookRegistrationFee: Decimal | DecimalJsLike | number | string
+    onsiteRegistrationFee: number
+    cookRegistrationFee: number
     status?: $Enums.EventStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -17499,11 +17485,11 @@ export namespace Prisma {
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     registrationDeadline?: DateTimeFieldUpdateOperationsInput | Date | string
-    preRegistrationFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    preRegistrationFee?: IntFieldUpdateOperationsInput | number
     preRegistrationStart?: DateTimeFieldUpdateOperationsInput | Date | string
     preRegistrationEnd?: DateTimeFieldUpdateOperationsInput | Date | string
-    onsiteRegistrationFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    cookRegistrationFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    onsiteRegistrationFee?: IntFieldUpdateOperationsInput | number
+    cookRegistrationFee?: IntFieldUpdateOperationsInput | number
     status?: EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17519,11 +17505,11 @@ export namespace Prisma {
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     registrationDeadline?: DateTimeFieldUpdateOperationsInput | Date | string
-    preRegistrationFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    preRegistrationFee?: IntFieldUpdateOperationsInput | number
     preRegistrationStart?: DateTimeFieldUpdateOperationsInput | Date | string
     preRegistrationEnd?: DateTimeFieldUpdateOperationsInput | Date | string
-    onsiteRegistrationFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    cookRegistrationFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    onsiteRegistrationFee?: IntFieldUpdateOperationsInput | number
+    cookRegistrationFee?: IntFieldUpdateOperationsInput | number
     status?: EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17539,11 +17525,11 @@ export namespace Prisma {
     startDate: Date | string
     endDate: Date | string
     registrationDeadline: Date | string
-    preRegistrationFee: Decimal | DecimalJsLike | number | string
+    preRegistrationFee: number
     preRegistrationStart: Date | string
     preRegistrationEnd: Date | string
-    onsiteRegistrationFee: Decimal | DecimalJsLike | number | string
-    cookRegistrationFee: Decimal | DecimalJsLike | number | string
+    onsiteRegistrationFee: number
+    cookRegistrationFee: number
     status?: $Enums.EventStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -17558,11 +17544,11 @@ export namespace Prisma {
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     registrationDeadline?: DateTimeFieldUpdateOperationsInput | Date | string
-    preRegistrationFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    preRegistrationFee?: IntFieldUpdateOperationsInput | number
     preRegistrationStart?: DateTimeFieldUpdateOperationsInput | Date | string
     preRegistrationEnd?: DateTimeFieldUpdateOperationsInput | Date | string
-    onsiteRegistrationFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    cookRegistrationFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    onsiteRegistrationFee?: IntFieldUpdateOperationsInput | number
+    cookRegistrationFee?: IntFieldUpdateOperationsInput | number
     status?: EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17577,11 +17563,11 @@ export namespace Prisma {
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     registrationDeadline?: DateTimeFieldUpdateOperationsInput | Date | string
-    preRegistrationFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    preRegistrationFee?: IntFieldUpdateOperationsInput | number
     preRegistrationStart?: DateTimeFieldUpdateOperationsInput | Date | string
     preRegistrationEnd?: DateTimeFieldUpdateOperationsInput | Date | string
-    onsiteRegistrationFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    cookRegistrationFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    onsiteRegistrationFee?: IntFieldUpdateOperationsInput | number
+    cookRegistrationFee?: IntFieldUpdateOperationsInput | number
     status?: EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -18303,15 +18289,15 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
-  export type DecimalFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
   }
 
   export type EnumEventStatusFilter<$PrismaModel = never> = {
@@ -18390,20 +18376,20 @@ export namespace Prisma {
     cookRegistrationFee?: SortOrder
   }
 
-  export type DecimalWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
     _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedDecimalFilter<$PrismaModel>
-    _sum?: NestedDecimalFilter<$PrismaModel>
-    _min?: NestedDecimalFilter<$PrismaModel>
-    _max?: NestedDecimalFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type EnumEventStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -18502,17 +18488,6 @@ export namespace Prisma {
     _max?: NestedEnumRegistrationStatusFilter<$PrismaModel>
   }
 
-  export type IntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
-  }
-
   export type EnumGenderFilter<$PrismaModel = never> = {
     equals?: $Enums.Gender | EnumGenderFieldRefInput<$PrismaModel>
     in?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel>
@@ -18564,22 +18539,6 @@ export namespace Prisma {
 
   export type DelegateSumOrderByAggregateInput = {
     age?: SortOrder
-  }
-
-  export type IntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type EnumGenderWithAggregatesFilter<$PrismaModel = never> = {
@@ -19073,12 +19032,12 @@ export namespace Prisma {
     connect?: RegistrationWhereUniqueInput | RegistrationWhereUniqueInput[]
   }
 
-  export type DecimalFieldUpdateOperationsInput = {
-    set?: Decimal | DecimalJsLike | number | string
-    increment?: Decimal | DecimalJsLike | number | string
-    decrement?: Decimal | DecimalJsLike | number | string
-    multiply?: Decimal | DecimalJsLike | number | string
-    divide?: Decimal | DecimalJsLike | number | string
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type EnumEventStatusFieldUpdateOperationsInput = {
@@ -19247,14 +19206,6 @@ export namespace Prisma {
     create?: XOR<RegistrationCreateWithoutDelegatesInput, RegistrationUncheckedCreateWithoutDelegatesInput>
     connectOrCreate?: RegistrationCreateOrConnectWithoutDelegatesInput
     connect?: RegistrationWhereUniqueInput
-  }
-
-  export type IntFieldUpdateOperationsInput = {
-    set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type EnumGenderFieldUpdateOperationsInput = {
@@ -19447,17 +19398,6 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
-  export type NestedDecimalFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
-  }
-
   export type NestedEnumEventStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.EventStatus | EnumEventStatusFieldRefInput<$PrismaModel>
     in?: $Enums.EventStatus[] | ListEnumEventStatusFieldRefInput<$PrismaModel>
@@ -19465,20 +19405,31 @@ export namespace Prisma {
     not?: NestedEnumEventStatusFilter<$PrismaModel> | $Enums.EventStatus
   }
 
-  export type NestedDecimalWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
     _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedDecimalFilter<$PrismaModel>
-    _sum?: NestedDecimalFilter<$PrismaModel>
-    _min?: NestedDecimalFilter<$PrismaModel>
-    _max?: NestedDecimalFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type NestedFloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
   }
 
   export type NestedEnumEventStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -19513,33 +19464,6 @@ export namespace Prisma {
     in?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel>
     notIn?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel>
     not?: NestedEnumGenderFilter<$PrismaModel> | $Enums.Gender
-  }
-
-  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
-  }
-
-  export type NestedFloatFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatFilter<$PrismaModel> | number
   }
 
   export type NestedEnumGenderWithAggregatesFilter<$PrismaModel = never> = {
@@ -20440,11 +20364,11 @@ export namespace Prisma {
     startDate: Date | string
     endDate: Date | string
     registrationDeadline: Date | string
-    preRegistrationFee: Decimal | DecimalJsLike | number | string
+    preRegistrationFee: number
     preRegistrationStart: Date | string
     preRegistrationEnd: Date | string
-    onsiteRegistrationFee: Decimal | DecimalJsLike | number | string
-    cookRegistrationFee: Decimal | DecimalJsLike | number | string
+    onsiteRegistrationFee: number
+    cookRegistrationFee: number
     status?: $Enums.EventStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -20459,11 +20383,11 @@ export namespace Prisma {
     startDate: Date | string
     endDate: Date | string
     registrationDeadline: Date | string
-    preRegistrationFee: Decimal | DecimalJsLike | number | string
+    preRegistrationFee: number
     preRegistrationStart: Date | string
     preRegistrationEnd: Date | string
-    onsiteRegistrationFee: Decimal | DecimalJsLike | number | string
-    cookRegistrationFee: Decimal | DecimalJsLike | number | string
+    onsiteRegistrationFee: number
+    cookRegistrationFee: number
     status?: $Enums.EventStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -20612,11 +20536,11 @@ export namespace Prisma {
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     registrationDeadline?: DateTimeFieldUpdateOperationsInput | Date | string
-    preRegistrationFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    preRegistrationFee?: IntFieldUpdateOperationsInput | number
     preRegistrationStart?: DateTimeFieldUpdateOperationsInput | Date | string
     preRegistrationEnd?: DateTimeFieldUpdateOperationsInput | Date | string
-    onsiteRegistrationFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    cookRegistrationFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    onsiteRegistrationFee?: IntFieldUpdateOperationsInput | number
+    cookRegistrationFee?: IntFieldUpdateOperationsInput | number
     status?: EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20631,11 +20555,11 @@ export namespace Prisma {
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     registrationDeadline?: DateTimeFieldUpdateOperationsInput | Date | string
-    preRegistrationFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    preRegistrationFee?: IntFieldUpdateOperationsInput | number
     preRegistrationStart?: DateTimeFieldUpdateOperationsInput | Date | string
     preRegistrationEnd?: DateTimeFieldUpdateOperationsInput | Date | string
-    onsiteRegistrationFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    cookRegistrationFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    onsiteRegistrationFee?: IntFieldUpdateOperationsInput | number
+    cookRegistrationFee?: IntFieldUpdateOperationsInput | number
     status?: EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
