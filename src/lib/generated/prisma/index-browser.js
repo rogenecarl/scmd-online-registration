@@ -187,8 +187,6 @@ exports.Prisma.CoordinatorScalarFieldEnum = {
   id: 'id',
   name: 'name',
   divisionId: 'divisionId',
-  phone: 'phone',
-  email: 'email',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -197,8 +195,6 @@ exports.Prisma.PastorScalarFieldEnum = {
   id: 'id',
   name: 'name',
   churchId: 'churchId',
-  phone: 'phone',
-  email: 'email',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

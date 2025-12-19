@@ -10,6 +10,8 @@ import {
   Users,
   FileText,
   Settings,
+  UserCog,
+  UserCheck,
 } from "lucide-react";
 
 export const adminNavSections: NavSection[] = [
@@ -35,6 +37,16 @@ export const adminNavSections: NavSection[] = [
         title: "Churches",
         href: "/admin/churches",
         icon: Church,
+      },
+      {
+        title: "Coordinators",
+        href: "/admin/coordinators",
+        icon: UserCog,
+      },
+      {
+        title: "Pastors",
+        href: "/admin/pastors",
+        icon: UserCheck,
       },
       {
         title: "Presidents",

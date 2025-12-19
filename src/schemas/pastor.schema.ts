@@ -1,7 +1,5 @@
 import { z } from "zod";
 
-const phoneRegex = /^[\d\s\-+()]*$/;
-
 export const pastorSchema = z.object({
   name: z
     .string()
@@ -12,18 +10,6 @@ export const pastorSchema = z.object({
     .string()
     .min(1, "Church is required")
     .cuid("Invalid church selected"),
-  phone: z
-    .string()
-    .regex(phoneRegex, "Invalid phone number format")
-    .max(20, "Phone number too long")
-    .optional()
-    .or(z.literal("")),
-  email: z
-    .string()
-    .email("Invalid email address")
-    .max(255, "Email too long")
-    .optional()
-    .or(z.literal("")),
 });
 
 export type PastorInput = z.infer<typeof pastorSchema>;

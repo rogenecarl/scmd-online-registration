@@ -8825,8 +8825,6 @@ export namespace Prisma {
     id: string | null
     name: string | null
     divisionId: string | null
-    phone: string | null
-    email: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -8835,8 +8833,6 @@ export namespace Prisma {
     id: string | null
     name: string | null
     divisionId: string | null
-    phone: string | null
-    email: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -8845,8 +8841,6 @@ export namespace Prisma {
     id: number
     name: number
     divisionId: number
-    phone: number
-    email: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -8857,8 +8851,6 @@ export namespace Prisma {
     id?: true
     name?: true
     divisionId?: true
-    phone?: true
-    email?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -8867,8 +8859,6 @@ export namespace Prisma {
     id?: true
     name?: true
     divisionId?: true
-    phone?: true
-    email?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -8877,8 +8867,6 @@ export namespace Prisma {
     id?: true
     name?: true
     divisionId?: true
-    phone?: true
-    email?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -8960,8 +8948,6 @@ export namespace Prisma {
     id: string
     name: string
     divisionId: string
-    phone: string | null
-    email: string | null
     createdAt: Date
     updatedAt: Date
     _count: CoordinatorCountAggregateOutputType | null
@@ -8987,8 +8973,6 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     divisionId?: boolean
-    phone?: boolean
-    email?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     division?: boolean | DivisionDefaultArgs<ExtArgs>
@@ -8998,8 +8982,6 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     divisionId?: boolean
-    phone?: boolean
-    email?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     division?: boolean | DivisionDefaultArgs<ExtArgs>
@@ -9009,8 +8991,6 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     divisionId?: boolean
-    phone?: boolean
-    email?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     division?: boolean | DivisionDefaultArgs<ExtArgs>
@@ -9020,13 +9000,11 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     divisionId?: boolean
-    phone?: boolean
-    email?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type CoordinatorOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "divisionId" | "phone" | "email" | "createdAt" | "updatedAt", ExtArgs["result"]["coordinator"]>
+  export type CoordinatorOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "divisionId" | "createdAt" | "updatedAt", ExtArgs["result"]["coordinator"]>
   export type CoordinatorInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     division?: boolean | DivisionDefaultArgs<ExtArgs>
   }
@@ -9046,8 +9024,6 @@ export namespace Prisma {
       id: string
       name: string
       divisionId: string
-      phone: string | null
-      email: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["coordinator"]>
@@ -9477,8 +9453,6 @@ export namespace Prisma {
     readonly id: FieldRef<"Coordinator", 'String'>
     readonly name: FieldRef<"Coordinator", 'String'>
     readonly divisionId: FieldRef<"Coordinator", 'String'>
-    readonly phone: FieldRef<"Coordinator", 'String'>
-    readonly email: FieldRef<"Coordinator", 'String'>
     readonly createdAt: FieldRef<"Coordinator", 'DateTime'>
     readonly updatedAt: FieldRef<"Coordinator", 'DateTime'>
   }
@@ -9909,8 +9883,6 @@ export namespace Prisma {
     id: string | null
     name: string | null
     churchId: string | null
-    phone: string | null
-    email: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -9919,8 +9891,6 @@ export namespace Prisma {
     id: string | null
     name: string | null
     churchId: string | null
-    phone: string | null
-    email: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -9929,8 +9899,6 @@ export namespace Prisma {
     id: number
     name: number
     churchId: number
-    phone: number
-    email: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -9941,8 +9909,6 @@ export namespace Prisma {
     id?: true
     name?: true
     churchId?: true
-    phone?: true
-    email?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -9951,8 +9917,6 @@ export namespace Prisma {
     id?: true
     name?: true
     churchId?: true
-    phone?: true
-    email?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -9961,8 +9925,6 @@ export namespace Prisma {
     id?: true
     name?: true
     churchId?: true
-    phone?: true
-    email?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -10044,8 +10006,6 @@ export namespace Prisma {
     id: string
     name: string
     churchId: string
-    phone: string | null
-    email: string | null
     createdAt: Date
     updatedAt: Date
     _count: PastorCountAggregateOutputType | null
@@ -10071,8 +10031,6 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     churchId?: boolean
-    phone?: boolean
-    email?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     church?: boolean | ChurchDefaultArgs<ExtArgs>
@@ -10082,8 +10040,6 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     churchId?: boolean
-    phone?: boolean
-    email?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     church?: boolean | ChurchDefaultArgs<ExtArgs>
@@ -10093,8 +10049,6 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     churchId?: boolean
-    phone?: boolean
-    email?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     church?: boolean | ChurchDefaultArgs<ExtArgs>
@@ -10104,13 +10058,11 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     churchId?: boolean
-    phone?: boolean
-    email?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type PastorOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "churchId" | "phone" | "email" | "createdAt" | "updatedAt", ExtArgs["result"]["pastor"]>
+  export type PastorOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "churchId" | "createdAt" | "updatedAt", ExtArgs["result"]["pastor"]>
   export type PastorInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     church?: boolean | ChurchDefaultArgs<ExtArgs>
   }
@@ -10130,8 +10082,6 @@ export namespace Prisma {
       id: string
       name: string
       churchId: string
-      phone: string | null
-      email: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["pastor"]>
@@ -10561,8 +10511,6 @@ export namespace Prisma {
     readonly id: FieldRef<"Pastor", 'String'>
     readonly name: FieldRef<"Pastor", 'String'>
     readonly churchId: FieldRef<"Pastor", 'String'>
-    readonly phone: FieldRef<"Pastor", 'String'>
-    readonly email: FieldRef<"Pastor", 'String'>
     readonly createdAt: FieldRef<"Pastor", 'DateTime'>
     readonly updatedAt: FieldRef<"Pastor", 'DateTime'>
   }
@@ -15792,8 +15740,6 @@ export namespace Prisma {
     id: 'id',
     name: 'name',
     divisionId: 'divisionId',
-    phone: 'phone',
-    email: 'email',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -15805,8 +15751,6 @@ export namespace Prisma {
     id: 'id',
     name: 'name',
     churchId: 'churchId',
-    phone: 'phone',
-    email: 'email',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -16475,8 +16419,6 @@ export namespace Prisma {
     id?: StringFilter<"Coordinator"> | string
     name?: StringFilter<"Coordinator"> | string
     divisionId?: StringFilter<"Coordinator"> | string
-    phone?: StringNullableFilter<"Coordinator"> | string | null
-    email?: StringNullableFilter<"Coordinator"> | string | null
     createdAt?: DateTimeFilter<"Coordinator"> | Date | string
     updatedAt?: DateTimeFilter<"Coordinator"> | Date | string
     division?: XOR<DivisionScalarRelationFilter, DivisionWhereInput>
@@ -16486,8 +16428,6 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     divisionId?: SortOrder
-    phone?: SortOrderInput | SortOrder
-    email?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     division?: DivisionOrderByWithRelationInput
@@ -16500,8 +16440,6 @@ export namespace Prisma {
     OR?: CoordinatorWhereInput[]
     NOT?: CoordinatorWhereInput | CoordinatorWhereInput[]
     name?: StringFilter<"Coordinator"> | string
-    phone?: StringNullableFilter<"Coordinator"> | string | null
-    email?: StringNullableFilter<"Coordinator"> | string | null
     createdAt?: DateTimeFilter<"Coordinator"> | Date | string
     updatedAt?: DateTimeFilter<"Coordinator"> | Date | string
     division?: XOR<DivisionScalarRelationFilter, DivisionWhereInput>
@@ -16511,8 +16449,6 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     divisionId?: SortOrder
-    phone?: SortOrderInput | SortOrder
-    email?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: CoordinatorCountOrderByAggregateInput
@@ -16527,8 +16463,6 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Coordinator"> | string
     name?: StringWithAggregatesFilter<"Coordinator"> | string
     divisionId?: StringWithAggregatesFilter<"Coordinator"> | string
-    phone?: StringNullableWithAggregatesFilter<"Coordinator"> | string | null
-    email?: StringNullableWithAggregatesFilter<"Coordinator"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Coordinator"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Coordinator"> | Date | string
   }
@@ -16540,8 +16474,6 @@ export namespace Prisma {
     id?: StringFilter<"Pastor"> | string
     name?: StringFilter<"Pastor"> | string
     churchId?: StringFilter<"Pastor"> | string
-    phone?: StringNullableFilter<"Pastor"> | string | null
-    email?: StringNullableFilter<"Pastor"> | string | null
     createdAt?: DateTimeFilter<"Pastor"> | Date | string
     updatedAt?: DateTimeFilter<"Pastor"> | Date | string
     church?: XOR<ChurchScalarRelationFilter, ChurchWhereInput>
@@ -16551,8 +16483,6 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     churchId?: SortOrder
-    phone?: SortOrderInput | SortOrder
-    email?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     church?: ChurchOrderByWithRelationInput
@@ -16565,8 +16495,6 @@ export namespace Prisma {
     OR?: PastorWhereInput[]
     NOT?: PastorWhereInput | PastorWhereInput[]
     name?: StringFilter<"Pastor"> | string
-    phone?: StringNullableFilter<"Pastor"> | string | null
-    email?: StringNullableFilter<"Pastor"> | string | null
     createdAt?: DateTimeFilter<"Pastor"> | Date | string
     updatedAt?: DateTimeFilter<"Pastor"> | Date | string
     church?: XOR<ChurchScalarRelationFilter, ChurchWhereInput>
@@ -16576,8 +16504,6 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     churchId?: SortOrder
-    phone?: SortOrderInput | SortOrder
-    email?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: PastorCountOrderByAggregateInput
@@ -16592,8 +16518,6 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Pastor"> | string
     name?: StringWithAggregatesFilter<"Pastor"> | string
     churchId?: StringWithAggregatesFilter<"Pastor"> | string
-    phone?: StringNullableWithAggregatesFilter<"Pastor"> | string | null
-    email?: StringNullableWithAggregatesFilter<"Pastor"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Pastor"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Pastor"> | Date | string
   }
@@ -17419,8 +17343,6 @@ export namespace Prisma {
   export type CoordinatorCreateInput = {
     id?: string
     name: string
-    phone?: string | null
-    email?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     division: DivisionCreateNestedOneWithoutCoordinatorInput
@@ -17430,8 +17352,6 @@ export namespace Prisma {
     id?: string
     name: string
     divisionId: string
-    phone?: string | null
-    email?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -17439,8 +17359,6 @@ export namespace Prisma {
   export type CoordinatorUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     division?: DivisionUpdateOneRequiredWithoutCoordinatorNestedInput
@@ -17450,8 +17368,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     divisionId?: StringFieldUpdateOperationsInput | string
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -17460,8 +17376,6 @@ export namespace Prisma {
     id?: string
     name: string
     divisionId: string
-    phone?: string | null
-    email?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -17469,8 +17383,6 @@ export namespace Prisma {
   export type CoordinatorUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -17479,8 +17391,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     divisionId?: StringFieldUpdateOperationsInput | string
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -17488,8 +17398,6 @@ export namespace Prisma {
   export type PastorCreateInput = {
     id?: string
     name: string
-    phone?: string | null
-    email?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     church: ChurchCreateNestedOneWithoutPastorInput
@@ -17499,8 +17407,6 @@ export namespace Prisma {
     id?: string
     name: string
     churchId: string
-    phone?: string | null
-    email?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -17508,8 +17414,6 @@ export namespace Prisma {
   export type PastorUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     church?: ChurchUpdateOneRequiredWithoutPastorNestedInput
@@ -17519,8 +17423,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     churchId?: StringFieldUpdateOperationsInput | string
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -17529,8 +17431,6 @@ export namespace Prisma {
     id?: string
     name: string
     churchId: string
-    phone?: string | null
-    email?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -17538,8 +17438,6 @@ export namespace Prisma {
   export type PastorUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -17548,8 +17446,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     churchId?: StringFieldUpdateOperationsInput | string
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -18358,8 +18254,6 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     divisionId?: SortOrder
-    phone?: SortOrder
-    email?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -18368,8 +18262,6 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     divisionId?: SortOrder
-    phone?: SortOrder
-    email?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -18378,8 +18270,6 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     divisionId?: SortOrder
-    phone?: SortOrder
-    email?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -18393,8 +18283,6 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     churchId?: SortOrder
-    phone?: SortOrder
-    email?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -18403,8 +18291,6 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     churchId?: SortOrder
-    phone?: SortOrder
-    email?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -18413,8 +18299,6 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     churchId?: SortOrder
-    phone?: SortOrder
-    email?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -20106,8 +19990,6 @@ export namespace Prisma {
   export type CoordinatorCreateWithoutDivisionInput = {
     id?: string
     name: string
-    phone?: string | null
-    email?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -20115,8 +19997,6 @@ export namespace Prisma {
   export type CoordinatorUncheckedCreateWithoutDivisionInput = {
     id?: string
     name: string
-    phone?: string | null
-    email?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -20167,8 +20047,6 @@ export namespace Prisma {
   export type CoordinatorUpdateWithoutDivisionInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -20176,8 +20054,6 @@ export namespace Prisma {
   export type CoordinatorUncheckedUpdateWithoutDivisionInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -20206,8 +20082,6 @@ export namespace Prisma {
   export type PastorCreateWithoutChurchInput = {
     id?: string
     name: string
-    phone?: string | null
-    email?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -20215,8 +20089,6 @@ export namespace Prisma {
   export type PastorUncheckedCreateWithoutChurchInput = {
     id?: string
     name: string
-    phone?: string | null
-    email?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -20343,8 +20215,6 @@ export namespace Prisma {
   export type PastorUpdateWithoutChurchInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -20352,8 +20222,6 @@ export namespace Prisma {
   export type PastorUncheckedUpdateWithoutChurchInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

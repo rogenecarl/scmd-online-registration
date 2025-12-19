@@ -155,8 +155,6 @@ model Coordinator {
   id         String   @id @default(cuid())
   name       String
   divisionId String   @unique @map("division_id")
-  phone      String?
-  email      String?
   createdAt  DateTime @default(now()) @map("created_at")
   updatedAt  DateTime @updatedAt @map("updated_at")
 
@@ -170,8 +168,6 @@ model Pastor {
   id        String   @id @default(cuid())
   name      String
   churchId  String   @unique @map("church_id")
-  phone     String?
-  email     String?
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
