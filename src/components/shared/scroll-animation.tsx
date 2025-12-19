@@ -66,7 +66,7 @@ export function ScrollAnimation({
   const { initial, visible } = animationClasses[animation];
 
   useEffect(() => {
-    setIsMounted(true);
+    queueMicrotask(() => setIsMounted(true));
     const element = ref.current;
     if (!element) return;
 
@@ -131,7 +131,7 @@ export function StaggerContainer({
   const { initial, visible } = animationClasses[animation];
 
   useEffect(() => {
-    setIsMounted(true);
+    queueMicrotask(() => setIsMounted(true));
     const element = ref.current;
     if (!element) return;
 

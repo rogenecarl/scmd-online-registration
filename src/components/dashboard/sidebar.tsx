@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -34,22 +34,32 @@ interface SidebarProps {
 
 export function Sidebar({ sections, brandName = "StarterKit" }: SidebarProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const pathname = usePathname();
   const { signOut, isLoading } = useAuth();
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // Use expanded state for SSR, then apply actual state after mount
+  const collapsed = isMounted && isCollapsed;
 
   return (
     <aside
       className={cn(
         "sticky top-0 h-screen flex flex-col border-r border-border bg-card/50 backdrop-blur-sm transition-all duration-300",
-        isCollapsed ? "w-16" : "w-64"
+        collapsed ? "w-16" : "w-64"
       )}
     >
       {/* Header */}
-      <div className={cn(
-        "flex h-16 items-center border-b border-border px-4",
-        isCollapsed ? "justify-center" : "justify-between"
-      )}>
-        {!isCollapsed && (
+      <div
+        className={cn(
+          "flex h-16 items-center border-b border-border px-4",
+          collapsed ? "justify-center" : "justify-between"
+        )}
+      >
+        {!collapsed && (
           <Link
             href="/"
             className="flex items-center gap-2"
@@ -66,7 +76,7 @@ export function Sidebar({ sections, brandName = "StarterKit" }: SidebarProps) {
           className="h-8 w-8 shrink-0"
           onClick={() => setIsCollapsed(!isCollapsed)}
         >
-          {isCollapsed ? (
+          {collapsed ? (
             <ChevronRight className="h-4 w-4" />
           ) : (
             <ChevronLeft className="h-4 w-4" />
@@ -79,7 +89,7 @@ export function Sidebar({ sections, brandName = "StarterKit" }: SidebarProps) {
         <div className="space-y-6">
           {sections.map((section, sectionIndex) => (
             <div key={sectionIndex}>
-              {section.title && !isCollapsed && (
+              {section.title && !collapsed && (
                 <h4 className="mb-2 px-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                   {section.title}
                 </h4>
@@ -98,12 +108,12 @@ export function Sidebar({ sections, brandName = "StarterKit" }: SidebarProps) {
                           isActive
                             ? "bg-primary text-primary-foreground shadow-sm"
                             : "text-muted-foreground hover:bg-accent hover:text-foreground",
-                          isCollapsed && "justify-center px-2"
+                          collapsed && "justify-center px-2"
                         )}
-                        title={isCollapsed ? item.title : undefined}
+                        title={collapsed ? item.title : undefined}
                       >
                         <Icon className="h-4 w-4 shrink-0" />
-                        {!isCollapsed && (
+                        {!collapsed && (
                           <>
                             <span className="flex-1">{item.title}</span>
                             {item.badge && (
@@ -129,7 +139,7 @@ export function Sidebar({ sections, brandName = "StarterKit" }: SidebarProps) {
           variant="ghost"
           className={cn(
             "w-full justify-start gap-3 text-muted-foreground hover:text-foreground",
-            isCollapsed && "justify-center px-2"
+            collapsed && "justify-center px-2"
           )}
           onClick={signOut}
           disabled={isLoading}
@@ -139,7 +149,7 @@ export function Sidebar({ sections, brandName = "StarterKit" }: SidebarProps) {
           ) : (
             <LogOut className="h-4 w-4 shrink-0" />
           )}
-          {!isCollapsed && <span>Sign Out</span>}
+          {!collapsed && <span>Sign Out</span>}
         </Button>
       </div>
     </aside>

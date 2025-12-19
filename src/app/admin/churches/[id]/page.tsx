@@ -59,19 +59,7 @@ export default async function ChurchDetailPage({ params }: Props) {
             <h3 className="text-lg font-semibold">Pastor</h3>
           </div>
           {church.pastor ? (
-            <div className="space-y-2">
-              <p className="font-medium">{church.pastor.name}</p>
-              {church.pastor.email && (
-                <p className="text-sm text-muted-foreground">
-                  {church.pastor.email}
-                </p>
-              )}
-              {church.pastor.phone && (
-                <p className="text-sm text-muted-foreground">
-                  {church.pastor.phone}
-                </p>
-              )}
-            </div>
+            <p className="font-medium">{church.pastor.name}</p>
           ) : (
             <p className="text-muted-foreground">No pastor assigned</p>
           )}

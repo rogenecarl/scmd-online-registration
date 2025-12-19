@@ -45,19 +45,7 @@ export default async function DivisionDetailPage({ params }: Props) {
             <h3 className="text-lg font-semibold">Coordinator</h3>
           </div>
           {division.coordinator ? (
-            <div className="space-y-2">
-              <p className="font-medium">{division.coordinator.name}</p>
-              {division.coordinator.email && (
-                <p className="text-sm text-muted-foreground">
-                  {division.coordinator.email}
-                </p>
-              )}
-              {division.coordinator.phone && (
-                <p className="text-sm text-muted-foreground">
-                  {division.coordinator.phone}
-                </p>
-              )}
-            </div>
+            <p className="font-medium">{division.coordinator.name}</p>
           ) : (
             <p className="text-muted-foreground">No coordinator assigned</p>
           )}

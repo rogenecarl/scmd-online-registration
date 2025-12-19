@@ -72,7 +72,7 @@ export function CTA() {
           {/* Benefits Grid */}
           <ScrollAnimation animation="fade-up" delay={300}>
             <div className="mt-10 grid grid-cols-2 sm:grid-cols-3 gap-4 max-w-2xl mx-auto">
-              {benefits.map((benefit, index) => (
+              {benefits.map((benefit) => (
                 <div
                   key={benefit}
                   className="flex items-center gap-2 text-sm text-muted-foreground"

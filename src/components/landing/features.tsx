@@ -10,7 +10,7 @@ import {
   FileText,
   Bell,
 } from "lucide-react";
-import { ScrollAnimation, StaggerContainer } from "@/components/shared/scroll-animation";
+import { ScrollAnimation } from "@/components/shared/scroll-animation";
 
 const features = [
   {

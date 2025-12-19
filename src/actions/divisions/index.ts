@@ -27,8 +27,6 @@ export type DivisionDetail = {
   coordinator: {
     id: string;
     name: string;
-    phone: string | null;
-    email: string | null;
   } | null;
 };
 
@@ -74,7 +72,7 @@ export async function getDivisionById(
           orderBy: { name: "asc" },
         },
         coordinator: {
-          select: { id: true, name: true, phone: true, email: true },
+          select: { id: true, name: true },
         },
       },
     });

@@ -27,8 +27,6 @@ export type ChurchDetail = {
   pastor: {
     id: string;
     name: string;
-    phone: string | null;
-    email: string | null;
   } | null;
   presidents: { id: string; name: string; email: string }[];
 };
@@ -74,7 +72,7 @@ export async function getChurchById(
       where: { id },
       include: {
         division: { select: { id: true, name: true } },
-        pastor: { select: { id: true, name: true, phone: true, email: true } },
+        pastor: { select: { id: true, name: true } },
         presidents: { select: { id: true, name: true, email: true } },
       },
     });

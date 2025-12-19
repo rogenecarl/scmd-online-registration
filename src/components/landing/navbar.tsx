@@ -24,7 +24,7 @@ export function Navbar() {
   const dashboardUrl = getRoleRedirect(role);
 
   useEffect(() => {
-    setIsMounted(true);
+    queueMicrotask(() => setIsMounted(true));
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
     };
