@@ -3,16 +3,14 @@
 import type { NavSection } from "@/components/dashboard";
 import {
   LayoutDashboard,
-  Rocket,
-  Code2,
-  Book,
+  Calendar,
+  ClipboardList,
   Bell,
   Settings,
   User,
-  FolderGit2,
   HelpCircle,
-  Palette,
-  Terminal,
+  History,
+  CalendarCheck,
 } from "lucide-react";
 
 export const userNavSections: NavSection[] = [
@@ -25,35 +23,30 @@ export const userNavSections: NavSection[] = [
         icon: LayoutDashboard,
       },
       {
-        title: "Projects",
-        href: "/dashboard/projects",
-        icon: FolderGit2,
+        title: "Events",
+        href: "/dashboard/events",
+        icon: Calendar,
         badge: 3,
       },
       {
-        title: "Components",
-        href: "/dashboard/components",
-        icon: Code2,
+        title: "My Registrations",
+        href: "/dashboard/registrations",
+        icon: ClipboardList,
       },
       {
-        title: "Templates",
-        href: "/dashboard/templates",
-        icon: Palette,
+        title: "Event History",
+        href: "/dashboard/history",
+        icon: History,
       },
     ],
   },
   {
-    title: "Development",
+    title: "Activities",
     items: [
       {
-        title: "Quick Start",
-        href: "/dashboard/quickstart",
-        icon: Rocket,
-      },
-      {
-        title: "CLI Commands",
-        href: "/dashboard/cli",
-        icon: Terminal,
+        title: "Upcoming Events",
+        href: "/dashboard/upcoming",
+        icon: CalendarCheck,
       },
       {
         title: "Notifications",
@@ -75,11 +68,6 @@ export const userNavSections: NavSection[] = [
         title: "Settings",
         href: "/dashboard/settings",
         icon: Settings,
-      },
-      {
-        title: "Documentation",
-        href: "/dashboard/docs",
-        icon: Book,
       },
       {
         title: "Help & Support",

@@ -1,11 +1,11 @@
-import { Hero, Features, TechStack, Testimonials, CTA } from "@/components/landing";
+import { Hero, Features, HowItWorks, Testimonials, CTA } from "@/components/landing";
 
 export default function Home() {
   return (
     <>
       <Hero />
       <Features />
-      <TechStack />
+      <HowItWorks />
       <Testimonials />
       <CTA />
     </>

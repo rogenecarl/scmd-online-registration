@@ -10,23 +10,130 @@ import { getRoleRedirect } from "@/config/auth";
 
 const navLinks = [
   { href: "#features", label: "Features" },
+  { href: "#how-it-works", label: "How It Works" },
+  { href: "#testimonials", label: "Testimonials" },
 ];
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const { isAuthenticated, isLoading, role, signOut } = useAuth();
 
   // Get dashboard URL based on user role
   const dashboardUrl = getRoleRedirect(role);
 
   useEffect(() => {
+    setIsMounted(true);
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Auth buttons - only render on client to avoid hydration mismatch
+  const renderAuthButtons = () => {
+    if (!isMounted) {
+      return <div className="w-[180px]" />; // Placeholder to prevent layout shift
+    }
+
+    if (isLoading) {
+      return <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />;
+    }
+
+    if (isAuthenticated) {
+      return (
+        <>
+          <Button variant="ghost" size="sm" asChild>
+            <Link href={dashboardUrl} className="flex items-center gap-2">
+              <LayoutDashboard className="h-4 w-4" />
+              Dashboard
+            </Link>
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={signOut}
+            className="flex items-center gap-2"
+          >
+            <LogOut className="h-4 w-4" />
+            Sign Out
+          </Button>
+        </>
+      );
+    }
+
+    return (
+      <>
+        <Button variant="ghost" size="sm" asChild>
+          <Link href="/login">Sign In</Link>
+        </Button>
+        <Button size="sm" asChild>
+          <Link href="/register">Get Started</Link>
+        </Button>
+      </>
+    );
+  };
+
+  // Mobile auth buttons
+  const renderMobileAuthButtons = () => {
+    if (!isMounted) {
+      return null;
+    }
+
+    if (isLoading) {
+      return (
+        <div className="flex justify-center py-2">
+          <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+        </div>
+      );
+    }
+
+    if (isAuthenticated) {
+      return (
+        <>
+          <Button variant="outline" size="sm" asChild className="w-full">
+            <Link
+              href={dashboardUrl}
+              className="flex items-center justify-center gap-2"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              <LayoutDashboard className="h-4 w-4" />
+              Dashboard
+            </Link>
+          </Button>
+          <Button
+            size="sm"
+            variant="ghost"
+            className="w-full flex items-center justify-center gap-2"
+            onClick={() => {
+              setIsMobileMenuOpen(false);
+              signOut();
+            }}
+          >
+            <LogOut className="h-4 w-4" />
+            Sign Out
+          </Button>
+        </>
+      );
+    }
+
+    return (
+      <>
+        <Button variant="outline" size="sm" asChild className="w-full">
+          <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>
+            Sign In
+          </Link>
+        </Button>
+        <Button size="sm" asChild className="w-full">
+          <Link href="/register" onClick={() => setIsMobileMenuOpen(false)}>
+            Get Started
+          </Link>
+        </Button>
+      </>
+    );
+  };
 
   return (
     <header
@@ -52,48 +159,19 @@ export function Navbar() {
           {/* Desktop Navigation */}
           <div className="hidden md:flex md:items-center md:gap-8">
             {navLinks.map((link) => (
-              <Link
+              <a
                 key={link.href}
                 href={link.href}
                 className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
               >
                 {link.label}
-              </Link>
+              </a>
             ))}
           </div>
 
           {/* Desktop CTA - Auth Aware */}
           <div className="hidden md:flex md:items-center md:gap-3">
-            {isLoading ? (
-              <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
-            ) : isAuthenticated ? (
-              <>
-                <Button variant="ghost" size="sm" asChild>
-                  <Link href={dashboardUrl} className="flex items-center gap-2">
-                    <LayoutDashboard className="h-4 w-4" />
-                    Dashboard
-                  </Link>
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={signOut}
-                  className="flex items-center gap-2"
-                >
-                  <LogOut className="h-4 w-4" />
-                  Sign Out
-                </Button>
-              </>
-            ) : (
-              <>
-                <Button variant="ghost" size="sm" asChild>
-                  <Link href="/login">Sign In</Link>
-                </Button>
-                <Button size="sm" asChild>
-                  <Link href="/register">Get Started</Link>
-                </Button>
-              </>
-            )}
+            {renderAuthButtons()}
           </div>
 
           {/* Mobile Menu Button */}
@@ -120,59 +198,17 @@ export function Navbar() {
         >
           <div className="flex flex-col gap-2 pt-2">
             {navLinks.map((link) => (
-              <Link
+              <a
                 key={link.href}
                 href={link.href}
                 className="rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 {link.label}
-              </Link>
+              </a>
             ))}
             <div className="mt-2 flex flex-col gap-2 border-t border-border pt-4">
-              {isLoading ? (
-                <div className="flex justify-center py-2">
-                  <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
-                </div>
-              ) : isAuthenticated ? (
-                <>
-                  <Button variant="outline" size="sm" asChild className="w-full">
-                    <Link
-                      href={dashboardUrl}
-                      className="flex items-center justify-center gap-2"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      <LayoutDashboard className="h-4 w-4" />
-                      Dashboard
-                    </Link>
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    className="w-full flex items-center justify-center gap-2"
-                    onClick={() => {
-                      setIsMobileMenuOpen(false);
-                      signOut();
-                    }}
-                  >
-                    <LogOut className="h-4 w-4" />
-                    Sign Out
-                  </Button>
-                </>
-              ) : (
-                <>
-                  <Button variant="outline" size="sm" asChild className="w-full">
-                    <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>
-                      Sign In
-                    </Link>
-                  </Button>
-                  <Button size="sm" asChild className="w-full">
-                    <Link href="/register" onClick={() => setIsMobileMenuOpen(false)}>
-                      Get Started
-                    </Link>
-                  </Button>
-                </>
-              )}
+              {renderMobileAuthButtons()}
             </div>
           </div>
         </div>

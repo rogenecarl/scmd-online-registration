@@ -13,18 +13,18 @@ import {
 } from "@/components/dashboard";
 import { Button } from "@/components/ui/button";
 import {
-  Rocket,
-  GitBranch,
-  Code2,
-  Book,
-  Bell,
-  ChevronRight,
-  Star,
+  Calendar,
+  Users,
+  ClipboardCheck,
   Clock,
-  Zap,
-  FileCode,
-  Terminal,
-  ExternalLink,
+  ChevronRight,
+  CalendarPlus,
+  FileText,
+  Bell,
+  CheckCircle,
+  AlertCircle,
+  CalendarDays,
+  HelpCircle,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -32,66 +32,66 @@ import Link from "next/link";
 const recentActivity = [
   {
     id: "1",
-    title: "Project Created",
-    description: "You initialized a new project from the starter kit",
+    title: "Registration Submitted",
+    description: "You registered for SCMD Youth Convention 2025",
     timestamp: "2 hours ago",
-    icon: Rocket,
+    icon: ClipboardCheck,
     iconColor: "bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400",
   },
   {
     id: "2",
-    title: "Dependencies Updated",
-    description: "Updated to Next.js 16.0.10 and React 19",
+    title: "Registration Approved",
+    description: "Your registration for District Fellowship was approved",
     timestamp: "1 day ago",
-    icon: GitBranch,
+    icon: CheckCircle,
     iconColor: "bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400",
   },
   {
     id: "3",
-    title: "New Component Added",
-    description: "Created custom dashboard layout component",
-    timestamp: "3 days ago",
-    icon: Code2,
-    iconColor: "bg-violet-100 text-violet-600 dark:bg-violet-900/30 dark:text-violet-400",
+    title: "Event Reminder",
+    description: "Leadership Training starts in 3 days",
+    timestamp: "2 days ago",
+    icon: Bell,
+    iconColor: "bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400",
   },
   {
     id: "4",
-    title: "Documentation Read",
-    description: "Completed Better Auth integration guide",
+    title: "New Event Available",
+    description: "Women's Ministry Conference registration is now open",
     timestamp: "1 week ago",
-    icon: Book,
-    iconColor: "bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400",
+    icon: Calendar,
+    iconColor: "bg-violet-100 text-violet-600 dark:bg-violet-900/30 dark:text-violet-400",
   },
 ];
 
-const quickStartGuides = [
+const upcomingEvents = [
   {
     id: "1",
-    title: "Authentication Setup",
-    description: "Configure email, OAuth, and role-based access",
-    icon: "🔐",
-    status: "completed",
+    title: "SCMD Youth Convention 2025",
+    date: "March 15-17, 2025",
+    location: "GenSan Convention Center",
+    status: "registered",
   },
   {
     id: "2",
-    title: "Database Configuration",
-    description: "Set up Prisma with PostgreSQL",
-    icon: "🗄️",
-    status: "completed",
+    title: "Leadership Training Seminar",
+    date: "February 28, 2025",
+    location: "Davao City Church",
+    status: "pending",
   },
   {
     id: "3",
-    title: "UI Components",
-    description: "Explore shadcn/ui component library",
-    icon: "🎨",
-    status: "in-progress",
+    title: "District Fellowship",
+    date: "April 5, 2025",
+    location: "Koronadal Church",
+    status: "approved",
   },
   {
     id: "4",
-    title: "Deployment",
-    description: "Deploy to Vercel or other platforms",
-    icon: "🚀",
-    status: "pending",
+    title: "Women's Ministry Conference",
+    date: "May 10-11, 2025",
+    location: "Tacurong Church",
+    status: "open",
   },
 ];
 
@@ -103,77 +103,76 @@ export function UserOverview() {
       {/* Welcome Section */}
       <div className="rounded-xl border border-border bg-gradient-to-r from-primary/5 via-violet-500/5 to-blue-500/5 p-6">
         <h2 className="text-2xl font-bold tracking-tight">
-          Welcome back, {user?.name?.split(" ")[0] || "Developer"}!
+          Welcome back, {user?.name?.split(" ")[0] || "Member"}!
         </h2>
         <p className="mt-1 text-muted-foreground">
-          Here&apos;s your starter kit dashboard. Build something amazing today.
+          Here&apos;s an overview of your event registrations and upcoming activities.
         </p>
       </div>
 
       {/* Stats Grid */}
       <StatsGrid columns={4}>
         <StatsCard
-          title="Projects Created"
+          title="Registered Events"
           value="3"
-          description="From this starter kit"
-          icon={Rocket}
-          trend={{ value: 50, label: "this month" }}
+          description="Total registrations"
+          icon={ClipboardCheck}
+          trend={{ value: 1, label: "this month" }}
         />
         <StatsCard
-          title="Components Used"
-          value="24"
-          description="shadcn/ui components"
-          icon={Code2}
+          title="Upcoming Events"
+          value="2"
+          description="Events you're attending"
+          icon={Calendar}
         />
         <StatsCard
-          title="Build Time"
-          value="2.4s"
-          description="Last production build"
-          icon={Zap}
-          trend={{ value: -15, label: "faster" }}
-        />
-        <StatsCard
-          title="Uptime"
-          value="99.9%"
-          description="Last 30 days"
+          title="Pending Approvals"
+          value="1"
+          description="Awaiting confirmation"
           icon={Clock}
+        />
+        <StatsCard
+          title="Events Attended"
+          value="8"
+          description="Total participation"
+          icon={Users}
         />
       </StatsGrid>
 
       {/* Main Content Grid */}
       <div className="grid gap-6 lg:grid-cols-2">
-        {/* Getting Started Guide */}
+        {/* Upcoming Events */}
         <Card>
           <CardHeader
             action={
               <Button variant="ghost" size="sm" asChild>
-                <Link href="/dashboard/docs" className="flex items-center gap-1">
-                  View docs
+                <Link href="/dashboard/events" className="flex items-center gap-1">
+                  View all events
                   <ChevronRight className="h-4 w-4" />
                 </Link>
               </Button>
             }
           >
-            <CardTitle>Getting Started</CardTitle>
-            <CardDescription>Complete these steps to master the starter kit</CardDescription>
+            <CardTitle>Upcoming Events</CardTitle>
+            <CardDescription>Events you&apos;re registered for or can join</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {quickStartGuides.map((guide) => (
+              {upcomingEvents.map((event) => (
                 <div
-                  key={guide.id}
+                  key={event.id}
                   className="flex items-center gap-4 rounded-lg border border-border p-4 transition-colors hover:bg-muted/50"
                 >
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-muted text-lg">
-                    {guide.icon}
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+                    <CalendarDays className="h-5 w-5 text-primary" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium">{guide.title}</p>
+                    <p className="font-medium truncate">{event.title}</p>
                     <p className="text-sm text-muted-foreground">
-                      {guide.description}
+                      {event.date} • {event.location}
                     </p>
                   </div>
-                  <StatusBadge status={guide.status} />
+                  <EventStatusBadge status={event.status} />
                 </div>
               ))}
             </div>
@@ -193,7 +192,7 @@ export function UserOverview() {
             }
           >
             <CardTitle>Recent Activity</CardTitle>
-            <CardDescription>Your latest actions and updates</CardDescription>
+            <CardDescription>Your latest registration updates</CardDescription>
           </CardHeader>
           <CardContent>
             <ActivityFeed items={recentActivity} />
@@ -205,19 +204,19 @@ export function UserOverview() {
       <Card>
         <CardHeader>
           <CardTitle>Quick Actions</CardTitle>
-          <CardDescription>Common development tasks</CardDescription>
+          <CardDescription>Common registration tasks</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             <QuickAction
-              icon={FileCode}
-              label="Create Component"
-              href="/dashboard/components"
+              icon={CalendarPlus}
+              label="Browse Events"
+              href="/dashboard/events"
             />
             <QuickAction
-              icon={Terminal}
-              label="Run Commands"
-              href="/dashboard/terminal"
+              icon={FileText}
+              label="My Registrations"
+              href="/dashboard/registrations"
             />
             <QuickAction
               icon={Bell}
@@ -226,52 +225,29 @@ export function UserOverview() {
               badge={2}
             />
             <QuickAction
-              icon={Book}
-              label="Documentation"
-              href="/dashboard/docs"
+              icon={HelpCircle}
+              label="Help & Support"
+              href="/dashboard/help"
             />
           </div>
         </CardContent>
       </Card>
 
-      {/* Resources */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Helpful Resources</CardTitle>
-          <CardDescription>Learn more about the technologies used</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            <ResourceLink
-              title="Next.js 16 Docs"
-              description="Learn about App Router and Server Components"
-              href="https://nextjs.org/docs"
-            />
-            <ResourceLink
-              title="Better Auth"
-              description="Authentication library documentation"
-              href="https://www.better-auth.com"
-            />
-            <ResourceLink
-              title="Prisma 7"
-              description="Type-safe database access"
-              href="https://www.prisma.io/docs"
-            />
-            <ResourceLink
-              title="Tailwind CSS 4"
-              description="Utility-first CSS framework"
-              href="https://tailwindcss.com/docs"
-            />
-            <ResourceLink
-              title="shadcn/ui"
-              description="Beautifully designed components"
-              href="https://ui.shadcn.com"
-            />
-            <ResourceLink
-              title="TanStack Query"
-              description="Powerful data synchronization"
-              href="https://tanstack.com/query"
-            />
+      {/* Important Notice */}
+      <Card className="border-amber-200 dark:border-amber-900/50 bg-amber-50/50 dark:bg-amber-900/10">
+        <CardContent className="pt-6">
+          <div className="flex gap-4">
+            <AlertCircle className="h-5 w-5 text-amber-600 dark:text-amber-500 shrink-0 mt-0.5" />
+            <div>
+              <h4 className="font-semibold text-amber-900 dark:text-amber-200">Registration Reminder</h4>
+              <p className="text-sm text-amber-800 dark:text-amber-300 mt-1">
+                The deadline for SCMD Youth Convention 2025 registration is approaching.
+                Make sure to complete your registration before February 28, 2025.
+              </p>
+              <Button variant="outline" size="sm" className="mt-3 border-amber-300 dark:border-amber-800" asChild>
+                <Link href="/dashboard/events">Complete Registration</Link>
+              </Button>
+            </div>
           </div>
         </CardContent>
       </Card>
@@ -279,23 +255,27 @@ export function UserOverview() {
   );
 }
 
-function StatusBadge({ status }: { status: string }) {
+function EventStatusBadge({ status }: { status: string }) {
   const config = {
-    completed: {
-      label: "Done",
+    approved: {
+      label: "Approved",
       className: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400",
     },
-    "in-progress": {
-      label: "In Progress",
+    registered: {
+      label: "Registered",
       className: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400",
     },
     pending: {
       label: "Pending",
+      className: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400",
+    },
+    open: {
+      label: "Open",
       className: "bg-muted text-muted-foreground",
     },
   };
 
-  const { label, className } = config[status as keyof typeof config] || config.pending;
+  const { label, className } = config[status as keyof typeof config] || config.open;
 
   return (
     <span className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${className}`}>
@@ -310,7 +290,7 @@ function QuickAction({
   href,
   badge,
 }: {
-  icon: typeof Rocket;
+  icon: typeof Calendar;
   label: string;
   href: string;
   badge?: number;
@@ -330,33 +310,5 @@ function QuickAction({
         </span>
       )}
     </Link>
-  );
-}
-
-function ResourceLink({
-  title,
-  description,
-  href,
-}: {
-  title: string;
-  description: string;
-  href: string;
-}) {
-  return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="flex items-start gap-3 rounded-lg border border-border p-4 transition-all hover:border-primary/20 hover:bg-primary/5"
-    >
-      <Star className="h-5 w-5 text-amber-500 shrink-0 mt-0.5" />
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-1">
-          <p className="font-medium">{title}</p>
-          <ExternalLink className="h-3 w-3 text-muted-foreground" />
-        </div>
-        <p className="text-sm text-muted-foreground">{description}</p>
-      </div>
-    </a>
   );
 }

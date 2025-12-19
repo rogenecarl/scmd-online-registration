@@ -23,17 +23,17 @@ export default function LoginPage() {
 
                 {/* Branding */}
                 <div className="relative z-10 w-full flex items-center gap-3 text-lg font-medium tracking-tight animate-in fade-in slide-in-from-top-4 duration-700">
-                    <span className="font-bold text-xl">StarterKit</span>
+                    <span className="font-bold text-xl">SCMD Online Registration</span>
                 </div>
 
                 {/* Feature Showcase */}
                 <div className="relative z-10 my-auto flex flex-col gap-8 max-w-[500px]">
                     <div className="space-y-2 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-100">
                         <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-                            Build production-ready apps faster.
+                            Welcome back to SCMD Events
                         </h2>
                         <p className="text-lg text-slate-400">
-                            Sign in to access your dashboard, manage your projects, and explore the full starter kit features.
+                            Sign in to manage your church registrations, track delegate submissions, and coordinate event participation.
                         </p>
                     </div>
 
@@ -43,12 +43,15 @@ export default function LoginPage() {
                             <div className="flex items-center gap-4">
                                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-indigo-500/20 text-indigo-300">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6">
-                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                                        <circle cx="9" cy="7" r="4" />
+                                        <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
                                     </svg>
                                 </div>
                                 <div>
-                                    <h3 className="font-semibold text-white">Secure Authentication</h3>
-                                    <p className="text-sm text-slate-400">Better Auth with email, OAuth, and role-based access control.</p>
+                                    <h3 className="font-semibold text-white">Delegate Management</h3>
+                                    <p className="text-sm text-slate-400">Register and manage your church delegates with detailed profiles.</p>
                                 </div>
                             </div>
                         </div>
@@ -58,17 +61,15 @@ export default function LoginPage() {
                             <div className="flex items-center gap-4">
                                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-violet-500/20 text-violet-300">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6">
-                                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
-                                        <polyline points="7.5 4.21 12 6.81 16.5 4.21" />
-                                        <polyline points="7.5 19.79 7.5 14.6 3 12" />
-                                        <polyline points="21 12 16.5 14.6 16.5 19.79" />
-                                        <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
-                                        <line x1="12" y1="22.08" x2="12" y2="12" />
+                                        <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
+                                        <line x1="16" x2="16" y1="2" y2="6" />
+                                        <line x1="8" x2="8" y1="2" y2="6" />
+                                        <line x1="3" x2="21" y1="10" y2="10" />
                                     </svg>
                                 </div>
                                 <div>
-                                    <h3 className="font-semibold text-white">Type-Safe Database</h3>
-                                    <p className="text-sm text-slate-400">Prisma 7 ORM with PostgreSQL for reliable data management.</p>
+                                    <h3 className="font-semibold text-white">Event Registration</h3>
+                                    <p className="text-sm text-slate-400">Browse upcoming events and register your church&apos;s participation.</p>
                                 </div>
                             </div>
                         </div>
@@ -78,12 +79,13 @@ export default function LoginPage() {
                             <div className="flex items-center gap-4">
                                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-500/20 text-blue-300">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6">
-                                        <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+                                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                                        <polyline points="22 4 12 14.01 9 11.01" />
                                     </svg>
                                 </div>
                                 <div>
-                                    <h3 className="font-semibold text-white">Beautiful UI Components</h3>
-                                    <p className="text-sm text-slate-400">shadcn/ui with Tailwind CSS 4 and dark mode support.</p>
+                                    <h3 className="font-semibold text-white">Real-time Status</h3>
+                                    <p className="text-sm text-slate-400">Track your registration approvals and receive instant notifications.</p>
                                 </div>
                             </div>
                         </div>
@@ -92,8 +94,8 @@ export default function LoginPage() {
 
                 {/* Footer Metadata */}
                 <div className="relative z-10 w-full flex justify-between text-xs text-slate-500">
-                    <p>© 2024 StarterKit. MIT License.</p>
-                    <p>Next.js 16 • React 19 • TypeScript</p>
+                    <p>&copy; {new Date().getFullYear()} SCMD Online Registration</p>
+                    <p>South Central Mindanao District</p>
                 </div>
             </div>
 

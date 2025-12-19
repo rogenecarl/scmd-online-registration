@@ -23,17 +23,17 @@ export default function SignupUserPage() {
 
                 {/* Branding */}
                 <div className="relative z-10 w-full flex items-center gap-3 text-lg font-medium tracking-tight animate-in fade-in slide-in-from-top-4 duration-700">
-                    <span className="font-bold text-xl">StarterKit</span>
+                    <span className="font-bold text-xl">SCMD Online Registration</span>
                 </div>
 
                 {/* Onboarding Steps Showcase */}
                 <div className="relative z-10 my-auto max-w-[500px]">
                     <div className="mb-10 space-y-2 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-100">
                         <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-                            Start building in minutes.
+                            Join SCMD Events
                         </h2>
                         <p className="text-lg text-slate-400">
-                            Create your account to access the full starter kit, explore components, and start your next project.
+                            Create your account to start registering for church events, managing delegates, and tracking your participation.
                         </p>
                     </div>
 
@@ -45,7 +45,7 @@ export default function SignupUserPage() {
                             </div>
                             <div className="pt-1">
                                 <h3 className="text-lg font-semibold text-white">Create Your Account</h3>
-                                <p className="text-sm text-slate-400">Sign up to access your personal dashboard and project management.</p>
+                                <p className="text-sm text-slate-400">Sign up with your email to access the registration dashboard.</p>
                             </div>
                         </div>
 
@@ -55,8 +55,8 @@ export default function SignupUserPage() {
                                 <span className="text-sm font-bold">2</span>
                             </div>
                             <div className="pt-1">
-                                <h3 className="text-lg font-semibold text-white">Explore Components</h3>
-                                <p className="text-sm text-slate-400">Browse shadcn/ui components, templates, and code examples.</p>
+                                <h3 className="text-lg font-semibold text-white">Browse Events</h3>
+                                <p className="text-sm text-slate-400">View upcoming SCMD events and their registration requirements.</p>
                             </div>
                         </div>
 
@@ -66,8 +66,8 @@ export default function SignupUserPage() {
                                 <span className="text-sm font-bold">3</span>
                             </div>
                             <div className="pt-1">
-                                <h3 className="text-lg font-semibold text-white">Build & Deploy</h3>
-                                <p className="text-sm text-slate-400">Create your app and deploy to Vercel with one click.</p>
+                                <h3 className="text-lg font-semibold text-white">Register & Participate</h3>
+                                <p className="text-sm text-slate-400">Submit your registration and join church events across SCMD.</p>
                             </div>
                         </div>
                     </div>
@@ -75,8 +75,8 @@ export default function SignupUserPage() {
 
                 {/* Footer Metadata */}
                 <div className="relative z-10 w-full flex justify-between text-xs text-slate-500">
-                    <p>© 2024 StarterKit. MIT License.</p>
-                    <p>Join <span className="text-white">5,000+</span> developers today</p>
+                    <p>&copy; {new Date().getFullYear()} SCMD Online Registration</p>
+                    <p>Join <span className="text-white">100+</span> churches today</p>
                 </div>
             </div>
 

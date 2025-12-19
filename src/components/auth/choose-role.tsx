@@ -1,5 +1,5 @@
 import React from 'react';
-import { User, Code2, Rocket, Palette, Terminal, Book, GitPullRequest, Users } from 'lucide-react';
+import { User, Church, Calendar, Users, ClipboardList, CheckCircle, Building2, FileText } from 'lucide-react';
 import { RoleCard } from './role-card';
 import { RoleOption, UserRole } from './types';
 import Link from 'next/link';
@@ -8,32 +8,32 @@ const ChooseRole: React.FC = () => {
   const roles: RoleOption[] = [
     {
       id: UserRole.USER,
-      title: "Developer Account",
-      description: "Start building with the starter kit. Access the dashboard, components, and documentation.",
+      title: "Church Member",
+      description: "Register for church events, view your registrations, and track your participation status.",
       href: "/register",
       visualIcon: <User size={32} strokeWidth={2} />,
       primaryColor: "from-blue-500 to-cyan-500",
-      buttonText: "Create Developer Account",
+      buttonText: "Register as Member",
       features: [
-        { icon: <Rocket />, text: "Access to starter kit dashboard" },
-        { icon: <Palette />, text: "Browse UI components & templates" },
-        { icon: <Terminal />, text: "CLI tools and generators" },
-        { icon: <Book />, text: "Full documentation access" },
+        { icon: <Calendar />, text: "View upcoming SCMD events" },
+        { icon: <ClipboardList />, text: "Register for events" },
+        { icon: <CheckCircle />, text: "Track registration status" },
+        { icon: <FileText />, text: "View event details" },
       ]
     },
     {
       id: UserRole.PRESIDENT,
-      title: "Contributor Account",
-      description: "Join the team to contribute code, review PRs, and help build the next version.",
+      title: "Church President",
+      description: "Manage your church's registrations, submit delegates, and coordinate event participation.",
       href: "/register-provider",
-      visualIcon: <Code2 size={32} strokeWidth={2} />,
+      visualIcon: <Church size={32} strokeWidth={2} />,
       primaryColor: "from-teal-500 to-emerald-500",
-      buttonText: "Become a Contributor",
+      buttonText: "Register as President",
       features: [
-        { icon: <GitPullRequest />, text: "Submit pull requests" },
-        { icon: <Code2 />, text: "Contribute components" },
-        { icon: <Users />, text: "Join team discussions" },
-        { icon: <Book />, text: "Access internal docs" },
+        { icon: <Users />, text: "Manage church delegates" },
+        { icon: <Building2 />, text: "Update church profile" },
+        { icon: <ClipboardList />, text: "Submit group registrations" },
+        { icon: <CheckCircle />, text: "Track approval status" },
       ]
     }
   ];
@@ -51,7 +51,7 @@ const ChooseRole: React.FC = () => {
               Choose your <span className="text-brand-600 dark:text-cyan-400">Account Type</span>
             </h1>
             <p className="text-lg text-slate-600 dark:text-slate-400 max-w-xl mx-auto leading-relaxed">
-              A production-ready Next.js starter kit with authentication, database, and beautiful UI components.
+              Select the account type that best describes your role in SCMD events registration.
             </p>
           </div>
 
@@ -69,7 +69,7 @@ const ChooseRole: React.FC = () => {
       </main>
 
       <footer className="py-6 text-center text-slate-400 dark:text-slate-600 text-sm">
-        © {new Date().getFullYear()} StarterKit. MIT License.
+        &copy; {new Date().getFullYear()} SCMD Online Registration. South Central Mindanao District.
       </footer>
     </div>
   );

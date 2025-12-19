@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Check } from "lucide-react";
+import { ScrollAnimation } from "@/components/shared/scroll-animation";
 
 const benefits = [
   "Easy delegate registration",
@@ -39,68 +40,80 @@ export function CTA() {
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-4xl text-center">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-sm font-medium text-primary mb-8">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
-            </span>
-            Registration is open
-          </div>
+          <ScrollAnimation animation="fade-up">
+            <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-sm font-medium text-primary mb-8">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
+              </span>
+              Registration is open
+            </div>
+          </ScrollAnimation>
 
           {/* Headline */}
-          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl xl:text-6xl">
-            Ready to{" "}
-            <span className="bg-gradient-to-r from-primary via-violet-600 to-blue-600 bg-clip-text text-transparent dark:from-white dark:via-violet-400 dark:to-blue-400">
-              register your delegates?
-            </span>
-          </h2>
+          <ScrollAnimation animation="fade-up" delay={100}>
+            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl xl:text-6xl">
+              Ready to{" "}
+              <span className="bg-gradient-to-r from-primary via-violet-600 to-blue-600 bg-clip-text text-transparent dark:from-white dark:via-violet-400 dark:to-blue-400">
+                register your delegates?
+              </span>
+            </h2>
+          </ScrollAnimation>
 
           {/* Subheadline */}
-          <p className="mt-6 text-lg text-muted-foreground max-w-2xl mx-auto">
-            Church presidents can easily register delegates for upcoming events.
-            Track your registration status and manage your church&apos;s participation
-            all in one place.
-          </p>
+          <ScrollAnimation animation="fade-up" delay={200}>
+            <p className="mt-6 text-lg text-muted-foreground max-w-2xl mx-auto">
+              Church presidents can easily register delegates for upcoming events.
+              Track your registration status and manage your church&apos;s participation
+              all in one place.
+            </p>
+          </ScrollAnimation>
 
           {/* Benefits Grid */}
-          <div className="mt-10 grid grid-cols-2 sm:grid-cols-3 gap-4 max-w-2xl mx-auto">
-            {benefits.map((benefit) => (
-              <div
-                key={benefit}
-                className="flex items-center gap-2 text-sm text-muted-foreground"
-              >
-                <Check className="h-4 w-4 text-emerald-500 flex-shrink-0" />
-                <span>{benefit}</span>
-              </div>
-            ))}
-          </div>
+          <ScrollAnimation animation="fade-up" delay={300}>
+            <div className="mt-10 grid grid-cols-2 sm:grid-cols-3 gap-4 max-w-2xl mx-auto">
+              {benefits.map((benefit, index) => (
+                <div
+                  key={benefit}
+                  className="flex items-center gap-2 text-sm text-muted-foreground"
+                >
+                  <Check className="h-4 w-4 text-emerald-500 flex-shrink-0" />
+                  <span>{benefit}</span>
+                </div>
+              ))}
+            </div>
+          </ScrollAnimation>
 
           {/* CTA Buttons */}
-          <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button
-              size="lg"
-              asChild
-              className="w-full sm:w-auto text-base shadow-lg shadow-primary/25"
-            >
-              <Link href="/login">
-                Login to Register
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-            <Button
-              variant="outline"
-              size="lg"
-              asChild
-              className="w-full sm:w-auto text-base"
-            >
-              <Link href="#features">View Features</Link>
-            </Button>
-          </div>
+          <ScrollAnimation animation="fade-up" delay={400}>
+            <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
+              <Button
+                size="lg"
+                asChild
+                className="w-full sm:w-auto text-base shadow-lg shadow-primary/25"
+              >
+                <Link href="/login">
+                  Login to Register
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+              <Button
+                variant="outline"
+                size="lg"
+                asChild
+                className="w-full sm:w-auto text-base"
+              >
+                <Link href="#features">View Features</Link>
+              </Button>
+            </div>
+          </ScrollAnimation>
 
           {/* Trust Indicators */}
-          <p className="mt-8 text-sm text-muted-foreground">
-            For SCMD church presidents and administrators only
-          </p>
+          <ScrollAnimation animation="fade" delay={500}>
+            <p className="mt-8 text-sm text-muted-foreground">
+              For SCMD church presidents and administrators only
+            </p>
+          </ScrollAnimation>
         </div>
       </div>
     </section>
