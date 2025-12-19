@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -32,15 +32,13 @@ interface SidebarProps {
   brandName?: string;
 }
 
+const emptySubscribe = () => () => {};
+
 export function Sidebar({ sections, brandName = "StarterKit" }: SidebarProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
+  const isMounted = useSyncExternalStore(emptySubscribe, () => true, () => false);
   const pathname = usePathname();
   const { signOut, isLoading } = useAuth();
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
 
   // Use expanded state for SSR, then apply actual state after mount
   const collapsed = isMounted && isCollapsed;

@@ -1,3 +1,5 @@
+"use client";
+
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, StatsCard } from "@/components/dashboard";
 import { Calendar, Users, ClipboardCheck, Clock } from "lucide-react";
 
