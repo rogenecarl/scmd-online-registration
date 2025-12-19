@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { PaginatedDataTable } from "@/components/dashboard/paginated-data-table";
 import { Input } from "@/components/ui/input";
 import {
@@ -25,10 +25,10 @@ export function DivisionTable() {
     name: string;
   } | null>(null);
 
-  // Reset to page 1 when search changes
-  useEffect(() => {
+  const handleSearchChange = (value: string) => {
+    setSearch(value);
     setPage(1);
-  }, [debouncedSearch]);
+  };
 
   const { data, isLoading, error, isFetching } = useDivisions({
     page,
@@ -77,7 +77,7 @@ export function DivisionTable() {
         <Input
           placeholder="Search divisions..."
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => handleSearchChange(e.target.value)}
           className="pl-9"
         />
       </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { PaginatedDataTable } from "@/components/dashboard/paginated-data-table";
 import { Input } from "@/components/ui/input";
 import {
@@ -34,10 +34,15 @@ export function ChurchTable() {
     name: string;
   } | null>(null);
 
-  // Reset to page 1 when filters change
-  useEffect(() => {
+  const handleSearchChange = (value: string) => {
+    setSearch(value);
     setPage(1);
-  }, [debouncedSearch, divisionId]);
+  };
+
+  const handleDivisionChange = (value: string) => {
+    setDivisionId(value);
+    setPage(1);
+  };
 
   const { data, isLoading, error, isFetching } = useChurches({
     page,
@@ -90,11 +95,11 @@ export function ChurchTable() {
           <Input
             placeholder="Search churches..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => handleSearchChange(e.target.value)}
             className="pl-9"
           />
         </div>
-        <Select value={divisionId} onValueChange={setDivisionId}>
+        <Select value={divisionId} onValueChange={handleDivisionChange}>
           <SelectTrigger className="w-[140px] shrink-0">
             <SelectValue placeholder="All Divisions" />
           </SelectTrigger>

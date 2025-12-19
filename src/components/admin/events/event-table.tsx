@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { PaginatedDataTable } from "@/components/dashboard/paginated-data-table";
 import { Input } from "@/components/ui/input";
 import {
@@ -42,10 +42,15 @@ export function EventTable() {
     name: string;
   } | null>(null);
 
-  // Reset to page 1 when filters change
-  useEffect(() => {
+  const handleSearchChange = (value: string) => {
+    setSearch(value);
     setPage(1);
-  }, [debouncedSearch, statusFilter]);
+  };
+
+  const handleStatusChange = (value: EventStatus | "ALL") => {
+    setStatusFilter(value);
+    setPage(1);
+  };
 
   const { data, isLoading, error, isFetching } = useEvents({
     page,
@@ -97,14 +102,14 @@ export function EventTable() {
           <Input
             placeholder="Search events..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => handleSearchChange(e.target.value)}
             className="pl-9"
           />
         </div>
         <Select
           value={statusFilter}
           onValueChange={(value) =>
-            setStatusFilter(value as EventStatus | "ALL")
+            handleStatusChange(value as EventStatus | "ALL")
           }
         >
           <SelectTrigger className="w-full sm:w-[140px] shrink-0">
