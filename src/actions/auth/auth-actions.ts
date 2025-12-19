@@ -199,10 +199,10 @@ export async function signUpProvider(
             };
         }
 
-        // Update user role to PROVIDER immediately in same transaction
+        // Update user role to PRESIDENT immediately in same transaction
         await prisma.user.update({
             where: { id: res.user.id },
-            data: { role: "PROVIDER" },
+            data: { role: "PRESIDENT" },
             select: { id: true }, // Only return id to minimize data transfer
         });
 

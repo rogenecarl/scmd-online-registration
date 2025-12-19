@@ -8,7 +8,7 @@ import type { Role } from "@/types/auth"
 // Role-based dashboard redirects after login
 export const ROLE_REDIRECTS: Record<Role, string> = {
     ADMIN: "/admin/dashboard",
-    PROVIDER: "/provider/dashboard",
+    PRESIDENT: "/president/dashboard",
     USER: "/dashboard",
 } as const
 
@@ -19,13 +19,12 @@ export const DEFAULT_REDIRECT = "/dashboard"
 export const AUTH_ROUTES = [
     "/login",
     "/register",
-    "/register-provider",
 ] as const
 
 // Protected routes (require authentication)
 export const PROTECTED_ROUTES = [
     "/admin",
-    "/provider",
+    "/president",
     "/dashboard",
     "/settings",
     "/profile",

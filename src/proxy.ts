@@ -9,7 +9,7 @@ import { AUTH_ROUTES, PROTECTED_ROUTES, ROLE_REDIRECTS } from "@/config/auth"
  */
 const ROLE_ROUTE_MAP: Record<string, string> = {
     "/admin": "ADMIN",
-    "/provider": "PROVIDER",
+    "/president": "PRESIDENT",
     "/dashboard": "USER",
 }
 

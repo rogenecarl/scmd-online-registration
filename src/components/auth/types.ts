@@ -1,8 +1,8 @@
 import { ReactNode } from "react";
 
 export enum UserRole {
-  PATIENT = 'PATIENT',
-  PROVIDER = 'PROVIDER'
+  USER = 'USER',
+  PRESIDENT = 'PRESIDENT'
 }
 
 export interface RoleFeature {

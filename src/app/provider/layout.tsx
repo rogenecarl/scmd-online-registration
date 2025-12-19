@@ -7,8 +7,8 @@ export default async function ProviderLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // Server-side role check - redirects if not PROVIDER role
-  await requireRole("PROVIDER");
+  // Server-side role check - redirects if not PRESIDENT role
+  await requireRole("PRESIDENT");
 
   return (
     <div className="flex min-h-screen">

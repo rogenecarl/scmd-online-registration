@@ -30,7 +30,7 @@ export function useAuth() {
         // Role checks
         role: session.role,
         isAdmin: session.isAdmin,
-        isProvider: session.isProvider,
+        isPresident: session.isPresident,
         isUser: session.isUser,
 
         // Methods

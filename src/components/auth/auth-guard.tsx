@@ -73,9 +73,9 @@ export function AdminOnly({
 }
 
 /**
- * Shows content only to providers
+ * Shows content only to church presidents
  */
-export function ProviderOnly({
+export function PresidentOnly({
     children,
     fallback,
 }: {
@@ -83,7 +83,7 @@ export function ProviderOnly({
     fallback?: React.ReactNode
 }) {
     return (
-        <AuthGuard role="PROVIDER" fallback={fallback}>
+        <AuthGuard role="PRESIDENT" fallback={fallback}>
             {children}
         </AuthGuard>
     )

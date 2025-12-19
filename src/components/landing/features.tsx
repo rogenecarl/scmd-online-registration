@@ -1,71 +1,71 @@
 "use client";
 
 import {
-  Shield,
+  Church,
   Users,
-  Lock,
-  Palette,
-  Zap,
-  Code2,
-  Globe,
-  KeyRound,
+  Calendar,
+  ClipboardCheck,
+  Building2,
+  UserCog,
+  FileText,
+  Bell,
 } from "lucide-react";
 
 const features = [
   {
-    icon: Shield,
-    title: "Better Auth Integration",
+    icon: Church,
+    title: "Multi-Division Support",
     description:
-      "Production-ready authentication with email/password and OAuth providers. Includes rate limiting, session management, and CSRF protection out of the box.",
+      "Organize churches across multiple divisions with dedicated coordinators. Hierarchical structure for efficient management of the entire SCMD network.",
     gradient: "from-blue-500 to-cyan-500",
   },
   {
     icon: Users,
-    title: "Role-Based Access Control",
+    title: "Delegate Management",
     description:
-      "Built-in support for multiple user roles (Admin, Provider, User). Protect routes and components with simple, declarative guards.",
+      "Register and manage delegates with detailed information including roles, accommodations, and dietary requirements. Track delegate counts per church.",
     gradient: "from-violet-500 to-purple-500",
   },
   {
-    icon: Lock,
-    title: "Type-Safe Database",
+    icon: Calendar,
+    title: "Event Scheduling",
     description:
-      "Prisma 7 with PostgreSQL provides fully type-safe database queries. Schema-driven development with automatic migrations.",
+      "Create and manage church events with customizable registration periods. Set deadlines and track event status from upcoming to completed.",
     gradient: "from-emerald-500 to-green-500",
   },
   {
-    icon: Palette,
-    title: "Beautiful UI Components",
+    icon: ClipboardCheck,
+    title: "Approval Workflow",
     description:
-      "Pre-configured shadcn/ui components with Tailwind CSS 4. Dark mode support, accessible by default, and fully customizable.",
+      "Streamlined registration approval process for administrators. Review, approve, or reject registrations with detailed remarks and tracking.",
     gradient: "from-pink-500 to-rose-500",
   },
   {
-    icon: Zap,
-    title: "Server Actions",
+    icon: Building2,
+    title: "Church Profiles",
     description:
-      "Leverage Next.js 16 server actions for secure form handling. Consistent response types and built-in validation with Zod.",
+      "Complete church information management including pastor details, contact information, and location. Link churches to their respective divisions.",
     gradient: "from-amber-500 to-orange-500",
   },
   {
-    icon: Code2,
-    title: "TanStack Query",
+    icon: UserCog,
+    title: "Role-Based Access",
     description:
-      "Efficient client-side data fetching with automatic caching, background refetching, and optimistic updates.",
+      "Separate dashboards for Administrators and Church Presidents. Each role has tailored views and permissions for their responsibilities.",
     gradient: "from-red-500 to-pink-500",
   },
   {
-    icon: Globe,
-    title: "Social OAuth Providers",
+    icon: FileText,
+    title: "Registration Reports",
     description:
-      "One-click authentication with Google OAuth. Easily extend to add more providers like GitHub, Discord, or Microsoft.",
+      "Export delegate lists and registration summaries. Generate reports for event planning, accommodation arrangements, and food preparation.",
     gradient: "from-indigo-500 to-blue-500",
   },
   {
-    icon: KeyRound,
-    title: "Session Management",
+    icon: Bell,
+    title: "Status Notifications",
     description:
-      "Secure session handling with cross-tab synchronization. Automatic token refresh and secure cookie management.",
+      "Track registration status in real-time. Presidents receive updates when their registrations are approved or require attention.",
     gradient: "from-teal-500 to-emerald-500",
   },
 ];
@@ -83,15 +83,15 @@ export function Features() {
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16 sm:mb-20">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
-            Everything you need to{" "}
+            Everything you need for{" "}
             <span className="bg-gradient-to-r from-primary via-violet-600 to-primary bg-clip-text text-transparent dark:from-white dark:via-violet-400 dark:to-white">
-              ship faster
+              event registration
             </span>
           </h2>
           <p className="mt-4 text-lg text-muted-foreground">
-            Stop wasting time on boilerplate. Focus on what makes your app
-            unique while we handle authentication, database, and UI
-            infrastructure.
+            A complete solution for managing church event registrations.
+            From delegate sign-ups to admin approvals, everything is
+            streamlined and organized.
           </p>
         </div>
 

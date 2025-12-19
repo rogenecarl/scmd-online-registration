@@ -5,12 +5,12 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Check } from "lucide-react";
 
 const benefits = [
-  "Production-ready authentication",
-  "Role-based access control",
-  "Type-safe database queries",
-  "Beautiful UI components",
-  "Dark mode support",
-  "Responsive design",
+  "Easy delegate registration",
+  "Real-time approval status",
+  "Multi-church support",
+  "Event management",
+  "Export to reports",
+  "Mobile-friendly design",
 ];
 
 export function CTA() {
@@ -44,22 +44,22 @@ export function CTA() {
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
             </span>
-            Start building today
+            Registration is open
           </div>
 
           {/* Headline */}
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl xl:text-6xl">
             Ready to{" "}
             <span className="bg-gradient-to-r from-primary via-violet-600 to-blue-600 bg-clip-text text-transparent dark:from-white dark:via-violet-400 dark:to-blue-400">
-              ship faster?
+              register your delegates?
             </span>
           </h2>
 
           {/* Subheadline */}
           <p className="mt-6 text-lg text-muted-foreground max-w-2xl mx-auto">
-            Stop wasting time on boilerplate. Get a production-ready foundation
-            with authentication, database, and UI components — all configured
-            and ready for your next project.
+            Church presidents can easily register delegates for upcoming events.
+            Track your registration status and manage your church&apos;s participation
+            all in one place.
           </p>
 
           {/* Benefits Grid */}
@@ -82,8 +82,8 @@ export function CTA() {
               asChild
               className="w-full sm:w-auto text-base shadow-lg shadow-primary/25"
             >
-              <Link href="/register">
-                Get Started Free
+              <Link href="/login">
+                Login to Register
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
@@ -93,13 +93,13 @@ export function CTA() {
               asChild
               className="w-full sm:w-auto text-base"
             >
-              <Link href="#features">Learn More</Link>
+              <Link href="#features">View Features</Link>
             </Button>
           </div>
 
           {/* Trust Indicators */}
           <p className="mt-8 text-sm text-muted-foreground">
-            Free to use • MIT License • No credit card required
+            For SCMD church presidents and administrators only
           </p>
         </div>
       </div>

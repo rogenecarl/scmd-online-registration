@@ -44,7 +44,7 @@ const recentUsers = [
     id: "2",
     name: "Sarah Chen",
     email: "sarah@example.com",
-    role: "PROVIDER",
+    role: "PRESIDENT",
     status: "pending",
     joinedAt: "Dec 14, 2024",
   },
@@ -60,7 +60,7 @@ const recentUsers = [
     id: "4",
     name: "Michael Brown",
     email: "michael@example.com",
-    role: "PROVIDER",
+    role: "PRESIDENT",
     status: "active",
     joinedAt: "Dec 12, 2024",
   },
@@ -143,7 +143,7 @@ const userColumns = [
     render: (item: (typeof recentUsers)[0]) => {
       const roleConfig = {
         USER: { color: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400" },
-        PROVIDER: { color: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400" },
+        PRESIDENT: { color: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400" },
         ADMIN: { color: "bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-400" },
       };
       const config = roleConfig[item.role as keyof typeof roleConfig];

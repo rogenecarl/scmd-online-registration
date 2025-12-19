@@ -41,7 +41,7 @@ export function RegisterProviderForm() {
                 toast.success("Account created successfully!", { id: toastId })
                 // Better Auth auto-logs in on signup, refresh and redirect to provider dashboard
                 router.refresh()
-                router.push(ROLE_REDIRECTS.PROVIDER)
+                router.push(ROLE_REDIRECTS.PRESIDENT)
             } else {
                 toast.error(result.error, { id: toastId })
             }

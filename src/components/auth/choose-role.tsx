@@ -7,7 +7,7 @@ import Link from 'next/link';
 const ChooseRole: React.FC = () => {
   const roles: RoleOption[] = [
     {
-      id: UserRole.PATIENT,
+      id: UserRole.USER,
       title: "Developer Account",
       description: "Start building with the starter kit. Access the dashboard, components, and documentation.",
       href: "/register",
@@ -22,7 +22,7 @@ const ChooseRole: React.FC = () => {
       ]
     },
     {
-      id: UserRole.PROVIDER,
+      id: UserRole.PRESIDENT,
       title: "Contributor Account",
       description: "Join the team to contribute code, review PRs, and help build the next version.",
       href: "/register-provider",

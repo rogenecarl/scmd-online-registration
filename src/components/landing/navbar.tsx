@@ -3,15 +3,13 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Sparkles, LayoutDashboard, LogOut, Loader2 } from "lucide-react";
+import { Menu, X, Church, LayoutDashboard, LogOut, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks";
 import { getRoleRedirect } from "@/config/auth";
 
 const navLinks = [
   { href: "#features", label: "Features" },
-  { href: "#tech-stack", label: "Tech Stack" },
-  { href: "#testimonials", label: "Testimonials" },
 ];
 
 export function Navbar() {
@@ -44,10 +42,10 @@ export function Navbar() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 group">
             <div className="relative flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-lg shadow-primary/25 transition-transform group-hover:scale-105">
-              <Sparkles className="h-5 w-5" />
+              <Church className="h-5 w-5" />
             </div>
             <span className="text-lg font-semibold tracking-tight">
-              StarterKit
+              SCMD Events
             </span>
           </Link>
 

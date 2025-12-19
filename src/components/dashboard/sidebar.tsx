@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks";
 import {
-  Sparkles,
+  Church,
   ChevronLeft,
   ChevronRight,
   LogOut,
@@ -54,7 +54,7 @@ export function Sidebar({ sections, brandName = "StarterKit" }: SidebarProps) {
           )}
         >
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-sm">
-            <Sparkles className="h-4 w-4" />
+            <Church className="h-4 w-4" />
           </div>
           <span className="font-semibold tracking-tight">{brandName}</span>
         </Link>

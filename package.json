@@ -1,5 +1,5 @@
 {
-  "name": "nextjs16-betterauth-prisma-starterkit",
+  "name": "scmd-online-registration",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "seed:admin": "npx tsx --env-file=.env prisma/seed-admin.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

@@ -127,6 +127,7 @@ exports.Prisma.UserScalarFieldEnum = {
   role: 'role',
   emailVerified: 'emailVerified',
   image: 'image',
+  churchId: 'churchId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -167,6 +168,95 @@ exports.Prisma.VerificationScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.DivisionScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ChurchScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  divisionId: 'divisionId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CoordinatorScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  divisionId: 'divisionId',
+  phone: 'phone',
+  email: 'email',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PastorScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  churchId: 'churchId',
+  phone: 'phone',
+  email: 'email',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.EventScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  location: 'location',
+  logo: 'logo',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  registrationDeadline: 'registrationDeadline',
+  preRegistrationFee: 'preRegistrationFee',
+  preRegistrationStart: 'preRegistrationStart',
+  preRegistrationEnd: 'preRegistrationEnd',
+  onsiteRegistrationFee: 'onsiteRegistrationFee',
+  cookRegistrationFee: 'cookRegistrationFee',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.RegistrationScalarFieldEnum = {
+  id: 'id',
+  eventId: 'eventId',
+  churchId: 'churchId',
+  presidentId: 'presidentId',
+  status: 'status',
+  remarks: 'remarks',
+  reviewedAt: 'reviewedAt',
+  reviewedBy: 'reviewedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.DelegateScalarFieldEnum = {
+  id: 'id',
+  fullName: 'fullName',
+  nickname: 'nickname',
+  age: 'age',
+  gender: 'gender',
+  registrationId: 'registrationId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CookScalarFieldEnum = {
+  id: 'id',
+  fullName: 'fullName',
+  nickname: 'nickname',
+  age: 'age',
+  gender: 'gender',
+  registrationId: 'registrationId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -184,14 +274,40 @@ exports.Prisma.NullsOrder = {
 exports.UserRole = exports.$Enums.UserRole = {
   USER: 'USER',
   ADMIN: 'ADMIN',
-  PROVIDER: 'PROVIDER'
+  PRESIDENT: 'PRESIDENT'
+};
+
+exports.EventStatus = exports.$Enums.EventStatus = {
+  UPCOMING: 'UPCOMING',
+  ONGOING: 'ONGOING',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED'
+};
+
+exports.RegistrationStatus = exports.$Enums.RegistrationStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+};
+
+exports.Gender = exports.$Enums.Gender = {
+  MALE: 'MALE',
+  FEMALE: 'FEMALE'
 };
 
 exports.Prisma.ModelName = {
   User: 'User',
   Session: 'Session',
   Account: 'Account',
-  Verification: 'Verification'
+  Verification: 'Verification',
+  Division: 'Division',
+  Church: 'Church',
+  Coordinator: 'Coordinator',
+  Pastor: 'Pastor',
+  Event: 'Event',
+  Registration: 'Registration',
+  Delegate: 'Delegate',
+  Cook: 'Cook'
 };
 
 /**

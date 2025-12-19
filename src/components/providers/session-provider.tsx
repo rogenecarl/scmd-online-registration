@@ -53,7 +53,7 @@ type SessionContextType = {
     // Role checks
     role: Role | undefined
     isAdmin: boolean
-    isProvider: boolean
+    isPresident: boolean
     isUser: boolean
 
     // Methods
@@ -172,7 +172,7 @@ export function SessionProvider({
             // Role checks
             role,
             isAdmin: role === "ADMIN",
-            isProvider: role === "PROVIDER",
+            isPresident: role === "PRESIDENT",
             isUser: role === "USER",
 
             // Methods
