@@ -8,7 +8,10 @@
     "start": "next start",
     "lint": "eslint",
     "postinstall": "prisma generate",
-    "seed:admin": "npx tsx --env-file=.env prisma/seed-admin.ts"
+    "seed:admin": "npx tsx --env-file=.env prisma/seed-admin.ts",
+    "seed:president": "npx tsx --env-file=.env prisma/seed-president.ts",
+    "seed:divisions": "npx tsx --env-file=.env prisma/seed-divisions.ts",
+    "seed:churches": "npx tsx --env-file=.env prisma/seed-churches.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

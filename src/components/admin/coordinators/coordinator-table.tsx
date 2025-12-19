@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { DataTable } from "@/components/dashboard/data-table";
+import { useState, useEffect } from "react";
+import { PaginatedDataTable } from "@/components/dashboard/paginated-data-table";
 import { Input } from "@/components/ui/input";
 import {
   ConfirmDialog,
@@ -13,16 +13,28 @@ import { useCoordinators, useDeleteCoordinator } from "@/hooks/use-coordinators"
 import { getCoordinatorColumns } from "./coordinator-columns";
 import { useDebounce } from "@/hooks/use-debounce";
 import { User, Search } from "lucide-react";
+import { DEFAULT_PAGE_SIZE } from "@/lib/pagination";
 
 export function CoordinatorTable() {
   const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const debouncedSearch = useDebounce(search, 300);
   const [deleteTarget, setDeleteTarget] = useState<{
     id: string;
     name: string;
   } | null>(null);
 
-  const { data: coordinators, isLoading, error } = useCoordinators(debouncedSearch);
+  // Reset to page 1 when search changes
+  useEffect(() => {
+    setPage(1);
+  }, [debouncedSearch]);
+
+  const { data, isLoading, error, isFetching } = useCoordinators({
+    page,
+    pageSize,
+    search: debouncedSearch,
+  });
   const deleteMutation = useDeleteCoordinator();
   const confirmDialog = useConfirmDialog();
 
@@ -54,6 +66,9 @@ export function CoordinatorTable() {
     );
   }
 
+  const coordinators = data?.items ?? [];
+  const hasData = coordinators.length > 0 || debouncedSearch;
+
   return (
     <>
       {/* Search */}
@@ -68,22 +83,31 @@ export function CoordinatorTable() {
       </div>
 
       {/* Table or Empty State */}
-      {coordinators && coordinators.length > 0 ? (
-        <DataTable columns={columns} data={coordinators} />
+      {hasData ? (
+        <PaginatedDataTable
+          columns={columns}
+          data={coordinators}
+          emptyMessage={
+            debouncedSearch
+              ? "No coordinators match your search"
+              : "No coordinators found"
+          }
+          isLoading={isFetching}
+          pagination={{
+            page: data?.page ?? 1,
+            pageSize: data?.pageSize ?? pageSize,
+            total: data?.total ?? 0,
+            totalPages: data?.totalPages ?? 0,
+            onPageChange: setPage,
+            onPageSizeChange: setPageSize,
+          }}
+        />
       ) : (
         <EmptyState
           icon={User}
           title="No coordinators found"
-          description={
-            search
-              ? "Try adjusting your search"
-              : "Get started by assigning your first coordinator"
-          }
-          action={
-            !search
-              ? { label: "Add Coordinator", href: "/admin/coordinators/create" }
-              : undefined
-          }
+          description="Get started by assigning your first coordinator"
+          action={{ label: "Add Coordinator", href: "/admin/coordinators/create" }}
         />
       )}
 

@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import prisma from "@/lib/db";
 import { requireRole } from "@/lib/auth-server";
-import type { ActionResponse } from "@/types/api";
+import type { ActionResponse, PaginatedActionResponse } from "@/types/api";
 import {
   createEventSchema,
   updateEventSchema,
@@ -11,6 +11,7 @@ import {
   type EventFormInput,
 } from "@/schemas";
 import type { EventStatus } from "@/lib/generated/prisma";
+import { DEFAULT_PAGE_SIZE, getSkip } from "@/lib/pagination";
 
 // Types for return data
 export type EventWithCounts = {
@@ -94,31 +95,52 @@ function toEventDetail(
   };
 }
 
-// GET ALL - List with counts
-export async function getEvents(filters?: {
+// GET ALL - List with counts and pagination
+export async function getEvents(params: {
+  page?: number;
+  pageSize?: number;
   search?: string;
   status?: EventStatus;
-}): Promise<ActionResponse<EventWithCounts[]>> {
+} = {}): Promise<PaginatedActionResponse<EventWithCounts>> {
   await requireRole("ADMIN");
 
-  try {
-    const events = await prisma.event.findMany({
-      where: {
-        ...(filters?.search && {
-          OR: [
-            { name: { contains: filters.search, mode: "insensitive" } },
-            { location: { contains: filters.search, mode: "insensitive" } },
-          ],
-        }),
-        ...(filters?.status && { status: filters.status }),
-      },
-      include: {
-        _count: { select: { registrations: true } },
-      },
-      orderBy: { startDate: "desc" },
-    });
+  const page = params.page ?? 1;
+  const pageSize = params.pageSize ?? DEFAULT_PAGE_SIZE;
 
-    return { success: true, data: events };
+  try {
+    const where = {
+      ...(params.search && {
+        OR: [
+          { name: { contains: params.search, mode: "insensitive" as const } },
+          { location: { contains: params.search, mode: "insensitive" as const } },
+        ],
+      }),
+      ...(params.status && { status: params.status }),
+    };
+
+    const [events, total] = await Promise.all([
+      prisma.event.findMany({
+        where,
+        include: {
+          _count: { select: { registrations: true } },
+        },
+        orderBy: { startDate: "desc" },
+        skip: getSkip(page, pageSize),
+        take: pageSize,
+      }),
+      prisma.event.count({ where }),
+    ]);
+
+    return {
+      success: true,
+      data: {
+        items: events,
+        total,
+        page,
+        pageSize,
+        totalPages: Math.ceil(total / pageSize),
+      },
+    };
   } catch (error) {
     console.error("Failed to fetch events:", error);
     return { success: false, error: "Failed to fetch events" };

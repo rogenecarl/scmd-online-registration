@@ -1,6 +1,11 @@
 "use client";
 
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  keepPreviousData,
+} from "@tanstack/react-query";
 import { queryKeys } from "@/lib/query-keys";
 import { toast } from "sonner";
 import {
@@ -12,15 +17,20 @@ import {
 } from "@/actions/pastors";
 import type { PastorInput } from "@/schemas";
 
-// Query: List all pastors
-export function usePastors(search?: string) {
+// Query: List all pastors with pagination
+export function usePastors(params: {
+  page?: number;
+  pageSize?: number;
+  search?: string;
+} = {}) {
   return useQuery({
-    queryKey: [...queryKeys.pastors.list(), { search }],
+    queryKey: [...queryKeys.pastors.list(), params],
     queryFn: async () => {
-      const result = await getPastors(search);
+      const result = await getPastors(params);
       if (!result.success) throw new Error(result.error);
       return result.data;
     },
+    placeholderData: keepPreviousData,
   });
 }
 

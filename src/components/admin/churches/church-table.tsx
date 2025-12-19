@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { DataTable } from "@/components/dashboard/data-table";
+import { useState, useEffect } from "react";
+import { PaginatedDataTable } from "@/components/dashboard/paginated-data-table";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -21,17 +21,27 @@ import { useDivisionsForSelect } from "@/hooks/use-divisions";
 import { getChurchColumns } from "./church-columns";
 import { useDebounce } from "@/hooks/use-debounce";
 import { Church, Search } from "lucide-react";
+import { DEFAULT_PAGE_SIZE } from "@/lib/pagination";
 
 export function ChurchTable() {
   const [search, setSearch] = useState("");
   const [divisionId, setDivisionId] = useState<string>("all");
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const debouncedSearch = useDebounce(search, 300);
   const [deleteTarget, setDeleteTarget] = useState<{
     id: string;
     name: string;
   } | null>(null);
 
-  const { data: churches, isLoading, error } = useChurches({
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setPage(1);
+  }, [debouncedSearch, divisionId]);
+
+  const { data, isLoading, error, isFetching } = useChurches({
+    page,
+    pageSize,
     search: debouncedSearch || undefined,
     divisionId: divisionId === "all" ? undefined : divisionId || undefined,
   });
@@ -67,11 +77,15 @@ export function ChurchTable() {
     );
   }
 
+  const churches = data?.items ?? [];
+  const hasFilters = debouncedSearch || divisionId !== "all";
+  const hasData = churches.length > 0 || hasFilters;
+
   return (
     <>
       {/* Filters */}
-      <div className="flex flex-col sm:flex-row gap-4 mb-4">
-        <div className="relative flex-1 max-w-sm">
+      <div className="flex gap-3 mb-4">
+        <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             placeholder="Search churches..."
@@ -81,7 +95,7 @@ export function ChurchTable() {
           />
         </div>
         <Select value={divisionId} onValueChange={setDivisionId}>
-          <SelectTrigger className="w-full sm:w-[200px]">
+          <SelectTrigger className="w-[140px] shrink-0">
             <SelectValue placeholder="All Divisions" />
           </SelectTrigger>
           <SelectContent>
@@ -96,22 +110,31 @@ export function ChurchTable() {
       </div>
 
       {/* Table or Empty State */}
-      {churches && churches.length > 0 ? (
-        <DataTable columns={columns} data={churches} />
+      {hasData ? (
+        <PaginatedDataTable
+          columns={columns}
+          data={churches}
+          emptyMessage={
+            hasFilters
+              ? "No churches match your filters"
+              : "No churches found"
+          }
+          isLoading={isFetching}
+          pagination={{
+            page: data?.page ?? 1,
+            pageSize: data?.pageSize ?? pageSize,
+            total: data?.total ?? 0,
+            totalPages: data?.totalPages ?? 0,
+            onPageChange: setPage,
+            onPageSizeChange: setPageSize,
+          }}
+        />
       ) : (
         <EmptyState
           icon={Church}
           title="No churches found"
-          description={
-            search || divisionId !== "all"
-              ? "Try adjusting your filters"
-              : "Get started by creating your first church"
-          }
-          action={
-            !search && divisionId === "all"
-              ? { label: "Add Church", href: "/admin/churches/create" }
-              : undefined
-          }
+          description="Get started by creating your first church"
+          action={{ label: "Add Church", href: "/admin/churches/create" }}
         />
       )}
 

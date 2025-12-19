@@ -3,8 +3,9 @@
 import { revalidatePath } from "next/cache";
 import prisma from "@/lib/db";
 import { requireRole } from "@/lib/auth-server";
-import type { ActionResponse } from "@/types/api";
+import type { ActionResponse, PaginatedActionResponse } from "@/types/api";
 import { divisionSchema, type DivisionInput } from "@/schemas";
+import { DEFAULT_PAGE_SIZE, getSkip } from "@/lib/pagination";
 
 // Types for return data
 export type DivisionWithCounts = {
@@ -30,27 +31,47 @@ export type DivisionDetail = {
   } | null;
 };
 
-// GET ALL - List with counts
-export async function getDivisions(
-  search?: string
-): Promise<ActionResponse<DivisionWithCounts[]>> {
+// GET ALL - List with counts and pagination
+export async function getDivisions(params: {
+  page?: number;
+  pageSize?: number;
+  search?: string;
+} = {}): Promise<PaginatedActionResponse<DivisionWithCounts>> {
   await requireRole("ADMIN");
 
-  try {
-    const divisions = await prisma.division.findMany({
-      where: search
-        ? {
-            name: { contains: search, mode: "insensitive" },
-          }
-        : undefined,
-      include: {
-        _count: { select: { churches: true } },
-        coordinator: { select: { id: true, name: true } },
-      },
-      orderBy: { name: "asc" },
-    });
+  const page = params.page ?? 1;
+  const pageSize = params.pageSize ?? DEFAULT_PAGE_SIZE;
+  const search = params.search;
 
-    return { success: true, data: divisions };
+  try {
+    const where = search
+      ? { name: { contains: search, mode: "insensitive" as const } }
+      : undefined;
+
+    const [divisions, total] = await Promise.all([
+      prisma.division.findMany({
+        where,
+        include: {
+          _count: { select: { churches: true } },
+          coordinator: { select: { id: true, name: true } },
+        },
+        orderBy: { name: "asc" },
+        skip: getSkip(page, pageSize),
+        take: pageSize,
+      }),
+      prisma.division.count({ where }),
+    ]);
+
+    return {
+      success: true,
+      data: {
+        items: divisions,
+        total,
+        page,
+        pageSize,
+        totalPages: Math.ceil(total / pageSize),
+      },
+    };
   } catch (error) {
     console.error("Failed to fetch divisions:", error);
     return { success: false, error: "Failed to fetch divisions" };

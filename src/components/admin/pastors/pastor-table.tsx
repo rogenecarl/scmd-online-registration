@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { DataTable } from "@/components/dashboard/data-table";
+import { useState, useEffect } from "react";
+import { PaginatedDataTable } from "@/components/dashboard/paginated-data-table";
 import { Input } from "@/components/ui/input";
 import {
   ConfirmDialog,
@@ -13,16 +13,28 @@ import { usePastors, useDeletePastor } from "@/hooks/use-pastors";
 import { getPastorColumns } from "./pastor-columns";
 import { useDebounce } from "@/hooks/use-debounce";
 import { User, Search } from "lucide-react";
+import { DEFAULT_PAGE_SIZE } from "@/lib/pagination";
 
 export function PastorTable() {
   const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const debouncedSearch = useDebounce(search, 300);
   const [deleteTarget, setDeleteTarget] = useState<{
     id: string;
     name: string;
   } | null>(null);
 
-  const { data: pastors, isLoading, error } = usePastors(debouncedSearch);
+  // Reset to page 1 when search changes
+  useEffect(() => {
+    setPage(1);
+  }, [debouncedSearch]);
+
+  const { data, isLoading, error, isFetching } = usePastors({
+    page,
+    pageSize,
+    search: debouncedSearch,
+  });
   const deleteMutation = useDeletePastor();
   const confirmDialog = useConfirmDialog();
 
@@ -54,6 +66,9 @@ export function PastorTable() {
     );
   }
 
+  const pastors = data?.items ?? [];
+  const hasData = pastors.length > 0 || debouncedSearch;
+
   return (
     <>
       {/* Search */}
@@ -68,22 +83,31 @@ export function PastorTable() {
       </div>
 
       {/* Table or Empty State */}
-      {pastors && pastors.length > 0 ? (
-        <DataTable columns={columns} data={pastors} />
+      {hasData ? (
+        <PaginatedDataTable
+          columns={columns}
+          data={pastors}
+          emptyMessage={
+            debouncedSearch
+              ? "No pastors match your search"
+              : "No pastors found"
+          }
+          isLoading={isFetching}
+          pagination={{
+            page: data?.page ?? 1,
+            pageSize: data?.pageSize ?? pageSize,
+            total: data?.total ?? 0,
+            totalPages: data?.totalPages ?? 0,
+            onPageChange: setPage,
+            onPageSizeChange: setPageSize,
+          }}
+        />
       ) : (
         <EmptyState
           icon={User}
           title="No pastors found"
-          description={
-            search
-              ? "Try adjusting your search"
-              : "Get started by assigning your first pastor"
-          }
-          action={
-            !search
-              ? { label: "Add Pastor", href: "/admin/pastors/create" }
-              : undefined
-          }
+          description="Get started by assigning your first pastor"
+          action={{ label: "Add Pastor", href: "/admin/pastors/create" }}
         />
       )}
 

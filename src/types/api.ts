@@ -7,6 +7,14 @@ export type ActionResponse<T = unknown> =
   | { success: false; error: string; fieldErrors?: Record<string, string[]> };
 
 /**
+ * Pagination parameters for list queries
+ */
+export type PaginationParams = {
+  page?: number;
+  pageSize?: number;
+};
+
+/**
  * Paginated response wrapper
  */
 export type PaginatedResponse<T> = {

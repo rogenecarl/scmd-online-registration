@@ -9,7 +9,8 @@ pnpm dev          # Start development server (localhost:3000)
 pnpm build        # Production build
 pnpm lint         # Run ESLint
 pnpm start        # Start production server
-pnpm seed:admin   # Seed admin user
+pnpm seed:admin      # Seed admin user
+pnpm seed:president  # Seed president users for churches
 
 # Database
 npx prisma generate                    # Regenerate Prisma client (output: src/lib/generated/prisma)

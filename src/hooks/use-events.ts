@@ -1,6 +1,11 @@
 "use client";
 
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  keepPreviousData,
+} from "@tanstack/react-query";
 import { queryKeys } from "@/lib/query-keys";
 import { toast } from "sonner";
 import {
@@ -16,15 +21,21 @@ import {
 import type { EventFormInput } from "@/schemas";
 import type { EventStatus } from "@/lib/generated/prisma";
 
-// Query: List all events
-export function useEvents(filters?: { search?: string; status?: EventStatus }) {
+// Query: List all events with pagination
+export function useEvents(params: {
+  page?: number;
+  pageSize?: number;
+  search?: string;
+  status?: EventStatus;
+} = {}) {
   return useQuery({
-    queryKey: [...queryKeys.events.list(), filters],
+    queryKey: [...queryKeys.events.list(), params],
     queryFn: async () => {
-      const result = await getEvents(filters);
+      const result = await getEvents(params);
       if (!result.success) throw new Error(result.error);
       return result.data;
     },
+    placeholderData: keepPreviousData,
   });
 }
 

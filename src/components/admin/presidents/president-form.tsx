@@ -54,9 +54,9 @@ export function PresidentForm({ mode, initialData }: PresidentFormProps) {
   // For edit mode, show all churches
   const { data: availableChurches, isLoading: churchesLoading } =
     useChurchesWithoutPresident();
-  const { data: allChurches } = useChurches();
+  const { data: allChurchesData } = useChurches();
 
-  const churches = mode === "edit" ? allChurches : availableChurches;
+  const churches = mode === "edit" ? allChurchesData?.items : availableChurches;
 
   // Use appropriate schema based on mode
   const form = useForm<SeedPresidentInput | UpdatePresidentInput>({

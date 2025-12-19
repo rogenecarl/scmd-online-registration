@@ -3,8 +3,9 @@
 import { revalidatePath } from "next/cache";
 import prisma from "@/lib/db";
 import { requireRole } from "@/lib/auth-server";
-import type { ActionResponse } from "@/types/api";
+import type { ActionResponse, PaginatedActionResponse } from "@/types/api";
 import { coordinatorSchema, type CoordinatorInput } from "@/schemas";
+import { DEFAULT_PAGE_SIZE, getSkip } from "@/lib/pagination";
 
 // Types for return data
 export type CoordinatorWithDivision = {
@@ -24,29 +25,51 @@ export type CoordinatorDetail = {
   division: { id: string; name: string };
 };
 
-// GET ALL
-export async function getCoordinators(
-  search?: string
-): Promise<ActionResponse<CoordinatorWithDivision[]>> {
+// GET ALL with pagination
+export async function getCoordinators(params: {
+  page?: number;
+  pageSize?: number;
+  search?: string;
+} = {}): Promise<PaginatedActionResponse<CoordinatorWithDivision>> {
   await requireRole("ADMIN");
 
-  try {
-    const coordinators = await prisma.coordinator.findMany({
-      where: search
-        ? {
-            OR: [
-              { name: { contains: search, mode: "insensitive" } },
-              { division: { name: { contains: search, mode: "insensitive" } } },
-            ],
-          }
-        : undefined,
-      include: {
-        division: { select: { id: true, name: true } },
-      },
-      orderBy: { division: { name: "asc" } },
-    });
+  const page = params.page ?? 1;
+  const pageSize = params.pageSize ?? DEFAULT_PAGE_SIZE;
+  const search = params.search;
 
-    return { success: true, data: coordinators };
+  try {
+    const where = search
+      ? {
+          OR: [
+            { name: { contains: search, mode: "insensitive" as const } },
+            { division: { name: { contains: search, mode: "insensitive" as const } } },
+          ],
+        }
+      : undefined;
+
+    const [coordinators, total] = await Promise.all([
+      prisma.coordinator.findMany({
+        where,
+        include: {
+          division: { select: { id: true, name: true } },
+        },
+        orderBy: { division: { name: "asc" } },
+        skip: getSkip(page, pageSize),
+        take: pageSize,
+      }),
+      prisma.coordinator.count({ where }),
+    ]);
+
+    return {
+      success: true,
+      data: {
+        items: coordinators,
+        total,
+        page,
+        pageSize,
+        totalPages: Math.ceil(total / pageSize),
+      },
+    };
   } catch (error) {
     console.error("Failed to fetch coordinators:", error);
     return { success: false, error: "Failed to fetch coordinators" };

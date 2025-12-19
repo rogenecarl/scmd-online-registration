@@ -397,20 +397,22 @@ export function EventForm({ mode, initialData }: EventFormProps) {
                   <FormItem>
                     <FormLabel>Pre-Registration Fee *</FormLabel>
                     <FormControl>
-                      <div className="relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
-                          ₱
-                        </span>
-                        <Input
+                      <div className="flex h-9 items-center gap-2 rounded-md border border-input bg-background px-3 ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
+                        <span className="text-muted-foreground">₱</span>
+                        <input
                           type="number"
                           step="1"
                           min="0"
-                          className="pl-7"
+                          className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                           placeholder="0"
                           {...field}
-                          value={field.value ?? ""}
+                          value={field.value || ""}
                           onChange={(e) =>
-                            field.onChange(parseInt(e.target.value, 10) || 0)
+                            field.onChange(
+                              e.target.value === ""
+                                ? 0
+                                : parseInt(e.target.value, 10)
+                            )
                           }
                         />
                       </div>
@@ -428,20 +430,22 @@ export function EventForm({ mode, initialData }: EventFormProps) {
                   <FormItem>
                     <FormLabel>On-Site Registration Fee *</FormLabel>
                     <FormControl>
-                      <div className="relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
-                          ₱
-                        </span>
-                        <Input
+                      <div className="flex h-9 items-center gap-2 rounded-md border border-input bg-background px-3 ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
+                        <span className="text-muted-foreground">₱</span>
+                        <input
                           type="number"
                           step="1"
                           min="0"
-                          className="pl-7"
+                          className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                           placeholder="0"
                           {...field}
-                          value={field.value ?? ""}
+                          value={field.value || ""}
                           onChange={(e) =>
-                            field.onChange(parseInt(e.target.value, 10) || 0)
+                            field.onChange(
+                              e.target.value === ""
+                                ? 0
+                                : parseInt(e.target.value, 10)
+                            )
                           }
                         />
                       </div>
@@ -459,20 +463,22 @@ export function EventForm({ mode, initialData }: EventFormProps) {
                   <FormItem>
                     <FormLabel>Cook Registration Fee *</FormLabel>
                     <FormControl>
-                      <div className="relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
-                          ₱
-                        </span>
-                        <Input
+                      <div className="flex h-9 items-center gap-2 rounded-md border border-input bg-background px-3 ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
+                        <span className="text-muted-foreground">₱</span>
+                        <input
                           type="number"
                           step="1"
                           min="0"
-                          className="pl-7"
+                          className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                           placeholder="0"
                           {...field}
-                          value={field.value ?? ""}
+                          value={field.value || ""}
                           onChange={(e) =>
-                            field.onChange(parseInt(e.target.value, 10) || 0)
+                            field.onChange(
+                              e.target.value === ""
+                                ? 0
+                                : parseInt(e.target.value, 10)
+                            )
                           }
                         />
                       </div>

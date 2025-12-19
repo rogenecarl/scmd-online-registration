@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { DataTable } from "@/components/dashboard/data-table";
+import { useState, useEffect } from "react";
+import { PaginatedDataTable } from "@/components/dashboard/paginated-data-table";
 import { Input } from "@/components/ui/input";
 import {
   ConfirmDialog,
@@ -13,16 +13,28 @@ import { useDivisions, useDeleteDivision } from "@/hooks/use-divisions";
 import { getDivisionColumns } from "./division-columns";
 import { useDebounce } from "@/hooks/use-debounce";
 import { Building2, Search } from "lucide-react";
+import { DEFAULT_PAGE_SIZE } from "@/lib/pagination";
 
 export function DivisionTable() {
   const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const debouncedSearch = useDebounce(search, 300);
   const [deleteTarget, setDeleteTarget] = useState<{
     id: string;
     name: string;
   } | null>(null);
 
-  const { data: divisions, isLoading, error } = useDivisions(debouncedSearch);
+  // Reset to page 1 when search changes
+  useEffect(() => {
+    setPage(1);
+  }, [debouncedSearch]);
+
+  const { data, isLoading, error, isFetching } = useDivisions({
+    page,
+    pageSize,
+    search: debouncedSearch,
+  });
   const deleteMutation = useDeleteDivision();
   const confirmDialog = useConfirmDialog();
 
@@ -54,6 +66,9 @@ export function DivisionTable() {
     );
   }
 
+  const divisions = data?.items ?? [];
+  const hasData = divisions.length > 0 || debouncedSearch;
+
   return (
     <>
       {/* Search */}
@@ -68,22 +83,31 @@ export function DivisionTable() {
       </div>
 
       {/* Table or Empty State */}
-      {divisions && divisions.length > 0 ? (
-        <DataTable columns={columns} data={divisions} />
+      {hasData ? (
+        <PaginatedDataTable
+          columns={columns}
+          data={divisions}
+          emptyMessage={
+            debouncedSearch
+              ? "No divisions match your search"
+              : "No divisions found"
+          }
+          isLoading={isFetching}
+          pagination={{
+            page: data?.page ?? 1,
+            pageSize: data?.pageSize ?? pageSize,
+            total: data?.total ?? 0,
+            totalPages: data?.totalPages ?? 0,
+            onPageChange: setPage,
+            onPageSizeChange: setPageSize,
+          }}
+        />
       ) : (
         <EmptyState
           icon={Building2}
           title="No divisions found"
-          description={
-            search
-              ? "Try adjusting your search"
-              : "Get started by creating your first division"
-          }
-          action={
-            !search
-              ? { label: "Add Division", href: "/admin/divisions/create" }
-              : undefined
-          }
+          description="Get started by creating your first division"
+          action={{ label: "Add Division", href: "/admin/divisions/create" }}
         />
       )}
 

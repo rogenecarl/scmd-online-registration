@@ -3,8 +3,9 @@
 import { revalidatePath } from "next/cache";
 import prisma from "@/lib/db";
 import { requireRole } from "@/lib/auth-server";
-import type { ActionResponse } from "@/types/api";
+import type { ActionResponse, PaginatedActionResponse } from "@/types/api";
 import { churchSchema, type ChurchInput } from "@/schemas";
+import { DEFAULT_PAGE_SIZE, getSkip } from "@/lib/pagination";
 
 // Types for return data
 export type ChurchWithRelations = {
@@ -31,30 +32,51 @@ export type ChurchDetail = {
   presidents: { id: string; name: string; email: string }[];
 };
 
-// GET ALL
-export async function getChurches(filters?: {
+// GET ALL with pagination
+export async function getChurches(params: {
+  page?: number;
+  pageSize?: number;
   search?: string;
   divisionId?: string;
-}): Promise<ActionResponse<ChurchWithRelations[]>> {
+} = {}): Promise<PaginatedActionResponse<ChurchWithRelations>> {
   await requireRole("ADMIN");
 
-  try {
-    const churches = await prisma.church.findMany({
-      where: {
-        ...(filters?.search && {
-          name: { contains: filters.search, mode: "insensitive" },
-        }),
-        ...(filters?.divisionId && { divisionId: filters.divisionId }),
-      },
-      include: {
-        division: { select: { id: true, name: true } },
-        pastor: { select: { id: true, name: true } },
-        _count: { select: { presidents: true, registrations: true } },
-      },
-      orderBy: { name: "asc" },
-    });
+  const page = params.page ?? 1;
+  const pageSize = params.pageSize ?? DEFAULT_PAGE_SIZE;
 
-    return { success: true, data: churches };
+  try {
+    const where = {
+      ...(params.search && {
+        name: { contains: params.search, mode: "insensitive" as const },
+      }),
+      ...(params.divisionId && { divisionId: params.divisionId }),
+    };
+
+    const [churches, total] = await Promise.all([
+      prisma.church.findMany({
+        where,
+        include: {
+          division: { select: { id: true, name: true } },
+          pastor: { select: { id: true, name: true } },
+          _count: { select: { presidents: true, registrations: true } },
+        },
+        orderBy: { name: "asc" },
+        skip: getSkip(page, pageSize),
+        take: pageSize,
+      }),
+      prisma.church.count({ where }),
+    ]);
+
+    return {
+      success: true,
+      data: {
+        items: churches,
+        total,
+        page,
+        pageSize,
+        totalPages: Math.ceil(total / pageSize),
+      },
+    };
   } catch (error) {
     console.error("Failed to fetch churches:", error);
     return { success: false, error: "Failed to fetch churches" };

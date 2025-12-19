@@ -1,6 +1,11 @@
 "use client";
 
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  keepPreviousData,
+} from "@tanstack/react-query";
 import { queryKeys } from "@/lib/query-keys";
 import { toast } from "sonner";
 import {
@@ -13,15 +18,21 @@ import {
 } from "@/actions/churches";
 import type { ChurchInput } from "@/schemas";
 
-// Query: List all churches with optional filters
-export function useChurches(filters?: { search?: string; divisionId?: string }) {
+// Query: List all churches with pagination and filters
+export function useChurches(params: {
+  page?: number;
+  pageSize?: number;
+  search?: string;
+  divisionId?: string;
+} = {}) {
   return useQuery({
-    queryKey: [...queryKeys.churches.list(), filters],
+    queryKey: [...queryKeys.churches.list(), params],
     queryFn: async () => {
-      const result = await getChurches(filters);
+      const result = await getChurches(params);
       if (!result.success) throw new Error(result.error);
       return result.data;
     },
+    placeholderData: keepPreviousData,
   });
 }
 

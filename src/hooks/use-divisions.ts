@@ -1,6 +1,11 @@
 "use client";
 
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  keepPreviousData,
+} from "@tanstack/react-query";
 import { queryKeys } from "@/lib/query-keys";
 import { toast } from "sonner";
 import {
@@ -14,15 +19,20 @@ import {
 } from "@/actions/divisions";
 import type { DivisionInput } from "@/schemas";
 
-// Query: List all divisions
-export function useDivisions(search?: string) {
+// Query: List all divisions with pagination
+export function useDivisions(params: {
+  page?: number;
+  pageSize?: number;
+  search?: string;
+} = {}) {
   return useQuery({
-    queryKey: [...queryKeys.divisions.list(), { search }],
+    queryKey: [...queryKeys.divisions.list(), params],
     queryFn: async () => {
-      const result = await getDivisions(search);
+      const result = await getDivisions(params);
       if (!result.success) throw new Error(result.error);
       return result.data;
     },
+    placeholderData: keepPreviousData,
   });
 }
 

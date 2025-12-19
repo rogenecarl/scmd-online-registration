@@ -62,6 +62,25 @@ export const queryKeys = {
     pending: () => [...queryKeys.registrations.all, "pending"] as const,
     detail: (id: string) =>
       [...queryKeys.registrations.all, "detail", id] as const,
+    // President-specific
+    my: () => [...queryKeys.registrations.all, "my"] as const,
+    myDetail: (id: string) =>
+      [...queryKeys.registrations.all, "my", "detail", id] as const,
+  },
+
+  // President events queries
+  presidentEvents: {
+    all: ["presidentEvents"] as const,
+    available: () => [...queryKeys.presidentEvents.all, "available"] as const,
+    forRegistration: (eventId: string) =>
+      [...queryKeys.presidentEvents.all, "forRegistration", eventId] as const,
+  },
+
+  // Dashboard queries
+  dashboard: {
+    all: ["dashboard"] as const,
+    president: () => [...queryKeys.dashboard.all, "president"] as const,
+    admin: () => [...queryKeys.dashboard.all, "admin"] as const,
   },
 
   // President (Church Admin) queries

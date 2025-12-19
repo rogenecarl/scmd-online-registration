@@ -5,9 +5,6 @@ import {
   LayoutDashboard,
   Calendar,
   ClipboardCheck,
-  Users,
-  UserPlus,
-  History,
   Settings,
 } from "lucide-react";
 
@@ -26,7 +23,7 @@ export const presidentNavSections: NavSection[] = [
     title: "Events",
     items: [
       {
-        title: "Active Events",
+        title: "Browse Events",
         href: "/president/events",
         icon: Calendar,
       },
@@ -34,31 +31,6 @@ export const presidentNavSections: NavSection[] = [
         title: "My Registrations",
         href: "/president/registrations",
         icon: ClipboardCheck,
-      },
-    ],
-  },
-  {
-    title: "Delegates",
-    items: [
-      {
-        title: "Register Delegates",
-        href: "/president/register",
-        icon: UserPlus,
-      },
-      {
-        title: "My Delegates",
-        href: "/president/delegates",
-        icon: Users,
-      },
-    ],
-  },
-  {
-    title: "History",
-    items: [
-      {
-        title: "Past Registrations",
-        href: "/president/history",
-        icon: History,
       },
     ],
   },

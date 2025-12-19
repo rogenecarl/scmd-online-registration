@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { DataTable } from "@/components/dashboard/data-table";
+import { useState, useEffect } from "react";
+import { PaginatedDataTable } from "@/components/dashboard/paginated-data-table";
 import { Input } from "@/components/ui/input";
 import {
   ConfirmDialog,
@@ -18,9 +18,12 @@ import { getPresidentColumns } from "./president-columns";
 import { ResetPasswordDialog } from "./reset-password-dialog";
 import { useDebounce } from "@/hooks/use-debounce";
 import { UserCog, Search } from "lucide-react";
+import { DEFAULT_PAGE_SIZE } from "@/lib/pagination";
 
 export function PresidentTable() {
   const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const debouncedSearch = useDebounce(search, 300);
 
   // Target states
@@ -37,7 +40,16 @@ export function PresidentTable() {
     name: string;
   } | null>(null);
 
-  const { data: presidents, isLoading, error } = usePresidents({ search: debouncedSearch });
+  // Reset to page 1 when search changes
+  useEffect(() => {
+    setPage(1);
+  }, [debouncedSearch]);
+
+  const { data, isLoading, error, isFetching } = usePresidents({
+    page,
+    pageSize,
+    search: debouncedSearch,
+  });
   const deleteMutation = useDeletePresident();
   const deactivateMutation = useDeactivatePresident();
 
@@ -92,6 +104,9 @@ export function PresidentTable() {
     );
   }
 
+  const presidents = data?.items ?? [];
+  const hasData = presidents.length > 0 || debouncedSearch;
+
   return (
     <>
       {/* Search */}
@@ -106,22 +121,31 @@ export function PresidentTable() {
       </div>
 
       {/* Table or Empty State */}
-      {presidents && presidents.length > 0 ? (
-        <DataTable columns={columns} data={presidents} />
+      {hasData ? (
+        <PaginatedDataTable
+          columns={columns}
+          data={presidents}
+          emptyMessage={
+            debouncedSearch
+              ? "No presidents match your search"
+              : "No presidents found"
+          }
+          isLoading={isFetching}
+          pagination={{
+            page: data?.page ?? 1,
+            pageSize: data?.pageSize ?? pageSize,
+            total: data?.total ?? 0,
+            totalPages: data?.totalPages ?? 0,
+            onPageChange: setPage,
+            onPageSizeChange: setPageSize,
+          }}
+        />
       ) : (
         <EmptyState
           icon={UserCog}
           title="No presidents found"
-          description={
-            search
-              ? "Try adjusting your search"
-              : "Get started by creating your first president account"
-          }
-          action={
-            !search
-              ? { label: "Add President", href: "/admin/presidents/create" }
-              : undefined
-          }
+          description="Get started by creating your first president account"
+          action={{ label: "Add President", href: "/admin/presidents/create" }}
         />
       )}
 

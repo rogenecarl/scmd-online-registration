@@ -44,10 +44,10 @@ export function PastorForm({ mode, initialData }: PastorFormProps) {
   // For edit mode, show all churches (including current one)
   const { data: availableChurches, isLoading: churchesLoading } =
     useChurchesWithoutPastor();
-  const { data: allChurches } = useChurches();
+  const { data: allChurchesData } = useChurches();
 
   // In edit mode, include the current church in the list
-  const churches = mode === "edit" ? allChurches : availableChurches;
+  const churches = mode === "edit" ? allChurchesData?.items : availableChurches;
 
   const form = useForm<PastorInput>({
     resolver: zodResolver(pastorSchema),

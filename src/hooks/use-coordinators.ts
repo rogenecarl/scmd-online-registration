@@ -1,6 +1,11 @@
 "use client";
 
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  keepPreviousData,
+} from "@tanstack/react-query";
 import { queryKeys } from "@/lib/query-keys";
 import { toast } from "sonner";
 import {
@@ -12,15 +17,20 @@ import {
 } from "@/actions/coordinators";
 import type { CoordinatorInput } from "@/schemas";
 
-// Query: List all coordinators
-export function useCoordinators(search?: string) {
+// Query: List all coordinators with pagination
+export function useCoordinators(params: {
+  page?: number;
+  pageSize?: number;
+  search?: string;
+} = {}) {
   return useQuery({
-    queryKey: [...queryKeys.coordinators.list(), { search }],
+    queryKey: [...queryKeys.coordinators.list(), params],
     queryFn: async () => {
-      const result = await getCoordinators(search);
+      const result = await getCoordinators(params);
       if (!result.success) throw new Error(result.error);
       return result.data;
     },
+    placeholderData: keepPreviousData,
   });
 }
 

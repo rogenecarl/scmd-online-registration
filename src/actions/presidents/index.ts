@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import prisma from "@/lib/db";
 import { requireRole } from "@/lib/auth-server";
-import type { ActionResponse } from "@/types/api";
+import type { ActionResponse, PaginatedActionResponse } from "@/types/api";
 import {
   seedPresidentSchema,
   updatePresidentSchema,
@@ -12,6 +12,7 @@ import {
   type UpdatePresidentInput,
   type ResetPasswordInput,
 } from "@/schemas";
+import { DEFAULT_PAGE_SIZE, getSkip } from "@/lib/pagination";
 
 // Types for return data
 export type PresidentWithChurch = {
@@ -46,45 +47,66 @@ export type PresidentDetail = {
   };
 };
 
-// GET ALL PRESIDENTS
-export async function getPresidents(filters?: {
+// GET ALL PRESIDENTS with pagination
+export async function getPresidents(params: {
+  page?: number;
+  pageSize?: number;
   search?: string;
   churchId?: string;
-}): Promise<ActionResponse<PresidentWithChurch[]>> {
+} = {}): Promise<PaginatedActionResponse<PresidentWithChurch>> {
   await requireRole("ADMIN");
 
+  const page = params.page ?? 1;
+  const pageSize = params.pageSize ?? DEFAULT_PAGE_SIZE;
+
   try {
-    const presidents = await prisma.user.findMany({
-      where: {
-        role: "PRESIDENT",
-        ...(filters?.search && {
-          OR: [
-            { name: { contains: filters.search, mode: "insensitive" } },
-            { email: { contains: filters.search, mode: "insensitive" } },
-            { church: { name: { contains: filters.search, mode: "insensitive" } } },
-          ],
-        }),
-        ...(filters?.churchId && { churchId: filters.churchId }),
-      },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        emailVerified: true,
-        createdAt: true,
-        updatedAt: true,
-        church: {
-          select: {
-            id: true,
-            name: true,
-            division: { select: { id: true, name: true } },
+    const where = {
+      role: "PRESIDENT" as const,
+      ...(params.search && {
+        OR: [
+          { name: { contains: params.search, mode: "insensitive" as const } },
+          { email: { contains: params.search, mode: "insensitive" as const } },
+          { church: { name: { contains: params.search, mode: "insensitive" as const } } },
+        ],
+      }),
+      ...(params.churchId && { churchId: params.churchId }),
+    };
+
+    const [presidents, total] = await Promise.all([
+      prisma.user.findMany({
+        where,
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          emailVerified: true,
+          createdAt: true,
+          updatedAt: true,
+          church: {
+            select: {
+              id: true,
+              name: true,
+              division: { select: { id: true, name: true } },
+            },
           },
         },
-      },
-      orderBy: { name: "asc" },
-    });
+        orderBy: { name: "asc" },
+        skip: getSkip(page, pageSize),
+        take: pageSize,
+      }),
+      prisma.user.count({ where }),
+    ]);
 
-    return { success: true, data: presidents };
+    return {
+      success: true,
+      data: {
+        items: presidents,
+        total,
+        page,
+        pageSize,
+        totalPages: Math.ceil(total / pageSize),
+      },
+    };
   } catch (error) {
     console.error("Failed to fetch presidents:", error);
     return { success: false, error: "Failed to fetch presidents" };

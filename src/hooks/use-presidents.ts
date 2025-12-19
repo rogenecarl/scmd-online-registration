@@ -1,6 +1,11 @@
 "use client";
 
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  keepPreviousData,
+} from "@tanstack/react-query";
 import { queryKeys } from "@/lib/query-keys";
 import { toast } from "sonner";
 import {
@@ -19,15 +24,21 @@ import type {
   ResetPasswordInput,
 } from "@/schemas";
 
-// Query: List all presidents
-export function usePresidents(filters?: { search?: string; churchId?: string }) {
+// Query: List all presidents with pagination
+export function usePresidents(params: {
+  page?: number;
+  pageSize?: number;
+  search?: string;
+  churchId?: string;
+} = {}) {
   return useQuery({
-    queryKey: [...queryKeys.presidents.list(), filters],
+    queryKey: [...queryKeys.presidents.list(), params],
     queryFn: async () => {
-      const result = await getPresidents(filters);
+      const result = await getPresidents(params);
       if (!result.success) throw new Error(result.error);
       return result.data;
     },
+    placeholderData: keepPreviousData,
   });
 }
 
