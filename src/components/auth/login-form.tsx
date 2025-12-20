@@ -64,34 +64,34 @@ export function LoginInForm() {
     }
 
     return (
-        <div className="w-full max-w-[400px] mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+        <div className="w-full space-y-6">
             {/* Header Section */}
-            <div className="flex flex-col space-y-2 text-center md:text-left">
-                <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
+            <div className="flex flex-col space-y-2 text-center">
+                <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
                     Welcome back
                 </h1>
-                <p className="text-sm text-slate-500 dark:text-slate-400">
-                    Enter your credentials to access your account.
+                <p className="text-sm text-muted-foreground">
+                    Enter your credentials to access your account
                 </p>
             </div>
 
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
                     <div className="space-y-4">
                         <FormField
                             control={form.control}
                             name="email"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel className="text-slate-700 dark:text-slate-300">Email</FormLabel>
+                                    <FormLabel className="text-foreground">Email</FormLabel>
                                     <FormControl>
                                         <div className="relative group">
-                                            <Mail className="absolute left-3 top-3 h-4 w-4 text-slate-400 group-focus-within:text-primary transition-colors" />
+                                            <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
                                             <Input
                                                 placeholder="name@example.com"
                                                 type="email"
                                                 {...field}
-                                                className="pl-9 h-11 bg-white dark:bg-slate-950/50 border-slate-200 dark:border-white/10 focus:ring-2 focus:ring-primary/20 transition-all"
+                                                className="pl-9 h-11 bg-background border-border focus:ring-2 focus:ring-primary/20 transition-all"
                                             />
                                         </div>
                                     </FormControl>
@@ -106,7 +106,7 @@ export function LoginInForm() {
                             render={({ field }) => (
                                 <FormItem>
                                     <div className="flex items-center justify-between">
-                                        <FormLabel className="text-slate-700 dark:text-slate-300">Password</FormLabel>
+                                        <FormLabel className="text-foreground">Password</FormLabel>
                                         <Link
                                             href="/forgot-password"
                                             className="text-sm font-medium text-primary hover:text-primary/80 transition-colors"
@@ -116,12 +116,12 @@ export function LoginInForm() {
                                     </div>
                                     <FormControl>
                                         <div className="relative group">
-                                            <Lock className="absolute left-3 top-3 h-4 w-4 text-slate-400 group-focus-within:text-primary transition-colors" />
+                                            <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
                                             <Input
                                                 type="password"
-                                                placeholder="••••••••"
+                                                placeholder="Enter your password"
                                                 {...field}
-                                                className="pl-9 h-11 bg-white dark:bg-slate-950/50 border-slate-200 dark:border-white/10 focus:ring-2 focus:ring-primary/20 transition-all"
+                                                className="pl-9 h-11 bg-background border-border focus:ring-2 focus:ring-primary/20 transition-all"
                                             />
                                         </div>
                                     </FormControl>
@@ -134,12 +134,12 @@ export function LoginInForm() {
                     <Button
                         type="submit"
                         disabled={isLoading}
-                        className="w-full h-11 text-base font-semibold shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all cursor-pointer"
+                        className="w-full h-11 text-base font-semibold shadow-lg shadow-primary/25 hover:shadow-primary/30 transition-all cursor-pointer"
                     >
                         {isLoading ? (
                             <>
                                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                Verifying...
+                                Signing in...
                             </>
                         ) : "Sign In"}
                     </Button>
@@ -148,17 +148,17 @@ export function LoginInForm() {
 
             <div className="relative">
                 <div className="absolute inset-0 flex items-center">
-                    <span className="w-full border-t border-slate-200 dark:border-slate-800" />
+                    <span className="w-full border-t border-border" />
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-slate-50 dark:bg-[#0B0F19] px-2 text-slate-500">Or continue with</span>
+                    <span className="bg-card px-2 text-muted-foreground">Or continue with</span>
                 </div>
             </div>
 
             <Button
                 variant="outline"
                 type="button"
-                className="w-full h-11 font-medium bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 transition-colors cursor-pointer"
+                className="w-full h-11 font-medium border-border hover:bg-accent text-foreground transition-colors cursor-pointer"
                 onClick={signInWithGoogle}
             >
                 <svg className="h-5 w-5 mr-2" viewBox="0 0 24 24">
@@ -182,14 +182,14 @@ export function LoginInForm() {
                 Sign in with Google
             </Button>
 
-            <div className="text-center text-sm text-slate-600 dark:text-slate-400">
+            <div className="text-center text-sm text-muted-foreground">
                 Don&apos;t have an account?{" "}
                 <Link href="/choose-role" className="font-semibold text-primary hover:text-primary/80 underline-offset-4 hover:underline transition-all">
                     Sign up
                 </Link>
             </div>
 
-            <div className="text-center text-[10px] text-slate-400 dark:text-slate-500 pt-4">
+            <div className="text-center text-xs text-muted-foreground pt-2">
                 By continuing, you agree to our Terms and Privacy Policy.
             </div>
         </div>

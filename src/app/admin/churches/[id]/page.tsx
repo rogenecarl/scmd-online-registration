@@ -1,8 +1,15 @@
 import { notFound } from "next/navigation";
-import { PageHeader } from "@/components/shared/page-header";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { getChurchById } from "@/actions/churches";
+import {
+  DetailCard,
+  DetailCardHeader,
+  DetailGrid,
+  DetailMetadata,
+  DetailList,
+} from "@/components/shared";
+import { PageHeader } from "@/components/shared/page-header";
 import { Pencil, ArrowLeft, User, Building2, Users } from "lucide-react";
 import Link from "next/link";
 
@@ -21,15 +28,15 @@ export default async function ChurchDetailPage({ params }: Props) {
   const church = result.data;
 
   return (
-    <div>
+    <div className="space-y-4 md:space-y-6">
       <PageHeader title={church.name} description="Church details">
-        <Button variant="outline" asChild>
+        <Button variant="outline" asChild className="touch-target">
           <Link href="/admin/churches">
             <ArrowLeft className="mr-2 h-4 w-4" />
-            Back
+            <span className="hidden sm:inline">Back</span>
           </Link>
         </Button>
-        <Button asChild>
+        <Button asChild className="touch-target">
           <Link href={`/admin/churches/${id}/edit`}>
             <Pencil className="mr-2 h-4 w-4" />
             Edit
@@ -37,76 +44,68 @@ export default async function ChurchDetailPage({ params }: Props) {
         </Button>
       </PageHeader>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <DetailGrid columns={3}>
         {/* Division Card */}
-        <div className="rounded-xl border border-border bg-card p-6">
-          <div className="flex items-center gap-2 mb-4">
-            <Building2 className="h-5 w-5 text-muted-foreground" />
-            <h3 className="text-lg font-semibold">Division</h3>
-          </div>
+        <DetailCard>
+          <DetailCardHeader icon={<Building2 />} title="Division" />
           <Link
             href={`/admin/divisions/${church.division.id}`}
-            className="text-primary hover:underline font-medium"
+            className="text-sm md:text-base text-primary hover:underline font-medium"
           >
             {church.division.name}
           </Link>
-        </div>
+        </DetailCard>
 
         {/* Pastor Card */}
-        <div className="rounded-xl border border-border bg-card p-6">
-          <div className="flex items-center gap-2 mb-4">
-            <User className="h-5 w-5 text-muted-foreground" />
-            <h3 className="text-lg font-semibold">Pastor</h3>
-          </div>
+        <DetailCard>
+          <DetailCardHeader icon={<User />} title="Pastor" />
           {church.pastor ? (
-            <p className="font-medium">{church.pastor.name}</p>
+            <p className="text-sm md:text-base font-medium">
+              {church.pastor.name}
+            </p>
           ) : (
-            <p className="text-muted-foreground">No pastor assigned</p>
+            <p className="text-sm md:text-base text-muted-foreground">
+              No pastor assigned
+            </p>
           )}
-        </div>
+        </DetailCard>
 
         {/* Presidents Card */}
-        <div className="rounded-xl border border-border bg-card p-6">
-          <div className="flex items-center gap-2 mb-4">
-            <Users className="h-5 w-5 text-muted-foreground" />
-            <h3 className="text-lg font-semibold">Presidents</h3>
-            <Badge variant="secondary" className="ml-auto">
-              {church.presidents.length}
-            </Badge>
-          </div>
-          {church.presidents.length > 0 ? (
-            <ul className="space-y-2">
-              {church.presidents.map((president) => (
-                <li key={president.id} className="text-sm">
-                  <p className="font-medium">{president.name}</p>
-                  <p className="text-muted-foreground">{president.email}</p>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="text-muted-foreground">No presidents assigned</p>
-          )}
-        </div>
-      </div>
+        <DetailCard>
+          <DetailCardHeader
+            icon={<Users />}
+            title="Presidents"
+            badge={
+              <Badge variant="secondary">{church.presidents.length}</Badge>
+            }
+          />
+          <DetailList
+            items={church.presidents.map((president) => ({
+              id: president.id,
+              label: president.name,
+              sublabel: president.email,
+            }))}
+            emptyMessage="No presidents assigned"
+          />
+        </DetailCard>
+      </DetailGrid>
 
       {/* Metadata */}
-      <div className="mt-6 rounded-xl border border-border bg-card p-6">
-        <h3 className="text-lg font-semibold mb-4">Details</h3>
-        <dl className="grid gap-4 sm:grid-cols-2">
-          <div>
-            <dt className="text-sm text-muted-foreground">Created</dt>
-            <dd className="font-medium">
-              {new Date(church.createdAt).toLocaleDateString()}
-            </dd>
-          </div>
-          <div>
-            <dt className="text-sm text-muted-foreground">Last Updated</dt>
-            <dd className="font-medium">
-              {new Date(church.updatedAt).toLocaleDateString()}
-            </dd>
-          </div>
-        </dl>
-      </div>
+      <DetailCard>
+        <DetailCardHeader title="Details" />
+        <DetailMetadata
+          items={[
+            {
+              label: "Created",
+              value: new Date(church.createdAt).toLocaleDateString(),
+            },
+            {
+              label: "Last Updated",
+              value: new Date(church.updatedAt).toLocaleDateString(),
+            },
+          ]}
+        />
+      </DetailCard>
     </div>
   );
 }

@@ -21,3 +21,16 @@ export {
   FormSection,
   FormGrid,
 } from "./form-layout";
+export {
+  DetailCard,
+  DetailCardHeader,
+  DetailGrid,
+  DetailSection,
+  DetailMetadata,
+  DetailInfoRow,
+  DetailActions,
+  DetailPageHeader,
+  DetailList,
+  StatsCard,
+  DetailTwoColumn,
+} from "./detail-page-layout";
