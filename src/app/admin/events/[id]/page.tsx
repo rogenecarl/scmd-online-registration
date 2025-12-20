@@ -8,7 +8,6 @@ import {
   DetailCardHeader,
   DetailGrid,
   DetailInfoRow,
-  DetailTwoColumn,
 } from "@/components/shared";
 import { PageHeader } from "@/components/shared/page-header";
 import {
