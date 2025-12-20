@@ -31,7 +31,8 @@ import {
 } from "@/components/ui/card";
 import { useCreateEvent, useUpdateEvent } from "@/hooks/use-events";
 import { createEventSchema, type EventFormInput } from "@/schemas";
-import { Loader2, Calendar, DollarSign, Info } from "lucide-react";
+import { ImageUpload } from "@/components/shared/image-upload";
+import { Loader2, Calendar, DollarSign, Info, ImageIcon } from "lucide-react";
 import { format } from "date-fns";
 import type { EventStatus } from "@/lib/generated/prisma";
 
@@ -42,7 +43,7 @@ interface EventFormProps {
     name: string;
     description: string | null;
     location: string;
-    logo: string | null;
+    banner: string | null;
     startDate: Date;
     endDate: Date;
     registrationDeadline: Date;
@@ -78,7 +79,7 @@ export function EventForm({ mode, initialData }: EventFormProps) {
       name: initialData?.name ?? "",
       description: initialData?.description ?? "",
       location: initialData?.location ?? "",
-      logo: initialData?.logo ?? "",
+      banner: initialData?.banner ?? null,
       startDate: initialData?.startDate ?? new Date(),
       endDate: initialData?.endDate ?? new Date(),
       registrationDeadline: initialData?.registrationDeadline ?? new Date(),
@@ -181,19 +182,25 @@ export function EventForm({ mode, initialData }: EventFormProps) {
 
             <FormField
               control={form.control}
-              name="logo"
+              name="banner"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Logo URL</FormLabel>
+                  <FormLabel className="flex items-center gap-2">
+                    <ImageIcon className="h-4 w-4" />
+                    Event Banner
+                  </FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="https://example.com/logo.png"
-                      {...field}
-                      value={field.value ?? ""}
+                    <ImageUpload
+                      value={field.value}
+                      onChange={field.onChange}
+                      folder="banners"
+                      aspectRatio="banner"
+                      placeholder="Upload event banner image"
+                      disabled={isPending}
                     />
                   </FormControl>
                   <FormDescription>
-                    Optional URL to the event logo image
+                    Upload a banner image for the event (recommended: 1200x400px)
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

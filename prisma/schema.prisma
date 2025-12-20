@@ -187,7 +187,7 @@ model Event {
   name                 String
   description          String?     @db.Text
   location             String
-  logo                 String?
+  banner               String?     // Banner image URL from Supabase Storage
   startDate            DateTime    @map("start_date")
   endDate              DateTime    @map("end_date")
   registrationDeadline DateTime    @map("registration_deadline")
@@ -220,6 +220,7 @@ model Registration {
   presidentId String             @map("president_id")
   status      RegistrationStatus @default(PENDING)
   remarks     String?            @db.Text
+  receiptImage String?           @map("receipt_image") // Payment receipt image URL from Supabase Storage
   reviewedAt  DateTime?          @map("reviewed_at")
   reviewedBy  String?            @map("reviewed_by")
   createdAt   DateTime           @default(now()) @map("created_at")

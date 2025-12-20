@@ -24,7 +24,7 @@ interface EventCardProps {
     name: string;
     description: string | null;
     location: string;
-    logo: string | null;
+    banner: string | null;
     startDate: Date;
     endDate: Date;
     registrationDeadline: Date;
@@ -99,9 +99,9 @@ export function EventCard({ event }: EventCardProps) {
     <div className="overflow-hidden rounded-xl border border-border bg-card transition-all hover:shadow-lg hover:shadow-black/5">
       {/* Event Header */}
       <div className="relative border-b border-border bg-gradient-to-br from-primary/5 to-primary/10 p-6">
-        {event.logo && (
+        {event.banner && (
           <Image
-            src={event.logo}
+            src={event.banner}
             alt={event.name}
             width={48}
             height={48}

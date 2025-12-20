@@ -31,8 +31,11 @@ import {
   Clock,
   AlertCircle,
   Loader2,
+  Receipt,
+  ExternalLink,
 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 interface RegistrationDetailProps {
   registrationId: string;
@@ -266,6 +269,49 @@ export function RegistrationDetail({ registrationId }: RegistrationDetailProps) 
               </div>
             </div>
           </div>
+        </CardContent>
+      </Card>
+
+      {/* Payment Receipt */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Receipt className="h-5 w-5" />
+            Payment Receipt
+          </CardTitle>
+          <CardDescription>
+            Payment receipt image uploaded by the president
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {registration.receiptImage ? (
+            <div className="space-y-4">
+              <div className="relative aspect-video max-w-lg overflow-hidden rounded-lg border">
+                <Image
+                  src={registration.receiptImage}
+                  alt="Payment receipt"
+                  fill
+                  className="object-contain"
+                  sizes="(max-width: 768px) 100vw, 512px"
+                />
+              </div>
+              <Button variant="outline" size="sm" asChild>
+                <a
+                  href={registration.receiptImage}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <ExternalLink className="mr-2 h-4 w-4" />
+                  View Full Image
+                </a>
+              </Button>
+            </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center py-8 text-center">
+              <Receipt className="h-12 w-12 text-muted-foreground mb-4" />
+              <p className="text-muted-foreground">No payment receipt uploaded</p>
+            </div>
+          )}
         </CardContent>
       </Card>
 

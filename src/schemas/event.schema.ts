@@ -29,11 +29,13 @@ const eventBaseSchema = z.object({
     .min(1, "Location is required")
     .max(500, "Location must be 500 characters or less")
     .trim(),
-  logo: z
+  banner: z
     .string()
-    .url("Invalid logo URL")
+    .url("Invalid banner URL")
     .optional()
-    .or(z.literal("")),
+    .nullable()
+    .or(z.literal(""))
+    .or(z.literal(null)),
 });
 
 // Create event schema with full validation

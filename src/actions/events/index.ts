@@ -33,7 +33,7 @@ export type EventDetail = {
   name: string;
   description: string | null;
   location: string;
-  logo: string | null;
+  banner: string | null;
   startDate: Date;
   endDate: Date;
   registrationDeadline: Date;
@@ -79,7 +79,7 @@ function toEventDetail(
     name: event.name,
     description: event.description,
     location: event.location,
-    logo: event.logo,
+    banner: event.banner,
     startDate: event.startDate,
     endDate: event.endDate,
     registrationDeadline: event.registrationDeadline,
@@ -258,7 +258,7 @@ export async function createEvent(
         name: validated.data.name,
         description: validated.data.description || null,
         location: validated.data.location,
-        logo: validated.data.logo || null,
+        banner: validated.data.banner || null,
         startDate: validated.data.startDate,
         endDate: validated.data.endDate,
         registrationDeadline: validated.data.registrationDeadline,
@@ -312,7 +312,7 @@ export async function updateEvent(
         name: validated.data.name,
         description: validated.data.description || null,
         location: validated.data.location,
-        logo: validated.data.logo || null,
+        banner: validated.data.banner || null,
         startDate: validated.data.startDate,
         endDate: validated.data.endDate,
         registrationDeadline: validated.data.registrationDeadline,

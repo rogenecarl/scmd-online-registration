@@ -38,7 +38,7 @@ export default async function EditEventPage({ params }: Props) {
           name: event.name,
           description: event.description,
           location: event.location,
-          logo: event.logo,
+          banner: event.banner,
           startDate: new Date(event.startDate),
           endDate: new Date(event.endDate),
           registrationDeadline: new Date(event.registrationDeadline),

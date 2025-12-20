@@ -10993,7 +10993,7 @@ export namespace Prisma {
     name: string | null
     description: string | null
     location: string | null
-    logo: string | null
+    banner: string | null
     startDate: Date | null
     endDate: Date | null
     registrationDeadline: Date | null
@@ -11012,7 +11012,7 @@ export namespace Prisma {
     name: string | null
     description: string | null
     location: string | null
-    logo: string | null
+    banner: string | null
     startDate: Date | null
     endDate: Date | null
     registrationDeadline: Date | null
@@ -11031,7 +11031,7 @@ export namespace Prisma {
     name: number
     description: number
     location: number
-    logo: number
+    banner: number
     startDate: number
     endDate: number
     registrationDeadline: number
@@ -11064,7 +11064,7 @@ export namespace Prisma {
     name?: true
     description?: true
     location?: true
-    logo?: true
+    banner?: true
     startDate?: true
     endDate?: true
     registrationDeadline?: true
@@ -11083,7 +11083,7 @@ export namespace Prisma {
     name?: true
     description?: true
     location?: true
-    logo?: true
+    banner?: true
     startDate?: true
     endDate?: true
     registrationDeadline?: true
@@ -11102,7 +11102,7 @@ export namespace Prisma {
     name?: true
     description?: true
     location?: true
-    logo?: true
+    banner?: true
     startDate?: true
     endDate?: true
     registrationDeadline?: true
@@ -11208,7 +11208,7 @@ export namespace Prisma {
     name: string
     description: string | null
     location: string
-    logo: string | null
+    banner: string | null
     startDate: Date
     endDate: Date
     registrationDeadline: Date
@@ -11246,7 +11246,7 @@ export namespace Prisma {
     name?: boolean
     description?: boolean
     location?: boolean
-    logo?: boolean
+    banner?: boolean
     startDate?: boolean
     endDate?: boolean
     registrationDeadline?: boolean
@@ -11267,7 +11267,7 @@ export namespace Prisma {
     name?: boolean
     description?: boolean
     location?: boolean
-    logo?: boolean
+    banner?: boolean
     startDate?: boolean
     endDate?: boolean
     registrationDeadline?: boolean
@@ -11286,7 +11286,7 @@ export namespace Prisma {
     name?: boolean
     description?: boolean
     location?: boolean
-    logo?: boolean
+    banner?: boolean
     startDate?: boolean
     endDate?: boolean
     registrationDeadline?: boolean
@@ -11305,7 +11305,7 @@ export namespace Prisma {
     name?: boolean
     description?: boolean
     location?: boolean
-    logo?: boolean
+    banner?: boolean
     startDate?: boolean
     endDate?: boolean
     registrationDeadline?: boolean
@@ -11319,7 +11319,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "location" | "logo" | "startDate" | "endDate" | "registrationDeadline" | "preRegistrationFee" | "preRegistrationStart" | "preRegistrationEnd" | "onsiteRegistrationFee" | "cookRegistrationFee" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
+  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "location" | "banner" | "startDate" | "endDate" | "registrationDeadline" | "preRegistrationFee" | "preRegistrationStart" | "preRegistrationEnd" | "onsiteRegistrationFee" | "cookRegistrationFee" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
   export type EventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     registrations?: boolean | Event$registrationsArgs<ExtArgs>
     _count?: boolean | EventCountOutputTypeDefaultArgs<ExtArgs>
@@ -11337,7 +11337,7 @@ export namespace Prisma {
       name: string
       description: string | null
       location: string
-      logo: string | null
+      banner: string | null
       startDate: Date
       endDate: Date
       registrationDeadline: Date
@@ -11777,7 +11777,7 @@ export namespace Prisma {
     readonly name: FieldRef<"Event", 'String'>
     readonly description: FieldRef<"Event", 'String'>
     readonly location: FieldRef<"Event", 'String'>
-    readonly logo: FieldRef<"Event", 'String'>
+    readonly banner: FieldRef<"Event", 'String'>
     readonly startDate: FieldRef<"Event", 'DateTime'>
     readonly endDate: FieldRef<"Event", 'DateTime'>
     readonly registrationDeadline: FieldRef<"Event", 'DateTime'>
@@ -12250,6 +12250,7 @@ export namespace Prisma {
     presidentId: string | null
     status: $Enums.RegistrationStatus | null
     remarks: string | null
+    receiptImage: string | null
     reviewedAt: Date | null
     reviewedBy: string | null
     createdAt: Date | null
@@ -12267,6 +12268,7 @@ export namespace Prisma {
     presidentId: string | null
     status: $Enums.RegistrationStatus | null
     remarks: string | null
+    receiptImage: string | null
     reviewedAt: Date | null
     reviewedBy: string | null
     createdAt: Date | null
@@ -12284,6 +12286,7 @@ export namespace Prisma {
     presidentId: number
     status: number
     remarks: number
+    receiptImage: number
     reviewedAt: number
     reviewedBy: number
     createdAt: number
@@ -12315,6 +12318,7 @@ export namespace Prisma {
     presidentId?: true
     status?: true
     remarks?: true
+    receiptImage?: true
     reviewedAt?: true
     reviewedBy?: true
     createdAt?: true
@@ -12332,6 +12336,7 @@ export namespace Prisma {
     presidentId?: true
     status?: true
     remarks?: true
+    receiptImage?: true
     reviewedAt?: true
     reviewedBy?: true
     createdAt?: true
@@ -12349,6 +12354,7 @@ export namespace Prisma {
     presidentId?: true
     status?: true
     remarks?: true
+    receiptImage?: true
     reviewedAt?: true
     reviewedBy?: true
     createdAt?: true
@@ -12453,6 +12459,7 @@ export namespace Prisma {
     presidentId: string
     status: $Enums.RegistrationStatus
     remarks: string | null
+    receiptImage: string | null
     reviewedAt: Date | null
     reviewedBy: string | null
     createdAt: Date
@@ -12489,6 +12496,7 @@ export namespace Prisma {
     presidentId?: boolean
     status?: boolean
     remarks?: boolean
+    receiptImage?: boolean
     reviewedAt?: boolean
     reviewedBy?: boolean
     createdAt?: boolean
@@ -12513,6 +12521,7 @@ export namespace Prisma {
     presidentId?: boolean
     status?: boolean
     remarks?: boolean
+    receiptImage?: boolean
     reviewedAt?: boolean
     reviewedBy?: boolean
     createdAt?: boolean
@@ -12534,6 +12543,7 @@ export namespace Prisma {
     presidentId?: boolean
     status?: boolean
     remarks?: boolean
+    receiptImage?: boolean
     reviewedAt?: boolean
     reviewedBy?: boolean
     createdAt?: boolean
@@ -12555,6 +12565,7 @@ export namespace Prisma {
     presidentId?: boolean
     status?: boolean
     remarks?: boolean
+    receiptImage?: boolean
     reviewedAt?: boolean
     reviewedBy?: boolean
     createdAt?: boolean
@@ -12565,7 +12576,7 @@ export namespace Prisma {
     isPreRegistration?: boolean
   }
 
-  export type RegistrationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "eventId" | "churchId" | "presidentId" | "status" | "remarks" | "reviewedAt" | "reviewedBy" | "createdAt" | "updatedAt" | "totalFee" | "delegateFeePerPerson" | "cookFeePerPerson" | "isPreRegistration", ExtArgs["result"]["registration"]>
+  export type RegistrationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "eventId" | "churchId" | "presidentId" | "status" | "remarks" | "receiptImage" | "reviewedAt" | "reviewedBy" | "createdAt" | "updatedAt" | "totalFee" | "delegateFeePerPerson" | "cookFeePerPerson" | "isPreRegistration", ExtArgs["result"]["registration"]>
   export type RegistrationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     event?: boolean | EventDefaultArgs<ExtArgs>
     church?: boolean | ChurchDefaultArgs<ExtArgs>
@@ -12605,6 +12616,7 @@ export namespace Prisma {
       presidentId: string
       status: $Enums.RegistrationStatus
       remarks: string | null
+      receiptImage: string | null
       reviewedAt: Date | null
       reviewedBy: string | null
       createdAt: Date
@@ -13048,6 +13060,7 @@ export namespace Prisma {
     readonly presidentId: FieldRef<"Registration", 'String'>
     readonly status: FieldRef<"Registration", 'RegistrationStatus'>
     readonly remarks: FieldRef<"Registration", 'String'>
+    readonly receiptImage: FieldRef<"Registration", 'String'>
     readonly reviewedAt: FieldRef<"Registration", 'DateTime'>
     readonly reviewedBy: FieldRef<"Registration", 'String'>
     readonly createdAt: FieldRef<"Registration", 'DateTime'>
@@ -15921,7 +15934,7 @@ export namespace Prisma {
     name: 'name',
     description: 'description',
     location: 'location',
-    logo: 'logo',
+    banner: 'banner',
     startDate: 'startDate',
     endDate: 'endDate',
     registrationDeadline: 'registrationDeadline',
@@ -15945,6 +15958,7 @@ export namespace Prisma {
     presidentId: 'presidentId',
     status: 'status',
     remarks: 'remarks',
+    receiptImage: 'receiptImage',
     reviewedAt: 'reviewedAt',
     reviewedBy: 'reviewedBy',
     createdAt: 'createdAt',
@@ -16681,7 +16695,7 @@ export namespace Prisma {
     name?: StringFilter<"Event"> | string
     description?: StringNullableFilter<"Event"> | string | null
     location?: StringFilter<"Event"> | string
-    logo?: StringNullableFilter<"Event"> | string | null
+    banner?: StringNullableFilter<"Event"> | string | null
     startDate?: DateTimeFilter<"Event"> | Date | string
     endDate?: DateTimeFilter<"Event"> | Date | string
     registrationDeadline?: DateTimeFilter<"Event"> | Date | string
@@ -16701,7 +16715,7 @@ export namespace Prisma {
     name?: SortOrder
     description?: SortOrderInput | SortOrder
     location?: SortOrder
-    logo?: SortOrderInput | SortOrder
+    banner?: SortOrderInput | SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
     registrationDeadline?: SortOrder
@@ -16724,7 +16738,7 @@ export namespace Prisma {
     name?: StringFilter<"Event"> | string
     description?: StringNullableFilter<"Event"> | string | null
     location?: StringFilter<"Event"> | string
-    logo?: StringNullableFilter<"Event"> | string | null
+    banner?: StringNullableFilter<"Event"> | string | null
     startDate?: DateTimeFilter<"Event"> | Date | string
     endDate?: DateTimeFilter<"Event"> | Date | string
     registrationDeadline?: DateTimeFilter<"Event"> | Date | string
@@ -16744,7 +16758,7 @@ export namespace Prisma {
     name?: SortOrder
     description?: SortOrderInput | SortOrder
     location?: SortOrder
-    logo?: SortOrderInput | SortOrder
+    banner?: SortOrderInput | SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
     registrationDeadline?: SortOrder
@@ -16771,7 +16785,7 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"Event"> | string
     description?: StringNullableWithAggregatesFilter<"Event"> | string | null
     location?: StringWithAggregatesFilter<"Event"> | string
-    logo?: StringNullableWithAggregatesFilter<"Event"> | string | null
+    banner?: StringNullableWithAggregatesFilter<"Event"> | string | null
     startDate?: DateTimeWithAggregatesFilter<"Event"> | Date | string
     endDate?: DateTimeWithAggregatesFilter<"Event"> | Date | string
     registrationDeadline?: DateTimeWithAggregatesFilter<"Event"> | Date | string
@@ -16795,6 +16809,7 @@ export namespace Prisma {
     presidentId?: StringFilter<"Registration"> | string
     status?: EnumRegistrationStatusFilter<"Registration"> | $Enums.RegistrationStatus
     remarks?: StringNullableFilter<"Registration"> | string | null
+    receiptImage?: StringNullableFilter<"Registration"> | string | null
     reviewedAt?: DateTimeNullableFilter<"Registration"> | Date | string | null
     reviewedBy?: StringNullableFilter<"Registration"> | string | null
     createdAt?: DateTimeFilter<"Registration"> | Date | string
@@ -16818,6 +16833,7 @@ export namespace Prisma {
     presidentId?: SortOrder
     status?: SortOrder
     remarks?: SortOrderInput | SortOrder
+    receiptImage?: SortOrderInput | SortOrder
     reviewedAt?: SortOrderInput | SortOrder
     reviewedBy?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -16845,6 +16861,7 @@ export namespace Prisma {
     presidentId?: StringFilter<"Registration"> | string
     status?: EnumRegistrationStatusFilter<"Registration"> | $Enums.RegistrationStatus
     remarks?: StringNullableFilter<"Registration"> | string | null
+    receiptImage?: StringNullableFilter<"Registration"> | string | null
     reviewedAt?: DateTimeNullableFilter<"Registration"> | Date | string | null
     reviewedBy?: StringNullableFilter<"Registration"> | string | null
     createdAt?: DateTimeFilter<"Registration"> | Date | string
@@ -16868,6 +16885,7 @@ export namespace Prisma {
     presidentId?: SortOrder
     status?: SortOrder
     remarks?: SortOrderInput | SortOrder
+    receiptImage?: SortOrderInput | SortOrder
     reviewedAt?: SortOrderInput | SortOrder
     reviewedBy?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -16893,6 +16911,7 @@ export namespace Prisma {
     presidentId?: StringWithAggregatesFilter<"Registration"> | string
     status?: EnumRegistrationStatusWithAggregatesFilter<"Registration"> | $Enums.RegistrationStatus
     remarks?: StringNullableWithAggregatesFilter<"Registration"> | string | null
+    receiptImage?: StringNullableWithAggregatesFilter<"Registration"> | string | null
     reviewedAt?: DateTimeNullableWithAggregatesFilter<"Registration"> | Date | string | null
     reviewedBy?: StringNullableWithAggregatesFilter<"Registration"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Registration"> | Date | string
@@ -17635,7 +17654,7 @@ export namespace Prisma {
     name: string
     description?: string | null
     location: string
-    logo?: string | null
+    banner?: string | null
     startDate: Date | string
     endDate: Date | string
     registrationDeadline: Date | string
@@ -17655,7 +17674,7 @@ export namespace Prisma {
     name: string
     description?: string | null
     location: string
-    logo?: string | null
+    banner?: string | null
     startDate: Date | string
     endDate: Date | string
     registrationDeadline: Date | string
@@ -17675,7 +17694,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     location?: StringFieldUpdateOperationsInput | string
-    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    banner?: NullableStringFieldUpdateOperationsInput | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     registrationDeadline?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17695,7 +17714,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     location?: StringFieldUpdateOperationsInput | string
-    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    banner?: NullableStringFieldUpdateOperationsInput | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     registrationDeadline?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17715,7 +17734,7 @@ export namespace Prisma {
     name: string
     description?: string | null
     location: string
-    logo?: string | null
+    banner?: string | null
     startDate: Date | string
     endDate: Date | string
     registrationDeadline: Date | string
@@ -17734,7 +17753,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     location?: StringFieldUpdateOperationsInput | string
-    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    banner?: NullableStringFieldUpdateOperationsInput | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     registrationDeadline?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17753,7 +17772,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     location?: StringFieldUpdateOperationsInput | string
-    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    banner?: NullableStringFieldUpdateOperationsInput | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     registrationDeadline?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17771,6 +17790,7 @@ export namespace Prisma {
     id?: string
     status?: $Enums.RegistrationStatus
     remarks?: string | null
+    receiptImage?: string | null
     reviewedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -17793,6 +17813,7 @@ export namespace Prisma {
     presidentId: string
     status?: $Enums.RegistrationStatus
     remarks?: string | null
+    receiptImage?: string | null
     reviewedAt?: Date | string | null
     reviewedBy?: string | null
     createdAt?: Date | string
@@ -17809,6 +17830,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptImage?: NullableStringFieldUpdateOperationsInput | string | null
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17831,6 +17853,7 @@ export namespace Prisma {
     presidentId?: StringFieldUpdateOperationsInput | string
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptImage?: NullableStringFieldUpdateOperationsInput | string | null
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17850,6 +17873,7 @@ export namespace Prisma {
     presidentId: string
     status?: $Enums.RegistrationStatus
     remarks?: string | null
+    receiptImage?: string | null
     reviewedAt?: Date | string | null
     reviewedBy?: string | null
     createdAt?: Date | string
@@ -17864,6 +17888,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptImage?: NullableStringFieldUpdateOperationsInput | string | null
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17880,6 +17905,7 @@ export namespace Prisma {
     presidentId?: StringFieldUpdateOperationsInput | string
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptImage?: NullableStringFieldUpdateOperationsInput | string | null
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -18533,7 +18559,7 @@ export namespace Prisma {
     name?: SortOrder
     description?: SortOrder
     location?: SortOrder
-    logo?: SortOrder
+    banner?: SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
     registrationDeadline?: SortOrder
@@ -18558,7 +18584,7 @@ export namespace Prisma {
     name?: SortOrder
     description?: SortOrder
     location?: SortOrder
-    logo?: SortOrder
+    banner?: SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
     registrationDeadline?: SortOrder
@@ -18577,7 +18603,7 @@ export namespace Prisma {
     name?: SortOrder
     description?: SortOrder
     location?: SortOrder
-    logo?: SortOrder
+    banner?: SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
     registrationDeadline?: SortOrder
@@ -18672,6 +18698,7 @@ export namespace Prisma {
     presidentId?: SortOrder
     status?: SortOrder
     remarks?: SortOrder
+    receiptImage?: SortOrder
     reviewedAt?: SortOrder
     reviewedBy?: SortOrder
     createdAt?: SortOrder
@@ -18695,6 +18722,7 @@ export namespace Prisma {
     presidentId?: SortOrder
     status?: SortOrder
     remarks?: SortOrder
+    receiptImage?: SortOrder
     reviewedAt?: SortOrder
     reviewedBy?: SortOrder
     createdAt?: SortOrder
@@ -18712,6 +18740,7 @@ export namespace Prisma {
     presidentId?: SortOrder
     status?: SortOrder
     remarks?: SortOrder
+    receiptImage?: SortOrder
     reviewedAt?: SortOrder
     reviewedBy?: SortOrder
     createdAt?: SortOrder
@@ -19883,6 +19912,7 @@ export namespace Prisma {
     id?: string
     status?: $Enums.RegistrationStatus
     remarks?: string | null
+    receiptImage?: string | null
     reviewedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -19903,6 +19933,7 @@ export namespace Prisma {
     churchId: string
     status?: $Enums.RegistrationStatus
     remarks?: string | null
+    receiptImage?: string | null
     reviewedAt?: Date | string | null
     reviewedBy?: string | null
     createdAt?: Date | string
@@ -19929,6 +19960,7 @@ export namespace Prisma {
     id?: string
     status?: $Enums.RegistrationStatus
     remarks?: string | null
+    receiptImage?: string | null
     reviewedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -19950,6 +19982,7 @@ export namespace Prisma {
     presidentId: string
     status?: $Enums.RegistrationStatus
     remarks?: string | null
+    receiptImage?: string | null
     reviewedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -20093,6 +20126,7 @@ export namespace Prisma {
     presidentId?: StringFilter<"Registration"> | string
     status?: EnumRegistrationStatusFilter<"Registration"> | $Enums.RegistrationStatus
     remarks?: StringNullableFilter<"Registration"> | string | null
+    receiptImage?: StringNullableFilter<"Registration"> | string | null
     reviewedAt?: DateTimeNullableFilter<"Registration"> | Date | string | null
     reviewedBy?: StringNullableFilter<"Registration"> | string | null
     createdAt?: DateTimeFilter<"Registration"> | Date | string
@@ -20456,6 +20490,7 @@ export namespace Prisma {
     id?: string
     status?: $Enums.RegistrationStatus
     remarks?: string | null
+    receiptImage?: string | null
     reviewedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -20476,6 +20511,7 @@ export namespace Prisma {
     presidentId: string
     status?: $Enums.RegistrationStatus
     remarks?: string | null
+    receiptImage?: string | null
     reviewedAt?: Date | string | null
     reviewedBy?: string | null
     createdAt?: Date | string
@@ -20705,6 +20741,7 @@ export namespace Prisma {
     id?: string
     status?: $Enums.RegistrationStatus
     remarks?: string | null
+    receiptImage?: string | null
     reviewedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -20725,6 +20762,7 @@ export namespace Prisma {
     presidentId: string
     status?: $Enums.RegistrationStatus
     remarks?: string | null
+    receiptImage?: string | null
     reviewedAt?: Date | string | null
     reviewedBy?: string | null
     createdAt?: Date | string
@@ -20768,7 +20806,7 @@ export namespace Prisma {
     name: string
     description?: string | null
     location: string
-    logo?: string | null
+    banner?: string | null
     startDate: Date | string
     endDate: Date | string
     registrationDeadline: Date | string
@@ -20787,7 +20825,7 @@ export namespace Prisma {
     name: string
     description?: string | null
     location: string
-    logo?: string | null
+    banner?: string | null
     startDate: Date | string
     endDate: Date | string
     registrationDeadline: Date | string
@@ -20977,7 +21015,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     location?: StringFieldUpdateOperationsInput | string
-    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    banner?: NullableStringFieldUpdateOperationsInput | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     registrationDeadline?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20996,7 +21034,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     location?: StringFieldUpdateOperationsInput | string
-    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    banner?: NullableStringFieldUpdateOperationsInput | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     registrationDeadline?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -21187,6 +21225,7 @@ export namespace Prisma {
     id?: string
     status?: $Enums.RegistrationStatus
     remarks?: string | null
+    receiptImage?: string | null
     reviewedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -21208,6 +21247,7 @@ export namespace Prisma {
     presidentId: string
     status?: $Enums.RegistrationStatus
     remarks?: string | null
+    receiptImage?: string | null
     reviewedAt?: Date | string | null
     reviewedBy?: string | null
     createdAt?: Date | string
@@ -21239,6 +21279,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptImage?: NullableStringFieldUpdateOperationsInput | string | null
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -21260,6 +21301,7 @@ export namespace Prisma {
     presidentId?: StringFieldUpdateOperationsInput | string
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptImage?: NullableStringFieldUpdateOperationsInput | string | null
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -21275,6 +21317,7 @@ export namespace Prisma {
     id?: string
     status?: $Enums.RegistrationStatus
     remarks?: string | null
+    receiptImage?: string | null
     reviewedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -21296,6 +21339,7 @@ export namespace Prisma {
     presidentId: string
     status?: $Enums.RegistrationStatus
     remarks?: string | null
+    receiptImage?: string | null
     reviewedAt?: Date | string | null
     reviewedBy?: string | null
     createdAt?: Date | string
@@ -21327,6 +21371,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptImage?: NullableStringFieldUpdateOperationsInput | string | null
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -21348,6 +21393,7 @@ export namespace Prisma {
     presidentId?: StringFieldUpdateOperationsInput | string
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptImage?: NullableStringFieldUpdateOperationsInput | string | null
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -21390,6 +21436,7 @@ export namespace Prisma {
     churchId: string
     status?: $Enums.RegistrationStatus
     remarks?: string | null
+    receiptImage?: string | null
     reviewedAt?: Date | string | null
     reviewedBy?: string | null
     createdAt?: Date | string
@@ -21407,6 +21454,7 @@ export namespace Prisma {
     presidentId: string
     status?: $Enums.RegistrationStatus
     remarks?: string | null
+    receiptImage?: string | null
     reviewedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -21495,6 +21543,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptImage?: NullableStringFieldUpdateOperationsInput | string | null
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -21515,6 +21564,7 @@ export namespace Prisma {
     churchId?: StringFieldUpdateOperationsInput | string
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptImage?: NullableStringFieldUpdateOperationsInput | string | null
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -21533,6 +21583,7 @@ export namespace Prisma {
     churchId?: StringFieldUpdateOperationsInput | string
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptImage?: NullableStringFieldUpdateOperationsInput | string | null
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -21547,6 +21598,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptImage?: NullableStringFieldUpdateOperationsInput | string | null
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -21568,6 +21620,7 @@ export namespace Prisma {
     presidentId?: StringFieldUpdateOperationsInput | string
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptImage?: NullableStringFieldUpdateOperationsInput | string | null
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -21586,6 +21639,7 @@ export namespace Prisma {
     presidentId?: StringFieldUpdateOperationsInput | string
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptImage?: NullableStringFieldUpdateOperationsInput | string | null
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -21646,6 +21700,7 @@ export namespace Prisma {
     presidentId: string
     status?: $Enums.RegistrationStatus
     remarks?: string | null
+    receiptImage?: string | null
     reviewedAt?: Date | string | null
     reviewedBy?: string | null
     createdAt?: Date | string
@@ -21701,6 +21756,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptImage?: NullableStringFieldUpdateOperationsInput | string | null
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -21721,6 +21777,7 @@ export namespace Prisma {
     presidentId?: StringFieldUpdateOperationsInput | string
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptImage?: NullableStringFieldUpdateOperationsInput | string | null
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -21739,6 +21796,7 @@ export namespace Prisma {
     presidentId?: StringFieldUpdateOperationsInput | string
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptImage?: NullableStringFieldUpdateOperationsInput | string | null
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -21755,6 +21813,7 @@ export namespace Prisma {
     presidentId: string
     status?: $Enums.RegistrationStatus
     remarks?: string | null
+    receiptImage?: string | null
     reviewedAt?: Date | string | null
     reviewedBy?: string | null
     createdAt?: Date | string
@@ -21769,6 +21828,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptImage?: NullableStringFieldUpdateOperationsInput | string | null
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -21789,6 +21849,7 @@ export namespace Prisma {
     presidentId?: StringFieldUpdateOperationsInput | string
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptImage?: NullableStringFieldUpdateOperationsInput | string | null
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -21807,6 +21868,7 @@ export namespace Prisma {
     presidentId?: StringFieldUpdateOperationsInput | string
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptImage?: NullableStringFieldUpdateOperationsInput | string | null
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string

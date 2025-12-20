@@ -4,7 +4,7 @@ import { useForm, useFieldArray, useWatch, type Resolver } from "react-hook-form
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Form } from "@/components/ui/form";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import {
   Card,
   CardContent,
@@ -23,7 +23,8 @@ import {
 } from "@/schemas";
 import { PersonForm } from "./person-form";
 import { FeeSummary } from "./fee-summary";
-import { Loader2, Plus, Users, ChefHat, AlertCircle } from "lucide-react";
+import { ImageUpload } from "@/components/shared/image-upload";
+import { Loader2, Plus, Users, ChefHat, AlertCircle, Receipt } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import type { EventForRegistration, RegistrationWithDetails } from "@/actions/registrations";
 
@@ -70,6 +71,7 @@ export function RegistrationForm({ mode, event, initialData }: RegistrationFormP
         age: c.age,
         gender: c.gender,
       })) ?? [],
+      receiptImage: initialData?.receiptImage ?? null,
     },
   });
 
@@ -104,6 +106,7 @@ export function RegistrationForm({ mode, event, initialData }: RegistrationFormP
         const updateData: UpdateRegistrationInput = {
           delegates: data.delegates,
           cooks: data.cooks,
+          receiptImage: data.receiptImage,
         };
         await updateMutation.mutateAsync({ id: initialData.id, input: updateData });
         router.push(`/president/registrations/${initialData.id}`);
@@ -252,6 +255,43 @@ export function RegistrationForm({ mode, event, initialData }: RegistrationFormP
                       form.formState.errors.cooks.root?.message}
                   </p>
                 )}
+              </CardContent>
+            </Card>
+
+            {/* Payment Receipt Section */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Receipt className="h-5 w-5" />
+                  Payment Receipt
+                </CardTitle>
+                <CardDescription>
+                  Upload a photo or screenshot of your payment receipt for verification
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <FormField
+                  control={form.control}
+                  name="receiptImage"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <ImageUpload
+                          value={field.value}
+                          onChange={field.onChange}
+                          folder="receipts"
+                          aspectRatio="video"
+                          placeholder="Upload payment receipt"
+                          disabled={isPending}
+                        />
+                      </FormControl>
+                      <FormDescription>
+                        Accepted formats: JPEG, PNG, WebP (max 5MB)
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </CardContent>
             </Card>
           </div>

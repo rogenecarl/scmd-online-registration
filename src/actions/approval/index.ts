@@ -29,6 +29,7 @@ export type AdminRegistration = {
   id: string;
   status: RegistrationStatus;
   remarks: string | null;
+  receiptImage: string | null;
   reviewedAt: Date | null;
   reviewedBy: string | null;
   createdAt: Date;
@@ -159,6 +160,7 @@ export async function getRegistrations(
           id: true,
           status: true,
           remarks: true,
+          receiptImage: true,
           reviewedAt: true,
           reviewedBy: true,
           createdAt: true,
@@ -241,6 +243,7 @@ export async function getRegistrationById(
         id: true,
         status: true,
         remarks: true,
+        receiptImage: true,
         reviewedAt: true,
         reviewedBy: true,
         createdAt: true,

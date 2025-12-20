@@ -21,7 +21,7 @@ export type AvailableEvent = {
   name: string;
   description: string | null;
   location: string;
-  logo: string | null;
+  banner: string | null;
   startDate: Date;
   endDate: Date;
   registrationDeadline: Date;
@@ -49,6 +49,7 @@ export type RegistrationWithDetails = {
   presidentId: string;
   status: RegistrationStatus;
   remarks: string | null;
+  receiptImage: string | null;
   reviewedAt: Date | null;
   reviewedBy: string | null;
   createdAt: Date;
@@ -198,7 +199,7 @@ export async function getAvailableEvents(): Promise<ActionResponse<AvailableEven
         name: event.name,
         description: event.description,
         location: event.location,
-        logo: event.logo,
+        banner: event.banner,
         startDate: event.startDate,
         endDate: event.endDate,
         registrationDeadline: event.registrationDeadline,
@@ -270,7 +271,7 @@ export async function getEventForRegistration(
         name: event.name,
         description: event.description,
         location: event.location,
-        logo: event.logo,
+        banner: event.banner,
         startDate: event.startDate,
         endDate: event.endDate,
         registrationDeadline: event.registrationDeadline,
@@ -363,6 +364,7 @@ export async function getMyRegistrationById(
         presidentId: true,
         status: true,
         remarks: true,
+        receiptImage: true,
         reviewedAt: true,
         reviewedBy: true,
         createdAt: true,
@@ -504,6 +506,7 @@ export async function createRegistration(
         churchId,
         presidentId: session.user.id,
         status: "PENDING",
+        receiptImage: validated.data.receiptImage || null,
         // Store fee information at registration time
         totalFee,
         delegateFeePerPerson: feeInfo.fee,
@@ -617,6 +620,8 @@ export async function updateRegistration(
           updatedAt: new Date(),
           // Reset to PENDING if was approved/rejected
           status: "PENDING",
+          // Update receipt image
+          receiptImage: validated.data.receiptImage || null,
           // Clear review info when resetting
           ...(wasApprovedOrRejected && {
             remarks: null,
