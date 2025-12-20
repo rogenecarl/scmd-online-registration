@@ -57,10 +57,11 @@ model User {
   updatedAt     DateTime  @updatedAt
 
   // Relations
-  sessions      Session[]
-  accounts      Account[]
-  church        Church?        @relation("ChurchPresidents", fields: [churchId], references: [id])
-  registrations Registration[]
+  sessions             Session[]
+  accounts             Account[]
+  church               Church?        @relation("ChurchPresidents", fields: [churchId], references: [id])
+  registrations        Registration[]
+  reviewedRegistrations Registration[] @relation("RegistrationReviewer")
 
   @@unique([email])
   @@index([churchId])
@@ -224,10 +225,17 @@ model Registration {
   createdAt   DateTime           @default(now()) @map("created_at")
   updatedAt   DateTime           @updatedAt @map("updated_at")
 
+  // Fee tracking (captured at registration time)
+  totalFee             Int      @default(0) @map("total_fee")
+  delegateFeePerPerson Int      @default(0) @map("delegate_fee_per_person")
+  cookFeePerPerson     Int      @default(0) @map("cook_fee_per_person")
+  isPreRegistration    Boolean  @default(false) @map("is_pre_registration")
+
   // Relations
   event     Event      @relation(fields: [eventId], references: [id], onDelete: Cascade)
   church    Church     @relation(fields: [churchId], references: [id], onDelete: Cascade)
   president User       @relation(fields: [presidentId], references: [id], onDelete: Cascade)
+  reviewer  User?      @relation("RegistrationReviewer", fields: [reviewedBy], references: [id])
   delegates Delegate[]
   cooks     Cook[]
 

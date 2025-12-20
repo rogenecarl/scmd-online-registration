@@ -53,12 +53,18 @@ export type RegistrationWithDetails = {
   reviewedBy: string | null;
   createdAt: Date;
   updatedAt: Date;
+  // Fee information (captured at registration time)
+  totalFee: number;
+  delegateFeePerPerson: number;
+  cookFeePerPerson: number;
+  isPreRegistration: boolean;
   event: {
     id: string;
     name: string;
     location: string;
     startDate: Date;
     endDate: Date;
+    registrationDeadline: Date;
     preRegistrationFee: number;
     onsiteRegistrationFee: number;
     cookRegistrationFee: number;
@@ -92,6 +98,11 @@ export type MyRegistration = {
   id: string;
   status: RegistrationStatus;
   createdAt: Date;
+  // Fee information (captured at registration time)
+  totalFee: number;
+  delegateFeePerPerson: number;
+  cookFeePerPerson: number;
+  isPreRegistration: boolean;
   event: {
     id: string;
     name: string;
@@ -297,7 +308,14 @@ export async function getMyRegistrations(): Promise<ActionResponse<MyRegistratio
 
     const registrations = await prisma.registration.findMany({
       where: { churchId },
-      include: {
+      select: {
+        id: true,
+        status: true,
+        createdAt: true,
+        totalFee: true,
+        delegateFeePerPerson: true,
+        cookFeePerPerson: true,
+        isPreRegistration: true,
         event: {
           select: {
             id: true,
@@ -338,7 +356,21 @@ export async function getMyRegistrationById(
 
     const registration = await prisma.registration.findFirst({
       where: { id, churchId },
-      include: {
+      select: {
+        id: true,
+        eventId: true,
+        churchId: true,
+        presidentId: true,
+        status: true,
+        remarks: true,
+        reviewedAt: true,
+        reviewedBy: true,
+        createdAt: true,
+        updatedAt: true,
+        totalFee: true,
+        delegateFeePerPerson: true,
+        cookFeePerPerson: true,
+        isPreRegistration: true,
         event: {
           select: {
             id: true,
@@ -346,6 +378,7 @@ export async function getMyRegistrationById(
             location: true,
             startDate: true,
             endDate: true,
+            registrationDeadline: true,
             preRegistrationFee: true,
             onsiteRegistrationFee: true,
             cookRegistrationFee: true,
@@ -456,6 +489,14 @@ export async function createRegistration(
       };
     }
 
+    // Calculate fees at registration time
+    const feeInfo = calculateCurrentFee(event);
+    const delegateCount = validated.data.delegates.length;
+    const cookCount = validated.data.cooks.length;
+    const totalDelegateFees = delegateCount * feeInfo.fee;
+    const totalCookFees = cookCount * event.cookRegistrationFee;
+    const totalFee = totalDelegateFees + totalCookFees;
+
     // Create registration with delegates and cooks
     const registration = await prisma.registration.create({
       data: {
@@ -463,6 +504,11 @@ export async function createRegistration(
         churchId,
         presidentId: session.user.id,
         status: "PENDING",
+        // Store fee information at registration time
+        totalFee,
+        delegateFeePerPerson: feeInfo.fee,
+        cookFeePerPerson: event.cookRegistrationFee,
+        isPreRegistration: feeInfo.isPreRegistration,
         delegates: {
           create: validated.data.delegates.map((delegate) => ({
             fullName: delegate.fullName,
@@ -493,12 +539,14 @@ export async function createRegistration(
 }
 
 /**
- * Update an existing registration (only if PENDING)
+ * Update an existing registration
+ * Can edit any status (PENDING, APPROVED, REJECTED) before the deadline
+ * Editing an APPROVED or REJECTED registration resets it to PENDING for re-review
  */
 export async function updateRegistration(
   id: string,
   input: UpdateRegistrationInput
-): Promise<ActionResponse<{ id: string }>> {
+): Promise<ActionResponse<{ id: string; statusReset: boolean }>> {
   await requireRole("PRESIDENT");
 
   const validated = updateRegistrationSchema.safeParse(input);
@@ -520,19 +568,22 @@ export async function updateRegistration(
     const registration = await prisma.registration.findFirst({
       where: { id, churchId },
       include: {
-        event: { select: { registrationDeadline: true, status: true } },
+        event: {
+          select: {
+            registrationDeadline: true,
+            status: true,
+            preRegistrationStart: true,
+            preRegistrationEnd: true,
+            preRegistrationFee: true,
+            onsiteRegistrationFee: true,
+            cookRegistrationFee: true,
+          },
+        },
       },
     });
 
     if (!registration) {
       return { success: false, error: "Registration not found" };
-    }
-
-    if (registration.status !== "PENDING") {
-      return {
-        success: false,
-        error: "Only pending registrations can be edited",
-      };
     }
 
     // Check if event is still open for registration
@@ -544,7 +595,19 @@ export async function updateRegistration(
       return { success: false, error: "Registration period has ended" };
     }
 
+    // Check if we need to reset status (editing an approved or rejected registration)
+    const wasApprovedOrRejected = registration.status !== "PENDING";
+
+    // Recalculate fees based on current time (may have changed from pre-reg to onsite)
+    const feeInfo = calculateCurrentFee(registration.event);
+    const delegateCount = validated.data.delegates.length;
+    const cookCount = validated.data.cooks.length;
+    const totalDelegateFees = delegateCount * feeInfo.fee;
+    const totalCookFees = cookCount * registration.event.cookRegistrationFee;
+    const totalFee = totalDelegateFees + totalCookFees;
+
     // Update registration: delete existing delegates/cooks and create new ones
+    // If previously approved/rejected, reset to PENDING and clear review info
     await prisma.$transaction([
       prisma.delegate.deleteMany({ where: { registrationId: id } }),
       prisma.cook.deleteMany({ where: { registrationId: id } }),
@@ -552,6 +615,19 @@ export async function updateRegistration(
         where: { id },
         data: {
           updatedAt: new Date(),
+          // Reset to PENDING if was approved/rejected
+          status: "PENDING",
+          // Clear review info when resetting
+          ...(wasApprovedOrRejected && {
+            remarks: null,
+            reviewedAt: null,
+            reviewedBy: null,
+          }),
+          // Update fee information
+          totalFee,
+          delegateFeePerPerson: feeInfo.fee,
+          cookFeePerPerson: registration.event.cookRegistrationFee,
+          isPreRegistration: feeInfo.isPreRegistration,
           delegates: {
             create: validated.data.delegates.map((delegate) => ({
               fullName: delegate.fullName,
@@ -574,7 +650,8 @@ export async function updateRegistration(
 
     revalidatePath("/president/registrations");
     revalidatePath(`/president/registrations/${id}`);
-    return { success: true, data: { id } };
+    revalidatePath("/admin/registrations");
+    return { success: true, data: { id, statusReset: wasApprovedOrRejected } };
   } catch (error) {
     console.error("Failed to update registration:", error);
     return { success: false, error: "Failed to update registration" };

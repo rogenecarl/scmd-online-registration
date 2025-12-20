@@ -81,18 +81,12 @@ export function RegistrationDetail({ registrationId }: RegistrationDetailProps) 
     );
   }
 
-  // Calculate fees
-  const now = new Date();
-  const isPreRegistration =
-    now >= new Date(registration.event.preRegistrationStart) &&
-    now <= new Date(registration.event.preRegistrationEnd);
-  const delegateFee = isPreRegistration
-    ? registration.event.preRegistrationFee
-    : registration.event.onsiteRegistrationFee;
-  const cookFee = registration.event.cookRegistrationFee;
+  // Use stored fees (captured at registration time)
+  const delegateFee = registration.delegateFeePerPerson;
+  const cookFee = registration.cookFeePerPerson;
   const totalDelegateFees = registration.delegates.length * delegateFee;
   const totalCookFees = registration.cooks.length * cookFee;
-  const totalFees = totalDelegateFees + totalCookFees;
+  const totalFees = registration.totalFee;
 
   return (
     <div className="space-y-6">
@@ -237,7 +231,8 @@ export function RegistrationDetail({ registrationId }: RegistrationDetailProps) 
           <CardTitle>Fee Summary</CardTitle>
           <CardDescription>
             Registration fees based on{" "}
-            {isPreRegistration ? "pre-registration" : "on-site"} rates
+            {registration.isPreRegistration ? "pre-registration" : "on-site"} rates
+            (recorded at registration time)
           </CardDescription>
         </CardHeader>
         <CardContent>

@@ -1923,12 +1923,14 @@ export namespace Prisma {
     sessions: number
     accounts: number
     registrations: number
+    reviewedRegistrations: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     sessions?: boolean | UserCountOutputTypeCountSessionsArgs
     accounts?: boolean | UserCountOutputTypeCountAccountsArgs
     registrations?: boolean | UserCountOutputTypeCountRegistrationsArgs
+    reviewedRegistrations?: boolean | UserCountOutputTypeCountReviewedRegistrationsArgs
   }
 
   // Custom InputTypes
@@ -1960,6 +1962,13 @@ export namespace Prisma {
    * UserCountOutputType without action
    */
   export type UserCountOutputTypeCountRegistrationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RegistrationWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountReviewedRegistrationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: RegistrationWhereInput
   }
 
@@ -2310,6 +2319,7 @@ export namespace Prisma {
     accounts?: boolean | User$accountsArgs<ExtArgs>
     church?: boolean | User$churchArgs<ExtArgs>
     registrations?: boolean | User$registrationsArgs<ExtArgs>
+    reviewedRegistrations?: boolean | User$reviewedRegistrationsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -2357,6 +2367,7 @@ export namespace Prisma {
     accounts?: boolean | User$accountsArgs<ExtArgs>
     church?: boolean | User$churchArgs<ExtArgs>
     registrations?: boolean | User$registrationsArgs<ExtArgs>
+    reviewedRegistrations?: boolean | User$reviewedRegistrationsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2373,6 +2384,7 @@ export namespace Prisma {
       accounts: Prisma.$AccountPayload<ExtArgs>[]
       church: Prisma.$ChurchPayload<ExtArgs> | null
       registrations: Prisma.$RegistrationPayload<ExtArgs>[]
+      reviewedRegistrations: Prisma.$RegistrationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -2782,6 +2794,7 @@ export namespace Prisma {
     accounts<T extends User$accountsArgs<ExtArgs> = {}>(args?: Subset<T, User$accountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     church<T extends User$churchArgs<ExtArgs> = {}>(args?: Subset<T, User$churchArgs<ExtArgs>>): Prisma__ChurchClient<$Result.GetResult<Prisma.$ChurchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     registrations<T extends User$registrationsArgs<ExtArgs> = {}>(args?: Subset<T, User$registrationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RegistrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    reviewedRegistrations<T extends User$reviewedRegistrationsArgs<ExtArgs> = {}>(args?: Subset<T, User$reviewedRegistrationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RegistrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3286,6 +3299,30 @@ export namespace Prisma {
    * User.registrations
    */
   export type User$registrationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Registration
+     */
+    select?: RegistrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Registration
+     */
+    omit?: RegistrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RegistrationInclude<ExtArgs> | null
+    where?: RegistrationWhereInput
+    orderBy?: RegistrationOrderByWithRelationInput | RegistrationOrderByWithRelationInput[]
+    cursor?: RegistrationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: RegistrationScalarFieldEnum | RegistrationScalarFieldEnum[]
+  }
+
+  /**
+   * User.reviewedRegistrations
+   */
+  export type User$reviewedRegistrationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Registration
      */
@@ -12188,8 +12225,22 @@ export namespace Prisma {
 
   export type AggregateRegistration = {
     _count: RegistrationCountAggregateOutputType | null
+    _avg: RegistrationAvgAggregateOutputType | null
+    _sum: RegistrationSumAggregateOutputType | null
     _min: RegistrationMinAggregateOutputType | null
     _max: RegistrationMaxAggregateOutputType | null
+  }
+
+  export type RegistrationAvgAggregateOutputType = {
+    totalFee: number | null
+    delegateFeePerPerson: number | null
+    cookFeePerPerson: number | null
+  }
+
+  export type RegistrationSumAggregateOutputType = {
+    totalFee: number | null
+    delegateFeePerPerson: number | null
+    cookFeePerPerson: number | null
   }
 
   export type RegistrationMinAggregateOutputType = {
@@ -12203,6 +12254,10 @@ export namespace Prisma {
     reviewedBy: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    totalFee: number | null
+    delegateFeePerPerson: number | null
+    cookFeePerPerson: number | null
+    isPreRegistration: boolean | null
   }
 
   export type RegistrationMaxAggregateOutputType = {
@@ -12216,6 +12271,10 @@ export namespace Prisma {
     reviewedBy: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    totalFee: number | null
+    delegateFeePerPerson: number | null
+    cookFeePerPerson: number | null
+    isPreRegistration: boolean | null
   }
 
   export type RegistrationCountAggregateOutputType = {
@@ -12229,9 +12288,25 @@ export namespace Prisma {
     reviewedBy: number
     createdAt: number
     updatedAt: number
+    totalFee: number
+    delegateFeePerPerson: number
+    cookFeePerPerson: number
+    isPreRegistration: number
     _all: number
   }
 
+
+  export type RegistrationAvgAggregateInputType = {
+    totalFee?: true
+    delegateFeePerPerson?: true
+    cookFeePerPerson?: true
+  }
+
+  export type RegistrationSumAggregateInputType = {
+    totalFee?: true
+    delegateFeePerPerson?: true
+    cookFeePerPerson?: true
+  }
 
   export type RegistrationMinAggregateInputType = {
     id?: true
@@ -12244,6 +12319,10 @@ export namespace Prisma {
     reviewedBy?: true
     createdAt?: true
     updatedAt?: true
+    totalFee?: true
+    delegateFeePerPerson?: true
+    cookFeePerPerson?: true
+    isPreRegistration?: true
   }
 
   export type RegistrationMaxAggregateInputType = {
@@ -12257,6 +12336,10 @@ export namespace Prisma {
     reviewedBy?: true
     createdAt?: true
     updatedAt?: true
+    totalFee?: true
+    delegateFeePerPerson?: true
+    cookFeePerPerson?: true
+    isPreRegistration?: true
   }
 
   export type RegistrationCountAggregateInputType = {
@@ -12270,6 +12353,10 @@ export namespace Prisma {
     reviewedBy?: true
     createdAt?: true
     updatedAt?: true
+    totalFee?: true
+    delegateFeePerPerson?: true
+    cookFeePerPerson?: true
+    isPreRegistration?: true
     _all?: true
   }
 
@@ -12311,6 +12398,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: RegistrationAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: RegistrationSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: RegistrationMinAggregateInputType
@@ -12341,6 +12440,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: RegistrationCountAggregateInputType | true
+    _avg?: RegistrationAvgAggregateInputType
+    _sum?: RegistrationSumAggregateInputType
     _min?: RegistrationMinAggregateInputType
     _max?: RegistrationMaxAggregateInputType
   }
@@ -12356,7 +12457,13 @@ export namespace Prisma {
     reviewedBy: string | null
     createdAt: Date
     updatedAt: Date
+    totalFee: number
+    delegateFeePerPerson: number
+    cookFeePerPerson: number
+    isPreRegistration: boolean
     _count: RegistrationCountAggregateOutputType | null
+    _avg: RegistrationAvgAggregateOutputType | null
+    _sum: RegistrationSumAggregateOutputType | null
     _min: RegistrationMinAggregateOutputType | null
     _max: RegistrationMaxAggregateOutputType | null
   }
@@ -12386,9 +12493,14 @@ export namespace Prisma {
     reviewedBy?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    totalFee?: boolean
+    delegateFeePerPerson?: boolean
+    cookFeePerPerson?: boolean
+    isPreRegistration?: boolean
     event?: boolean | EventDefaultArgs<ExtArgs>
     church?: boolean | ChurchDefaultArgs<ExtArgs>
     president?: boolean | UserDefaultArgs<ExtArgs>
+    reviewer?: boolean | Registration$reviewerArgs<ExtArgs>
     delegates?: boolean | Registration$delegatesArgs<ExtArgs>
     cooks?: boolean | Registration$cooksArgs<ExtArgs>
     _count?: boolean | RegistrationCountOutputTypeDefaultArgs<ExtArgs>
@@ -12405,9 +12517,14 @@ export namespace Prisma {
     reviewedBy?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    totalFee?: boolean
+    delegateFeePerPerson?: boolean
+    cookFeePerPerson?: boolean
+    isPreRegistration?: boolean
     event?: boolean | EventDefaultArgs<ExtArgs>
     church?: boolean | ChurchDefaultArgs<ExtArgs>
     president?: boolean | UserDefaultArgs<ExtArgs>
+    reviewer?: boolean | Registration$reviewerArgs<ExtArgs>
   }, ExtArgs["result"]["registration"]>
 
   export type RegistrationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -12421,9 +12538,14 @@ export namespace Prisma {
     reviewedBy?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    totalFee?: boolean
+    delegateFeePerPerson?: boolean
+    cookFeePerPerson?: boolean
+    isPreRegistration?: boolean
     event?: boolean | EventDefaultArgs<ExtArgs>
     church?: boolean | ChurchDefaultArgs<ExtArgs>
     president?: boolean | UserDefaultArgs<ExtArgs>
+    reviewer?: boolean | Registration$reviewerArgs<ExtArgs>
   }, ExtArgs["result"]["registration"]>
 
   export type RegistrationSelectScalar = {
@@ -12437,13 +12559,18 @@ export namespace Prisma {
     reviewedBy?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    totalFee?: boolean
+    delegateFeePerPerson?: boolean
+    cookFeePerPerson?: boolean
+    isPreRegistration?: boolean
   }
 
-  export type RegistrationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "eventId" | "churchId" | "presidentId" | "status" | "remarks" | "reviewedAt" | "reviewedBy" | "createdAt" | "updatedAt", ExtArgs["result"]["registration"]>
+  export type RegistrationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "eventId" | "churchId" | "presidentId" | "status" | "remarks" | "reviewedAt" | "reviewedBy" | "createdAt" | "updatedAt" | "totalFee" | "delegateFeePerPerson" | "cookFeePerPerson" | "isPreRegistration", ExtArgs["result"]["registration"]>
   export type RegistrationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     event?: boolean | EventDefaultArgs<ExtArgs>
     church?: boolean | ChurchDefaultArgs<ExtArgs>
     president?: boolean | UserDefaultArgs<ExtArgs>
+    reviewer?: boolean | Registration$reviewerArgs<ExtArgs>
     delegates?: boolean | Registration$delegatesArgs<ExtArgs>
     cooks?: boolean | Registration$cooksArgs<ExtArgs>
     _count?: boolean | RegistrationCountOutputTypeDefaultArgs<ExtArgs>
@@ -12452,11 +12579,13 @@ export namespace Prisma {
     event?: boolean | EventDefaultArgs<ExtArgs>
     church?: boolean | ChurchDefaultArgs<ExtArgs>
     president?: boolean | UserDefaultArgs<ExtArgs>
+    reviewer?: boolean | Registration$reviewerArgs<ExtArgs>
   }
   export type RegistrationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     event?: boolean | EventDefaultArgs<ExtArgs>
     church?: boolean | ChurchDefaultArgs<ExtArgs>
     president?: boolean | UserDefaultArgs<ExtArgs>
+    reviewer?: boolean | Registration$reviewerArgs<ExtArgs>
   }
 
   export type $RegistrationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -12465,6 +12594,7 @@ export namespace Prisma {
       event: Prisma.$EventPayload<ExtArgs>
       church: Prisma.$ChurchPayload<ExtArgs>
       president: Prisma.$UserPayload<ExtArgs>
+      reviewer: Prisma.$UserPayload<ExtArgs> | null
       delegates: Prisma.$DelegatePayload<ExtArgs>[]
       cooks: Prisma.$CookPayload<ExtArgs>[]
     }
@@ -12479,6 +12609,10 @@ export namespace Prisma {
       reviewedBy: string | null
       createdAt: Date
       updatedAt: Date
+      totalFee: number
+      delegateFeePerPerson: number
+      cookFeePerPerson: number
+      isPreRegistration: boolean
     }, ExtArgs["result"]["registration"]>
     composites: {}
   }
@@ -12876,6 +13010,7 @@ export namespace Prisma {
     event<T extends EventDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EventDefaultArgs<ExtArgs>>): Prisma__EventClient<$Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     church<T extends ChurchDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ChurchDefaultArgs<ExtArgs>>): Prisma__ChurchClient<$Result.GetResult<Prisma.$ChurchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     president<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    reviewer<T extends Registration$reviewerArgs<ExtArgs> = {}>(args?: Subset<T, Registration$reviewerArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     delegates<T extends Registration$delegatesArgs<ExtArgs> = {}>(args?: Subset<T, Registration$delegatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DelegatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     cooks<T extends Registration$cooksArgs<ExtArgs> = {}>(args?: Subset<T, Registration$cooksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CookPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
@@ -12917,6 +13052,10 @@ export namespace Prisma {
     readonly reviewedBy: FieldRef<"Registration", 'String'>
     readonly createdAt: FieldRef<"Registration", 'DateTime'>
     readonly updatedAt: FieldRef<"Registration", 'DateTime'>
+    readonly totalFee: FieldRef<"Registration", 'Int'>
+    readonly delegateFeePerPerson: FieldRef<"Registration", 'Int'>
+    readonly cookFeePerPerson: FieldRef<"Registration", 'Int'>
+    readonly isPreRegistration: FieldRef<"Registration", 'Boolean'>
   }
     
 
@@ -13310,6 +13449,25 @@ export namespace Prisma {
      * Limit how many Registrations to delete.
      */
     limit?: number
+  }
+
+  /**
+   * Registration.reviewer
+   */
+  export type Registration$reviewerArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
   }
 
   /**
@@ -15790,7 +15948,11 @@ export namespace Prisma {
     reviewedAt: 'reviewedAt',
     reviewedBy: 'reviewedBy',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    totalFee: 'totalFee',
+    delegateFeePerPerson: 'delegateFeePerPerson',
+    cookFeePerPerson: 'cookFeePerPerson',
+    isPreRegistration: 'isPreRegistration'
   };
 
   export type RegistrationScalarFieldEnum = (typeof RegistrationScalarFieldEnum)[keyof typeof RegistrationScalarFieldEnum]
@@ -15992,6 +16154,7 @@ export namespace Prisma {
     accounts?: AccountListRelationFilter
     church?: XOR<ChurchNullableScalarRelationFilter, ChurchWhereInput> | null
     registrations?: RegistrationListRelationFilter
+    reviewedRegistrations?: RegistrationListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -16008,6 +16171,7 @@ export namespace Prisma {
     accounts?: AccountOrderByRelationAggregateInput
     church?: ChurchOrderByWithRelationInput
     registrations?: RegistrationOrderByRelationAggregateInput
+    reviewedRegistrations?: RegistrationOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -16027,6 +16191,7 @@ export namespace Prisma {
     accounts?: AccountListRelationFilter
     church?: XOR<ChurchNullableScalarRelationFilter, ChurchWhereInput> | null
     registrations?: RegistrationListRelationFilter
+    reviewedRegistrations?: RegistrationListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -16634,9 +16799,14 @@ export namespace Prisma {
     reviewedBy?: StringNullableFilter<"Registration"> | string | null
     createdAt?: DateTimeFilter<"Registration"> | Date | string
     updatedAt?: DateTimeFilter<"Registration"> | Date | string
+    totalFee?: IntFilter<"Registration"> | number
+    delegateFeePerPerson?: IntFilter<"Registration"> | number
+    cookFeePerPerson?: IntFilter<"Registration"> | number
+    isPreRegistration?: BoolFilter<"Registration"> | boolean
     event?: XOR<EventScalarRelationFilter, EventWhereInput>
     church?: XOR<ChurchScalarRelationFilter, ChurchWhereInput>
     president?: XOR<UserScalarRelationFilter, UserWhereInput>
+    reviewer?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     delegates?: DelegateListRelationFilter
     cooks?: CookListRelationFilter
   }
@@ -16652,9 +16822,14 @@ export namespace Prisma {
     reviewedBy?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    totalFee?: SortOrder
+    delegateFeePerPerson?: SortOrder
+    cookFeePerPerson?: SortOrder
+    isPreRegistration?: SortOrder
     event?: EventOrderByWithRelationInput
     church?: ChurchOrderByWithRelationInput
     president?: UserOrderByWithRelationInput
+    reviewer?: UserOrderByWithRelationInput
     delegates?: DelegateOrderByRelationAggregateInput
     cooks?: CookOrderByRelationAggregateInput
   }
@@ -16674,9 +16849,14 @@ export namespace Prisma {
     reviewedBy?: StringNullableFilter<"Registration"> | string | null
     createdAt?: DateTimeFilter<"Registration"> | Date | string
     updatedAt?: DateTimeFilter<"Registration"> | Date | string
+    totalFee?: IntFilter<"Registration"> | number
+    delegateFeePerPerson?: IntFilter<"Registration"> | number
+    cookFeePerPerson?: IntFilter<"Registration"> | number
+    isPreRegistration?: BoolFilter<"Registration"> | boolean
     event?: XOR<EventScalarRelationFilter, EventWhereInput>
     church?: XOR<ChurchScalarRelationFilter, ChurchWhereInput>
     president?: XOR<UserScalarRelationFilter, UserWhereInput>
+    reviewer?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     delegates?: DelegateListRelationFilter
     cooks?: CookListRelationFilter
   }, "id" | "eventId_churchId">
@@ -16692,9 +16872,15 @@ export namespace Prisma {
     reviewedBy?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    totalFee?: SortOrder
+    delegateFeePerPerson?: SortOrder
+    cookFeePerPerson?: SortOrder
+    isPreRegistration?: SortOrder
     _count?: RegistrationCountOrderByAggregateInput
+    _avg?: RegistrationAvgOrderByAggregateInput
     _max?: RegistrationMaxOrderByAggregateInput
     _min?: RegistrationMinOrderByAggregateInput
+    _sum?: RegistrationSumOrderByAggregateInput
   }
 
   export type RegistrationScalarWhereWithAggregatesInput = {
@@ -16711,6 +16897,10 @@ export namespace Prisma {
     reviewedBy?: StringNullableWithAggregatesFilter<"Registration"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Registration"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Registration"> | Date | string
+    totalFee?: IntWithAggregatesFilter<"Registration"> | number
+    delegateFeePerPerson?: IntWithAggregatesFilter<"Registration"> | number
+    cookFeePerPerson?: IntWithAggregatesFilter<"Registration"> | number
+    isPreRegistration?: BoolWithAggregatesFilter<"Registration"> | boolean
   }
 
   export type DelegateWhereInput = {
@@ -16870,6 +17060,7 @@ export namespace Prisma {
     accounts?: AccountCreateNestedManyWithoutUserInput
     church?: ChurchCreateNestedOneWithoutPresidentsInput
     registrations?: RegistrationCreateNestedManyWithoutPresidentInput
+    reviewedRegistrations?: RegistrationCreateNestedManyWithoutReviewerInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -16885,6 +17076,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     registrations?: RegistrationUncheckedCreateNestedManyWithoutPresidentInput
+    reviewedRegistrations?: RegistrationUncheckedCreateNestedManyWithoutReviewerInput
   }
 
   export type UserUpdateInput = {
@@ -16900,6 +17092,7 @@ export namespace Prisma {
     accounts?: AccountUpdateManyWithoutUserNestedInput
     church?: ChurchUpdateOneWithoutPresidentsNestedInput
     registrations?: RegistrationUpdateManyWithoutPresidentNestedInput
+    reviewedRegistrations?: RegistrationUpdateManyWithoutReviewerNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -16915,6 +17108,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     registrations?: RegistrationUncheckedUpdateManyWithoutPresidentNestedInput
+    reviewedRegistrations?: RegistrationUncheckedUpdateManyWithoutReviewerNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -17578,12 +17772,16 @@ export namespace Prisma {
     status?: $Enums.RegistrationStatus
     remarks?: string | null
     reviewedAt?: Date | string | null
-    reviewedBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    totalFee?: number
+    delegateFeePerPerson?: number
+    cookFeePerPerson?: number
+    isPreRegistration?: boolean
     event: EventCreateNestedOneWithoutRegistrationsInput
     church: ChurchCreateNestedOneWithoutRegistrationsInput
     president: UserCreateNestedOneWithoutRegistrationsInput
+    reviewer?: UserCreateNestedOneWithoutReviewedRegistrationsInput
     delegates?: DelegateCreateNestedManyWithoutRegistrationInput
     cooks?: CookCreateNestedManyWithoutRegistrationInput
   }
@@ -17599,6 +17797,10 @@ export namespace Prisma {
     reviewedBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    totalFee?: number
+    delegateFeePerPerson?: number
+    cookFeePerPerson?: number
+    isPreRegistration?: boolean
     delegates?: DelegateUncheckedCreateNestedManyWithoutRegistrationInput
     cooks?: CookUncheckedCreateNestedManyWithoutRegistrationInput
   }
@@ -17608,12 +17810,16 @@ export namespace Prisma {
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalFee?: IntFieldUpdateOperationsInput | number
+    delegateFeePerPerson?: IntFieldUpdateOperationsInput | number
+    cookFeePerPerson?: IntFieldUpdateOperationsInput | number
+    isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
     event?: EventUpdateOneRequiredWithoutRegistrationsNestedInput
     church?: ChurchUpdateOneRequiredWithoutRegistrationsNestedInput
     president?: UserUpdateOneRequiredWithoutRegistrationsNestedInput
+    reviewer?: UserUpdateOneWithoutReviewedRegistrationsNestedInput
     delegates?: DelegateUpdateManyWithoutRegistrationNestedInput
     cooks?: CookUpdateManyWithoutRegistrationNestedInput
   }
@@ -17629,6 +17835,10 @@ export namespace Prisma {
     reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalFee?: IntFieldUpdateOperationsInput | number
+    delegateFeePerPerson?: IntFieldUpdateOperationsInput | number
+    cookFeePerPerson?: IntFieldUpdateOperationsInput | number
+    isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
     delegates?: DelegateUncheckedUpdateManyWithoutRegistrationNestedInput
     cooks?: CookUncheckedUpdateManyWithoutRegistrationNestedInput
   }
@@ -17644,6 +17854,10 @@ export namespace Prisma {
     reviewedBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    totalFee?: number
+    delegateFeePerPerson?: number
+    cookFeePerPerson?: number
+    isPreRegistration?: boolean
   }
 
   export type RegistrationUpdateManyMutationInput = {
@@ -17651,9 +17865,12 @@ export namespace Prisma {
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalFee?: IntFieldUpdateOperationsInput | number
+    delegateFeePerPerson?: IntFieldUpdateOperationsInput | number
+    cookFeePerPerson?: IntFieldUpdateOperationsInput | number
+    isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type RegistrationUncheckedUpdateManyInput = {
@@ -17667,6 +17884,10 @@ export namespace Prisma {
     reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalFee?: IntFieldUpdateOperationsInput | number
+    delegateFeePerPerson?: IntFieldUpdateOperationsInput | number
+    cookFeePerPerson?: IntFieldUpdateOperationsInput | number
+    isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type DelegateCreateInput = {
@@ -18414,6 +18635,11 @@ export namespace Prisma {
     isNot?: EventWhereInput
   }
 
+  export type UserNullableScalarRelationFilter = {
+    is?: UserWhereInput | null
+    isNot?: UserWhereInput | null
+  }
+
   export type DelegateListRelationFilter = {
     every?: DelegateWhereInput
     some?: DelegateWhereInput
@@ -18450,6 +18676,16 @@ export namespace Prisma {
     reviewedBy?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    totalFee?: SortOrder
+    delegateFeePerPerson?: SortOrder
+    cookFeePerPerson?: SortOrder
+    isPreRegistration?: SortOrder
+  }
+
+  export type RegistrationAvgOrderByAggregateInput = {
+    totalFee?: SortOrder
+    delegateFeePerPerson?: SortOrder
+    cookFeePerPerson?: SortOrder
   }
 
   export type RegistrationMaxOrderByAggregateInput = {
@@ -18463,6 +18699,10 @@ export namespace Prisma {
     reviewedBy?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    totalFee?: SortOrder
+    delegateFeePerPerson?: SortOrder
+    cookFeePerPerson?: SortOrder
+    isPreRegistration?: SortOrder
   }
 
   export type RegistrationMinOrderByAggregateInput = {
@@ -18476,6 +18716,16 @@ export namespace Prisma {
     reviewedBy?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    totalFee?: SortOrder
+    delegateFeePerPerson?: SortOrder
+    cookFeePerPerson?: SortOrder
+    isPreRegistration?: SortOrder
+  }
+
+  export type RegistrationSumOrderByAggregateInput = {
+    totalFee?: SortOrder
+    delegateFeePerPerson?: SortOrder
+    cookFeePerPerson?: SortOrder
   }
 
   export type EnumRegistrationStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -18619,6 +18869,13 @@ export namespace Prisma {
     connect?: RegistrationWhereUniqueInput | RegistrationWhereUniqueInput[]
   }
 
+  export type RegistrationCreateNestedManyWithoutReviewerInput = {
+    create?: XOR<RegistrationCreateWithoutReviewerInput, RegistrationUncheckedCreateWithoutReviewerInput> | RegistrationCreateWithoutReviewerInput[] | RegistrationUncheckedCreateWithoutReviewerInput[]
+    connectOrCreate?: RegistrationCreateOrConnectWithoutReviewerInput | RegistrationCreateOrConnectWithoutReviewerInput[]
+    createMany?: RegistrationCreateManyReviewerInputEnvelope
+    connect?: RegistrationWhereUniqueInput | RegistrationWhereUniqueInput[]
+  }
+
   export type SessionUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<SessionCreateWithoutUserInput, SessionUncheckedCreateWithoutUserInput> | SessionCreateWithoutUserInput[] | SessionUncheckedCreateWithoutUserInput[]
     connectOrCreate?: SessionCreateOrConnectWithoutUserInput | SessionCreateOrConnectWithoutUserInput[]
@@ -18637,6 +18894,13 @@ export namespace Prisma {
     create?: XOR<RegistrationCreateWithoutPresidentInput, RegistrationUncheckedCreateWithoutPresidentInput> | RegistrationCreateWithoutPresidentInput[] | RegistrationUncheckedCreateWithoutPresidentInput[]
     connectOrCreate?: RegistrationCreateOrConnectWithoutPresidentInput | RegistrationCreateOrConnectWithoutPresidentInput[]
     createMany?: RegistrationCreateManyPresidentInputEnvelope
+    connect?: RegistrationWhereUniqueInput | RegistrationWhereUniqueInput[]
+  }
+
+  export type RegistrationUncheckedCreateNestedManyWithoutReviewerInput = {
+    create?: XOR<RegistrationCreateWithoutReviewerInput, RegistrationUncheckedCreateWithoutReviewerInput> | RegistrationCreateWithoutReviewerInput[] | RegistrationUncheckedCreateWithoutReviewerInput[]
+    connectOrCreate?: RegistrationCreateOrConnectWithoutReviewerInput | RegistrationCreateOrConnectWithoutReviewerInput[]
+    createMany?: RegistrationCreateManyReviewerInputEnvelope
     connect?: RegistrationWhereUniqueInput | RegistrationWhereUniqueInput[]
   }
 
@@ -18712,6 +18976,20 @@ export namespace Prisma {
     deleteMany?: RegistrationScalarWhereInput | RegistrationScalarWhereInput[]
   }
 
+  export type RegistrationUpdateManyWithoutReviewerNestedInput = {
+    create?: XOR<RegistrationCreateWithoutReviewerInput, RegistrationUncheckedCreateWithoutReviewerInput> | RegistrationCreateWithoutReviewerInput[] | RegistrationUncheckedCreateWithoutReviewerInput[]
+    connectOrCreate?: RegistrationCreateOrConnectWithoutReviewerInput | RegistrationCreateOrConnectWithoutReviewerInput[]
+    upsert?: RegistrationUpsertWithWhereUniqueWithoutReviewerInput | RegistrationUpsertWithWhereUniqueWithoutReviewerInput[]
+    createMany?: RegistrationCreateManyReviewerInputEnvelope
+    set?: RegistrationWhereUniqueInput | RegistrationWhereUniqueInput[]
+    disconnect?: RegistrationWhereUniqueInput | RegistrationWhereUniqueInput[]
+    delete?: RegistrationWhereUniqueInput | RegistrationWhereUniqueInput[]
+    connect?: RegistrationWhereUniqueInput | RegistrationWhereUniqueInput[]
+    update?: RegistrationUpdateWithWhereUniqueWithoutReviewerInput | RegistrationUpdateWithWhereUniqueWithoutReviewerInput[]
+    updateMany?: RegistrationUpdateManyWithWhereWithoutReviewerInput | RegistrationUpdateManyWithWhereWithoutReviewerInput[]
+    deleteMany?: RegistrationScalarWhereInput | RegistrationScalarWhereInput[]
+  }
+
   export type SessionUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<SessionCreateWithoutUserInput, SessionUncheckedCreateWithoutUserInput> | SessionCreateWithoutUserInput[] | SessionUncheckedCreateWithoutUserInput[]
     connectOrCreate?: SessionCreateOrConnectWithoutUserInput | SessionCreateOrConnectWithoutUserInput[]
@@ -18751,6 +19029,20 @@ export namespace Prisma {
     connect?: RegistrationWhereUniqueInput | RegistrationWhereUniqueInput[]
     update?: RegistrationUpdateWithWhereUniqueWithoutPresidentInput | RegistrationUpdateWithWhereUniqueWithoutPresidentInput[]
     updateMany?: RegistrationUpdateManyWithWhereWithoutPresidentInput | RegistrationUpdateManyWithWhereWithoutPresidentInput[]
+    deleteMany?: RegistrationScalarWhereInput | RegistrationScalarWhereInput[]
+  }
+
+  export type RegistrationUncheckedUpdateManyWithoutReviewerNestedInput = {
+    create?: XOR<RegistrationCreateWithoutReviewerInput, RegistrationUncheckedCreateWithoutReviewerInput> | RegistrationCreateWithoutReviewerInput[] | RegistrationUncheckedCreateWithoutReviewerInput[]
+    connectOrCreate?: RegistrationCreateOrConnectWithoutReviewerInput | RegistrationCreateOrConnectWithoutReviewerInput[]
+    upsert?: RegistrationUpsertWithWhereUniqueWithoutReviewerInput | RegistrationUpsertWithWhereUniqueWithoutReviewerInput[]
+    createMany?: RegistrationCreateManyReviewerInputEnvelope
+    set?: RegistrationWhereUniqueInput | RegistrationWhereUniqueInput[]
+    disconnect?: RegistrationWhereUniqueInput | RegistrationWhereUniqueInput[]
+    delete?: RegistrationWhereUniqueInput | RegistrationWhereUniqueInput[]
+    connect?: RegistrationWhereUniqueInput | RegistrationWhereUniqueInput[]
+    update?: RegistrationUpdateWithWhereUniqueWithoutReviewerInput | RegistrationUpdateWithWhereUniqueWithoutReviewerInput[]
+    updateMany?: RegistrationUpdateManyWithWhereWithoutReviewerInput | RegistrationUpdateManyWithWhereWithoutReviewerInput[]
     deleteMany?: RegistrationScalarWhereInput | RegistrationScalarWhereInput[]
   }
 
@@ -19090,6 +19382,12 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
+  export type UserCreateNestedOneWithoutReviewedRegistrationsInput = {
+    create?: XOR<UserCreateWithoutReviewedRegistrationsInput, UserUncheckedCreateWithoutReviewedRegistrationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutReviewedRegistrationsInput
+    connect?: UserWhereUniqueInput
+  }
+
   export type DelegateCreateNestedManyWithoutRegistrationInput = {
     create?: XOR<DelegateCreateWithoutRegistrationInput, DelegateUncheckedCreateWithoutRegistrationInput> | DelegateCreateWithoutRegistrationInput[] | DelegateUncheckedCreateWithoutRegistrationInput[]
     connectOrCreate?: DelegateCreateOrConnectWithoutRegistrationInput | DelegateCreateOrConnectWithoutRegistrationInput[]
@@ -19144,6 +19442,16 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutRegistrationsInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutRegistrationsInput, UserUpdateWithoutRegistrationsInput>, UserUncheckedUpdateWithoutRegistrationsInput>
+  }
+
+  export type UserUpdateOneWithoutReviewedRegistrationsNestedInput = {
+    create?: XOR<UserCreateWithoutReviewedRegistrationsInput, UserUncheckedCreateWithoutReviewedRegistrationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutReviewedRegistrationsInput
+    upsert?: UserUpsertWithoutReviewedRegistrationsInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutReviewedRegistrationsInput, UserUpdateWithoutReviewedRegistrationsInput>, UserUncheckedUpdateWithoutReviewedRegistrationsInput>
   }
 
   export type DelegateUpdateManyWithoutRegistrationNestedInput = {
@@ -19576,11 +19884,15 @@ export namespace Prisma {
     status?: $Enums.RegistrationStatus
     remarks?: string | null
     reviewedAt?: Date | string | null
-    reviewedBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    totalFee?: number
+    delegateFeePerPerson?: number
+    cookFeePerPerson?: number
+    isPreRegistration?: boolean
     event: EventCreateNestedOneWithoutRegistrationsInput
     church: ChurchCreateNestedOneWithoutRegistrationsInput
+    reviewer?: UserCreateNestedOneWithoutReviewedRegistrationsInput
     delegates?: DelegateCreateNestedManyWithoutRegistrationInput
     cooks?: CookCreateNestedManyWithoutRegistrationInput
   }
@@ -19595,6 +19907,10 @@ export namespace Prisma {
     reviewedBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    totalFee?: number
+    delegateFeePerPerson?: number
+    cookFeePerPerson?: number
+    isPreRegistration?: boolean
     delegates?: DelegateUncheckedCreateNestedManyWithoutRegistrationInput
     cooks?: CookUncheckedCreateNestedManyWithoutRegistrationInput
   }
@@ -19606,6 +19922,52 @@ export namespace Prisma {
 
   export type RegistrationCreateManyPresidentInputEnvelope = {
     data: RegistrationCreateManyPresidentInput | RegistrationCreateManyPresidentInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type RegistrationCreateWithoutReviewerInput = {
+    id?: string
+    status?: $Enums.RegistrationStatus
+    remarks?: string | null
+    reviewedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    totalFee?: number
+    delegateFeePerPerson?: number
+    cookFeePerPerson?: number
+    isPreRegistration?: boolean
+    event: EventCreateNestedOneWithoutRegistrationsInput
+    church: ChurchCreateNestedOneWithoutRegistrationsInput
+    president: UserCreateNestedOneWithoutRegistrationsInput
+    delegates?: DelegateCreateNestedManyWithoutRegistrationInput
+    cooks?: CookCreateNestedManyWithoutRegistrationInput
+  }
+
+  export type RegistrationUncheckedCreateWithoutReviewerInput = {
+    id?: string
+    eventId: string
+    churchId: string
+    presidentId: string
+    status?: $Enums.RegistrationStatus
+    remarks?: string | null
+    reviewedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    totalFee?: number
+    delegateFeePerPerson?: number
+    cookFeePerPerson?: number
+    isPreRegistration?: boolean
+    delegates?: DelegateUncheckedCreateNestedManyWithoutRegistrationInput
+    cooks?: CookUncheckedCreateNestedManyWithoutRegistrationInput
+  }
+
+  export type RegistrationCreateOrConnectWithoutReviewerInput = {
+    where: RegistrationWhereUniqueInput
+    create: XOR<RegistrationCreateWithoutReviewerInput, RegistrationUncheckedCreateWithoutReviewerInput>
+  }
+
+  export type RegistrationCreateManyReviewerInputEnvelope = {
+    data: RegistrationCreateManyReviewerInput | RegistrationCreateManyReviewerInput[]
     skipDuplicates?: boolean
   }
 
@@ -19735,6 +20097,26 @@ export namespace Prisma {
     reviewedBy?: StringNullableFilter<"Registration"> | string | null
     createdAt?: DateTimeFilter<"Registration"> | Date | string
     updatedAt?: DateTimeFilter<"Registration"> | Date | string
+    totalFee?: IntFilter<"Registration"> | number
+    delegateFeePerPerson?: IntFilter<"Registration"> | number
+    cookFeePerPerson?: IntFilter<"Registration"> | number
+    isPreRegistration?: BoolFilter<"Registration"> | boolean
+  }
+
+  export type RegistrationUpsertWithWhereUniqueWithoutReviewerInput = {
+    where: RegistrationWhereUniqueInput
+    update: XOR<RegistrationUpdateWithoutReviewerInput, RegistrationUncheckedUpdateWithoutReviewerInput>
+    create: XOR<RegistrationCreateWithoutReviewerInput, RegistrationUncheckedCreateWithoutReviewerInput>
+  }
+
+  export type RegistrationUpdateWithWhereUniqueWithoutReviewerInput = {
+    where: RegistrationWhereUniqueInput
+    data: XOR<RegistrationUpdateWithoutReviewerInput, RegistrationUncheckedUpdateWithoutReviewerInput>
+  }
+
+  export type RegistrationUpdateManyWithWhereWithoutReviewerInput = {
+    where: RegistrationScalarWhereInput
+    data: XOR<RegistrationUpdateManyMutationInput, RegistrationUncheckedUpdateManyWithoutReviewerInput>
   }
 
   export type UserCreateWithoutSessionsInput = {
@@ -19749,6 +20131,7 @@ export namespace Prisma {
     accounts?: AccountCreateNestedManyWithoutUserInput
     church?: ChurchCreateNestedOneWithoutPresidentsInput
     registrations?: RegistrationCreateNestedManyWithoutPresidentInput
+    reviewedRegistrations?: RegistrationCreateNestedManyWithoutReviewerInput
   }
 
   export type UserUncheckedCreateWithoutSessionsInput = {
@@ -19763,6 +20146,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     registrations?: RegistrationUncheckedCreateNestedManyWithoutPresidentInput
+    reviewedRegistrations?: RegistrationUncheckedCreateNestedManyWithoutReviewerInput
   }
 
   export type UserCreateOrConnectWithoutSessionsInput = {
@@ -19793,6 +20177,7 @@ export namespace Prisma {
     accounts?: AccountUpdateManyWithoutUserNestedInput
     church?: ChurchUpdateOneWithoutPresidentsNestedInput
     registrations?: RegistrationUpdateManyWithoutPresidentNestedInput
+    reviewedRegistrations?: RegistrationUpdateManyWithoutReviewerNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -19807,6 +20192,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     registrations?: RegistrationUncheckedUpdateManyWithoutPresidentNestedInput
+    reviewedRegistrations?: RegistrationUncheckedUpdateManyWithoutReviewerNestedInput
   }
 
   export type UserCreateWithoutAccountsInput = {
@@ -19821,6 +20207,7 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     church?: ChurchCreateNestedOneWithoutPresidentsInput
     registrations?: RegistrationCreateNestedManyWithoutPresidentInput
+    reviewedRegistrations?: RegistrationCreateNestedManyWithoutReviewerInput
   }
 
   export type UserUncheckedCreateWithoutAccountsInput = {
@@ -19835,6 +20222,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     registrations?: RegistrationUncheckedCreateNestedManyWithoutPresidentInput
+    reviewedRegistrations?: RegistrationUncheckedCreateNestedManyWithoutReviewerInput
   }
 
   export type UserCreateOrConnectWithoutAccountsInput = {
@@ -19865,6 +20253,7 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     church?: ChurchUpdateOneWithoutPresidentsNestedInput
     registrations?: RegistrationUpdateManyWithoutPresidentNestedInput
+    reviewedRegistrations?: RegistrationUpdateManyWithoutReviewerNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -19879,6 +20268,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     registrations?: RegistrationUncheckedUpdateManyWithoutPresidentNestedInput
+    reviewedRegistrations?: RegistrationUncheckedUpdateManyWithoutReviewerNestedInput
   }
 
   export type ChurchCreateWithoutDivisionInput = {
@@ -20034,6 +20424,7 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     registrations?: RegistrationCreateNestedManyWithoutPresidentInput
+    reviewedRegistrations?: RegistrationCreateNestedManyWithoutReviewerInput
   }
 
   export type UserUncheckedCreateWithoutChurchInput = {
@@ -20048,6 +20439,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     registrations?: RegistrationUncheckedCreateNestedManyWithoutPresidentInput
+    reviewedRegistrations?: RegistrationUncheckedCreateNestedManyWithoutReviewerInput
   }
 
   export type UserCreateOrConnectWithoutChurchInput = {
@@ -20065,11 +20457,15 @@ export namespace Prisma {
     status?: $Enums.RegistrationStatus
     remarks?: string | null
     reviewedAt?: Date | string | null
-    reviewedBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    totalFee?: number
+    delegateFeePerPerson?: number
+    cookFeePerPerson?: number
+    isPreRegistration?: boolean
     event: EventCreateNestedOneWithoutRegistrationsInput
     president: UserCreateNestedOneWithoutRegistrationsInput
+    reviewer?: UserCreateNestedOneWithoutReviewedRegistrationsInput
     delegates?: DelegateCreateNestedManyWithoutRegistrationInput
     cooks?: CookCreateNestedManyWithoutRegistrationInput
   }
@@ -20084,6 +20480,10 @@ export namespace Prisma {
     reviewedBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    totalFee?: number
+    delegateFeePerPerson?: number
+    cookFeePerPerson?: number
+    isPreRegistration?: boolean
     delegates?: DelegateUncheckedCreateNestedManyWithoutRegistrationInput
     cooks?: CookUncheckedCreateNestedManyWithoutRegistrationInput
   }
@@ -20306,11 +20706,15 @@ export namespace Prisma {
     status?: $Enums.RegistrationStatus
     remarks?: string | null
     reviewedAt?: Date | string | null
-    reviewedBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    totalFee?: number
+    delegateFeePerPerson?: number
+    cookFeePerPerson?: number
+    isPreRegistration?: boolean
     church: ChurchCreateNestedOneWithoutRegistrationsInput
     president: UserCreateNestedOneWithoutRegistrationsInput
+    reviewer?: UserCreateNestedOneWithoutReviewedRegistrationsInput
     delegates?: DelegateCreateNestedManyWithoutRegistrationInput
     cooks?: CookCreateNestedManyWithoutRegistrationInput
   }
@@ -20325,6 +20729,10 @@ export namespace Prisma {
     reviewedBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    totalFee?: number
+    delegateFeePerPerson?: number
+    cookFeePerPerson?: number
+    isPreRegistration?: boolean
     delegates?: DelegateUncheckedCreateNestedManyWithoutRegistrationInput
     cooks?: CookUncheckedCreateNestedManyWithoutRegistrationInput
   }
@@ -20435,6 +20843,7 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     church?: ChurchCreateNestedOneWithoutPresidentsInput
+    reviewedRegistrations?: RegistrationCreateNestedManyWithoutReviewerInput
   }
 
   export type UserUncheckedCreateWithoutRegistrationsInput = {
@@ -20449,11 +20858,47 @@ export namespace Prisma {
     updatedAt?: Date | string
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    reviewedRegistrations?: RegistrationUncheckedCreateNestedManyWithoutReviewerInput
   }
 
   export type UserCreateOrConnectWithoutRegistrationsInput = {
     where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutRegistrationsInput, UserUncheckedCreateWithoutRegistrationsInput>
+  }
+
+  export type UserCreateWithoutReviewedRegistrationsInput = {
+    id?: string
+    name: string
+    email: string
+    role?: $Enums.UserRole
+    emailVerified?: boolean
+    image?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    church?: ChurchCreateNestedOneWithoutPresidentsInput
+    registrations?: RegistrationCreateNestedManyWithoutPresidentInput
+  }
+
+  export type UserUncheckedCreateWithoutReviewedRegistrationsInput = {
+    id?: string
+    name: string
+    email: string
+    role?: $Enums.UserRole
+    emailVerified?: boolean
+    image?: string | null
+    churchId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    registrations?: RegistrationUncheckedCreateNestedManyWithoutPresidentInput
+  }
+
+  export type UserCreateOrConnectWithoutReviewedRegistrationsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutReviewedRegistrationsInput, UserUncheckedCreateWithoutReviewedRegistrationsInput>
   }
 
   export type DelegateCreateWithoutRegistrationInput = {
@@ -20619,6 +21064,7 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     church?: ChurchUpdateOneWithoutPresidentsNestedInput
+    reviewedRegistrations?: RegistrationUpdateManyWithoutReviewerNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRegistrationsInput = {
@@ -20633,6 +21079,48 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    reviewedRegistrations?: RegistrationUncheckedUpdateManyWithoutReviewerNestedInput
+  }
+
+  export type UserUpsertWithoutReviewedRegistrationsInput = {
+    update: XOR<UserUpdateWithoutReviewedRegistrationsInput, UserUncheckedUpdateWithoutReviewedRegistrationsInput>
+    create: XOR<UserCreateWithoutReviewedRegistrationsInput, UserUncheckedCreateWithoutReviewedRegistrationsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutReviewedRegistrationsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutReviewedRegistrationsInput, UserUncheckedUpdateWithoutReviewedRegistrationsInput>
+  }
+
+  export type UserUpdateWithoutReviewedRegistrationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    church?: ChurchUpdateOneWithoutPresidentsNestedInput
+    registrations?: RegistrationUpdateManyWithoutPresidentNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutReviewedRegistrationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    churchId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    registrations?: RegistrationUncheckedUpdateManyWithoutPresidentNestedInput
   }
 
   export type DelegateUpsertWithWhereUniqueWithoutRegistrationInput = {
@@ -20700,12 +21188,16 @@ export namespace Prisma {
     status?: $Enums.RegistrationStatus
     remarks?: string | null
     reviewedAt?: Date | string | null
-    reviewedBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    totalFee?: number
+    delegateFeePerPerson?: number
+    cookFeePerPerson?: number
+    isPreRegistration?: boolean
     event: EventCreateNestedOneWithoutRegistrationsInput
     church: ChurchCreateNestedOneWithoutRegistrationsInput
     president: UserCreateNestedOneWithoutRegistrationsInput
+    reviewer?: UserCreateNestedOneWithoutReviewedRegistrationsInput
     cooks?: CookCreateNestedManyWithoutRegistrationInput
   }
 
@@ -20720,6 +21212,10 @@ export namespace Prisma {
     reviewedBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    totalFee?: number
+    delegateFeePerPerson?: number
+    cookFeePerPerson?: number
+    isPreRegistration?: boolean
     cooks?: CookUncheckedCreateNestedManyWithoutRegistrationInput
   }
 
@@ -20744,12 +21240,16 @@ export namespace Prisma {
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalFee?: IntFieldUpdateOperationsInput | number
+    delegateFeePerPerson?: IntFieldUpdateOperationsInput | number
+    cookFeePerPerson?: IntFieldUpdateOperationsInput | number
+    isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
     event?: EventUpdateOneRequiredWithoutRegistrationsNestedInput
     church?: ChurchUpdateOneRequiredWithoutRegistrationsNestedInput
     president?: UserUpdateOneRequiredWithoutRegistrationsNestedInput
+    reviewer?: UserUpdateOneWithoutReviewedRegistrationsNestedInput
     cooks?: CookUpdateManyWithoutRegistrationNestedInput
   }
 
@@ -20764,6 +21264,10 @@ export namespace Prisma {
     reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalFee?: IntFieldUpdateOperationsInput | number
+    delegateFeePerPerson?: IntFieldUpdateOperationsInput | number
+    cookFeePerPerson?: IntFieldUpdateOperationsInput | number
+    isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
     cooks?: CookUncheckedUpdateManyWithoutRegistrationNestedInput
   }
 
@@ -20772,12 +21276,16 @@ export namespace Prisma {
     status?: $Enums.RegistrationStatus
     remarks?: string | null
     reviewedAt?: Date | string | null
-    reviewedBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    totalFee?: number
+    delegateFeePerPerson?: number
+    cookFeePerPerson?: number
+    isPreRegistration?: boolean
     event: EventCreateNestedOneWithoutRegistrationsInput
     church: ChurchCreateNestedOneWithoutRegistrationsInput
     president: UserCreateNestedOneWithoutRegistrationsInput
+    reviewer?: UserCreateNestedOneWithoutReviewedRegistrationsInput
     delegates?: DelegateCreateNestedManyWithoutRegistrationInput
   }
 
@@ -20792,6 +21300,10 @@ export namespace Prisma {
     reviewedBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    totalFee?: number
+    delegateFeePerPerson?: number
+    cookFeePerPerson?: number
+    isPreRegistration?: boolean
     delegates?: DelegateUncheckedCreateNestedManyWithoutRegistrationInput
   }
 
@@ -20816,12 +21328,16 @@ export namespace Prisma {
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalFee?: IntFieldUpdateOperationsInput | number
+    delegateFeePerPerson?: IntFieldUpdateOperationsInput | number
+    cookFeePerPerson?: IntFieldUpdateOperationsInput | number
+    isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
     event?: EventUpdateOneRequiredWithoutRegistrationsNestedInput
     church?: ChurchUpdateOneRequiredWithoutRegistrationsNestedInput
     president?: UserUpdateOneRequiredWithoutRegistrationsNestedInput
+    reviewer?: UserUpdateOneWithoutReviewedRegistrationsNestedInput
     delegates?: DelegateUpdateManyWithoutRegistrationNestedInput
   }
 
@@ -20836,6 +21352,10 @@ export namespace Prisma {
     reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalFee?: IntFieldUpdateOperationsInput | number
+    delegateFeePerPerson?: IntFieldUpdateOperationsInput | number
+    cookFeePerPerson?: IntFieldUpdateOperationsInput | number
+    isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
     delegates?: DelegateUncheckedUpdateManyWithoutRegistrationNestedInput
   }
 
@@ -20874,6 +21394,26 @@ export namespace Prisma {
     reviewedBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    totalFee?: number
+    delegateFeePerPerson?: number
+    cookFeePerPerson?: number
+    isPreRegistration?: boolean
+  }
+
+  export type RegistrationCreateManyReviewerInput = {
+    id?: string
+    eventId: string
+    churchId: string
+    presidentId: string
+    status?: $Enums.RegistrationStatus
+    remarks?: string | null
+    reviewedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    totalFee?: number
+    delegateFeePerPerson?: number
+    cookFeePerPerson?: number
+    isPreRegistration?: boolean
   }
 
   export type SessionUpdateWithoutUserInput = {
@@ -20956,11 +21496,15 @@ export namespace Prisma {
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalFee?: IntFieldUpdateOperationsInput | number
+    delegateFeePerPerson?: IntFieldUpdateOperationsInput | number
+    cookFeePerPerson?: IntFieldUpdateOperationsInput | number
+    isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
     event?: EventUpdateOneRequiredWithoutRegistrationsNestedInput
     church?: ChurchUpdateOneRequiredWithoutRegistrationsNestedInput
+    reviewer?: UserUpdateOneWithoutReviewedRegistrationsNestedInput
     delegates?: DelegateUpdateManyWithoutRegistrationNestedInput
     cooks?: CookUpdateManyWithoutRegistrationNestedInput
   }
@@ -20975,6 +21519,10 @@ export namespace Prisma {
     reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalFee?: IntFieldUpdateOperationsInput | number
+    delegateFeePerPerson?: IntFieldUpdateOperationsInput | number
+    cookFeePerPerson?: IntFieldUpdateOperationsInput | number
+    isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
     delegates?: DelegateUncheckedUpdateManyWithoutRegistrationNestedInput
     cooks?: CookUncheckedUpdateManyWithoutRegistrationNestedInput
   }
@@ -20989,6 +21537,62 @@ export namespace Prisma {
     reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalFee?: IntFieldUpdateOperationsInput | number
+    delegateFeePerPerson?: IntFieldUpdateOperationsInput | number
+    cookFeePerPerson?: IntFieldUpdateOperationsInput | number
+    isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type RegistrationUpdateWithoutReviewerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
+    remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalFee?: IntFieldUpdateOperationsInput | number
+    delegateFeePerPerson?: IntFieldUpdateOperationsInput | number
+    cookFeePerPerson?: IntFieldUpdateOperationsInput | number
+    isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
+    event?: EventUpdateOneRequiredWithoutRegistrationsNestedInput
+    church?: ChurchUpdateOneRequiredWithoutRegistrationsNestedInput
+    president?: UserUpdateOneRequiredWithoutRegistrationsNestedInput
+    delegates?: DelegateUpdateManyWithoutRegistrationNestedInput
+    cooks?: CookUpdateManyWithoutRegistrationNestedInput
+  }
+
+  export type RegistrationUncheckedUpdateWithoutReviewerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    eventId?: StringFieldUpdateOperationsInput | string
+    churchId?: StringFieldUpdateOperationsInput | string
+    presidentId?: StringFieldUpdateOperationsInput | string
+    status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
+    remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalFee?: IntFieldUpdateOperationsInput | number
+    delegateFeePerPerson?: IntFieldUpdateOperationsInput | number
+    cookFeePerPerson?: IntFieldUpdateOperationsInput | number
+    isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
+    delegates?: DelegateUncheckedUpdateManyWithoutRegistrationNestedInput
+    cooks?: CookUncheckedUpdateManyWithoutRegistrationNestedInput
+  }
+
+  export type RegistrationUncheckedUpdateManyWithoutReviewerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    eventId?: StringFieldUpdateOperationsInput | string
+    churchId?: StringFieldUpdateOperationsInput | string
+    presidentId?: StringFieldUpdateOperationsInput | string
+    status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
+    remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalFee?: IntFieldUpdateOperationsInput | number
+    delegateFeePerPerson?: IntFieldUpdateOperationsInput | number
+    cookFeePerPerson?: IntFieldUpdateOperationsInput | number
+    isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type ChurchCreateManyDivisionInput = {
@@ -21046,6 +21650,10 @@ export namespace Prisma {
     reviewedBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    totalFee?: number
+    delegateFeePerPerson?: number
+    cookFeePerPerson?: number
+    isPreRegistration?: boolean
   }
 
   export type UserUpdateWithoutChurchInput = {
@@ -21060,6 +21668,7 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     registrations?: RegistrationUpdateManyWithoutPresidentNestedInput
+    reviewedRegistrations?: RegistrationUpdateManyWithoutReviewerNestedInput
   }
 
   export type UserUncheckedUpdateWithoutChurchInput = {
@@ -21074,6 +21683,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     registrations?: RegistrationUncheckedUpdateManyWithoutPresidentNestedInput
+    reviewedRegistrations?: RegistrationUncheckedUpdateManyWithoutReviewerNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutChurchInput = {
@@ -21092,11 +21702,15 @@ export namespace Prisma {
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalFee?: IntFieldUpdateOperationsInput | number
+    delegateFeePerPerson?: IntFieldUpdateOperationsInput | number
+    cookFeePerPerson?: IntFieldUpdateOperationsInput | number
+    isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
     event?: EventUpdateOneRequiredWithoutRegistrationsNestedInput
     president?: UserUpdateOneRequiredWithoutRegistrationsNestedInput
+    reviewer?: UserUpdateOneWithoutReviewedRegistrationsNestedInput
     delegates?: DelegateUpdateManyWithoutRegistrationNestedInput
     cooks?: CookUpdateManyWithoutRegistrationNestedInput
   }
@@ -21111,6 +21725,10 @@ export namespace Prisma {
     reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalFee?: IntFieldUpdateOperationsInput | number
+    delegateFeePerPerson?: IntFieldUpdateOperationsInput | number
+    cookFeePerPerson?: IntFieldUpdateOperationsInput | number
+    isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
     delegates?: DelegateUncheckedUpdateManyWithoutRegistrationNestedInput
     cooks?: CookUncheckedUpdateManyWithoutRegistrationNestedInput
   }
@@ -21125,6 +21743,10 @@ export namespace Prisma {
     reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalFee?: IntFieldUpdateOperationsInput | number
+    delegateFeePerPerson?: IntFieldUpdateOperationsInput | number
+    cookFeePerPerson?: IntFieldUpdateOperationsInput | number
+    isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type RegistrationCreateManyEventInput = {
@@ -21137,6 +21759,10 @@ export namespace Prisma {
     reviewedBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    totalFee?: number
+    delegateFeePerPerson?: number
+    cookFeePerPerson?: number
+    isPreRegistration?: boolean
   }
 
   export type RegistrationUpdateWithoutEventInput = {
@@ -21144,11 +21770,15 @@ export namespace Prisma {
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalFee?: IntFieldUpdateOperationsInput | number
+    delegateFeePerPerson?: IntFieldUpdateOperationsInput | number
+    cookFeePerPerson?: IntFieldUpdateOperationsInput | number
+    isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
     church?: ChurchUpdateOneRequiredWithoutRegistrationsNestedInput
     president?: UserUpdateOneRequiredWithoutRegistrationsNestedInput
+    reviewer?: UserUpdateOneWithoutReviewedRegistrationsNestedInput
     delegates?: DelegateUpdateManyWithoutRegistrationNestedInput
     cooks?: CookUpdateManyWithoutRegistrationNestedInput
   }
@@ -21163,6 +21793,10 @@ export namespace Prisma {
     reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalFee?: IntFieldUpdateOperationsInput | number
+    delegateFeePerPerson?: IntFieldUpdateOperationsInput | number
+    cookFeePerPerson?: IntFieldUpdateOperationsInput | number
+    isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
     delegates?: DelegateUncheckedUpdateManyWithoutRegistrationNestedInput
     cooks?: CookUncheckedUpdateManyWithoutRegistrationNestedInput
   }
@@ -21177,6 +21811,10 @@ export namespace Prisma {
     reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalFee?: IntFieldUpdateOperationsInput | number
+    delegateFeePerPerson?: IntFieldUpdateOperationsInput | number
+    cookFeePerPerson?: IntFieldUpdateOperationsInput | number
+    isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type DelegateCreateManyRegistrationInput = {

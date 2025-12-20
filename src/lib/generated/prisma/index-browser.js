@@ -228,7 +228,11 @@ exports.Prisma.RegistrationScalarFieldEnum = {
   reviewedAt: 'reviewedAt',
   reviewedBy: 'reviewedBy',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  totalFee: 'totalFee',
+  delegateFeePerPerson: 'delegateFeePerPerson',
+  cookFeePerPerson: 'cookFeePerPerson',
+  isPreRegistration: 'isPreRegistration'
 };
 
 exports.Prisma.DelegateScalarFieldEnum = {

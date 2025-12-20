@@ -346,3 +346,300 @@ export async function getAdminDashboard(): Promise<
     return { success: false, error: "Failed to fetch dashboard data" };
   }
 }
+
+// ==========================================
+// EXPORT TYPES
+// ==========================================
+
+export type ExportFilters = {
+  eventId?: string;
+  status?: RegistrationStatus;
+  divisionId?: string;
+  dateFrom?: Date;
+  dateTo?: Date;
+};
+
+export type ExportRow = {
+  // Registration info
+  registrationId: string;
+  registrationStatus: string;
+  registrationDate: string;
+  reviewedAt: string | null;
+  reviewedBy: string | null;
+  rejectionRemarks: string | null;
+  // Event info
+  eventName: string;
+  eventStartDate: string;
+  eventEndDate: string;
+  eventLocation: string;
+  // Church info
+  churchName: string;
+  divisionName: string;
+  // Person info (delegate or cook)
+  personType: "Delegate" | "Cook";
+  personFullName: string;
+  personNickname: string | null;
+  personGender: string;
+  personAge: number;
+  // Fee info (only for registrations)
+  totalFee: number;
+  delegateCount: number;
+  cookCount: number;
+};
+
+export type ExportData = {
+  rows: ExportRow[];
+  summary: {
+    totalRegistrations: number;
+    totalDelegates: number;
+    totalCooks: number;
+    totalFees: number;
+    byStatus: Record<string, number>;
+    byDivision: Record<string, number>;
+  };
+  generatedAt: Date;
+  filters: ExportFilters;
+};
+
+// ==========================================
+// EXPORT FUNCTIONS
+// ==========================================
+
+/**
+ * Get registration data for export
+ * Returns detailed data including delegates and cooks
+ */
+export async function exportRegistrations(
+  filters: ExportFilters
+): Promise<ActionResponse<ExportData>> {
+  await requireRole("ADMIN");
+
+  try {
+    // Build where clause based on filters
+    const where: {
+      eventId?: string;
+      status?: RegistrationStatus;
+      church?: { divisionId?: string };
+      createdAt?: { gte?: Date; lte?: Date };
+    } = {};
+
+    if (filters.eventId) {
+      where.eventId = filters.eventId;
+    }
+
+    if (filters.status) {
+      where.status = filters.status;
+    }
+
+    if (filters.divisionId) {
+      where.church = { divisionId: filters.divisionId };
+    }
+
+    if (filters.dateFrom || filters.dateTo) {
+      where.createdAt = {};
+      if (filters.dateFrom) {
+        where.createdAt.gte = filters.dateFrom;
+      }
+      if (filters.dateTo) {
+        where.createdAt.lte = filters.dateTo;
+      }
+    }
+
+    // Fetch registrations with all related data
+    const registrations = await prisma.registration.findMany({
+      where,
+      select: {
+        id: true,
+        status: true,
+        remarks: true,
+        createdAt: true,
+        reviewedAt: true,
+        reviewedBy: true,
+        // Fee fields captured at registration time
+        totalFee: true,
+        delegateFeePerPerson: true,
+        cookFeePerPerson: true,
+        isPreRegistration: true,
+        event: {
+          select: {
+            name: true,
+            startDate: true,
+            endDate: true,
+            location: true,
+          },
+        },
+        church: {
+          select: {
+            name: true,
+            division: {
+              select: { name: true },
+            },
+          },
+        },
+        delegates: {
+          select: {
+            fullName: true,
+            nickname: true,
+            gender: true,
+            age: true,
+          },
+        },
+        cooks: {
+          select: {
+            fullName: true,
+            nickname: true,
+            gender: true,
+            age: true,
+          },
+        },
+      },
+      orderBy: [
+        { church: { division: { name: "asc" } } },
+        { church: { name: "asc" } },
+        { createdAt: "desc" },
+      ],
+    });
+
+    // Get reviewer names for registrations that have reviewedBy
+    const reviewerIds = registrations
+      .map((r) => r.reviewedBy)
+      .filter((id): id is string => id !== null);
+    const reviewers = reviewerIds.length > 0
+      ? await prisma.user.findMany({
+          where: { id: { in: reviewerIds } },
+          select: { id: true, name: true },
+        })
+      : [];
+    const reviewerMap = new Map(reviewers.map((r) => [r.id, r.name]));
+
+    // Transform to flat rows (one row per person)
+    const rows: ExportRow[] = [];
+    const byStatus: Record<string, number> = {};
+    const byDivision: Record<string, number> = {};
+    let totalFees = 0;
+    let totalDelegates = 0;
+    let totalCooks = 0;
+
+    for (const reg of registrations) {
+      // Use stored fee values (captured at registration time)
+      const baseRow = {
+        registrationId: reg.id,
+        registrationStatus: reg.status,
+        registrationDate: reg.createdAt.toISOString(),
+        reviewedAt: reg.reviewedAt?.toISOString() || null,
+        reviewedBy: reg.reviewedBy ? reviewerMap.get(reg.reviewedBy) || null : null,
+        rejectionRemarks: reg.remarks,
+        eventName: reg.event.name,
+        eventStartDate: reg.event.startDate.toISOString(),
+        eventEndDate: reg.event.endDate.toISOString(),
+        eventLocation: reg.event.location,
+        churchName: reg.church.name,
+        divisionName: reg.church.division.name,
+        totalFee: reg.totalFee,
+        delegateCount: reg.delegates.length,
+        cookCount: reg.cooks.length,
+      };
+
+      // Track summary stats
+      byStatus[reg.status] = (byStatus[reg.status] || 0) + 1;
+      byDivision[reg.church.division.name] =
+        (byDivision[reg.church.division.name] || 0) + 1;
+      totalFees += reg.totalFee;
+      totalDelegates += reg.delegates.length;
+      totalCooks += reg.cooks.length;
+
+      // Add delegate rows
+      for (const delegate of reg.delegates) {
+        rows.push({
+          ...baseRow,
+          personType: "Delegate",
+          personFullName: delegate.fullName,
+          personNickname: delegate.nickname,
+          personGender: delegate.gender,
+          personAge: delegate.age,
+        });
+      }
+
+      // Add cook rows
+      for (const cook of reg.cooks) {
+        rows.push({
+          ...baseRow,
+          personType: "Cook",
+          personFullName: cook.fullName,
+          personNickname: cook.nickname,
+          personGender: cook.gender,
+          personAge: cook.age,
+        });
+      }
+    }
+
+    return {
+      success: true,
+      data: {
+        rows,
+        summary: {
+          totalRegistrations: registrations.length,
+          totalDelegates,
+          totalCooks,
+          totalFees,
+          byStatus,
+          byDivision,
+        },
+        generatedAt: new Date(),
+        filters,
+      },
+    };
+  } catch (error) {
+    console.error("Failed to export registrations:", error);
+    return { success: false, error: "Failed to export registrations" };
+  }
+}
+
+/**
+ * Get list of events for export filter dropdown
+ */
+export async function getEventsForExport(): Promise<
+  ActionResponse<{ id: string; name: string; startDate: Date }[]>
+> {
+  await requireRole("ADMIN");
+
+  try {
+    const events = await prisma.event.findMany({
+      select: {
+        id: true,
+        name: true,
+        startDate: true,
+      },
+      orderBy: { startDate: "desc" },
+    });
+
+    return { success: true, data: events };
+  } catch (error) {
+    console.error("Failed to fetch events for export:", error);
+    return { success: false, error: "Failed to fetch events" };
+  }
+}
+
+/**
+ * Get list of divisions for export filter dropdown
+ */
+export async function getDivisionsForExport(): Promise<
+  ActionResponse<{ id: string; name: string }[]>
+> {
+  await requireRole("ADMIN");
+
+  try {
+    const divisions = await prisma.division.findMany({
+      select: {
+        id: true,
+        name: true,
+      },
+      orderBy: { name: "asc" },
+    });
+
+    return { success: true, data: divisions };
+  } catch (error) {
+    console.error("Failed to fetch divisions for export:", error);
+    return { success: false, error: "Failed to fetch divisions" };
+  }
+}

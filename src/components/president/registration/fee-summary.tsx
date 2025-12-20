@@ -99,7 +99,7 @@ export function FeeSummary({
 
         {/* Note */}
         <p className="text-xs text-muted-foreground">
-          This is an estimate. Final amount will be confirmed upon approval.
+          This amount will be recorded with your registration.
         </p>
       </CardContent>
     </Card>

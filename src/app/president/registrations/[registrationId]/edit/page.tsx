@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { PageHeader, FormSkeleton, EmptyState } from "@/components/shared";
 import { RegistrationForm, ProfileGuard } from "@/components/president";
 import { useMyRegistration, useEventForRegistration } from "@/hooks/use-registrations";
-import { ArrowLeft, AlertTriangle, Lock } from "lucide-react";
+import { ArrowLeft, AlertTriangle, Lock, AlertCircle } from "lucide-react";
 import { Card, CardContent } from "@/components/dashboard";
 
 function EditRegistrationContent() {
@@ -48,8 +48,12 @@ function EditRegistrationContent() {
     );
   }
 
-  // Check if registration can be edited
-  if (registration.status !== "PENDING") {
+  // Check if registration deadline has passed
+  const now = new Date();
+  const deadlinePassed = now > new Date(registration.event.registrationDeadline);
+  const eventNotOpen = !["UPCOMING", "ONGOING"].includes(registration.event.status);
+
+  if (deadlinePassed || eventNotOpen) {
     return (
       <div className="space-y-6">
         <PageHeader title="Edit Registration">
@@ -64,7 +68,9 @@ function EditRegistrationContent() {
             <div>
               <h2 className="text-xl font-semibold text-yellow-800">Cannot Edit Registration</h2>
               <p className="text-yellow-700">
-                This registration has already been {registration.status.toLowerCase()} and cannot be edited.
+                {deadlinePassed
+                  ? "The registration deadline for this event has passed."
+                  : "This event is no longer open for registration."}
               </p>
             </div>
             <Button variant="outline" onClick={() => router.back()}>
@@ -94,6 +100,9 @@ function EditRegistrationContent() {
     );
   }
 
+  // Check if this will reset the status (editing approved/rejected registration)
+  const willResetStatus = registration.status !== "PENDING";
+
   return (
     <div className="space-y-6">
       <PageHeader
@@ -105,6 +114,24 @@ function EditRegistrationContent() {
           Back
         </Button>
       </PageHeader>
+
+      {/* Warning banner for approved/rejected registrations */}
+      {willResetStatus && (
+        <Card className="border-amber-300 bg-amber-50/50 dark:border-amber-800 dark:bg-amber-950/30">
+          <CardContent className="flex items-start gap-4 py-4">
+            <AlertCircle className="h-6 w-6 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+            <div>
+              <p className="font-semibold text-amber-800 dark:text-amber-200">
+                Status will be reset to Pending
+              </p>
+              <p className="text-sm text-amber-700 dark:text-amber-300 mt-1">
+                This registration was previously <strong>{registration.status.toLowerCase()}</strong>.
+                Saving changes will reset the status to <strong>pending</strong> and require admin re-approval.
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       <RegistrationForm mode="edit" event={event} initialData={registration} />
     </div>

@@ -16,9 +16,10 @@ import {
   XCircle,
   ArrowRight,
   Plus,
+  Receipt,
 } from "lucide-react";
 import { format } from "date-fns";
-import { cn } from "@/lib/utils";
+import { cn, formatCurrency } from "@/lib/utils";
 import type { RegistrationStatus, EventStatus } from "@/lib/generated/prisma";
 
 function getStatusIcon(status: RegistrationStatus) {
@@ -137,6 +138,10 @@ function RegistrationsContent() {
                           {registration._count.cooks} cooks
                         </span>
                       )}
+                      <span className="flex items-center gap-1 font-medium text-primary">
+                        <Receipt className="h-3.5 w-3.5" />
+                        {formatCurrency(registration.totalFee)}
+                      </span>
                     </div>
 
                     <div className="flex items-center gap-2 text-xs text-muted-foreground">

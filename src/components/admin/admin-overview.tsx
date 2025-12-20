@@ -1,6 +1,7 @@
 "use client";
 
 import { useAuth } from "@/hooks";
+import { useAdminDashboard } from "@/hooks/use-dashboard";
 import {
   StatsCard,
   StatsGrid,
@@ -14,188 +15,144 @@ import {
 } from "@/components/dashboard";
 import { Button } from "@/components/ui/button";
 import {
+  Skeleton,
+  RegistrationStatusBadge,
+  EventStatusBadge,
+} from "@/components/shared";
+import {
   Users,
-  UserPlus,
-  Download,
-  Star,
+  Building2,
+  Calendar,
+  FileText,
   ChevronRight,
-  Shield,
   CheckCircle,
   Clock,
-  Activity,
-  Server,
-  GitFork,
-  Package,
-  AlertTriangle,
+  XCircle,
+  UserCheck,
+  ChefHat,
+  AlertCircle,
+  Layers,
 } from "lucide-react";
 import Link from "next/link";
-
-// Mock data for demonstration
-const recentUsers = [
-  {
-    id: "1",
-    name: "John Smith",
-    email: "john@example.com",
-    role: "USER",
-    status: "active",
-    joinedAt: "Dec 15, 2024",
-  },
-  {
-    id: "2",
-    name: "Sarah Chen",
-    email: "sarah@example.com",
-    role: "PRESIDENT",
-    status: "pending",
-    joinedAt: "Dec 14, 2024",
-  },
-  {
-    id: "3",
-    name: "Emily Davis",
-    email: "emily@example.com",
-    role: "USER",
-    status: "active",
-    joinedAt: "Dec 13, 2024",
-  },
-  {
-    id: "4",
-    name: "Michael Brown",
-    email: "michael@example.com",
-    role: "PRESIDENT",
-    status: "active",
-    joinedAt: "Dec 12, 2024",
-  },
-  {
-    id: "5",
-    name: "Admin User",
-    email: "admin2@example.com",
-    role: "ADMIN",
-    status: "active",
-    joinedAt: "Dec 10, 2024",
-  },
-];
-
-const systemActivity = [
-  {
-    id: "1",
-    title: "New User Registration",
-    description: "john@example.com signed up for an account",
-    timestamp: "10 minutes ago",
-    icon: UserPlus,
-    iconColor: "bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400",
-  },
-  {
-    id: "2",
-    title: "Deployment Successful",
-    description: "Production deployment v2.4.1 completed",
-    timestamp: "1 hour ago",
-    icon: Package,
-    iconColor: "bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400",
-  },
-  {
-    id: "3",
-    title: "Security Alert",
-    description: "Multiple failed login attempts detected",
-    timestamp: "3 hours ago",
-    icon: Shield,
-    iconColor: "bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400",
-  },
-  {
-    id: "4",
-    title: "New Fork Created",
-    description: "Repository forked by sarah_dev",
-    timestamp: "5 hours ago",
-    icon: GitFork,
-    iconColor: "bg-violet-100 text-violet-600 dark:bg-violet-900/30 dark:text-violet-400",
-  },
-  {
-    id: "5",
-    title: "Database Backup",
-    description: "Automatic backup completed successfully",
-    timestamp: "1 day ago",
-    icon: Server,
-    iconColor: "bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400",
-  },
-];
-
-const userColumns = [
-  {
-    key: "name",
-    header: "User",
-    render: (item: (typeof recentUsers)[0]) => (
-      <div className="flex items-center gap-3">
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-primary/20 to-violet-500/20 text-xs font-semibold">
-          {item.name
-            .split(" ")
-            .map((n) => n[0])
-            .join("")
-            .slice(0, 2)}
-        </div>
-        <div>
-          <p className="font-medium">{item.name}</p>
-          <p className="text-xs text-muted-foreground">{item.email}</p>
-        </div>
-      </div>
-    ),
-  },
-  {
-    key: "role",
-    header: "Role",
-    render: (item: (typeof recentUsers)[0]) => {
-      const roleConfig = {
-        USER: { color: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400" },
-        PRESIDENT: { color: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400" },
-        ADMIN: { color: "bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-400" },
-      };
-      const config = roleConfig[item.role as keyof typeof roleConfig];
-
-      return (
-        <span className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${config.color}`}>
-          {item.role}
-        </span>
-      );
-    },
-  },
-  {
-    key: "status",
-    header: "Status",
-    render: (item: (typeof recentUsers)[0]) => {
-      const statusConfig = {
-        active: {
-          icon: CheckCircle,
-          color: "text-emerald-600 dark:text-emerald-400",
-          label: "Active",
-        },
-        pending: {
-          icon: Clock,
-          color: "text-amber-600 dark:text-amber-400",
-          label: "Pending",
-        },
-        suspended: {
-          icon: AlertTriangle,
-          color: "text-red-600 dark:text-red-400",
-          label: "Suspended",
-        },
-      };
-      const config = statusConfig[item.status as keyof typeof statusConfig];
-      const Icon = config.icon;
-
-      return (
-        <span className={`inline-flex items-center gap-1 text-xs font-medium ${config.color}`}>
-          <Icon className="h-3 w-3" />
-          {config.label}
-        </span>
-      );
-    },
-  },
-  {
-    key: "joinedAt",
-    header: "Joined",
-    className: "text-muted-foreground",
-  },
-];
+import { formatDistanceToNow, format } from "date-fns";
 
 export function AdminOverview() {
   const { user } = useAuth();
+  const { data: dashboard, isLoading, error } = useAdminDashboard();
+
+  if (isLoading) {
+    return <AdminOverviewSkeleton />;
+  }
+
+  if (error || !dashboard) {
+    return (
+      <div className="flex flex-col items-center justify-center py-12">
+        <AlertCircle className="h-12 w-12 text-destructive mb-4" />
+        <h3 className="text-lg font-semibold">Failed to load dashboard</h3>
+        <p className="text-muted-foreground">
+          {error?.message || "Please try again later."}
+        </p>
+      </div>
+    );
+  }
+
+  const { stats, recentRegistrations, eventsSummary } = dashboard;
+
+  // Transform recent registrations for ActivityFeed
+  const activityItems = recentRegistrations.map((reg) => ({
+    id: reg.id,
+    title: `${reg.church.name} registered for ${reg.event.name}`,
+    description: `${reg._count.delegates} delegates, ${reg._count.cooks} cooks`,
+    timestamp: formatDistanceToNow(new Date(reg.createdAt), { addSuffix: true }),
+    icon:
+      reg.status === "APPROVED"
+        ? CheckCircle
+        : reg.status === "REJECTED"
+          ? XCircle
+          : Clock,
+    iconColor:
+      reg.status === "APPROVED"
+        ? "bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400"
+        : reg.status === "REJECTED"
+          ? "bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400"
+          : "bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400",
+  }));
+
+  // Registration columns
+  const registrationColumns = [
+    {
+      key: "church",
+      header: "Church",
+      render: (item: (typeof recentRegistrations)[0]) => (
+        <div>
+          <p className="font-medium">{item.church.name}</p>
+          <p className="text-xs text-muted-foreground">{item.event.name}</p>
+        </div>
+      ),
+    },
+    {
+      key: "attendees",
+      header: "Attendees",
+      render: (item: (typeof recentRegistrations)[0]) => (
+        <div className="flex items-center gap-2 text-sm">
+          <span className="flex items-center gap-1">
+            <UserCheck className="h-3 w-3" />
+            {item._count.delegates}
+          </span>
+          <span className="flex items-center gap-1">
+            <ChefHat className="h-3 w-3" />
+            {item._count.cooks}
+          </span>
+        </div>
+      ),
+    },
+    {
+      key: "status",
+      header: "Status",
+      render: (item: (typeof recentRegistrations)[0]) => (
+        <RegistrationStatusBadge status={item.status} />
+      ),
+    },
+    {
+      key: "createdAt",
+      header: "Date",
+      render: (item: (typeof recentRegistrations)[0]) => (
+        <span className="text-sm text-muted-foreground">
+          {format(new Date(item.createdAt), "MMM d, yyyy")}
+        </span>
+      ),
+    },
+  ];
+
+  // Event columns
+  const eventColumns = [
+    {
+      key: "name",
+      header: "Event",
+      render: (item: (typeof eventsSummary)[0]) => (
+        <div>
+          <p className="font-medium">{item.name}</p>
+          <p className="text-xs text-muted-foreground">
+            {format(new Date(item.startDate), "MMM d, yyyy")}
+          </p>
+        </div>
+      ),
+    },
+    {
+      key: "registrations",
+      header: "Registrations",
+      render: (item: (typeof eventsSummary)[0]) => (
+        <span className="text-sm font-medium">{item._count.registrations}</span>
+      ),
+    },
+    {
+      key: "status",
+      header: "Status",
+      render: (item: (typeof eventsSummary)[0]) => (
+        <EventStatusBadge status={item.status} />
+      ),
+    },
+  ];
 
   return (
     <div className="space-y-6">
@@ -207,128 +164,180 @@ export function AdminOverview() {
               Admin Dashboard
             </h2>
             <p className="mt-1 text-muted-foreground">
-              Welcome back, {user?.name || "Administrator"}. Manage your starter kit deployment.
+              Welcome back, {user?.name || "Administrator"}. Here&apos;s an
+              overview of SCMD Online Registration.
             </p>
           </div>
-          <div className="hidden sm:flex items-center gap-2 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 px-3 py-1.5 text-sm font-medium text-emerald-700 dark:text-emerald-400">
-            <Activity className="h-4 w-4" />
-            All Systems Operational
-          </div>
+          {stats.pendingRegistrations > 0 && (
+            <Link
+              href="/admin/registrations?status=PENDING"
+              className="hidden sm:flex items-center gap-2 rounded-lg bg-amber-100 dark:bg-amber-900/30 px-3 py-1.5 text-sm font-medium text-amber-700 dark:text-amber-400 hover:bg-amber-200 dark:hover:bg-amber-900/50 transition-colors"
+            >
+              <Clock className="h-4 w-4" />
+              {stats.pendingRegistrations} Pending Approval
+            </Link>
+          )}
         </div>
       </div>
 
-      {/* Stats Grid */}
+      {/* Stats Grid - Row 1: Organization */}
       <StatsGrid columns={4}>
         <StatsCard
-          title="Total Users"
-          value="1,284"
-          description="Registered accounts"
+          title="Divisions"
+          value={stats.totalDivisions.toString()}
+          description="Regional divisions"
+          icon={Layers}
+        />
+        <StatsCard
+          title="Churches"
+          value={stats.totalChurches.toString()}
+          description="Registered churches"
+          icon={Building2}
+        />
+        <StatsCard
+          title="Presidents"
+          value={stats.totalPresidents.toString()}
+          description="Church presidents"
           icon={Users}
-          trend={{ value: 12, label: "vs last month" }}
         />
         <StatsCard
-          title="Active Contributors"
-          value="48"
-          description="Team members"
-          icon={UserPlus}
-          trend={{ value: 8, label: "vs last month" }}
+          title="Active Events"
+          value={stats.activeEvents.toString()}
+          description="Upcoming & ongoing"
+          icon={Calendar}
+        />
+      </StatsGrid>
+
+      {/* Stats Grid - Row 2: Registrations */}
+      <StatsGrid columns={4}>
+        <StatsCard
+          title="Total Registrations"
+          value={stats.totalRegistrations.toString()}
+          description="All time"
+          icon={FileText}
         />
         <StatsCard
-          title="Downloads"
-          value="24.5K"
-          description="This month"
-          icon={Download}
-          trend={{ value: 23, label: "vs last month" }}
+          title="Pending"
+          value={stats.pendingRegistrations.toString()}
+          description="Awaiting approval"
+          icon={Clock}
         />
         <StatsCard
-          title="GitHub Stars"
-          value="5.2K"
-          description="Repository stars"
-          icon={Star}
-          trend={{ value: 15, label: "growth" }}
+          title="Approved"
+          value={stats.approvedRegistrations.toString()}
+          description="Confirmed"
+          icon={CheckCircle}
+        />
+        <StatsCard
+          title="Rejected"
+          value={stats.rejectedRegistrations.toString()}
+          description="Declined"
+          icon={XCircle}
+        />
+      </StatsGrid>
+
+      {/* Stats Grid - Row 3: Attendees */}
+      <StatsGrid columns={2}>
+        <StatsCard
+          title="Total Delegates"
+          value={stats.totalDelegates.toString()}
+          description="Registered delegates across all events"
+          icon={UserCheck}
+        />
+        <StatsCard
+          title="Total Cooks"
+          value={stats.totalCooks.toString()}
+          description="Registered cooks across all events"
+          icon={ChefHat}
         />
       </StatsGrid>
 
       {/* Main Content Grid */}
       <div className="grid gap-6 lg:grid-cols-3">
-        {/* Recent Users */}
+        {/* Recent Registrations */}
         <div className="lg:col-span-2">
           <Card className="h-full">
             <CardHeader
               action={
                 <Button variant="ghost" size="sm" asChild>
-                  <Link href="/admin/dashboard/users" className="flex items-center gap-1">
+                  <Link
+                    href="/admin/registrations"
+                    className="flex items-center gap-1"
+                  >
                     View all
                     <ChevronRight className="h-4 w-4" />
                   </Link>
                 </Button>
               }
             >
-              <CardTitle>Recent Users</CardTitle>
-              <CardDescription>Newly registered accounts</CardDescription>
+              <CardTitle>Recent Registrations</CardTitle>
+              <CardDescription>
+                Latest church registrations for events
+              </CardDescription>
             </CardHeader>
             <CardContent>
-              <DataTable
-                columns={userColumns}
-                data={recentUsers}
-                emptyMessage="No users found"
-              />
+              {recentRegistrations.length > 0 ? (
+                <DataTable
+                  columns={registrationColumns}
+                  data={recentRegistrations}
+                  emptyMessage="No registrations found"
+                />
+              ) : (
+                <div className="text-center py-8 text-muted-foreground">
+                  No registrations yet
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>
 
-        {/* System Activity */}
+        {/* Activity Feed */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Activity</CardTitle>
+            <CardDescription>Recent registration activity</CardDescription>
+          </CardHeader>
+          <CardContent>
+            {activityItems.length > 0 ? (
+              <ActivityFeed items={activityItems} />
+            ) : (
+              <div className="text-center py-8 text-muted-foreground">
+                No recent activity
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Events Summary & Quick Actions */}
+      <div className="grid gap-6 lg:grid-cols-2">
+        {/* Events Summary */}
         <Card>
           <CardHeader
             action={
               <Button variant="ghost" size="sm" asChild>
-                <Link href="/admin/dashboard/activity" className="flex items-center gap-1">
+                <Link href="/admin/events" className="flex items-center gap-1">
                   View all
                   <ChevronRight className="h-4 w-4" />
                 </Link>
               </Button>
             }
           >
-            <CardTitle>System Activity</CardTitle>
-            <CardDescription>Recent events</CardDescription>
+            <CardTitle>Events Summary</CardTitle>
+            <CardDescription>Recent events and registrations</CardDescription>
           </CardHeader>
           <CardContent>
-            <ActivityFeed items={systemActivity} />
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* System Status & Quick Actions */}
-      <div className="grid gap-6 lg:grid-cols-2">
-        {/* System Status */}
-        <Card>
-          <CardHeader>
-            <CardTitle>System Health</CardTitle>
-            <CardDescription>Infrastructure metrics</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <SystemMetric
-                label="API Response Time"
-                value="45ms"
-                status="healthy"
+            {eventsSummary.length > 0 ? (
+              <DataTable
+                columns={eventColumns}
+                data={eventsSummary}
+                emptyMessage="No events found"
               />
-              <SystemMetric
-                label="Database Connections"
-                value="12/100"
-                status="healthy"
-              />
-              <SystemMetric
-                label="Memory Usage"
-                value="2.1GB / 4GB"
-                status="warning"
-              />
-              <SystemMetric
-                label="Storage Usage"
-                value="45GB / 100GB"
-                status="healthy"
-              />
-            </div>
+            ) : (
+              <div className="text-center py-8 text-muted-foreground">
+                No events created yet
+              </div>
+            )}
           </CardContent>
         </Card>
 
@@ -341,28 +350,33 @@ export function AdminOverview() {
           <CardContent>
             <div className="space-y-3">
               <ActionItem
+                icon={FileText}
+                title="Review Registrations"
+                description="Approve or reject pending registrations"
+                href="/admin/registrations?status=PENDING"
+                badge={
+                  stats.pendingRegistrations > 0
+                    ? stats.pendingRegistrations
+                    : undefined
+                }
+              />
+              <ActionItem
+                icon={Calendar}
+                title="Create Event"
+                description="Set up a new event for registration"
+                href="/admin/events/create"
+              />
+              <ActionItem
                 icon={Users}
-                title="User Management"
-                description="View, edit, or suspend user accounts"
-                href="/admin/dashboard/users"
+                title="Manage Presidents"
+                description="Add or update church president accounts"
+                href="/admin/presidents"
               />
               <ActionItem
-                icon={Shield}
-                title="Security Settings"
-                description="Configure auth and rate limiting"
-                href="/admin/dashboard/security"
-              />
-              <ActionItem
-                icon={Server}
-                title="Deployment Settings"
-                description="Manage environment variables"
-                href="/admin/dashboard/deployment"
-              />
-              <ActionItem
-                icon={Package}
-                title="Release Management"
-                description="Create and publish new versions"
-                href="/admin/dashboard/releases"
+                icon={Building2}
+                title="Manage Churches"
+                description="View and edit church information"
+                href="/admin/churches"
               />
             </div>
           </CardContent>
@@ -372,28 +386,24 @@ export function AdminOverview() {
   );
 }
 
-function SystemMetric({
-  label,
-  value,
-  status,
-}: {
-  label: string;
-  value: string;
-  status: "healthy" | "warning" | "critical";
-}) {
-  const statusConfig = {
-    healthy: "bg-emerald-500",
-    warning: "bg-amber-500",
-    critical: "bg-red-500",
-  };
-
+function AdminOverviewSkeleton() {
   return (
-    <div className="flex items-center justify-between rounded-lg border border-border p-3">
-      <div className="flex items-center gap-3">
-        <div className={`h-2 w-2 rounded-full ${statusConfig[status]}`} />
-        <span className="text-sm">{label}</span>
+    <div className="space-y-6">
+      <Skeleton className="h-28 w-full rounded-xl" />
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        {[...Array(4)].map((_, i) => (
+          <Skeleton key={i} className="h-32 w-full" />
+        ))}
       </div>
-      <span className="text-sm font-medium">{value}</span>
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        {[...Array(4)].map((_, i) => (
+          <Skeleton key={i} className="h-32 w-full" />
+        ))}
+      </div>
+      <div className="grid gap-6 lg:grid-cols-3">
+        <Skeleton className="h-96 lg:col-span-2" />
+        <Skeleton className="h-96" />
+      </div>
     </div>
   );
 }
@@ -403,11 +413,13 @@ function ActionItem({
   title,
   description,
   href,
+  badge,
 }: {
   icon: typeof Users;
   title: string;
   description: string;
   href: string;
+  badge?: number;
 }) {
   return (
     <Link
@@ -418,7 +430,14 @@ function ActionItem({
         <Icon className="h-5 w-5 text-primary" />
       </div>
       <div className="flex-1">
-        <p className="text-sm font-medium">{title}</p>
+        <div className="flex items-center gap-2">
+          <p className="text-sm font-medium">{title}</p>
+          {badge && (
+            <span className="rounded-full bg-amber-100 dark:bg-amber-900/30 px-2 py-0.5 text-xs font-medium text-amber-700 dark:text-amber-400">
+              {badge}
+            </span>
+          )}
+        </div>
         <p className="text-xs text-muted-foreground">{description}</p>
       </div>
       <ChevronRight className="h-4 w-4 text-muted-foreground" />

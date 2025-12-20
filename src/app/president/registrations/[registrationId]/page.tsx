@@ -112,10 +112,32 @@ function RegistrationDetailContent() {
     );
   }
 
-  const canEdit = registration.status === "PENDING";
-  const delegateTotal = registration.delegates.length * registration.event.preRegistrationFee;
-  const cookTotal = registration.cooks.length * registration.event.cookRegistrationFee;
-  const grandTotal = delegateTotal + cookTotal;
+  // Check if editing is allowed (before deadline and event is open)
+  const now = new Date();
+  const deadline = registration.event.registrationDeadline
+    ? new Date(registration.event.registrationDeadline)
+    : null;
+  const deadlinePassed = deadline ? now > deadline : false;
+  const eventStatus = String(registration.event.status);
+  const eventNotOpen = !["UPCOMING", "ONGOING"].includes(eventStatus);
+  const canEdit = !deadlinePassed && !eventNotOpen;
+  const canCancel = registration.status === "PENDING";
+
+  // Debug logging (remove in production)
+  console.log("Edit Check:", {
+    status: registration.status,
+    eventStatus,
+    deadline: deadline?.toISOString(),
+    now: now.toISOString(),
+    deadlinePassed,
+    eventNotOpen,
+    canEdit
+  });
+
+  // Use stored fees (captured at registration time)
+  const delegateTotal = registration.delegates.length * registration.delegateFeePerPerson;
+  const cookTotal = registration.cooks.length * registration.cookFeePerPerson;
+  const grandTotal = registration.totalFee;
 
   return (
     <div className="space-y-6">
@@ -129,22 +151,22 @@ function RegistrationDetailContent() {
             Back
           </Button>
           {canEdit && (
-            <>
-              <Button variant="outline" asChild>
-                <Link href={`/president/registrations/${registration.id}/edit`}>
-                  <Edit className="mr-2 h-4 w-4" />
-                  Edit
-                </Link>
-              </Button>
-              <Button
-                variant="destructive"
-                onClick={cancelDialog.open}
-                disabled={cancelMutation.isPending}
-              >
-                <Trash2 className="mr-2 h-4 w-4" />
-                Cancel
-              </Button>
-            </>
+            <Button variant="outline" asChild>
+              <Link href={`/president/registrations/${registration.id}/edit`}>
+                <Edit className="mr-2 h-4 w-4" />
+                Edit
+              </Link>
+            </Button>
+          )}
+          {canCancel && (
+            <Button
+              variant="destructive"
+              onClick={cancelDialog.open}
+              disabled={cancelMutation.isPending}
+            >
+              <Trash2 className="mr-2 h-4 w-4" />
+              Cancel
+            </Button>
           )}
         </div>
       </PageHeader>
@@ -312,7 +334,7 @@ function RegistrationDetailContent() {
                 </div>
               </div>
               <p className="text-xs text-muted-foreground">
-                *Estimated based on pre-registration rates
+                *Fees recorded at {registration.isPreRegistration ? "pre-registration" : "on-site"} rate
               </p>
             </CardContent>
           </Card>

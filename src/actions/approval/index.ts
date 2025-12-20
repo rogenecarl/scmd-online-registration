@@ -33,6 +33,11 @@ export type AdminRegistration = {
   reviewedBy: string | null;
   createdAt: Date;
   updatedAt: Date;
+  // Fee information (captured at registration time)
+  totalFee: number;
+  delegateFeePerPerson: number;
+  cookFeePerPerson: number;
+  isPreRegistration: boolean;
   event: {
     id: string;
     name: string;
@@ -150,7 +155,18 @@ export async function getRegistrations(
     const [registrations, total] = await Promise.all([
       prisma.registration.findMany({
         where,
-        include: {
+        select: {
+          id: true,
+          status: true,
+          remarks: true,
+          reviewedAt: true,
+          reviewedBy: true,
+          createdAt: true,
+          updatedAt: true,
+          totalFee: true,
+          delegateFeePerPerson: true,
+          cookFeePerPerson: true,
+          isPreRegistration: true,
           event: {
             select: {
               id: true,
@@ -221,7 +237,18 @@ export async function getRegistrationById(
   try {
     const registration = await prisma.registration.findUnique({
       where: { id },
-      include: {
+      select: {
+        id: true,
+        status: true,
+        remarks: true,
+        reviewedAt: true,
+        reviewedBy: true,
+        createdAt: true,
+        updatedAt: true,
+        totalFee: true,
+        delegateFeePerPerson: true,
+        cookFeePerPerson: true,
+        isPreRegistration: true,
         event: {
           select: {
             id: true,
