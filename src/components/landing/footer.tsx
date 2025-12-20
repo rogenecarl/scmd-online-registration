@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Church } from "lucide-react";
+import Image from "next/image";
 
 const footerLinks = {
   navigation: {
@@ -48,7 +48,7 @@ export function Footer() {
             <div className="col-span-2 md:col-span-4 lg:col-span-1 mb-8 lg:mb-0">
               <Link href="/" className="flex items-center gap-2 group">
                 <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-lg shadow-primary/25">
-                  <Church className="h-5 w-5" />
+                  <Image src={"/logo.webp"} alt="Logo" width={30} height={20} priority />
                 </div>
                 <span className="text-lg font-semibold tracking-tight">
                   SCMD Events

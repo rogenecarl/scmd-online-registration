@@ -18,8 +18,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Next.js Starter Kit",
+  title: "SCDM UFY Online Registration",
   description: "Next.js 16 Starter Kit with Authentication, TailwindCSS, and more. better auth, prisma orm",
+  icons: {
+    icon: "/logo.webp",
+  },
 };
 
 export default async function RootLayout({

@@ -21,7 +21,14 @@ const nextConfig: NextConfig = {
     formats: ["image/avif", "image/webp"],
     // Cache optimized images for 1 year
     minimumCacheTTL: 31536000,
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "rpligfejuidxxckkbvgv.supabase.co",
+      },
+    ],
   },
+
 
   // Security headers + caching
   async headers() {
