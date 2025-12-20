@@ -12,6 +12,17 @@ import {
   updateRegistration,
   cancelRegistration,
 } from "@/actions/registrations";
+import {
+  getRegistrations,
+  getRegistrationById,
+  approveRegistration,
+  rejectRegistration,
+  getPendingRegistrationsCount,
+  getEventsForFilter,
+  getChurchesForFilter,
+  getDivisionsForFilter,
+  type RegistrationFilters,
+} from "@/actions/approval";
 import type { CreateRegistrationInput, UpdateRegistrationInput } from "@/schemas";
 
 // ==========================================
@@ -168,6 +179,157 @@ export function useCancelRegistration() {
     },
     onError: (error: Error) => {
       toast.error(error.message || "Failed to cancel registration");
+    },
+  });
+}
+
+// ==========================================
+// ADMIN QUERIES
+// ==========================================
+
+/**
+ * Get all registrations with filtering (Admin only)
+ */
+export function useRegistrations(filters: RegistrationFilters = {}) {
+  return useQuery({
+    queryKey: [...queryKeys.registrations.list(), filters],
+    queryFn: async () => {
+      const result = await getRegistrations(filters);
+      if (!result.success) throw new Error(result.error);
+      return result.data;
+    },
+  });
+}
+
+/**
+ * Get a single registration with full details (Admin only)
+ */
+export function useRegistration(id: string) {
+  return useQuery({
+    queryKey: queryKeys.registrations.detail(id),
+    queryFn: async () => {
+      const result = await getRegistrationById(id);
+      if (!result.success) throw new Error(result.error);
+      return result.data;
+    },
+    enabled: !!id,
+  });
+}
+
+/**
+ * Get pending registrations count for dashboard
+ */
+export function usePendingRegistrationsCount() {
+  return useQuery({
+    queryKey: queryKeys.registrations.pending(),
+    queryFn: async () => {
+      const result = await getPendingRegistrationsCount();
+      if (!result.success) throw new Error(result.error);
+      return result.data;
+    },
+  });
+}
+
+/**
+ * Get events for filter dropdown
+ */
+export function useEventsForFilter() {
+  return useQuery({
+    queryKey: [...queryKeys.events.all, "filter"],
+    queryFn: async () => {
+      const result = await getEventsForFilter();
+      if (!result.success) throw new Error(result.error);
+      return result.data;
+    },
+  });
+}
+
+/**
+ * Get churches for filter dropdown
+ */
+export function useChurchesForFilter() {
+  return useQuery({
+    queryKey: [...queryKeys.churches.all, "filter"],
+    queryFn: async () => {
+      const result = await getChurchesForFilter();
+      if (!result.success) throw new Error(result.error);
+      return result.data;
+    },
+  });
+}
+
+/**
+ * Get divisions for filter dropdown
+ */
+export function useDivisionsForFilter() {
+  return useQuery({
+    queryKey: [...queryKeys.divisions.all, "filter"],
+    queryFn: async () => {
+      const result = await getDivisionsForFilter();
+      if (!result.success) throw new Error(result.error);
+      return result.data;
+    },
+  });
+}
+
+// ==========================================
+// ADMIN MUTATIONS
+// ==========================================
+
+/**
+ * Approve a registration
+ */
+export function useApproveRegistration() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (registrationId: string) => {
+      const result = await approveRegistration(registrationId);
+      if (!result.success) throw new Error(result.error);
+      return result.data;
+    },
+    onSuccess: (_, registrationId) => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.registrations.all });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.registrations.detail(registrationId),
+      });
+      queryClient.invalidateQueries({ queryKey: queryKeys.dashboard.admin() });
+      toast.success("Registration approved successfully");
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || "Failed to approve registration");
+    },
+  });
+}
+
+/**
+ * Reject a registration with remarks
+ */
+export function useRejectRegistration() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      registrationId,
+      remarks,
+    }: {
+      registrationId: string;
+      remarks: string;
+    }) => {
+      const result = await rejectRegistration(registrationId, remarks);
+      if (!result.success) throw new Error(result.error);
+      return result.data;
+    },
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.registrations.all });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.registrations.detail(variables.registrationId),
+      });
+      queryClient.invalidateQueries({ queryKey: queryKeys.dashboard.admin() });
+      toast.success("Registration rejected");
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || "Failed to reject registration");
     },
   });
 }
