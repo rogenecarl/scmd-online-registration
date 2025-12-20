@@ -11,6 +11,11 @@ export type Column<T> = {
   header: string;
   className?: string;
   render?: (item: T) => React.ReactNode;
+  // Mobile-specific properties
+  mobileVisible?: boolean;
+  mobilePriority?: "primary" | "secondary" | "hidden";
+  mobileLabel?: string;
+  mobileFullWidth?: boolean;
 };
 
 type PresidentActions = {
@@ -26,6 +31,7 @@ export function getPresidentColumns(
     {
       key: "name",
       header: "Name",
+      mobilePriority: "primary",
       render: (president) => (
         <Link
           href={`/admin/presidents/${president.id}`}
@@ -38,11 +44,14 @@ export function getPresidentColumns(
     {
       key: "email",
       header: "Email",
+      mobilePriority: "secondary",
       render: (president) => (
         <div className="flex items-center gap-2">
-          <span className="text-muted-foreground">{president.email}</span>
+          <span className="text-muted-foreground truncate max-w-[150px]">
+            {president.email}
+          </span>
           {president.emailVerified && (
-            <Badge variant="secondary" className="text-xs">
+            <Badge variant="secondary" className="text-xs shrink-0">
               Verified
             </Badge>
           )}
@@ -52,6 +61,7 @@ export function getPresidentColumns(
     {
       key: "church",
       header: "Church",
+      mobilePriority: "primary",
       render: (president) =>
         president.church ? (
           <Link
@@ -67,6 +77,7 @@ export function getPresidentColumns(
     {
       key: "division",
       header: "Division",
+      mobilePriority: "hidden",
       render: (president) =>
         president.church?.division ? (
           <Link
@@ -82,6 +93,7 @@ export function getPresidentColumns(
     {
       key: "createdAt",
       header: "Created",
+      mobilePriority: "hidden",
       render: (president) => (
         <span className="text-muted-foreground">
           {new Date(president.createdAt).toLocaleDateString()}
@@ -92,6 +104,7 @@ export function getPresidentColumns(
       key: "actions",
       header: "",
       className: "w-36",
+      mobilePriority: "primary",
       render: (president) => (
         <div className="flex items-center gap-1">
           <Button variant="ghost" size="icon" asChild title="View details">

@@ -11,6 +11,11 @@ export type Column<T> = {
   header: string;
   className?: string;
   render?: (item: T) => React.ReactNode;
+  // Mobile-specific properties
+  mobileVisible?: boolean;
+  mobilePriority?: "primary" | "secondary" | "hidden";
+  mobileLabel?: string;
+  mobileFullWidth?: boolean;
 };
 
 export function getDivisionColumns(
@@ -20,6 +25,7 @@ export function getDivisionColumns(
     {
       key: "name",
       header: "Division Name",
+      mobilePriority: "primary",
       render: (division) => (
         <Link
           href={`/admin/divisions/${division.id}`}
@@ -32,6 +38,7 @@ export function getDivisionColumns(
     {
       key: "coordinator",
       header: "Coordinator",
+      mobilePriority: "primary",
       render: (division) =>
         division.coordinator ? (
           <span>{division.coordinator.name}</span>
@@ -45,6 +52,8 @@ export function getDivisionColumns(
       key: "_count.churches",
       header: "Churches",
       className: "text-center",
+      mobilePriority: "primary",
+      mobileLabel: "Churches",
       render: (division) => (
         <Badge variant="secondary">{division._count.churches}</Badge>
       ),
@@ -52,6 +61,7 @@ export function getDivisionColumns(
     {
       key: "createdAt",
       header: "Created",
+      mobilePriority: "secondary",
       render: (division) => (
         <span className="text-muted-foreground">
           {new Date(division.createdAt).toLocaleDateString()}
@@ -62,6 +72,7 @@ export function getDivisionColumns(
       key: "actions",
       header: "",
       className: "w-24",
+      mobilePriority: "primary",
       render: (division) => (
         <div className="flex items-center gap-1">
           <Button variant="ghost" size="icon" asChild>

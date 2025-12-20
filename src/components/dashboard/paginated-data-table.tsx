@@ -2,12 +2,21 @@
 
 import { cn } from "@/lib/utils";
 import { Pagination, type PaginationProps } from "@/components/ui/pagination";
+import { MobileCardList, type MobileColumn } from "./mobile-data-card";
 
-interface Column<T> {
+// Re-export MobileColumn for use in column definitions
+export type { MobileColumn };
+
+export interface Column<T> {
   key: keyof T | string;
   header: string;
   className?: string;
   render?: (item: T) => React.ReactNode;
+  // Mobile-specific properties
+  mobileVisible?: boolean;
+  mobilePriority?: "primary" | "secondary" | "hidden";
+  mobileLabel?: string;
+  mobileFullWidth?: boolean;
 }
 
 interface PaginatedDataTableProps<T> {
@@ -17,6 +26,7 @@ interface PaginatedDataTableProps<T> {
   className?: string;
   pagination: PaginationProps;
   isLoading?: boolean;
+  onRowClick?: (item: T) => void;
 }
 
 export function PaginatedDataTable<T extends Record<string, unknown>>({
@@ -26,6 +36,7 @@ export function PaginatedDataTable<T extends Record<string, unknown>>({
   className,
   pagination,
   isLoading,
+  onRowClick,
 }: PaginatedDataTableProps<T>) {
   const getValue = (item: T, key: string): unknown => {
     return key.split(".").reduce<unknown>((obj, k) => {
@@ -36,11 +47,29 @@ export function PaginatedDataTable<T extends Record<string, unknown>>({
     }, item);
   };
 
+  // Filter columns for mobile view (exclude hidden priority)
+  const mobileColumns = columns.filter(
+    (col) => col.mobilePriority !== "hidden"
+  ) as MobileColumn<T>[];
+
   return (
     <div className="space-y-4">
+      {/* Mobile Card Layout */}
+      <div className="md:hidden">
+        <MobileCardList
+          data={data}
+          columns={mobileColumns}
+          emptyMessage={emptyMessage}
+          onItemClick={onRowClick}
+          isLoading={isLoading}
+          className={className}
+        />
+      </div>
+
+      {/* Desktop Table Layout */}
       <div
         className={cn(
-          "rounded-xl border border-border bg-card overflow-hidden",
+          "hidden md:block rounded-xl border border-border bg-card overflow-hidden",
           isLoading && "opacity-60 pointer-events-none",
           className
         )}
@@ -76,7 +105,11 @@ export function PaginatedDataTable<T extends Record<string, unknown>>({
                 data.map((item, index) => (
                   <tr
                     key={index}
-                    className="transition-colors hover:bg-muted/30"
+                    className={cn(
+                      "transition-colors hover:bg-muted/30",
+                      onRowClick && "cursor-pointer"
+                    )}
+                    onClick={() => onRowClick?.(item)}
                   >
                     {columns.map((column) => (
                       <td

@@ -11,6 +11,11 @@ export type Column<T> = {
   header: string;
   className?: string;
   render?: (item: T) => React.ReactNode;
+  // Mobile-specific properties
+  mobileVisible?: boolean;
+  mobilePriority?: "primary" | "secondary" | "hidden";
+  mobileLabel?: string;
+  mobileFullWidth?: boolean;
 };
 
 export function getChurchColumns(
@@ -20,6 +25,7 @@ export function getChurchColumns(
     {
       key: "name",
       header: "Church Name",
+      mobilePriority: "primary",
       render: (church) => (
         <Link
           href={`/admin/churches/${church.id}`}
@@ -32,6 +38,7 @@ export function getChurchColumns(
     {
       key: "division",
       header: "Division",
+      mobilePriority: "primary",
       render: (church) => (
         <Link
           href={`/admin/divisions/${church.division.id}`}
@@ -44,6 +51,7 @@ export function getChurchColumns(
     {
       key: "pastor",
       header: "Pastor",
+      mobilePriority: "secondary",
       render: (church) =>
         church.pastor ? (
           <span>{church.pastor.name}</span>
@@ -57,6 +65,8 @@ export function getChurchColumns(
       key: "_count.presidents",
       header: "Presidents",
       className: "text-center",
+      mobilePriority: "secondary",
+      mobileLabel: "Presidents",
       render: (church) => (
         <Badge variant="secondary">{church._count.presidents}</Badge>
       ),
@@ -64,6 +74,7 @@ export function getChurchColumns(
     {
       key: "createdAt",
       header: "Created",
+      mobilePriority: "hidden",
       render: (church) => (
         <span className="text-muted-foreground">
           {new Date(church.createdAt).toLocaleDateString()}
@@ -74,6 +85,7 @@ export function getChurchColumns(
       key: "actions",
       header: "",
       className: "w-24",
+      mobilePriority: "primary",
       render: (church) => (
         <div className="flex items-center gap-1">
           <Button variant="ghost" size="icon" asChild>

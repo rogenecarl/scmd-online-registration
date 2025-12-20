@@ -10,6 +10,11 @@ export type Column<T> = {
   header: string;
   className?: string;
   render?: (item: T) => React.ReactNode;
+  // Mobile-specific properties
+  mobileVisible?: boolean;
+  mobilePriority?: "primary" | "secondary" | "hidden";
+  mobileLabel?: string;
+  mobileFullWidth?: boolean;
 };
 
 export function getCoordinatorColumns(
@@ -19,6 +24,7 @@ export function getCoordinatorColumns(
     {
       key: "name",
       header: "Coordinator Name",
+      mobilePriority: "primary",
       render: (coordinator) => (
         <Link
           href={`/admin/coordinators/${coordinator.id}`}
@@ -31,6 +37,7 @@ export function getCoordinatorColumns(
     {
       key: "division",
       header: "Division",
+      mobilePriority: "primary",
       render: (coordinator) => (
         <Link
           href={`/admin/divisions/${coordinator.division.id}`}
@@ -43,6 +50,7 @@ export function getCoordinatorColumns(
     {
       key: "createdAt",
       header: "Created",
+      mobilePriority: "secondary",
       render: (coordinator) => (
         <span className="text-muted-foreground">
           {new Date(coordinator.createdAt).toLocaleDateString()}
@@ -53,6 +61,7 @@ export function getCoordinatorColumns(
       key: "actions",
       header: "",
       className: "w-24",
+      mobilePriority: "primary",
       render: (coordinator) => (
         <div className="flex items-center gap-1">
           <Button variant="ghost" size="icon" asChild>

@@ -10,6 +10,11 @@ export type Column<T> = {
   header: string;
   className?: string;
   render?: (item: T) => React.ReactNode;
+  // Mobile-specific properties
+  mobileVisible?: boolean;
+  mobilePriority?: "primary" | "secondary" | "hidden";
+  mobileLabel?: string;
+  mobileFullWidth?: boolean;
 };
 
 export function getPastorColumns(
@@ -19,6 +24,7 @@ export function getPastorColumns(
     {
       key: "name",
       header: "Pastor Name",
+      mobilePriority: "primary",
       render: (pastor) => (
         <Link
           href={`/admin/pastors/${pastor.id}`}
@@ -31,6 +37,7 @@ export function getPastorColumns(
     {
       key: "church",
       header: "Church",
+      mobilePriority: "primary",
       render: (pastor) => (
         <Link
           href={`/admin/churches/${pastor.church.id}`}
@@ -43,6 +50,7 @@ export function getPastorColumns(
     {
       key: "division",
       header: "Division",
+      mobilePriority: "hidden",
       render: (pastor) => (
         <Link
           href={`/admin/divisions/${pastor.church.division.id}`}
@@ -55,6 +63,7 @@ export function getPastorColumns(
     {
       key: "createdAt",
       header: "Created",
+      mobilePriority: "secondary",
       render: (pastor) => (
         <span className="text-muted-foreground">
           {new Date(pastor.createdAt).toLocaleDateString()}
@@ -65,6 +74,7 @@ export function getPastorColumns(
       key: "actions",
       header: "",
       className: "w-24",
+      mobilePriority: "primary",
       render: (pastor) => (
         <div className="flex items-center gap-1">
           <Button variant="ghost" size="icon" asChild>

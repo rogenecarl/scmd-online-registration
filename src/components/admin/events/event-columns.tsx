@@ -13,6 +13,11 @@ export type Column<T> = {
   header: string;
   className?: string;
   render?: (item: T) => React.ReactNode;
+  // Mobile-specific properties
+  mobileVisible?: boolean;
+  mobilePriority?: "primary" | "secondary" | "hidden";
+  mobileLabel?: string;
+  mobileFullWidth?: boolean;
 };
 
 export function getEventColumns(
@@ -22,6 +27,8 @@ export function getEventColumns(
     {
       key: "name",
       header: "Event",
+      mobilePriority: "primary",
+      mobileFullWidth: true,
       render: (event) => (
         <div className="flex flex-col">
           <Link
@@ -40,6 +47,8 @@ export function getEventColumns(
     {
       key: "dates",
       header: "Dates",
+      mobilePriority: "primary",
+      mobileLabel: "Event Dates",
       render: (event) => (
         <div className="flex flex-col text-sm">
           <div className="flex items-center gap-1">
@@ -55,6 +64,8 @@ export function getEventColumns(
     {
       key: "registrationDeadline",
       header: "Reg. Deadline",
+      mobilePriority: "secondary",
+      mobileLabel: "Deadline",
       render: (event) => (
         <span className="text-sm">
           {format(new Date(event.registrationDeadline), "MMM d, yyyy")}
@@ -65,12 +76,15 @@ export function getEventColumns(
       key: "status",
       header: "Status",
       className: "text-center",
+      mobilePriority: "primary",
       render: (event) => <EventStatusBadge status={event.status} />,
     },
     {
       key: "_count.registrations",
       header: "Registrations",
       className: "text-center",
+      mobilePriority: "secondary",
+      mobileLabel: "Registrations",
       render: (event) => (
         <div className="flex items-center justify-center gap-1">
           <Users className="h-4 w-4 text-muted-foreground" />
@@ -82,6 +96,7 @@ export function getEventColumns(
       key: "actions",
       header: "",
       className: "w-24",
+      mobilePriority: "primary",
       render: (event) => (
         <div className="flex items-center gap-1">
           <Button variant="ghost" size="icon" asChild>

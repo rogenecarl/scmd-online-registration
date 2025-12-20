@@ -3,7 +3,10 @@
 import type { AdminRegistration } from "@/actions/approval";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { RegistrationStatusBadge, EventStatusBadge } from "@/components/shared/status-badge";
+import {
+  RegistrationStatusBadge,
+  EventStatusBadge,
+} from "@/components/shared/status-badge";
 import { Eye, CheckCircle, XCircle, Users, ChefHat } from "lucide-react";
 import Link from "next/link";
 import { formatDate } from "@/lib/utils";
@@ -13,6 +16,11 @@ export type Column<T> = {
   header: string;
   className?: string;
   render?: (item: T) => React.ReactNode;
+  // Mobile-specific properties
+  mobileVisible?: boolean;
+  mobilePriority?: "primary" | "secondary" | "hidden";
+  mobileLabel?: string;
+  mobileFullWidth?: boolean;
 };
 
 type RegistrationColumnsProps = {
@@ -28,6 +36,8 @@ export function getRegistrationColumns({
     {
       key: "church",
       header: "Church",
+      mobilePriority: "primary",
+      mobileFullWidth: true,
       render: (registration) => (
         <div>
           <Link
@@ -45,6 +55,7 @@ export function getRegistrationColumns({
     {
       key: "event",
       header: "Event",
+      mobilePriority: "primary",
       render: (registration) => (
         <div>
           <span className="font-medium">{registration.event.name}</span>
@@ -60,6 +71,7 @@ export function getRegistrationColumns({
     {
       key: "president",
       header: "Submitted By",
+      mobilePriority: "hidden",
       render: (registration) => (
         <div>
           <span>{registration.president.name}</span>
@@ -73,6 +85,8 @@ export function getRegistrationColumns({
       key: "participants",
       header: "Participants",
       className: "text-center",
+      mobilePriority: "secondary",
+      mobileLabel: "Participants",
       render: (registration) => (
         <div className="flex items-center justify-center gap-3">
           <div className="flex items-center gap-1" title="Delegates">
@@ -90,6 +104,7 @@ export function getRegistrationColumns({
       key: "status",
       header: "Status",
       className: "text-center",
+      mobilePriority: "primary",
       render: (registration) => (
         <RegistrationStatusBadge status={registration.status} />
       ),
@@ -97,6 +112,8 @@ export function getRegistrationColumns({
     {
       key: "createdAt",
       header: "Submitted",
+      mobilePriority: "secondary",
+      mobileLabel: "Submitted",
       render: (registration) => (
         <span className="text-muted-foreground text-sm">
           {formatDate(registration.createdAt)}
@@ -107,6 +124,7 @@ export function getRegistrationColumns({
       key: "actions",
       header: "",
       className: "w-32",
+      mobilePriority: "primary",
       render: (registration) => (
         <div className="flex items-center gap-1">
           <Button variant="ghost" size="icon" asChild>
