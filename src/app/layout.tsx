@@ -6,6 +6,8 @@ import QueryProvider from "@/context/QueryProvider";
 import { SessionProvider } from "@/components/providers";
 import { getServerSession } from "@/lib/auth-server";
 import { Toaster } from "sonner";
+import { Analytics } from '@vercel/analytics/next';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -44,6 +46,8 @@ export default async function RootLayout({
             <Toaster position="bottom-right" />
             <main className="min-h-screen">
               {children}
+              <Analytics />
+              <SpeedInsights />
             </main>
           </SessionProvider>
         </QueryProvider>
