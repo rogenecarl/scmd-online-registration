@@ -13,7 +13,9 @@ import {
 import {
   ConfirmDialog,
   useConfirmDialog,
-} from "@/components/shared/confirm-dialog";
+  MobileFilterSheet,
+  FilterGroup,
+} from "@/components/shared";
 import { TableSkeleton } from "@/components/shared/loading-skeleton";
 import { EmptyState } from "@/components/shared/empty-state";
 import { useChurches, useDeleteChurch } from "@/hooks/use-churches";
@@ -86,10 +88,30 @@ export function ChurchTable() {
   const hasFilters = debouncedSearch || divisionId !== "all";
   const hasData = churches.length > 0 || hasFilters;
 
+  const activeFilterCount = divisionId !== "all" ? 1 : 0;
+
+  const handleClearFilters = () => {
+    setDivisionId("all");
+    setPage(1);
+  };
+
+  // Division select options (reused in desktop and mobile views)
+  const divisionSelectContent = (
+    <SelectContent>
+      <SelectItem value="all">All Divisions</SelectItem>
+      {divisions?.map((division) => (
+        <SelectItem key={division.id} value={division.id}>
+          {division.name}
+        </SelectItem>
+      ))}
+    </SelectContent>
+  );
+
   return (
     <>
       {/* Filters */}
       <div className="flex gap-3 mb-4">
+        {/* Search - Full width on mobile */}
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
@@ -99,19 +121,31 @@ export function ChurchTable() {
             className="pl-9"
           />
         </div>
-        <Select value={divisionId} onValueChange={handleDivisionChange}>
-          <SelectTrigger className="w-[140px] shrink-0">
-            <SelectValue placeholder="All Divisions" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Divisions</SelectItem>
-            {divisions?.map((division) => (
-              <SelectItem key={division.id} value={division.id}>
-                {division.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+
+        {/* Desktop filter - Hidden on mobile */}
+        <div className="hidden md:block">
+          <Select value={divisionId} onValueChange={handleDivisionChange}>
+            <SelectTrigger className="w-[140px] shrink-0">
+              <SelectValue placeholder="All Divisions" />
+            </SelectTrigger>
+            {divisionSelectContent}
+          </Select>
+        </div>
+
+        {/* Mobile filter sheet */}
+        <MobileFilterSheet
+          activeFilterCount={activeFilterCount}
+          onClear={handleClearFilters}
+        >
+          <FilterGroup label="Division">
+            <Select value={divisionId} onValueChange={handleDivisionChange}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="All Divisions" />
+              </SelectTrigger>
+              {divisionSelectContent}
+            </Select>
+          </FilterGroup>
+        </MobileFilterSheet>
       </div>
 
       {/* Table or Empty State */}

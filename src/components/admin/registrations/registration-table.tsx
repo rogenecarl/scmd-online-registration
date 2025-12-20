@@ -10,7 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { TableSkeleton } from "@/components/shared/loading-skeleton";
+import { TableSkeleton, MobileFilterSheet, FilterGroup } from "@/components/shared";
 import { EmptyState } from "@/components/shared/empty-state";
 import {
   useRegistrations,
@@ -23,7 +23,7 @@ import { getRegistrationColumns } from "./registration-columns";
 import { ApprovalDialog } from "./approval-dialog";
 import { RejectionDialog } from "./rejection-dialog";
 import { useDebounce } from "@/hooks/use-debounce";
-import { ClipboardCheck, Search, Filter } from "lucide-react";
+import { ClipboardCheck, Search } from "lucide-react";
 import { DEFAULT_PAGE_SIZE } from "@/lib/pagination";
 import type { RegistrationStatus } from "@/lib/generated/prisma";
 
@@ -117,12 +117,74 @@ export function RegistrationTable() {
   const hasFilters = debouncedSearch || statusFilter !== "ALL" || eventFilter !== "ALL" || divisionFilter !== "ALL";
   const hasData = registrations.length > 0 || hasFilters;
 
+  // Count active filters for mobile badge
+  const activeFilterCount = [
+    statusFilter !== "ALL",
+    eventFilter !== "ALL",
+    divisionFilter !== "ALL",
+  ].filter(Boolean).length;
+
+  const handleClearFilters = () => {
+    setStatusFilter("ALL");
+    setEventFilter("ALL");
+    setDivisionFilter("ALL");
+    setPage(1);
+  };
+
+  // Select content elements (reused in desktop and mobile views)
+  const statusSelectContent = (
+    <SelectContent>
+      {STATUS_OPTIONS.map((option) => (
+        <SelectItem key={option.value} value={option.value}>
+          {option.label}
+        </SelectItem>
+      ))}
+    </SelectContent>
+  );
+
+  const eventSelectContent = (
+    <SelectContent>
+      <SelectItem value="ALL">All Events</SelectItem>
+      {events?.map((event) => (
+        <SelectItem key={event.id} value={event.id}>
+          {event.name}
+        </SelectItem>
+      ))}
+    </SelectContent>
+  );
+
+  const divisionSelectContent = (
+    <SelectContent>
+      <SelectItem value="ALL">All Divisions</SelectItem>
+      {divisions?.map((division) => (
+        <SelectItem key={division.id} value={division.id}>
+          {division.name}
+        </SelectItem>
+      ))}
+    </SelectContent>
+  );
+
+  const handleStatusFilterChange = (value: string) => {
+    setStatusFilter(value as RegistrationStatus | "ALL");
+    handleFilterChange();
+  };
+
+  const handleEventFilterChange = (value: string) => {
+    setEventFilter(value);
+    handleFilterChange();
+  };
+
+  const handleDivisionFilterChange = (value: string) => {
+    setDivisionFilter(value);
+    handleFilterChange();
+  };
+
   return (
     <>
       {/* Filters */}
-      <div className="flex flex-col gap-4 mb-4 md:flex-row md:items-center">
-        {/* Search */}
-        <div className="relative flex-1 max-w-sm">
+      <div className="flex gap-3 mb-4">
+        {/* Search - Full width on mobile */}
+        <div className="relative flex-1 md:max-w-sm">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             placeholder="Search churches, events..."
@@ -132,72 +194,58 @@ export function RegistrationTable() {
           />
         </div>
 
-        {/* Filter Controls */}
-        <div className="flex items-center gap-2 flex-wrap">
-          <Filter className="h-4 w-4 text-muted-foreground hidden md:block" />
-
-          {/* Status Filter */}
-          <Select
-            value={statusFilter}
-            onValueChange={(value) => {
-              setStatusFilter(value as RegistrationStatus | "ALL");
-              handleFilterChange();
-            }}
-          >
+        {/* Desktop Filter Controls - Hidden on mobile */}
+        <div className="hidden md:flex md:items-center md:gap-2">
+          <Select value={statusFilter} onValueChange={handleStatusFilterChange}>
             <SelectTrigger className="w-[140px]">
               <SelectValue placeholder="Status" />
             </SelectTrigger>
-            <SelectContent>
-              {STATUS_OPTIONS.map((option) => (
-                <SelectItem key={option.value} value={option.value}>
-                  {option.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
+            {statusSelectContent}
           </Select>
-
-          {/* Event Filter */}
-          <Select
-            value={eventFilter}
-            onValueChange={(value) => {
-              setEventFilter(value);
-              handleFilterChange();
-            }}
-          >
+          <Select value={eventFilter} onValueChange={handleEventFilterChange}>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Event" />
             </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="ALL">All Events</SelectItem>
-              {events?.map((event) => (
-                <SelectItem key={event.id} value={event.id}>
-                  {event.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
+            {eventSelectContent}
           </Select>
-
-          {/* Division Filter */}
-          <Select
-            value={divisionFilter}
-            onValueChange={(value) => {
-              setDivisionFilter(value);
-              handleFilterChange();
-            }}
-          >
+          <Select value={divisionFilter} onValueChange={handleDivisionFilterChange}>
             <SelectTrigger className="w-[160px]">
               <SelectValue placeholder="Division" />
             </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="ALL">All Divisions</SelectItem>
-              {divisions?.map((division) => (
-                <SelectItem key={division.id} value={division.id}>
-                  {division.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
+            {divisionSelectContent}
           </Select>
         </div>
+
+        {/* Mobile filter sheet */}
+        <MobileFilterSheet
+          activeFilterCount={activeFilterCount}
+          onClear={handleClearFilters}
+        >
+          <FilterGroup label="Status">
+            <Select value={statusFilter} onValueChange={handleStatusFilterChange}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Status" />
+              </SelectTrigger>
+              {statusSelectContent}
+            </Select>
+          </FilterGroup>
+          <FilterGroup label="Event">
+            <Select value={eventFilter} onValueChange={handleEventFilterChange}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Event" />
+              </SelectTrigger>
+              {eventSelectContent}
+            </Select>
+          </FilterGroup>
+          <FilterGroup label="Division">
+            <Select value={divisionFilter} onValueChange={handleDivisionFilterChange}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Division" />
+              </SelectTrigger>
+              {divisionSelectContent}
+            </Select>
+          </FilterGroup>
+        </MobileFilterSheet>
       </div>
 
       {/* Table or Empty State */}

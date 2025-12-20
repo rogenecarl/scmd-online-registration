@@ -13,7 +13,9 @@ import {
 import {
   ConfirmDialog,
   useConfirmDialog,
-} from "@/components/shared/confirm-dialog";
+  MobileFilterSheet,
+  FilterGroup,
+} from "@/components/shared";
 import { TableSkeleton } from "@/components/shared/loading-skeleton";
 import { EmptyState } from "@/components/shared/empty-state";
 import { useEvents, useDeleteEvent } from "@/hooks/use-events";
@@ -93,11 +95,30 @@ export function EventTable() {
   const hasFilters = debouncedSearch || statusFilter !== "ALL";
   const hasData = events.length > 0 || hasFilters;
 
+  const activeFilterCount = statusFilter !== "ALL" ? 1 : 0;
+
+  const handleClearFilters = () => {
+    setStatusFilter("ALL");
+    setPage(1);
+  };
+
+  // Status select options (reused in desktop and mobile views)
+  const statusSelectContent = (
+    <SelectContent>
+      {STATUS_OPTIONS.map((option) => (
+        <SelectItem key={option.value} value={option.value}>
+          {option.label}
+        </SelectItem>
+      ))}
+    </SelectContent>
+  );
+
   return (
     <>
       {/* Filters */}
-      <div className="flex flex-col sm:flex-row gap-3 mb-4">
-        <div className="relative flex-1 sm:max-w-md">
+      <div className="flex gap-3 mb-4">
+        {/* Search - Full width on mobile */}
+        <div className="relative flex-1 md:max-w-md">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             placeholder="Search events..."
@@ -106,23 +127,41 @@ export function EventTable() {
             className="pl-9"
           />
         </div>
-        <Select
-          value={statusFilter}
-          onValueChange={(value) =>
-            handleStatusChange(value as EventStatus | "ALL")
-          }
+
+        {/* Desktop filter - Hidden on mobile */}
+        <div className="hidden md:block">
+          <Select
+            value={statusFilter}
+            onValueChange={(value) =>
+              handleStatusChange(value as EventStatus | "ALL")
+            }
+          >
+            <SelectTrigger className="w-[140px] shrink-0">
+              <SelectValue placeholder="Filter by status" />
+            </SelectTrigger>
+            {statusSelectContent}
+          </Select>
+        </div>
+
+        {/* Mobile filter sheet */}
+        <MobileFilterSheet
+          activeFilterCount={activeFilterCount}
+          onClear={handleClearFilters}
         >
-          <SelectTrigger className="w-full sm:w-[140px] shrink-0">
-            <SelectValue placeholder="Filter by status" />
-          </SelectTrigger>
-          <SelectContent>
-            {STATUS_OPTIONS.map((option) => (
-              <SelectItem key={option.value} value={option.value}>
-                {option.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+          <FilterGroup label="Status">
+            <Select
+              value={statusFilter}
+              onValueChange={(value) =>
+                handleStatusChange(value as EventStatus | "ALL")
+              }
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Filter by status" />
+              </SelectTrigger>
+              {statusSelectContent}
+            </Select>
+          </FilterGroup>
+        </MobileFilterSheet>
       </div>
 
       {/* Table or Empty State */}

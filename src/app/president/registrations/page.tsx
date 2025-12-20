@@ -103,11 +103,71 @@ function RegistrationsContent() {
           }}
         />
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-3 md:space-y-4">
           {registrations.map((registration) => (
             <Card key={registration.id} className="transition-all hover:shadow-md">
-              <CardContent className="p-6">
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <CardContent className="p-4 md:p-6">
+                {/* Mobile: Stack layout */}
+                <div className="flex flex-col gap-3 md:hidden">
+                  <div className="flex items-start justify-between gap-2">
+                    <h3 className="font-semibold text-sm">{registration.event.name}</h3>
+                    <span
+                      className={cn(
+                        "inline-flex shrink-0 items-center gap-1 rounded-full border px-1.5 py-0.5 text-[10px] font-medium",
+                        getStatusColor(registration.status)
+                      )}
+                    >
+                      {getStatusIcon(registration.status)}
+                      {registration.status.toLowerCase()}
+                    </span>
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
+                    <span className="flex items-center gap-1">
+                      <Calendar className="h-3 w-3" />
+                      {format(new Date(registration.event.startDate), "MMM d")} -{" "}
+                      {format(new Date(registration.event.endDate), "MMM d")}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <Users className="h-3 w-3" />
+                      {registration._count.delegates}
+                    </span>
+                    {registration._count.cooks > 0 && (
+                      <span className="flex items-center gap-1">
+                        <ChefHat className="h-3 w-3" />
+                        {registration._count.cooks}
+                      </span>
+                    )}
+                    <span className="flex items-center gap-1 font-medium text-primary">
+                      <Receipt className="h-3 w-3" />
+                      {formatCurrency(registration.totalFee)}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
+                    <span
+                      className={cn(
+                        "rounded-full px-1.5 py-0.5 font-medium capitalize",
+                        getEventStatusColor(registration.event.status)
+                      )}
+                    >
+                      {registration.event.status.toLowerCase()}
+                    </span>
+                    <span>
+                      {format(new Date(registration.createdAt), "MMM d, yyyy")}
+                    </span>
+                  </div>
+
+                  <Button variant="outline" size="sm" asChild className="w-full touch-target">
+                    <Link href={`/president/registrations/${registration.id}`}>
+                      View Details
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Link>
+                  </Button>
+                </div>
+
+                {/* Desktop: Row layout */}
+                <div className="hidden md:flex md:flex-row md:items-center md:justify-between md:gap-4">
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
                       <h3 className="font-semibold">{registration.event.name}</h3>
@@ -159,7 +219,7 @@ function RegistrationsContent() {
                     </div>
                   </div>
 
-                  <Button variant="outline" asChild>
+                  <Button variant="outline" asChild className="touch-target">
                     <Link href={`/president/registrations/${registration.id}`}>
                       View Details
                       <ArrowRight className="ml-2 h-4 w-4" />

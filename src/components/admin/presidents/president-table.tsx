@@ -109,8 +109,8 @@ export function PresidentTable() {
 
   return (
     <>
-      {/* Search */}
-      <div className="relative mb-4 max-w-sm">
+      {/* Search - Full width on mobile */}
+      <div className="relative mb-4 w-full md:max-w-sm">
         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         <Input
           placeholder="Search presidents..."

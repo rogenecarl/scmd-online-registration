@@ -14,8 +14,6 @@ interface StatsCardProps {
     label: string;
   };
   className?: string;
-  /** Use compact style on mobile */
-  compact?: boolean;
 }
 
 export function StatsCard({
@@ -25,7 +23,6 @@ export function StatsCard({
   icon: Icon,
   trend,
   className,
-  compact,
 }: StatsCardProps) {
   return (
     <div
