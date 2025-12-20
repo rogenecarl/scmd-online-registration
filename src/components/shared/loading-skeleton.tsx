@@ -56,24 +56,24 @@ export function TableSkeleton({ rows = 5, columns = 4 }: TableSkeletonProps) {
 // Card skeleton
 export function CardSkeleton() {
   return (
-    <div className="rounded-xl border border-border bg-card p-6">
-      <div className="space-y-4">
-        <Skeleton className="h-5 w-32" />
-        <Skeleton className="h-8 w-24" />
-        <Skeleton className="h-4 w-full" />
+    <div className="rounded-xl border border-border bg-card p-4 md:p-6">
+      <div className="space-y-3 md:space-y-4">
+        <Skeleton className="h-4 md:h-5 w-24 md:w-32" />
+        <Skeleton className="h-6 md:h-8 w-20 md:w-24" />
+        <Skeleton className="h-3 md:h-4 w-full" />
       </div>
     </div>
   );
 }
 
-// Stats grid skeleton
+// Stats grid skeleton - matches StatsGrid responsive layout
 interface StatsSkeletonProps {
   count?: number;
 }
 
 export function StatsSkeleton({ count = 4 }: StatsSkeletonProps) {
   return (
-    <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+    <div className="grid gap-3 md:gap-4 grid-cols-2 lg:grid-cols-4">
       {Array.from({ length: count }).map((_, i) => (
         <CardSkeleton key={i} />
       ))}

@@ -16,16 +16,13 @@ function DashboardContent() {
 
   if (isLoading) {
     return (
-      <div className="space-y-6">
+      <div className="space-y-4 md:space-y-6">
         <StatsSkeleton />
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className="grid gap-4 md:gap-6 md:grid-cols-2">
           <CardSkeleton />
           <CardSkeleton />
         </div>
-        <div className="grid gap-6 md:grid-cols-2">
-          <CardSkeleton />
-          <CardSkeleton />
-        </div>
+        <CardSkeleton />
       </div>
     );
   }
@@ -45,9 +42,9 @@ function DashboardContent() {
   }
 
   return (
-    <div className="space-y-6">
-      {/* Stats Grid */}
-      <StatsGrid>
+    <div className="space-y-4 md:space-y-6">
+      {/* Stats Grid - 2 columns on mobile, 4 on desktop */}
+      <StatsGrid columns={4}>
         <StatsCard
           title="Active Events"
           value={data.stats.activeEvents}
@@ -74,8 +71,8 @@ function DashboardContent() {
         />
       </StatsGrid>
 
-      {/* Church Info & Upcoming Events */}
-      <div className="grid gap-6 md:grid-cols-2">
+      {/* Church Info & Upcoming Events - Stack on mobile */}
+      <div className="grid gap-4 md:gap-6 md:grid-cols-2">
         <ChurchInfoCard church={data.church} />
         <UpcomingEventsCard events={data.upcomingEvents} />
       </div>

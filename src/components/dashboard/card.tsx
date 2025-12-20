@@ -11,7 +11,7 @@ export function Card({ children, className }: CardProps) {
   return (
     <div
       className={cn(
-        "rounded-xl border border-border bg-card p-6",
+        "rounded-xl border border-border bg-card p-4 md:p-6",
         className
       )}
     >
@@ -30,12 +30,12 @@ export function CardHeader({ children, className, action }: CardHeaderProps) {
   return (
     <div
       className={cn(
-        "flex items-center justify-between mb-4",
+        "flex items-start md:items-center justify-between gap-2 mb-3 md:mb-4",
         className
       )}
     >
-      <div>{children}</div>
-      {action && <div>{action}</div>}
+      <div className="min-w-0 flex-1">{children}</div>
+      {action && <div className="shrink-0">{action}</div>}
     </div>
   );
 }

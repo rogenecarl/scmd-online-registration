@@ -45,17 +45,17 @@ export function ActivityFeed({
   }
 
   return (
-    <div className={cn("space-y-4", className)}>
+    <div className={cn("space-y-3 md:space-y-4", className)}>
       {items.map((item, index) => {
         const Icon = item.icon;
         return (
           <div
             key={item.id}
-            className="relative flex gap-4"
+            className="relative flex gap-3 md:gap-4"
           >
             {/* Timeline Line */}
             {index < items.length - 1 && (
-              <div className="absolute left-5 top-10 h-[calc(100%-8px)] w-px bg-border" />
+              <div className="absolute left-4 md:left-5 top-8 md:top-10 h-[calc(100%-4px)] md:h-[calc(100%-8px)] w-px bg-border" />
             )}
 
             {/* Icon or Avatar */}
@@ -63,14 +63,15 @@ export function ActivityFeed({
               {Icon ? (
                 <div
                   className={cn(
-                    "flex h-10 w-10 items-center justify-center rounded-full",
+                    "flex items-center justify-center rounded-full",
+                    "h-8 w-8 md:h-10 md:w-10",
                     item.iconColor || "bg-primary/10 text-primary"
                   )}
                 >
-                  <Icon className="h-4 w-4" />
+                  <Icon className="h-3.5 w-3.5 md:h-4 md:w-4" />
                 </div>
               ) : item.user ? (
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-primary/20 to-violet-500/20 text-sm font-semibold">
+                <div className="flex h-8 w-8 md:h-10 md:w-10 items-center justify-center rounded-full bg-gradient-to-br from-primary/20 to-violet-500/20 text-xs md:text-sm font-semibold">
                   {item.user.avatar ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
@@ -83,21 +84,21 @@ export function ActivityFeed({
                   )}
                 </div>
               ) : (
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted">
-                  <div className="h-2 w-2 rounded-full bg-muted-foreground" />
+                <div className="flex h-8 w-8 md:h-10 md:w-10 items-center justify-center rounded-full bg-muted">
+                  <div className="h-1.5 w-1.5 md:h-2 md:w-2 rounded-full bg-muted-foreground" />
                 </div>
               )}
             </div>
 
             {/* Content */}
-            <div className="flex-1 min-w-0 pb-4">
-              <p className="text-sm font-medium">{item.title}</p>
+            <div className="flex-1 min-w-0 pb-3 md:pb-4">
+              <p className="text-xs md:text-sm font-medium line-clamp-2">{item.title}</p>
               {item.description && (
-                <p className="mt-0.5 text-sm text-muted-foreground line-clamp-2">
+                <p className="mt-0.5 text-xs md:text-sm text-muted-foreground line-clamp-1 md:line-clamp-2">
                   {item.description}
                 </p>
               )}
-              <p className="mt-1 text-xs text-muted-foreground">
+              <p className="mt-1 text-[10px] md:text-xs text-muted-foreground">
                 {item.timestamp}
               </p>
             </div>

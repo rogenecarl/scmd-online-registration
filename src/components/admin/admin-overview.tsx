@@ -78,11 +78,12 @@ export function AdminOverview() {
           : "bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400",
   }));
 
-  // Registration columns
+  // Registration columns with mobile support
   const registrationColumns = [
     {
       key: "church",
       header: "Church",
+      mobilePriority: "primary" as const,
       render: (item: (typeof recentRegistrations)[0]) => (
         <div>
           <p className="font-medium">{item.church.name}</p>
@@ -93,6 +94,8 @@ export function AdminOverview() {
     {
       key: "attendees",
       header: "Attendees",
+      mobilePriority: "primary" as const,
+      mobileLabel: "Attendees",
       render: (item: (typeof recentRegistrations)[0]) => (
         <div className="flex items-center gap-2 text-sm">
           <span className="flex items-center gap-1">
@@ -109,6 +112,8 @@ export function AdminOverview() {
     {
       key: "status",
       header: "Status",
+      mobilePriority: "primary" as const,
+      mobileLabel: "Status",
       render: (item: (typeof recentRegistrations)[0]) => (
         <RegistrationStatusBadge status={item.status} />
       ),
@@ -116,6 +121,8 @@ export function AdminOverview() {
     {
       key: "createdAt",
       header: "Date",
+      mobilePriority: "secondary" as const,
+      mobileLabel: "Date",
       render: (item: (typeof recentRegistrations)[0]) => (
         <span className="text-sm text-muted-foreground">
           {format(new Date(item.createdAt), "MMM d, yyyy")}
@@ -124,11 +131,12 @@ export function AdminOverview() {
     },
   ];
 
-  // Event columns
+  // Event columns with mobile support
   const eventColumns = [
     {
       key: "name",
       header: "Event",
+      mobilePriority: "primary" as const,
       render: (item: (typeof eventsSummary)[0]) => (
         <div>
           <p className="font-medium">{item.name}</p>
@@ -141,6 +149,8 @@ export function AdminOverview() {
     {
       key: "registrations",
       header: "Registrations",
+      mobilePriority: "primary" as const,
+      mobileLabel: "Registrations",
       render: (item: (typeof eventsSummary)[0]) => (
         <span className="text-sm font-medium">{item._count.registrations}</span>
       ),
@@ -148,6 +158,8 @@ export function AdminOverview() {
     {
       key: "status",
       header: "Status",
+      mobilePriority: "primary" as const,
+      mobileLabel: "Status",
       render: (item: (typeof eventsSummary)[0]) => (
         <EventStatusBadge status={item.status} />
       ),
@@ -155,23 +167,23 @@ export function AdminOverview() {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 md:space-y-6">
       {/* Welcome Section */}
-      <div className="rounded-xl border border-border bg-gradient-to-r from-violet-500/5 via-purple-500/5 to-fuchsia-500/5 p-6">
-        <div className="flex items-center justify-between">
+      <div className="rounded-xl border border-border bg-gradient-to-r from-violet-500/5 via-purple-500/5 to-fuchsia-500/5 p-4 md:p-6">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h2 className="text-2xl font-bold tracking-tight">
+            <h2 className="text-xl md:text-2xl font-bold tracking-tight">
               Admin Dashboard
             </h2>
-            <p className="mt-1 text-muted-foreground">
-              Welcome back, {user?.name || "Administrator"}. Here&apos;s an
-              overview of SCMD Online Registration.
+            <p className="mt-1 text-sm md:text-base text-muted-foreground">
+              Welcome back, {user?.name || "Administrator"}.
+              <span className="hidden sm:inline"> Here&apos;s an overview of SCMD Online Registration.</span>
             </p>
           </div>
           {stats.pendingRegistrations > 0 && (
             <Link
               href="/admin/registrations?status=PENDING"
-              className="hidden sm:flex items-center gap-2 rounded-lg bg-amber-100 dark:bg-amber-900/30 px-3 py-1.5 text-sm font-medium text-amber-700 dark:text-amber-400 hover:bg-amber-200 dark:hover:bg-amber-900/50 transition-colors"
+              className="flex items-center justify-center gap-2 rounded-lg bg-amber-100 dark:bg-amber-900/30 px-3 py-2 text-sm font-medium text-amber-700 dark:text-amber-400 hover:bg-amber-200 dark:hover:bg-amber-900/50 transition-colors touch-target w-full sm:w-auto"
             >
               <Clock className="h-4 w-4" />
               {stats.pendingRegistrations} Pending Approval
@@ -253,13 +265,13 @@ export function AdminOverview() {
       </StatsGrid>
 
       {/* Main Content Grid */}
-      <div className="grid gap-6 lg:grid-cols-3">
+      <div className="grid gap-4 md:gap-6 lg:grid-cols-3">
         {/* Recent Registrations */}
         <div className="lg:col-span-2">
           <Card className="h-full">
             <CardHeader
               action={
-                <Button variant="ghost" size="sm" asChild>
+                <Button variant="ghost" size="sm" asChild className="touch-target">
                   <Link
                     href="/admin/registrations"
                     className="flex items-center gap-1"
@@ -270,12 +282,12 @@ export function AdminOverview() {
                 </Button>
               }
             >
-              <CardTitle>Recent Registrations</CardTitle>
-              <CardDescription>
+              <CardTitle className="text-base md:text-lg">Recent Registrations</CardTitle>
+              <CardDescription className="text-xs md:text-sm">
                 Latest church registrations for events
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-3 md:p-6 pt-0 md:pt-0">
               {recentRegistrations.length > 0 ? (
                 <DataTable
                   columns={registrationColumns}
@@ -283,7 +295,7 @@ export function AdminOverview() {
                   emptyMessage="No registrations found"
                 />
               ) : (
-                <div className="text-center py-8 text-muted-foreground">
+                <div className="text-center py-6 md:py-8 text-muted-foreground text-sm">
                   No registrations yet
                 </div>
               )}
@@ -294,14 +306,14 @@ export function AdminOverview() {
         {/* Activity Feed */}
         <Card>
           <CardHeader>
-            <CardTitle>Activity</CardTitle>
-            <CardDescription>Recent registration activity</CardDescription>
+            <CardTitle className="text-base md:text-lg">Activity</CardTitle>
+            <CardDescription className="text-xs md:text-sm">Recent registration activity</CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-3 md:p-6 pt-0 md:pt-0">
             {activityItems.length > 0 ? (
               <ActivityFeed items={activityItems} />
             ) : (
-              <div className="text-center py-8 text-muted-foreground">
+              <div className="text-center py-6 md:py-8 text-muted-foreground text-sm">
                 No recent activity
               </div>
             )}
@@ -310,12 +322,12 @@ export function AdminOverview() {
       </div>
 
       {/* Events Summary & Quick Actions */}
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-4 md:gap-6 lg:grid-cols-2">
         {/* Events Summary */}
         <Card>
           <CardHeader
             action={
-              <Button variant="ghost" size="sm" asChild>
+              <Button variant="ghost" size="sm" asChild className="touch-target">
                 <Link href="/admin/events" className="flex items-center gap-1">
                   View all
                   <ChevronRight className="h-4 w-4" />
@@ -323,10 +335,10 @@ export function AdminOverview() {
               </Button>
             }
           >
-            <CardTitle>Events Summary</CardTitle>
-            <CardDescription>Recent events and registrations</CardDescription>
+            <CardTitle className="text-base md:text-lg">Events Summary</CardTitle>
+            <CardDescription className="text-xs md:text-sm">Recent events and registrations</CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-3 md:p-6 pt-0 md:pt-0">
             {eventsSummary.length > 0 ? (
               <DataTable
                 columns={eventColumns}
@@ -334,7 +346,7 @@ export function AdminOverview() {
                 emptyMessage="No events found"
               />
             ) : (
-              <div className="text-center py-8 text-muted-foreground">
+              <div className="text-center py-6 md:py-8 text-muted-foreground text-sm">
                 No events created yet
               </div>
             )}
@@ -344,11 +356,11 @@ export function AdminOverview() {
         {/* Quick Actions */}
         <Card>
           <CardHeader>
-            <CardTitle>Quick Actions</CardTitle>
-            <CardDescription>Common administrative tasks</CardDescription>
+            <CardTitle className="text-base md:text-lg">Quick Actions</CardTitle>
+            <CardDescription className="text-xs md:text-sm">Common administrative tasks</CardDescription>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
+          <CardContent className="p-3 md:p-6 pt-0 md:pt-0">
+            <div className="space-y-2 md:space-y-3">
               <ActionItem
                 icon={FileText}
                 title="Review Registrations"
@@ -388,21 +400,21 @@ export function AdminOverview() {
 
 function AdminOverviewSkeleton() {
   return (
-    <div className="space-y-6">
-      <Skeleton className="h-28 w-full rounded-xl" />
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+    <div className="space-y-4 md:space-y-6">
+      <Skeleton className="h-24 md:h-28 w-full rounded-xl" />
+      <div className="grid grid-cols-2 gap-3 md:gap-4 lg:grid-cols-4">
         {[...Array(4)].map((_, i) => (
-          <Skeleton key={i} className="h-32 w-full" />
+          <Skeleton key={i} className="h-24 md:h-32 w-full" />
         ))}
       </div>
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 md:gap-4 lg:grid-cols-4">
         {[...Array(4)].map((_, i) => (
-          <Skeleton key={i} className="h-32 w-full" />
+          <Skeleton key={i} className="h-24 md:h-32 w-full" />
         ))}
       </div>
-      <div className="grid gap-6 lg:grid-cols-3">
-        <Skeleton className="h-96 lg:col-span-2" />
-        <Skeleton className="h-96" />
+      <div className="grid gap-4 md:gap-6 lg:grid-cols-3">
+        <Skeleton className="h-64 md:h-96 lg:col-span-2" />
+        <Skeleton className="h-64 md:h-96" />
       </div>
     </div>
   );
@@ -424,23 +436,23 @@ function ActionItem({
   return (
     <Link
       href={href}
-      className="flex items-center gap-4 rounded-lg border border-border p-3 transition-all hover:border-primary/20 hover:bg-primary/5"
+      className="flex items-center gap-3 md:gap-4 rounded-lg border border-border p-3 transition-all hover:border-primary/20 hover:bg-primary/5 active:bg-primary/10 touch-target"
     >
-      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-        <Icon className="h-5 w-5 text-primary" />
+      <div className="flex h-9 w-9 md:h-10 md:w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+        <Icon className="h-4 w-4 md:h-5 md:w-5 text-primary" />
       </div>
-      <div className="flex-1">
+      <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
-          <p className="text-sm font-medium">{title}</p>
+          <p className="text-sm font-medium truncate">{title}</p>
           {badge && (
-            <span className="rounded-full bg-amber-100 dark:bg-amber-900/30 px-2 py-0.5 text-xs font-medium text-amber-700 dark:text-amber-400">
+            <span className="shrink-0 rounded-full bg-amber-100 dark:bg-amber-900/30 px-2 py-0.5 text-xs font-medium text-amber-700 dark:text-amber-400">
               {badge}
             </span>
           )}
         </div>
-        <p className="text-xs text-muted-foreground">{description}</p>
+        <p className="text-xs text-muted-foreground truncate">{description}</p>
       </div>
-      <ChevronRight className="h-4 w-4 text-muted-foreground" />
+      <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" />
     </Link>
   );
 }
