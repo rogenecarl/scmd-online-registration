@@ -425,3 +425,132 @@ export async function getEventsForSelect(): Promise<
     return { success: false, error: "Failed to fetch events" };
   }
 }
+
+// ============================================
+// PUBLIC ACTIONS (No authentication required)
+// ============================================
+
+export type PublicEvent = {
+  id: string;
+  name: string;
+  description: string | null;
+  location: string;
+  banner: string | null;
+  startDate: Date;
+  endDate: Date;
+  registrationDeadline: Date;
+  preRegistrationFee: number;
+  preRegistrationStart: Date;
+  preRegistrationEnd: Date;
+  onsiteRegistrationFee: number;
+  cookRegistrationFee: number;
+  status: EventStatus;
+};
+
+// GET ALL PUBLIC - List upcoming and ongoing events (no auth required)
+export async function getPublicEvents(params: {
+  page?: number;
+  pageSize?: number;
+  search?: string;
+  status?: EventStatus;
+} = {}): Promise<PaginatedActionResponse<PublicEvent>> {
+  const page = params.page ?? 1;
+  const pageSize = params.pageSize ?? DEFAULT_PAGE_SIZE;
+
+  try {
+    // Only show UPCOMING and ONGOING events to the public
+    const statusFilter = params.status
+      ? { status: params.status }
+      : { status: { in: ["UPCOMING", "ONGOING"] as EventStatus[] } };
+
+    const where = {
+      ...statusFilter,
+      ...(params.search && {
+        OR: [
+          { name: { contains: params.search, mode: "insensitive" as const } },
+          { location: { contains: params.search, mode: "insensitive" as const } },
+        ],
+      }),
+    };
+
+    const [events, total] = await Promise.all([
+      prisma.event.findMany({
+        where,
+        select: {
+          id: true,
+          name: true,
+          description: true,
+          location: true,
+          banner: true,
+          startDate: true,
+          endDate: true,
+          registrationDeadline: true,
+          preRegistrationFee: true,
+          preRegistrationStart: true,
+          preRegistrationEnd: true,
+          onsiteRegistrationFee: true,
+          cookRegistrationFee: true,
+          status: true,
+        },
+        orderBy: { startDate: "asc" },
+        skip: getSkip(page, pageSize),
+        take: pageSize,
+      }),
+      prisma.event.count({ where }),
+    ]);
+
+    return {
+      success: true,
+      data: {
+        items: events,
+        total,
+        page,
+        pageSize,
+        totalPages: Math.ceil(total / pageSize),
+      },
+    };
+  } catch (error) {
+    console.error("Failed to fetch public events:", error);
+    return { success: false, error: "Failed to fetch events" };
+  }
+}
+
+// GET PUBLIC BY ID - Single event detail (no auth required)
+export async function getPublicEventById(
+  id: string
+): Promise<ActionResponse<PublicEvent>> {
+  try {
+    const event = await prisma.event.findUnique({
+      where: {
+        id,
+        // Only allow viewing UPCOMING and ONGOING events publicly
+        status: { in: ["UPCOMING", "ONGOING"] },
+      },
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        location: true,
+        banner: true,
+        startDate: true,
+        endDate: true,
+        registrationDeadline: true,
+        preRegistrationFee: true,
+        preRegistrationStart: true,
+        preRegistrationEnd: true,
+        onsiteRegistrationFee: true,
+        cookRegistrationFee: true,
+        status: true,
+      },
+    });
+
+    if (!event) {
+      return { success: false, error: "Event not found" };
+    }
+
+    return { success: true, data: event };
+  } catch (error) {
+    console.error("Failed to fetch public event:", error);
+    return { success: false, error: "Failed to fetch event" };
+  }
+}

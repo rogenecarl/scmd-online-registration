@@ -10,9 +10,10 @@ import { getRoleRedirect } from "@/config/auth";
 import Image from "next/image";
 
 const navLinks = [
+  { href: "/", label: "Home" },
+  { href: "/events", label: "Events" },
   { href: "#features", label: "Features" },
   { href: "#how-it-works", label: "How It Works" },
-  { href: "#testimonials", label: "Testimonials" },
 ];
 
 export function Navbar() {
@@ -159,15 +160,25 @@ export function Navbar() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex md:items-center md:gap-8">
-            {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-              >
-                {link.label}
-              </a>
-            ))}
+            {navLinks.map((link) =>
+              link.href.startsWith("#") ? (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  {link.label}
+                </a>
+              ) : (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  {link.label}
+                </Link>
+              )
+            )}
           </div>
 
           {/* Desktop CTA - Auth Aware */}
@@ -198,16 +209,27 @@ export function Navbar() {
           )}
         >
           <div className="flex flex-col gap-2 pt-2">
-            {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className="rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                {link.label}
-              </a>
-            ))}
+            {navLinks.map((link) =>
+              link.href.startsWith("#") ? (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className="rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  {link.label}
+                </a>
+              ) : (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  {link.label}
+                </Link>
+              )
+            )}
             <div className="mt-2 flex flex-col gap-2 border-t border-border pt-4">
               {renderMobileAuthButtons()}
             </div>
