@@ -30,11 +30,12 @@ export interface NavSection {
 interface SidebarProps {
   sections: NavSection[];
   brandName?: string;
+  className?: string;
 }
 
 const emptySubscribe = () => () => {};
 
-export function Sidebar({ sections, brandName = "StarterKit" }: SidebarProps) {
+export function Sidebar({ sections, brandName = "StarterKit", className }: SidebarProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const isMounted = useSyncExternalStore(emptySubscribe, () => true, () => false);
   const pathname = usePathname();
@@ -47,7 +48,8 @@ export function Sidebar({ sections, brandName = "StarterKit" }: SidebarProps) {
     <aside
       className={cn(
         "sticky top-0 h-screen flex flex-col border-r border-border bg-card/50 backdrop-blur-sm transition-all duration-300",
-        collapsed ? "w-16" : "w-64"
+        collapsed ? "w-16" : "w-64",
+        className
       )}
     >
       {/* Header */}

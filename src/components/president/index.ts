@@ -1,4 +1,5 @@
 export * from "./president-nav";
+export * from "./president-bottom-nav";
 export * from "./dashboard";
 export * from "./events";
 export * from "./registration";

@@ -1,5 +1,9 @@
-import { Sidebar, Header } from "@/components/dashboard";
-import { adminNavSections } from "@/components/admin";
+import { ResponsiveLayout } from "@/components/dashboard";
+import {
+  adminNavSections,
+  adminBottomNavItems,
+  adminMoreNavItems,
+} from "@/components/admin";
 import { requireRole } from "@/lib/auth-server";
 
 export default async function AdminLayout({
@@ -11,14 +15,15 @@ export default async function AdminLayout({
   await requireRole("ADMIN");
 
   return (
-    <div className="flex min-h-screen">
-      <Sidebar sections={adminNavSections} brandName="SCMD Admin" />
-      <div className="flex-1 flex flex-col">
-        <Header title="Admin Dashboard" description="Manage events, churches, and registrations" />
-        <main className="flex-1 overflow-y-auto bg-muted/30 p-6">
-          {children}
-        </main>
-      </div>
-    </div>
+    <ResponsiveLayout
+      sections={adminNavSections}
+      brandName="SCMD Admin"
+      headerTitle="Admin Dashboard"
+      headerDescription="Manage events, churches, and registrations"
+      bottomNavItems={adminBottomNavItems}
+      bottomNavMoreItems={adminMoreNavItems}
+    >
+      {children}
+    </ResponsiveLayout>
   );
 }

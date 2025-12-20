@@ -19,8 +19,11 @@ export default function CompleteProfilePage() {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-[60vh] items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+      <div className="flex min-h-[50vh] md:min-h-[60vh] items-center justify-center p-4">
+        <div className="flex flex-col items-center gap-3">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          <p className="text-sm text-muted-foreground">Loading...</p>
+        </div>
       </div>
     );
   }
@@ -28,14 +31,17 @@ export default function CompleteProfilePage() {
   // If profile is complete, show loading while redirecting
   if (profileStatus?.isComplete) {
     return (
-      <div className="flex min-h-[60vh] items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+      <div className="flex min-h-[50vh] md:min-h-[60vh] items-center justify-center p-4">
+        <div className="flex flex-col items-center gap-3">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          <p className="text-sm text-muted-foreground">Redirecting...</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="flex min-h-[60vh] items-center justify-center p-4">
+    <div className="flex min-h-[50vh] md:min-h-[60vh] items-center justify-center px-4 py-6 md:p-4">
       <CompleteProfileForm />
     </div>
   );

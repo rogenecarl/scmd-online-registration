@@ -1,5 +1,9 @@
 export { Sidebar, type NavItem, type NavSection } from "./sidebar";
 export { Header } from "./header";
+export { MobileHeader } from "./mobile-header";
+export { MobileSidebar } from "./mobile-sidebar";
+export { BottomNav, type BottomNavItem } from "./bottom-nav";
+export { ResponsiveLayout } from "./responsive-layout";
 export { StatsCard, StatsGrid } from "./stats-card";
 export { DataTable } from "./data-table";
 export { Card, CardHeader, CardTitle, CardDescription, CardContent } from "./card";

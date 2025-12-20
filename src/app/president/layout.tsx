@@ -1,5 +1,9 @@
-import { Sidebar, Header } from "@/components/dashboard";
-import { presidentNavSections } from "@/components/president";
+import { ResponsiveLayout } from "@/components/dashboard";
+import {
+  presidentNavSections,
+  presidentBottomNavItems,
+  presidentMoreNavItems,
+} from "@/components/president";
 import { requireRole } from "@/lib/auth-server";
 
 export default async function PresidentLayout({
@@ -11,14 +15,15 @@ export default async function PresidentLayout({
   await requireRole("PRESIDENT");
 
   return (
-    <div className="flex min-h-screen">
-      <Sidebar sections={presidentNavSections} brandName="SCMD Events" />
-      <div className="flex-1 flex flex-col">
-        <Header title="Church Dashboard" description="Manage your church registrations" />
-        <main className="flex-1 overflow-y-auto bg-muted/30 p-6">
-          {children}
-        </main>
-      </div>
-    </div>
+    <ResponsiveLayout
+      sections={presidentNavSections}
+      brandName="SCMD Events"
+      headerTitle="Church Dashboard"
+      headerDescription="Manage your church registrations"
+      bottomNavItems={presidentBottomNavItems}
+      bottomNavMoreItems={presidentMoreNavItems}
+    >
+      {children}
+    </ResponsiveLayout>
   );
 }
