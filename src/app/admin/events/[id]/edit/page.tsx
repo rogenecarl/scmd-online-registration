@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { PageHeader } from "@/components/shared/page-header";
+import { PageHeader } from "@/components/shared";
 import { Button } from "@/components/ui/button";
 import { EventForm } from "@/components/admin/events";
 import { getEventById } from "@/actions/events";
@@ -23,7 +23,7 @@ export default async function EditEventPage({ params }: Props) {
   return (
     <div>
       <PageHeader title="Edit Event" description={`Editing: ${event.name}`}>
-        <Button variant="outline" asChild>
+        <Button variant="outline" asChild className="touch-target">
           <Link href={`/admin/events/${id}`}>
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back

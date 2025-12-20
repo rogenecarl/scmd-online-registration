@@ -13,6 +13,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { FormActions } from "@/components/shared";
 import { useCreateDivision, useUpdateDivision } from "@/hooks/use-divisions";
 import { divisionSchema, type DivisionInput } from "@/schemas";
 import { Loader2 } from "lucide-react";
@@ -75,20 +76,21 @@ export function DivisionForm({ mode, initialData }: DivisionFormProps) {
           )}
         />
 
-        <div className="flex gap-2">
-          <Button type="submit" disabled={isPending}>
-            {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            {mode === "create" ? "Create Division" : "Save Changes"}
-          </Button>
+        <FormActions>
           <Button
             type="button"
             variant="outline"
             onClick={() => router.back()}
             disabled={isPending}
+            className="touch-target"
           >
             Cancel
           </Button>
-        </div>
+          <Button type="submit" disabled={isPending} className="touch-target">
+            {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            {mode === "create" ? "Create Division" : "Save Changes"}
+          </Button>
+        </FormActions>
       </form>
     </Form>
   );

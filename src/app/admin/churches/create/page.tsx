@@ -1,4 +1,4 @@
-import { PageHeader } from "@/components/shared/page-header";
+import { PageHeader, FormCard } from "@/components/shared";
 import { ChurchForm } from "@/components/admin/churches";
 
 export default function CreateChurchPage() {
@@ -9,9 +9,9 @@ export default function CreateChurchPage() {
         description="Add a new church to a division"
       />
 
-      <div className="rounded-xl border border-border bg-card p-6">
+      <FormCard>
         <ChurchForm mode="create" />
-      </div>
+      </FormCard>
     </div>
   );
 }

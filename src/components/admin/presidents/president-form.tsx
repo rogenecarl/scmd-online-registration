@@ -21,6 +21,7 @@ import {
   FormMessage,
   FormDescription,
 } from "@/components/ui/form";
+import { FormActions } from "@/components/shared";
 import {
   useSeedPresident,
   useUpdatePresident,
@@ -234,20 +235,21 @@ export function PresidentForm({ mode, initialData }: PresidentFormProps) {
           )}
         />
 
-        <div className="flex gap-2">
-          <Button type="submit" disabled={isPending || noChurchesAvailable}>
-            {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            {mode === "create" ? "Create President" : "Save Changes"}
-          </Button>
+        <FormActions>
           <Button
             type="button"
             variant="outline"
             onClick={() => router.back()}
             disabled={isPending}
+            className="touch-target"
           >
             Cancel
           </Button>
-        </div>
+          <Button type="submit" disabled={isPending || noChurchesAvailable} className="touch-target">
+            {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            {mode === "create" ? "Create President" : "Save Changes"}
+          </Button>
+        </FormActions>
       </form>
     </Form>
   );

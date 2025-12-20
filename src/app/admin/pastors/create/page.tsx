@@ -1,4 +1,4 @@
-import { PageHeader } from "@/components/shared/page-header";
+import { PageHeader, FormCard } from "@/components/shared";
 import { PastorForm } from "@/components/admin/pastors";
 
 export default function CreatePastorPage() {
@@ -9,9 +9,9 @@ export default function CreatePastorPage() {
         description="Assign a pastor to a church"
       />
 
-      <div className="rounded-xl border border-border bg-card p-6">
+      <FormCard>
         <PastorForm mode="create" />
-      </div>
+      </FormCard>
     </div>
   );
 }

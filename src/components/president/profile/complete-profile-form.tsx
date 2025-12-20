@@ -99,17 +99,17 @@ export function CompleteProfileForm() {
 
   return (
     <Card className="w-full max-w-lg mx-auto">
-      <CardHeader className="text-center">
-        <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-          <Church className="h-6 w-6 text-primary" />
+      <CardHeader className="text-center p-4 md:p-6">
+        <div className="mx-auto mb-3 md:mb-4 flex h-10 w-10 md:h-12 md:w-12 items-center justify-center rounded-full bg-primary/10">
+          <Church className="h-5 w-5 md:h-6 md:w-6 text-primary" />
         </div>
-        <CardTitle className="text-2xl">Complete Your Profile</CardTitle>
-        <CardDescription>
+        <CardTitle className="text-xl md:text-2xl">Complete Your Profile</CardTitle>
+        <CardDescription className="text-xs md:text-sm">
           Select your division and church to continue. This will associate you with
           your church for event registrations.
         </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="p-4 md:p-6 pt-0 md:pt-0">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             {/* Division Selection */}
@@ -227,7 +227,7 @@ export function CompleteProfileForm() {
 
             <Button
               type="submit"
-              className="w-full"
+              className="w-full touch-target"
               disabled={completeProfileMutation.isPending}
             >
               {completeProfileMutation.isPending && (

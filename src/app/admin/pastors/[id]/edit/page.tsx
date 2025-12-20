@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { PageHeader } from "@/components/shared/page-header";
+import { PageHeader, FormCard } from "@/components/shared";
 import { PastorForm } from "@/components/admin/pastors";
 import { getPastorById } from "@/actions/pastors";
 
@@ -22,7 +22,7 @@ export default async function EditPastorPage({ params }: Props) {
         description={`Editing ${result.data.name}`}
       />
 
-      <div className="rounded-xl border border-border bg-card p-6">
+      <FormCard>
         <PastorForm
           mode="edit"
           initialData={{
@@ -31,7 +31,7 @@ export default async function EditPastorPage({ params }: Props) {
             churchId: result.data.churchId,
           }}
         />
-      </div>
+      </FormCard>
     </div>
   );
 }

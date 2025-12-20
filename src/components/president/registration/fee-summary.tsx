@@ -34,14 +34,14 @@ export function FeeSummary({
   const grandTotal = delegateTotal + cookTotal;
 
   return (
-    <Card className={cn("sticky top-6", className)}>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Calculator className="h-5 w-5" />
+    <Card className={cn("lg:sticky lg:top-6", className)}>
+      <CardHeader className="p-4 md:p-6">
+        <CardTitle className="flex items-center gap-2 text-base md:text-lg">
+          <Calculator className="h-4 w-4 md:h-5 md:w-5" />
           Fee Summary
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-3 md:space-y-4 p-4 md:p-6 pt-0 md:pt-0">
         {/* Fee Type Badge */}
         <div className="rounded-lg bg-primary/10 p-3 text-center">
           <p className="text-xs font-medium text-muted-foreground">Current Rate</p>

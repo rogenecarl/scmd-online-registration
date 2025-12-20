@@ -38,9 +38,9 @@ export function PersonForm({
   const label = type === "delegates" ? "Delegate" : "Cook";
 
   return (
-    <div className="rounded-lg border border-border bg-card p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h4 className="font-medium">
+    <div className="rounded-lg border border-border bg-card p-3 md:p-4">
+      <div className="mb-3 md:mb-4 flex items-center justify-between">
+        <h4 className="font-medium text-sm md:text-base">
           {label} #{index + 1}
         </h4>
         {canRemove && (
@@ -49,7 +49,7 @@ export function PersonForm({
             variant="ghost"
             size="sm"
             onClick={onRemove}
-            className="h-8 w-8 p-0 text-muted-foreground hover:text-destructive"
+            className="h-10 w-10 p-0 text-muted-foreground hover:text-destructive touch-target"
           >
             <Trash2 className="h-4 w-4" />
             <span className="sr-only">Remove {label}</span>
@@ -57,7 +57,7 @@ export function PersonForm({
         )}
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-3 md:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         <FormField
           control={control}
           name={`${type}.${index}.fullName`}

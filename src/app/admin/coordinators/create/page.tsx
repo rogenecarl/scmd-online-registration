@@ -1,4 +1,4 @@
-import { PageHeader } from "@/components/shared/page-header";
+import { PageHeader, FormCard } from "@/components/shared";
 import { CoordinatorForm } from "@/components/admin/coordinators";
 
 export default function CreateCoordinatorPage() {
@@ -9,9 +9,9 @@ export default function CreateCoordinatorPage() {
         description="Assign a coordinator to a division"
       />
 
-      <div className="rounded-xl border border-border bg-card p-6">
+      <FormCard>
         <CoordinatorForm mode="create" />
-      </div>
+      </FormCard>
     </div>
   );
 }

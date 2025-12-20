@@ -21,6 +21,7 @@ import {
   FormMessage,
   FormDescription,
 } from "@/components/ui/form";
+import { FormActions } from "@/components/shared";
 import {
   useCreateCoordinator,
   useUpdateCoordinator,
@@ -147,20 +148,21 @@ export function CoordinatorForm({ mode, initialData }: CoordinatorFormProps) {
           )}
         />
 
-        <div className="flex gap-2">
-          <Button type="submit" disabled={isPending || noDivisionsAvailable}>
-            {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            {mode === "create" ? "Create Coordinator" : "Save Changes"}
-          </Button>
+        <FormActions>
           <Button
             type="button"
             variant="outline"
             onClick={() => router.back()}
             disabled={isPending}
+            className="touch-target"
           >
             Cancel
           </Button>
-        </div>
+          <Button type="submit" disabled={isPending || noDivisionsAvailable} className="touch-target">
+            {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            {mode === "create" ? "Create Coordinator" : "Save Changes"}
+          </Button>
+        </FormActions>
       </form>
     </Form>
   );

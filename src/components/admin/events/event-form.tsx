@@ -29,6 +29,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { FormActions } from "@/components/shared";
 import { useCreateEvent, useUpdateEvent } from "@/hooks/use-events";
 import { createEventSchema, type EventFormInput } from "@/schemas";
 import { ImageUpload } from "@/components/shared/image-upload";
@@ -121,16 +122,16 @@ export function EventForm({ mode, initialData }: EventFormProps) {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         {/* Basic Information */}
         <Card>
-          <CardHeader>
+          <CardHeader className="p-4 md:p-6">
             <div className="flex items-center gap-2">
-              <Info className="h-5 w-5 text-muted-foreground" />
-              <CardTitle>Basic Information</CardTitle>
+              <Info className="h-4 w-4 md:h-5 md:w-5 text-muted-foreground" />
+              <CardTitle className="text-base md:text-lg">Basic Information</CardTitle>
             </div>
-            <CardDescription>
+            <CardDescription className="text-xs md:text-sm">
               Enter the event name, description, and location
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-4 p-4 md:p-6 pt-0 md:pt-0">
             <div className="grid gap-4 md:grid-cols-2">
               <FormField
                 control={form.control}
@@ -241,16 +242,16 @@ export function EventForm({ mode, initialData }: EventFormProps) {
 
         {/* Event Dates */}
         <Card>
-          <CardHeader>
+          <CardHeader className="p-4 md:p-6">
             <div className="flex items-center gap-2">
-              <Calendar className="h-5 w-5 text-muted-foreground" />
-              <CardTitle>Event Dates</CardTitle>
+              <Calendar className="h-4 w-4 md:h-5 md:w-5 text-muted-foreground" />
+              <CardTitle className="text-base md:text-lg">Event Dates</CardTitle>
             </div>
-            <CardDescription>
+            <CardDescription className="text-xs md:text-sm">
               Set the event dates and registration deadline
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-4 p-4 md:p-6 pt-0 md:pt-0">
             <div className="grid gap-4 md:grid-cols-2">
               <FormField
                 control={form.control}
@@ -326,16 +327,16 @@ export function EventForm({ mode, initialData }: EventFormProps) {
 
         {/* Pre-Registration Period */}
         <Card>
-          <CardHeader>
+          <CardHeader className="p-4 md:p-6">
             <div className="flex items-center gap-2">
-              <Calendar className="h-5 w-5 text-muted-foreground" />
-              <CardTitle>Pre-Registration Period</CardTitle>
+              <Calendar className="h-4 w-4 md:h-5 md:w-5 text-muted-foreground" />
+              <CardTitle className="text-base md:text-lg">Pre-Registration Period</CardTitle>
             </div>
-            <CardDescription>
+            <CardDescription className="text-xs md:text-sm">
               Define the early bird registration period with discounted fees
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-4 p-4 md:p-6 pt-0 md:pt-0">
             <div className="grid gap-4 md:grid-cols-2">
               <FormField
                 control={form.control}
@@ -386,17 +387,17 @@ export function EventForm({ mode, initialData }: EventFormProps) {
 
         {/* Registration Fees */}
         <Card>
-          <CardHeader>
+          <CardHeader className="p-4 md:p-6">
             <div className="flex items-center gap-2">
-              <DollarSign className="h-5 w-5 text-muted-foreground" />
-              <CardTitle>Registration Fees</CardTitle>
+              <DollarSign className="h-4 w-4 md:h-5 md:w-5 text-muted-foreground" />
+              <CardTitle className="text-base md:text-lg">Registration Fees</CardTitle>
             </div>
-            <CardDescription>
+            <CardDescription className="text-xs md:text-sm">
               Set the registration fees in Philippine Peso (whole numbers only)
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid gap-4 md:grid-cols-3">
+          <CardContent className="space-y-4 p-4 md:p-6 pt-0 md:pt-0">
+            <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
               <FormField
                 control={form.control}
                 name="preRegistrationFee"
@@ -500,20 +501,21 @@ export function EventForm({ mode, initialData }: EventFormProps) {
         </Card>
 
         {/* Form Actions */}
-        <div className="flex gap-2">
-          <Button type="submit" disabled={isPending}>
-            {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            {mode === "create" ? "Create Event" : "Save Changes"}
-          </Button>
+        <FormActions>
           <Button
             type="button"
             variant="outline"
             onClick={() => router.back()}
             disabled={isPending}
+            className="touch-target"
           >
             Cancel
           </Button>
-        </div>
+          <Button type="submit" disabled={isPending} className="touch-target">
+            {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            {mode === "create" ? "Create Event" : "Save Changes"}
+          </Button>
+        </FormActions>
       </form>
     </Form>
   );

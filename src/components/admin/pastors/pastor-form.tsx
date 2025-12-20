@@ -21,6 +21,7 @@ import {
   FormMessage,
   FormDescription,
 } from "@/components/ui/form";
+import { FormActions } from "@/components/shared";
 import { useCreatePastor, useUpdatePastor } from "@/hooks/use-pastors";
 import { useChurchesWithoutPastor, useChurches } from "@/hooks/use-churches";
 import { pastorSchema, type PastorInput } from "@/schemas";
@@ -141,20 +142,21 @@ export function PastorForm({ mode, initialData }: PastorFormProps) {
           )}
         />
 
-        <div className="flex gap-2">
-          <Button type="submit" disabled={isPending || noChurchesAvailable}>
-            {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            {mode === "create" ? "Create Pastor" : "Save Changes"}
-          </Button>
+        <FormActions>
           <Button
             type="button"
             variant="outline"
             onClick={() => router.back()}
             disabled={isPending}
+            className="touch-target"
           >
             Cancel
           </Button>
-        </div>
+          <Button type="submit" disabled={isPending || noChurchesAvailable} className="touch-target">
+            {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            {mode === "create" ? "Create Pastor" : "Save Changes"}
+          </Button>
+        </FormActions>
       </form>
     </Form>
   );

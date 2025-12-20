@@ -1,4 +1,4 @@
-import { PageHeader } from "@/components/shared/page-header";
+import { PageHeader, FormCard } from "@/components/shared";
 import { DivisionForm } from "@/components/admin/divisions";
 
 export default function CreateDivisionPage() {
@@ -9,9 +9,9 @@ export default function CreateDivisionPage() {
         description="Add a new organizational division"
       />
 
-      <div className="rounded-xl border border-border bg-card p-6">
+      <FormCard>
         <DivisionForm mode="create" />
-      </div>
+      </FormCard>
     </div>
   );
 }

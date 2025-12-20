@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { PageHeader } from "@/components/shared/page-header";
+import { PageHeader, FormCard } from "@/components/shared";
 import { CoordinatorForm } from "@/components/admin/coordinators";
 import { getCoordinatorById } from "@/actions/coordinators";
 
@@ -22,7 +22,7 @@ export default async function EditCoordinatorPage({ params }: Props) {
         description={`Editing ${result.data.name}`}
       />
 
-      <div className="rounded-xl border border-border bg-card p-6">
+      <FormCard>
         <CoordinatorForm
           mode="edit"
           initialData={{
@@ -31,7 +31,7 @@ export default async function EditCoordinatorPage({ params }: Props) {
             divisionId: result.data.divisionId,
           }}
         />
-      </div>
+      </FormCard>
     </div>
   );
 }

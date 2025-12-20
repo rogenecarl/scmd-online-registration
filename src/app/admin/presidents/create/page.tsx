@@ -1,4 +1,4 @@
-import { PageHeader } from "@/components/shared/page-header";
+import { PageHeader, FormCard } from "@/components/shared";
 import { PresidentForm } from "@/components/admin/presidents";
 
 export default function CreatePresidentPage() {
@@ -9,9 +9,9 @@ export default function CreatePresidentPage() {
         description="Create a new church president account"
       />
 
-      <div className="rounded-xl border border-border bg-card p-6">
+      <FormCard>
         <PresidentForm mode="create" />
-      </div>
+      </FormCard>
     </div>
   );
 }

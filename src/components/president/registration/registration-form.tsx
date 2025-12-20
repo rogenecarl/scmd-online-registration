@@ -12,6 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { FormActions } from "@/components/shared";
 import {
   useCreateRegistration,
   useUpdateRegistration,
@@ -126,14 +127,14 @@ export function RegistrationForm({ mode, event, initialData }: RegistrationFormP
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <div className="grid gap-8 lg:grid-cols-3">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 md:space-y-8">
+        <div className="grid gap-6 md:gap-8 lg:grid-cols-3">
           {/* Main Form */}
-          <div className="space-y-6 lg:col-span-2">
+          <div className="space-y-4 md:space-y-6 lg:col-span-2">
             {/* Event Info Alert */}
             <Alert>
               <AlertCircle className="h-4 w-4" />
-              <AlertDescription>
+              <AlertDescription className="text-xs md:text-sm">
                 You are registering for <strong>{event.name}</strong>.{" "}
                 {event.isPreRegistration
                   ? "Early bird rates apply."
@@ -143,14 +144,14 @@ export function RegistrationForm({ mode, event, initialData }: RegistrationFormP
 
             {/* Delegates Section */}
             <Card>
-              <CardHeader>
-                <div className="flex items-center justify-between">
+              <CardHeader className="p-4 md:p-6">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <div>
-                    <CardTitle className="flex items-center gap-2">
-                      <Users className="h-5 w-5" />
+                    <CardTitle className="flex items-center gap-2 text-base md:text-lg">
+                      <Users className="h-4 w-4 md:h-5 md:w-5" />
                       Delegates
                     </CardTitle>
-                    <CardDescription>
+                    <CardDescription className="text-xs md:text-sm">
                       Add the delegates from your church who will attend
                     </CardDescription>
                   </div>
@@ -160,13 +161,14 @@ export function RegistrationForm({ mode, event, initialData }: RegistrationFormP
                     size="sm"
                     onClick={() => appendDelegate({ ...emptyDelegate })}
                     disabled={delegateFields.length >= 100}
+                    className="touch-target w-full sm:w-auto"
                   >
                     <Plus className="mr-1 h-4 w-4" />
                     Add Delegate
                   </Button>
                 </div>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-4 p-4 md:p-6 pt-0 md:pt-0">
                 {delegateFields.length === 0 ? (
                   <div className="rounded-lg border border-dashed border-border p-8 text-center">
                     <Users className="mx-auto h-10 w-10 text-muted-foreground" />
@@ -206,14 +208,14 @@ export function RegistrationForm({ mode, event, initialData }: RegistrationFormP
 
             {/* Cooks Section */}
             <Card>
-              <CardHeader>
-                <div className="flex items-center justify-between">
+              <CardHeader className="p-4 md:p-6">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <div>
-                    <CardTitle className="flex items-center gap-2">
-                      <ChefHat className="h-5 w-5" />
+                    <CardTitle className="flex items-center gap-2 text-base md:text-lg">
+                      <ChefHat className="h-4 w-4 md:h-5 md:w-5" />
                       Cooks
                     </CardTitle>
-                    <CardDescription>
+                    <CardDescription className="text-xs md:text-sm">
                       Optionally add cooks who will prepare food for your delegation
                     </CardDescription>
                   </div>
@@ -223,13 +225,14 @@ export function RegistrationForm({ mode, event, initialData }: RegistrationFormP
                     size="sm"
                     onClick={() => appendCook({ ...emptyCook })}
                     disabled={cookFields.length >= 50}
+                    className="touch-target w-full sm:w-auto"
                   >
                     <Plus className="mr-1 h-4 w-4" />
                     Add Cook
                   </Button>
                 </div>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-4 p-4 md:p-6 pt-0 md:pt-0">
                 {cookFields.length === 0 ? (
                   <div className="rounded-lg border border-dashed border-border p-8 text-center">
                     <ChefHat className="mx-auto h-10 w-10 text-muted-foreground" />
@@ -260,16 +263,16 @@ export function RegistrationForm({ mode, event, initialData }: RegistrationFormP
 
             {/* Payment Receipt Section */}
             <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Receipt className="h-5 w-5" />
+              <CardHeader className="p-4 md:p-6">
+                <CardTitle className="flex items-center gap-2 text-base md:text-lg">
+                  <Receipt className="h-4 w-4 md:h-5 md:w-5" />
                   Payment Receipt
                 </CardTitle>
-                <CardDescription>
+                <CardDescription className="text-xs md:text-sm">
                   Upload a photo or screenshot of your payment receipt for verification
                 </CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="p-4 md:p-6 pt-0 md:pt-0">
                 <FormField
                   control={form.control}
                   name="receiptImage"
@@ -306,26 +309,27 @@ export function RegistrationForm({ mode, event, initialData }: RegistrationFormP
               feeType={event.feeType === "pre-registration" ? "Pre-Registration" : "On-Site"}
             />
 
-            {/* Submit Button */}
-            <div className="mt-6 space-y-4">
-              <Button
-                type="submit"
-                className="w-full"
-                size="lg"
-                disabled={isPending}
-              >
-                {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                {mode === "create" ? "Submit Registration" : "Update Registration"}
-              </Button>
-              <Button
-                type="button"
-                variant="outline"
-                className="w-full"
-                onClick={() => router.back()}
-                disabled={isPending}
-              >
-                Cancel
-              </Button>
+            {/* Submit Buttons */}
+            <div className="mt-4 md:mt-6">
+              <FormActions>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => router.back()}
+                  disabled={isPending}
+                  className="touch-target"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  disabled={isPending}
+                  className="touch-target"
+                >
+                  {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  {mode === "create" ? "Submit Registration" : "Update Registration"}
+                </Button>
+              </FormActions>
             </div>
           </div>
         </div>

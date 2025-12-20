@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { PageHeader } from "@/components/shared/page-header";
+import { PageHeader, FormCard } from "@/components/shared";
 import { DivisionForm } from "@/components/admin/divisions";
 import { getDivisionById } from "@/actions/divisions";
 
@@ -22,9 +22,9 @@ export default async function EditDivisionPage({ params }: Props) {
         description={`Editing ${result.data.name}`}
       />
 
-      <div className="rounded-xl border border-border bg-card p-6">
+      <FormCard>
         <DivisionForm mode="edit" initialData={{ id, name: result.data.name }} />
-      </div>
+      </FormCard>
     </div>
   );
 }

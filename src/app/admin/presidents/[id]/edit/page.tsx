@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { PageHeader } from "@/components/shared/page-header";
+import { PageHeader, FormCard } from "@/components/shared";
 import { PresidentForm } from "@/components/admin/presidents";
 import { getPresidentById } from "@/actions/presidents";
 
@@ -22,7 +22,7 @@ export default async function EditPresidentPage({ params }: Props) {
         description={`Editing ${result.data.name}`}
       />
 
-      <div className="rounded-xl border border-border bg-card p-6">
+      <FormCard>
         <PresidentForm
           mode="edit"
           initialData={{
@@ -32,7 +32,7 @@ export default async function EditPresidentPage({ params }: Props) {
             churchId: result.data.churchId,
           }}
         />
-      </div>
+      </FormCard>
     </div>
   );
 }
