@@ -68,12 +68,12 @@ export function Navbar() {
 
     return (
       <>
-        <Button variant="ghost" size="sm" asChild>
+        <Button size="sm" asChild>
           <Link href="/login">Sign In</Link>
         </Button>
-        <Button size="sm" asChild>
+        {/* <Button size="sm" asChild>
           <Link href="/register">Get Started</Link>
-        </Button>
+        </Button> */}
       </>
     );
   };
