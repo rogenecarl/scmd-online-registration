@@ -15,24 +15,32 @@ import {
 import { FormActions } from "@/components/shared";
 import {
   useCreateRegistration,
-  useUpdateRegistration,
+  useCreateBatch,
+  useUpdateBatch,
 } from "@/hooks/use-registrations";
 import {
   createRegistrationSchema,
+  createBatchSchema,
+  updateBatchSchema,
   type CreateRegistrationInput,
-  type UpdateRegistrationInput,
+  type CreateBatchInput,
+  type UpdateBatchInput,
 } from "@/schemas";
 import { PersonForm } from "./person-form";
 import { FeeSummary } from "./fee-summary";
 import { ImageUpload } from "@/components/shared/image-upload";
-import { Loader2, Plus, Users, ChefHat, AlertCircle, Receipt } from "lucide-react";
+import { Loader2, Plus, Users, ChefHat, AlertCircle, Receipt, Info } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import type { EventForRegistration, RegistrationWithDetails } from "@/actions/registrations";
+import type { EventForRegistration, BatchWithDetails } from "@/actions/registrations";
+
+// Form mode types
+type FormMode = "create" | "add-batch" | "edit-batch";
 
 interface RegistrationFormProps {
-  mode: "create" | "edit";
+  mode: FormMode;
   event: EventForRegistration;
-  initialData?: RegistrationWithDetails;
+  registrationId?: string; // Required for add-batch and edit-batch modes
+  batchData?: BatchWithDetails; // Required for edit-batch mode
 }
 
 const emptyDelegate = {
@@ -49,31 +57,66 @@ const emptyCook = {
   gender: "" as "MALE" | "FEMALE",
 };
 
-export function RegistrationForm({ mode, event, initialData }: RegistrationFormProps) {
-  const router = useRouter();
-  const createMutation = useCreateRegistration();
-  const updateMutation = useUpdateRegistration();
+// Combined form schema type
+type FormInput = CreateRegistrationInput | CreateBatchInput | UpdateBatchInput;
 
-  // Always use the create schema since it's a superset of update schema
-  // Type assertion needed due to Zod transform in delegate/cook age fields
-  const form = useForm<CreateRegistrationInput>({
-    resolver: zodResolver(createRegistrationSchema) as unknown as Resolver<CreateRegistrationInput>,
-    defaultValues: {
-      eventId: event.id,
-      delegates: initialData?.delegates.map((d) => ({
-        fullName: d.fullName,
-        nickname: d.nickname ?? "",
-        age: d.age,
-        gender: d.gender,
-      })) ?? [{ ...emptyDelegate }],
-      cooks: initialData?.cooks.map((c) => ({
-        fullName: c.fullName,
-        nickname: c.nickname ?? "",
-        age: c.age,
-        gender: c.gender,
-      })) ?? [],
-      receiptImage: initialData?.receiptImage ?? null,
-    },
+export function RegistrationForm({ mode, event, registrationId, batchData }: RegistrationFormProps) {
+  const router = useRouter();
+  const createRegistrationMutation = useCreateRegistration();
+  const createBatchMutation = useCreateBatch();
+  const updateBatchMutation = useUpdateBatch();
+
+  // Determine which schema to use based on mode
+  const getSchema = () => {
+    switch (mode) {
+      case "create":
+        return createRegistrationSchema;
+      case "add-batch":
+        return createBatchSchema;
+      case "edit-batch":
+        return updateBatchSchema;
+    }
+  };
+
+  // Get default values based on mode
+  const getDefaultValues = (): FormInput => {
+    switch (mode) {
+      case "create":
+        return {
+          eventId: event.id,
+          delegates: [{ ...emptyDelegate }],
+          cooks: [],
+          receiptImage: "",
+        };
+      case "add-batch":
+        return {
+          registrationId: registrationId!,
+          delegates: [{ ...emptyDelegate }],
+          cooks: [],
+          receiptImage: "",
+        };
+      case "edit-batch":
+        return {
+          delegates: batchData?.delegates.map((d) => ({
+            fullName: d.fullName,
+            nickname: d.nickname ?? "",
+            age: d.age,
+            gender: d.gender,
+          })) ?? [],
+          cooks: batchData?.cooks.map((c) => ({
+            fullName: c.fullName,
+            nickname: c.nickname ?? "",
+            age: c.age,
+            gender: c.gender,
+          })) ?? [],
+          receiptImage: batchData?.receiptImage ?? "",
+        };
+    }
+  };
+
+  const form = useForm<FormInput>({
+    resolver: zodResolver(getSchema()) as unknown as Resolver<FormInput>,
+    defaultValues: getDefaultValues(),
   });
 
   const {
@@ -94,29 +137,47 @@ export function RegistrationForm({ mode, event, initialData }: RegistrationFormP
     name: "cooks",
   });
 
-  const isPending = createMutation.isPending || updateMutation.isPending;
+  const isPending =
+    createRegistrationMutation.isPending ||
+    createBatchMutation.isPending ||
+    updateBatchMutation.isPending;
+
   const watchedDelegates = useWatch({ control: form.control, name: "delegates" });
   const watchedCooks = useWatch({ control: form.control, name: "cooks" });
 
-  const onSubmit = async (data: CreateRegistrationInput) => {
+  const onSubmit = async (data: FormInput) => {
     try {
-      if (mode === "create") {
-        const result = await createMutation.mutateAsync(data);
-        router.push(`/president/registrations/${result.id}`);
-      } else if (initialData) {
-        const updateData: UpdateRegistrationInput = {
-          delegates: data.delegates,
-          cooks: data.cooks,
-          receiptImage: data.receiptImage,
-        };
-        await updateMutation.mutateAsync({ id: initialData.id, input: updateData });
-        router.push(`/president/registrations/${initialData.id}`);
+      switch (mode) {
+        case "create": {
+          const result = await createRegistrationMutation.mutateAsync(data as CreateRegistrationInput);
+          router.push(`/president/registrations/${result.id}`);
+          break;
+        }
+        case "add-batch": {
+          const batchInput: CreateBatchInput = {
+            registrationId: registrationId!,
+            delegates: data.delegates,
+            cooks: data.cooks,
+            receiptImage: (data as CreateBatchInput).receiptImage,
+          };
+          await createBatchMutation.mutateAsync(batchInput);
+          router.push(`/president/registrations/${registrationId}`);
+          break;
+        }
+        case "edit-batch": {
+          await updateBatchMutation.mutateAsync({
+            batchId: batchData!.id,
+            input: data as UpdateBatchInput,
+          });
+          router.push(`/president/registrations/${registrationId}`);
+          break;
+        }
       }
     } catch (error) {
       const err = error as Error & { fieldErrors?: Record<string, string[]> };
       if (err.fieldErrors) {
         Object.entries(err.fieldErrors).forEach(([field, messages]) => {
-          form.setError(field as keyof CreateRegistrationInput, {
+          form.setError(field as keyof FormInput, {
             type: "server",
             message: messages[0],
           });
@@ -124,6 +185,35 @@ export function RegistrationForm({ mode, event, initialData }: RegistrationFormP
       }
     }
   };
+
+  // Form title and description based on mode
+  const getFormInfo = () => {
+    switch (mode) {
+      case "create":
+        return {
+          title: "Register for Event",
+          description: `You are registering for ${event.name}.`,
+          submitLabel: "Submit Registration",
+        };
+      case "add-batch":
+        return {
+          title: "Add More Delegates/Cooks",
+          description: `Adding to your existing registration for ${event.name}.`,
+          submitLabel: "Submit Batch",
+        };
+      case "edit-batch":
+        return {
+          title: `Edit Batch #${batchData?.batchNumber}`,
+          description: `Editing batch for ${event.name}.`,
+          submitLabel: "Update Batch",
+        };
+    }
+  };
+
+  const formInfo = getFormInfo();
+
+  // Determine minimum delegates required
+  const minDelegatesRequired = mode === "create" ? 1 : 0;
 
   return (
     <Form {...form}>
@@ -135,12 +225,24 @@ export function RegistrationForm({ mode, event, initialData }: RegistrationFormP
             <Alert>
               <AlertCircle className="h-4 w-4" />
               <AlertDescription className="text-xs md:text-sm">
-                You are registering for <strong>{event.name}</strong>.{" "}
+                {formInfo.description}{" "}
                 {event.isPreRegistration
                   ? "Early bird rates apply."
                   : "Standard rates apply."}
               </AlertDescription>
             </Alert>
+
+            {/* Info about existing registration */}
+            {mode === "add-batch" && event.totalApprovedDelegates > 0 && (
+              <Alert variant="default">
+                <Info className="h-4 w-4" />
+                <AlertDescription className="text-xs md:text-sm">
+                  You already have {event.totalApprovedDelegates} approved delegates
+                  {event.totalApprovedCooks > 0 && ` and ${event.totalApprovedCooks} approved cooks`}.
+                  This new batch will be reviewed separately.
+                </AlertDescription>
+              </Alert>
+            )}
 
             {/* Delegates Section */}
             <Card>
@@ -152,7 +254,9 @@ export function RegistrationForm({ mode, event, initialData }: RegistrationFormP
                       Delegates
                     </CardTitle>
                     <CardDescription className="text-xs md:text-sm">
-                      Add the delegates from your church who will attend
+                      {mode === "create"
+                        ? "Add the delegates from your church who will attend"
+                        : "Add delegates for this batch"}
                     </CardDescription>
                   </div>
                   <Button
@@ -173,7 +277,9 @@ export function RegistrationForm({ mode, event, initialData }: RegistrationFormP
                   <div className="rounded-lg border border-dashed border-border p-8 text-center">
                     <Users className="mx-auto h-10 w-10 text-muted-foreground" />
                     <p className="mt-2 text-sm text-muted-foreground">
-                      No delegates added yet. At least one delegate is required.
+                      {minDelegatesRequired > 0
+                        ? "No delegates added yet. At least one delegate is required."
+                        : "No delegates added yet."}
                     </p>
                     <Button
                       type="button"
@@ -191,16 +297,16 @@ export function RegistrationForm({ mode, event, initialData }: RegistrationFormP
                       key={field.id}
                       type="delegates"
                       index={index}
-                      control={form.control}
+                      control={form.control as never}
                       onRemove={() => removeDelegate(index)}
-                      canRemove={delegateFields.length > 1}
+                      canRemove={delegateFields.length > minDelegatesRequired}
                     />
                   ))
                 )}
                 {form.formState.errors.delegates && (
                   <p className="text-sm text-destructive">
-                    {form.formState.errors.delegates.message ||
-                      form.formState.errors.delegates.root?.message}
+                    {(form.formState.errors.delegates as { message?: string })?.message ||
+                      (form.formState.errors.delegates as { root?: { message?: string } })?.root?.message}
                   </p>
                 )}
               </CardContent>
@@ -246,7 +352,7 @@ export function RegistrationForm({ mode, event, initialData }: RegistrationFormP
                       key={field.id}
                       type="cooks"
                       index={index}
-                      control={form.control}
+                      control={form.control as never}
                       onRemove={() => removeCook(index)}
                       canRemove={true}
                     />
@@ -254,8 +360,8 @@ export function RegistrationForm({ mode, event, initialData }: RegistrationFormP
                 )}
                 {form.formState.errors.cooks && (
                   <p className="text-sm text-destructive">
-                    {form.formState.errors.cooks.message ||
-                      form.formState.errors.cooks.root?.message}
+                    {(form.formState.errors.cooks as { message?: string })?.message ||
+                      (form.formState.errors.cooks as { root?: { message?: string } })?.root?.message}
                   </p>
                 )}
               </CardContent>
@@ -267,24 +373,26 @@ export function RegistrationForm({ mode, event, initialData }: RegistrationFormP
                 <CardTitle className="flex items-center gap-2 text-base md:text-lg">
                   <Receipt className="h-4 w-4 md:h-5 md:w-5" />
                   Payment Receipt
+                  <span className="text-destructive">*</span>
                 </CardTitle>
                 <CardDescription className="text-xs md:text-sm">
-                  Upload a photo or screenshot of your payment receipt for verification
+                  Upload a photo or screenshot of your payment receipt for verification.
+                  <span className="font-medium text-destructive"> This is required.</span>
                 </CardDescription>
               </CardHeader>
               <CardContent className="p-4 md:p-6 pt-0 md:pt-0">
                 <FormField
-                  control={form.control}
+                  control={form.control as never}
                   name="receiptImage"
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
                         <ImageUpload
-                          value={field.value}
+                          value={field.value as string | null | undefined}
                           onChange={field.onChange}
                           folder="receipts"
                           aspectRatio="video"
-                          placeholder="Upload payment receipt"
+                          placeholder="Upload payment receipt (required)"
                           disabled={isPending}
                         />
                       </FormControl>
@@ -327,7 +435,7 @@ export function RegistrationForm({ mode, event, initialData }: RegistrationFormP
                   className="touch-target"
                 >
                   {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                  {mode === "create" ? "Submit Registration" : "Update Registration"}
+                  {formInfo.submitLabel}
                 </Button>
               </FormActions>
             </div>

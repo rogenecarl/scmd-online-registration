@@ -62,17 +62,6 @@ export function getEventColumns(
       ),
     },
     {
-      key: "registrationDeadline",
-      header: "Reg. Deadline",
-      mobilePriority: "secondary",
-      mobileLabel: "Deadline",
-      render: (event) => (
-        <span className="text-sm">
-          {format(new Date(event.registrationDeadline), "MMM d, yyyy")}
-        </span>
-      ),
-    },
-    {
       key: "status",
       header: "Status",
       className: "text-center",

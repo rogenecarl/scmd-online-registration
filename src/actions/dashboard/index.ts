@@ -25,30 +25,29 @@ export type PresidentDashboardData = {
   stats: {
     activeEvents: number;
     totalDelegates: number;
-    pendingRegistrations: number;
-    approvedRegistrations: number;
+    pendingBatches: number;
+    approvedBatches: number;
   };
   recentRegistrations: {
     id: string;
-    status: RegistrationStatus;
     createdAt: Date;
     event: {
       id: string;
       name: string;
     };
-    _count: {
-      delegates: number;
-      cooks: number;
-    };
+    totalDelegates: number;
+    totalCooks: number;
+    hasPendingBatch: boolean;
+    latestBatchStatus: RegistrationStatus | null;
   }[];
   upcomingEvents: {
     id: string;
     name: string;
     location: string;
     startDate: Date;
-    registrationDeadline: Date;
     hasRegistration: boolean;
-    registrationStatus: RegistrationStatus | null;
+    hasPendingBatch: boolean;
+    hasApprovedBatch: boolean;
   }[];
 };
 
@@ -59,14 +58,15 @@ export type AdminDashboardData = {
     totalPresidents: number;
     activeEvents: number;
     totalRegistrations: number;
-    pendingRegistrations: number;
-    approvedRegistrations: number;
-    rejectedRegistrations: number;
+    pendingBatches: number;
+    approvedBatches: number;
+    rejectedBatches: number;
     totalDelegates: number;
     totalCooks: number;
   };
-  recentRegistrations: {
+  recentBatches: {
     id: string;
+    batchNumber: number;
     status: RegistrationStatus;
     createdAt: Date;
     church: {
@@ -77,19 +77,15 @@ export type AdminDashboardData = {
       id: string;
       name: string;
     };
-    _count: {
-      delegates: number;
-      cooks: number;
-    };
+    delegateCount: number;
+    cookCount: number;
   }[];
   eventsSummary: {
     id: string;
     name: string;
     startDate: Date;
     status: EventStatus;
-    _count: {
-      registrations: number;
-    };
+    registrationCount: number;
   }[];
 };
 
@@ -144,49 +140,53 @@ export async function getPresidentDashboard(): Promise<
     const [
       activeEventsCount,
       delegatesCount,
-      pendingCount,
-      approvedCount,
+      pendingBatchesCount,
+      approvedBatchesCount,
     ] = await Promise.all([
       // Active events (UPCOMING or ONGOING with registration still open)
       prisma.event.count({
         where: {
           status: { in: ["UPCOMING", "ONGOING"] },
-          registrationDeadline: { gte: now },
+          startDate: { gt: now },
         },
       }),
-      // Total delegates across all registrations for this church
+      // Total delegates across all batches for this church
       churchId
         ? prisma.delegate.count({
-            where: { registration: { churchId } },
+            where: { batch: { registration: { churchId } } },
           })
         : 0,
-      // Pending registrations for this church
+      // Pending batches for this church
       churchId
-        ? prisma.registration.count({
-            where: { churchId, status: "PENDING" },
+        ? prisma.registrationBatch.count({
+            where: { registration: { churchId }, status: "PENDING" },
           })
         : 0,
-      // Approved registrations for this church
+      // Approved batches for this church
       churchId
-        ? prisma.registration.count({
-            where: { churchId, status: "APPROVED" },
+        ? prisma.registrationBatch.count({
+            where: { registration: { churchId }, status: "APPROVED" },
           })
         : 0,
     ]);
 
-    // Get recent registrations
+    // Get recent registrations with batch info
     const recentRegistrations = churchId
       ? await prisma.registration.findMany({
           where: { churchId },
           select: {
             id: true,
-            status: true,
             createdAt: true,
             event: {
               select: { id: true, name: true },
             },
-            _count: {
-              select: { delegates: true, cooks: true },
+            batches: {
+              select: {
+                status: true,
+                createdAt: true,
+                _count: { select: { delegates: true, cooks: true } },
+              },
+              orderBy: { createdAt: "desc" },
             },
           },
           orderBy: { createdAt: "desc" },
@@ -194,22 +194,52 @@ export async function getPresidentDashboard(): Promise<
         })
       : [];
 
+    // Transform registrations to include computed fields
+    const formattedRecentRegistrations = recentRegistrations.map((reg) => {
+      let totalDelegates = 0;
+      let totalCooks = 0;
+      let hasPendingBatch = false;
+
+      for (const batch of reg.batches) {
+        totalDelegates += batch._count.delegates;
+        totalCooks += batch._count.cooks;
+        if (batch.status === "PENDING") {
+          hasPendingBatch = true;
+        }
+      }
+
+      const latestBatchStatus = reg.batches[0]?.status ?? null;
+
+      return {
+        id: reg.id,
+        createdAt: reg.createdAt,
+        event: reg.event,
+        totalDelegates,
+        totalCooks,
+        hasPendingBatch,
+        latestBatchStatus,
+      };
+    });
+
     // Get upcoming events with registration status
     const upcomingEvents = await prisma.event.findMany({
       where: {
         status: { in: ["UPCOMING", "ONGOING"] },
-        registrationDeadline: { gte: now },
+        startDate: { gt: now },
       },
       select: {
         id: true,
         name: true,
         location: true,
         startDate: true,
-        registrationDeadline: true,
         registrations: churchId
           ? {
               where: { churchId },
-              select: { status: true },
+              select: {
+                batches: {
+                  select: { status: true },
+                },
+              },
             }
           : false,
       },
@@ -217,18 +247,29 @@ export async function getPresidentDashboard(): Promise<
       take: 5,
     });
 
-    const formattedUpcomingEvents = upcomingEvents.map((event) => ({
-      id: event.id,
-      name: event.name,
-      location: event.location,
-      startDate: event.startDate,
-      registrationDeadline: event.registrationDeadline,
-      hasRegistration: churchId && event.registrations ? event.registrations.length > 0 : false,
-      registrationStatus:
-        churchId && event.registrations && event.registrations.length > 0
-          ? event.registrations[0].status
-          : null,
-    }));
+    const formattedUpcomingEvents = upcomingEvents.map((event) => {
+      const registrations = (event as unknown as { registrations?: { batches: { status: string }[] }[] }).registrations;
+      const registration = churchId && registrations ? registrations[0] : null;
+      let hasPendingBatch = false;
+      let hasApprovedBatch = false;
+
+      if (registration) {
+        for (const batch of registration.batches) {
+          if (batch.status === "PENDING") hasPendingBatch = true;
+          if (batch.status === "APPROVED") hasApprovedBatch = true;
+        }
+      }
+
+      return {
+        id: event.id,
+        name: event.name,
+        location: event.location,
+        startDate: event.startDate,
+        hasRegistration: !!registration,
+        hasPendingBatch,
+        hasApprovedBatch,
+      };
+    });
 
     return {
       success: true,
@@ -237,10 +278,10 @@ export async function getPresidentDashboard(): Promise<
         stats: {
           activeEvents: activeEventsCount,
           totalDelegates: delegatesCount,
-          pendingRegistrations: pendingCount,
-          approvedRegistrations: approvedCount,
+          pendingBatches: pendingBatchesCount,
+          approvedBatches: approvedBatchesCount,
         },
-        recentRegistrations,
+        recentRegistrations: formattedRecentRegistrations,
         upcomingEvents: formattedUpcomingEvents,
       },
     };
@@ -267,9 +308,9 @@ export async function getAdminDashboard(): Promise<
       presidentsCount,
       activeEventsCount,
       totalRegistrations,
-      pendingRegistrations,
-      approvedRegistrations,
-      rejectedRegistrations,
+      pendingBatches,
+      approvedBatches,
+      rejectedBatches,
       totalDelegates,
       totalCooks,
     ] = await Promise.all([
@@ -280,32 +321,51 @@ export async function getAdminDashboard(): Promise<
         where: { status: { in: ["UPCOMING", "ONGOING"] } },
       }),
       prisma.registration.count(),
-      prisma.registration.count({ where: { status: "PENDING" } }),
-      prisma.registration.count({ where: { status: "APPROVED" } }),
-      prisma.registration.count({ where: { status: "REJECTED" } }),
+      prisma.registrationBatch.count({ where: { status: "PENDING" } }),
+      prisma.registrationBatch.count({ where: { status: "APPROVED" } }),
+      prisma.registrationBatch.count({ where: { status: "REJECTED" } }),
       prisma.delegate.count(),
       prisma.cook.count(),
     ]);
 
-    // Get recent registrations
-    const recentRegistrations = await prisma.registration.findMany({
+    // Get recent batches (for approval queue visibility)
+    const recentBatches = await prisma.registrationBatch.findMany({
       select: {
         id: true,
+        batchNumber: true,
         status: true,
         createdAt: true,
-        church: {
-          select: { id: true, name: true },
-        },
-        event: {
-          select: { id: true, name: true },
+        registration: {
+          select: {
+            church: {
+              select: { id: true, name: true },
+            },
+            event: {
+              select: { id: true, name: true },
+            },
+          },
         },
         _count: {
           select: { delegates: true, cooks: true },
         },
       },
-      orderBy: { createdAt: "desc" },
+      orderBy: [
+        { status: "asc" }, // PENDING first
+        { createdAt: "desc" },
+      ],
       take: 10,
     });
+
+    const formattedRecentBatches = recentBatches.map((batch) => ({
+      id: batch.id,
+      batchNumber: batch.batchNumber,
+      status: batch.status,
+      createdAt: batch.createdAt,
+      church: batch.registration.church,
+      event: batch.registration.event,
+      delegateCount: batch._count.delegates,
+      cookCount: batch._count.cooks,
+    }));
 
     // Get events summary
     const eventsSummary = await prisma.event.findMany({
@@ -322,6 +382,14 @@ export async function getAdminDashboard(): Promise<
       take: 5,
     });
 
+    const formattedEventsSummary = eventsSummary.map((event) => ({
+      id: event.id,
+      name: event.name,
+      startDate: event.startDate,
+      status: event.status,
+      registrationCount: event._count.registrations,
+    }));
+
     return {
       success: true,
       data: {
@@ -331,14 +399,14 @@ export async function getAdminDashboard(): Promise<
           totalPresidents: presidentsCount,
           activeEvents: activeEventsCount,
           totalRegistrations,
-          pendingRegistrations,
-          approvedRegistrations,
-          rejectedRegistrations,
+          pendingBatches,
+          approvedBatches,
+          rejectedBatches,
           totalDelegates,
           totalCooks,
         },
-        recentRegistrations,
-        eventsSummary,
+        recentBatches: formattedRecentBatches,
+        eventsSummary: formattedEventsSummary,
       },
     };
   } catch (error) {
@@ -360,13 +428,19 @@ export type ExportFilters = {
 };
 
 export type ExportRow = {
-  // Registration info
-  registrationId: string;
-  registrationStatus: string;
-  registrationDate: string;
+  // Batch info
+  batchId: string;
+  batchNumber: number;
+  batchStatus: string;
+  batchCreatedAt: string;
   reviewedAt: string | null;
   reviewedBy: string | null;
   rejectionRemarks: string | null;
+  // Fee info
+  totalFee: number;
+  delegateFeePerPerson: number;
+  cookFeePerPerson: number;
+  isPreRegistration: boolean;
   // Event info
   eventName: string;
   eventStartDate: string;
@@ -381,8 +455,7 @@ export type ExportRow = {
   personNickname: string | null;
   personGender: string;
   personAge: number;
-  // Fee info (only for registrations)
-  totalFee: number;
+  // Batch counts
   delegateCount: number;
   cookCount: number;
 };
@@ -390,7 +463,7 @@ export type ExportRow = {
 export type ExportData = {
   rows: ExportRow[];
   summary: {
-    totalRegistrations: number;
+    totalBatches: number;
     totalDelegates: number;
     totalCooks: number;
     totalFees: number;
@@ -407,7 +480,7 @@ export type ExportData = {
 
 /**
  * Get registration data for export
- * Returns detailed data including delegates and cooks
+ * Returns detailed data including delegates and cooks from batches
  */
 export async function exportRegistrations(
   filters: ExportFilters
@@ -417,14 +490,16 @@ export async function exportRegistrations(
   try {
     // Build where clause based on filters
     const where: {
-      eventId?: string;
+      registration?: {
+        eventId?: string;
+        church?: { divisionId?: string };
+      };
       status?: RegistrationStatus;
-      church?: { divisionId?: string };
       createdAt?: { gte?: Date; lte?: Date };
     } = {};
 
     if (filters.eventId) {
-      where.eventId = filters.eventId;
+      where.registration = { ...where.registration, eventId: filters.eventId };
     }
 
     if (filters.status) {
@@ -432,7 +507,10 @@ export async function exportRegistrations(
     }
 
     if (filters.divisionId) {
-      where.church = { divisionId: filters.divisionId };
+      where.registration = {
+        ...where.registration,
+        church: { divisionId: filters.divisionId },
+      };
     }
 
     if (filters.dateFrom || filters.dateTo) {
@@ -445,34 +523,38 @@ export async function exportRegistrations(
       }
     }
 
-    // Fetch registrations with all related data
-    const registrations = await prisma.registration.findMany({
+    // Fetch batches with all related data
+    const batches = await prisma.registrationBatch.findMany({
       where,
       select: {
         id: true,
+        batchNumber: true,
         status: true,
         remarks: true,
         createdAt: true,
         reviewedAt: true,
         reviewedBy: true,
-        // Fee fields captured at registration time
         totalFee: true,
         delegateFeePerPerson: true,
         cookFeePerPerson: true,
         isPreRegistration: true,
-        event: {
+        registration: {
           select: {
-            name: true,
-            startDate: true,
-            endDate: true,
-            location: true,
-          },
-        },
-        church: {
-          select: {
-            name: true,
-            division: {
-              select: { name: true },
+            event: {
+              select: {
+                name: true,
+                startDate: true,
+                endDate: true,
+                location: true,
+              },
+            },
+            church: {
+              select: {
+                name: true,
+                division: {
+                  select: { name: true },
+                },
+              },
             },
           },
         },
@@ -494,15 +576,15 @@ export async function exportRegistrations(
         },
       },
       orderBy: [
-        { church: { division: { name: "asc" } } },
-        { church: { name: "asc" } },
+        { registration: { church: { division: { name: "asc" } } } },
+        { registration: { church: { name: "asc" } } },
         { createdAt: "desc" },
       ],
     });
 
-    // Get reviewer names for registrations that have reviewedBy
-    const reviewerIds = registrations
-      .map((r) => r.reviewedBy)
+    // Get reviewer names for batches that have reviewedBy
+    const reviewerIds = batches
+      .map((b) => b.reviewedBy)
       .filter((id): id is string => id !== null);
     const reviewers = reviewerIds.length > 0
       ? await prisma.user.findMany({
@@ -520,36 +602,39 @@ export async function exportRegistrations(
     let totalDelegates = 0;
     let totalCooks = 0;
 
-    for (const reg of registrations) {
-      // Use stored fee values (captured at registration time)
+    for (const batch of batches) {
       const baseRow = {
-        registrationId: reg.id,
-        registrationStatus: reg.status,
-        registrationDate: reg.createdAt.toISOString(),
-        reviewedAt: reg.reviewedAt?.toISOString() || null,
-        reviewedBy: reg.reviewedBy ? reviewerMap.get(reg.reviewedBy) || null : null,
-        rejectionRemarks: reg.remarks,
-        eventName: reg.event.name,
-        eventStartDate: reg.event.startDate.toISOString(),
-        eventEndDate: reg.event.endDate.toISOString(),
-        eventLocation: reg.event.location,
-        churchName: reg.church.name,
-        divisionName: reg.church.division.name,
-        totalFee: reg.totalFee,
-        delegateCount: reg.delegates.length,
-        cookCount: reg.cooks.length,
+        batchId: batch.id,
+        batchNumber: batch.batchNumber,
+        batchStatus: batch.status,
+        batchCreatedAt: batch.createdAt.toISOString(),
+        reviewedAt: batch.reviewedAt?.toISOString() || null,
+        reviewedBy: batch.reviewedBy ? reviewerMap.get(batch.reviewedBy) || null : null,
+        rejectionRemarks: batch.remarks,
+        totalFee: batch.totalFee,
+        delegateFeePerPerson: batch.delegateFeePerPerson,
+        cookFeePerPerson: batch.cookFeePerPerson,
+        isPreRegistration: batch.isPreRegistration,
+        eventName: batch.registration.event.name,
+        eventStartDate: batch.registration.event.startDate.toISOString(),
+        eventEndDate: batch.registration.event.endDate.toISOString(),
+        eventLocation: batch.registration.event.location,
+        churchName: batch.registration.church.name,
+        divisionName: batch.registration.church.division.name,
+        delegateCount: batch.delegates.length,
+        cookCount: batch.cooks.length,
       };
 
       // Track summary stats
-      byStatus[reg.status] = (byStatus[reg.status] || 0) + 1;
-      byDivision[reg.church.division.name] =
-        (byDivision[reg.church.division.name] || 0) + 1;
-      totalFees += reg.totalFee;
-      totalDelegates += reg.delegates.length;
-      totalCooks += reg.cooks.length;
+      byStatus[batch.status] = (byStatus[batch.status] || 0) + 1;
+      byDivision[batch.registration.church.division.name] =
+        (byDivision[batch.registration.church.division.name] || 0) + 1;
+      totalFees += batch.totalFee;
+      totalDelegates += batch.delegates.length;
+      totalCooks += batch.cooks.length;
 
       // Add delegate rows
-      for (const delegate of reg.delegates) {
+      for (const delegate of batch.delegates) {
         rows.push({
           ...baseRow,
           personType: "Delegate",
@@ -561,7 +646,7 @@ export async function exportRegistrations(
       }
 
       // Add cook rows
-      for (const cook of reg.cooks) {
+      for (const cook of batch.cooks) {
         rows.push({
           ...baseRow,
           personType: "Cook",
@@ -578,7 +663,7 @@ export async function exportRegistrations(
       data: {
         rows,
         summary: {
-          totalRegistrations: registrations.length,
+          totalBatches: batches.length,
           totalDelegates,
           totalCooks,
           totalFees,

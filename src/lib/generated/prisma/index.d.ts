@@ -64,6 +64,11 @@ export type Event = $Result.DefaultSelection<Prisma.$EventPayload>
  */
 export type Registration = $Result.DefaultSelection<Prisma.$RegistrationPayload>
 /**
+ * Model RegistrationBatch
+ * 
+ */
+export type RegistrationBatch = $Result.DefaultSelection<Prisma.$RegistrationBatchPayload>
+/**
  * Model Delegate
  * 
  */
@@ -347,6 +352,16 @@ export class PrismaClient<
     * ```
     */
   get registration(): Prisma.RegistrationDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.registrationBatch`: Exposes CRUD operations for the **RegistrationBatch** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more RegistrationBatches
+    * const registrationBatches = await prisma.registrationBatch.findMany()
+    * ```
+    */
+  get registrationBatch(): Prisma.RegistrationBatchDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.delegate`: Exposes CRUD operations for the **Delegate** model.
@@ -811,6 +826,7 @@ export namespace Prisma {
     Pastor: 'Pastor',
     Event: 'Event',
     Registration: 'Registration',
+    RegistrationBatch: 'RegistrationBatch',
     Delegate: 'Delegate',
     Cook: 'Cook'
   };
@@ -828,7 +844,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "session" | "account" | "verification" | "division" | "church" | "coordinator" | "pastor" | "event" | "registration" | "delegate" | "cook"
+      modelProps: "user" | "session" | "account" | "verification" | "division" | "church" | "coordinator" | "pastor" | "event" | "registration" | "registrationBatch" | "delegate" | "cook"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1572,6 +1588,80 @@ export namespace Prisma {
           }
         }
       }
+      RegistrationBatch: {
+        payload: Prisma.$RegistrationBatchPayload<ExtArgs>
+        fields: Prisma.RegistrationBatchFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.RegistrationBatchFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RegistrationBatchPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.RegistrationBatchFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RegistrationBatchPayload>
+          }
+          findFirst: {
+            args: Prisma.RegistrationBatchFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RegistrationBatchPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.RegistrationBatchFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RegistrationBatchPayload>
+          }
+          findMany: {
+            args: Prisma.RegistrationBatchFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RegistrationBatchPayload>[]
+          }
+          create: {
+            args: Prisma.RegistrationBatchCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RegistrationBatchPayload>
+          }
+          createMany: {
+            args: Prisma.RegistrationBatchCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.RegistrationBatchCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RegistrationBatchPayload>[]
+          }
+          delete: {
+            args: Prisma.RegistrationBatchDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RegistrationBatchPayload>
+          }
+          update: {
+            args: Prisma.RegistrationBatchUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RegistrationBatchPayload>
+          }
+          deleteMany: {
+            args: Prisma.RegistrationBatchDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.RegistrationBatchUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.RegistrationBatchUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RegistrationBatchPayload>[]
+          }
+          upsert: {
+            args: Prisma.RegistrationBatchUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RegistrationBatchPayload>
+          }
+          aggregate: {
+            args: Prisma.RegistrationBatchAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateRegistrationBatch>
+          }
+          groupBy: {
+            args: Prisma.RegistrationBatchGroupByArgs<ExtArgs>
+            result: $Utils.Optional<RegistrationBatchGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.RegistrationBatchCountArgs<ExtArgs>
+            result: $Utils.Optional<RegistrationBatchCountAggregateOutputType> | number
+          }
+        }
+      }
       Delegate: {
         payload: Prisma.$DelegatePayload<ExtArgs>
         fields: Prisma.DelegateFieldRefs
@@ -1838,6 +1928,7 @@ export namespace Prisma {
     pastor?: PastorOmit
     event?: EventOmit
     registration?: RegistrationOmit
+    registrationBatch?: RegistrationBatchOmit
     delegate?: DelegateOmit
     cook?: CookOmit
   }
@@ -1923,14 +2014,14 @@ export namespace Prisma {
     sessions: number
     accounts: number
     registrations: number
-    reviewedRegistrations: number
+    reviewedBatches: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     sessions?: boolean | UserCountOutputTypeCountSessionsArgs
     accounts?: boolean | UserCountOutputTypeCountAccountsArgs
     registrations?: boolean | UserCountOutputTypeCountRegistrationsArgs
-    reviewedRegistrations?: boolean | UserCountOutputTypeCountReviewedRegistrationsArgs
+    reviewedBatches?: boolean | UserCountOutputTypeCountReviewedBatchesArgs
   }
 
   // Custom InputTypes
@@ -1968,8 +2059,8 @@ export namespace Prisma {
   /**
    * UserCountOutputType without action
    */
-  export type UserCountOutputTypeCountReviewedRegistrationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: RegistrationWhereInput
+  export type UserCountOutputTypeCountReviewedBatchesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RegistrationBatchWhereInput
   }
 
 
@@ -2080,13 +2171,11 @@ export namespace Prisma {
    */
 
   export type RegistrationCountOutputType = {
-    delegates: number
-    cooks: number
+    batches: number
   }
 
   export type RegistrationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    delegates?: boolean | RegistrationCountOutputTypeCountDelegatesArgs
-    cooks?: boolean | RegistrationCountOutputTypeCountCooksArgs
+    batches?: boolean | RegistrationCountOutputTypeCountBatchesArgs
   }
 
   // Custom InputTypes
@@ -2103,14 +2192,47 @@ export namespace Prisma {
   /**
    * RegistrationCountOutputType without action
    */
-  export type RegistrationCountOutputTypeCountDelegatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type RegistrationCountOutputTypeCountBatchesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RegistrationBatchWhereInput
+  }
+
+
+  /**
+   * Count Type RegistrationBatchCountOutputType
+   */
+
+  export type RegistrationBatchCountOutputType = {
+    delegates: number
+    cooks: number
+  }
+
+  export type RegistrationBatchCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    delegates?: boolean | RegistrationBatchCountOutputTypeCountDelegatesArgs
+    cooks?: boolean | RegistrationBatchCountOutputTypeCountCooksArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * RegistrationBatchCountOutputType without action
+   */
+  export type RegistrationBatchCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RegistrationBatchCountOutputType
+     */
+    select?: RegistrationBatchCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * RegistrationBatchCountOutputType without action
+   */
+  export type RegistrationBatchCountOutputTypeCountDelegatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: DelegateWhereInput
   }
 
   /**
-   * RegistrationCountOutputType without action
+   * RegistrationBatchCountOutputType without action
    */
-  export type RegistrationCountOutputTypeCountCooksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type RegistrationBatchCountOutputTypeCountCooksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CookWhereInput
   }
 
@@ -2319,7 +2441,7 @@ export namespace Prisma {
     accounts?: boolean | User$accountsArgs<ExtArgs>
     church?: boolean | User$churchArgs<ExtArgs>
     registrations?: boolean | User$registrationsArgs<ExtArgs>
-    reviewedRegistrations?: boolean | User$reviewedRegistrationsArgs<ExtArgs>
+    reviewedBatches?: boolean | User$reviewedBatchesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -2367,7 +2489,7 @@ export namespace Prisma {
     accounts?: boolean | User$accountsArgs<ExtArgs>
     church?: boolean | User$churchArgs<ExtArgs>
     registrations?: boolean | User$registrationsArgs<ExtArgs>
-    reviewedRegistrations?: boolean | User$reviewedRegistrationsArgs<ExtArgs>
+    reviewedBatches?: boolean | User$reviewedBatchesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2384,7 +2506,7 @@ export namespace Prisma {
       accounts: Prisma.$AccountPayload<ExtArgs>[]
       church: Prisma.$ChurchPayload<ExtArgs> | null
       registrations: Prisma.$RegistrationPayload<ExtArgs>[]
-      reviewedRegistrations: Prisma.$RegistrationPayload<ExtArgs>[]
+      reviewedBatches: Prisma.$RegistrationBatchPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -2794,7 +2916,7 @@ export namespace Prisma {
     accounts<T extends User$accountsArgs<ExtArgs> = {}>(args?: Subset<T, User$accountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     church<T extends User$churchArgs<ExtArgs> = {}>(args?: Subset<T, User$churchArgs<ExtArgs>>): Prisma__ChurchClient<$Result.GetResult<Prisma.$ChurchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     registrations<T extends User$registrationsArgs<ExtArgs> = {}>(args?: Subset<T, User$registrationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RegistrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    reviewedRegistrations<T extends User$reviewedRegistrationsArgs<ExtArgs> = {}>(args?: Subset<T, User$reviewedRegistrationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RegistrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    reviewedBatches<T extends User$reviewedBatchesArgs<ExtArgs> = {}>(args?: Subset<T, User$reviewedBatchesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RegistrationBatchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3320,27 +3442,27 @@ export namespace Prisma {
   }
 
   /**
-   * User.reviewedRegistrations
+   * User.reviewedBatches
    */
-  export type User$reviewedRegistrationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type User$reviewedBatchesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Registration
+     * Select specific fields to fetch from the RegistrationBatch
      */
-    select?: RegistrationSelect<ExtArgs> | null
+    select?: RegistrationBatchSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Registration
+     * Omit specific fields from the RegistrationBatch
      */
-    omit?: RegistrationOmit<ExtArgs> | null
+    omit?: RegistrationBatchOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: RegistrationInclude<ExtArgs> | null
-    where?: RegistrationWhereInput
-    orderBy?: RegistrationOrderByWithRelationInput | RegistrationOrderByWithRelationInput[]
-    cursor?: RegistrationWhereUniqueInput
+    include?: RegistrationBatchInclude<ExtArgs> | null
+    where?: RegistrationBatchWhereInput
+    orderBy?: RegistrationBatchOrderByWithRelationInput | RegistrationBatchOrderByWithRelationInput[]
+    cursor?: RegistrationBatchWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: RegistrationScalarFieldEnum | RegistrationScalarFieldEnum[]
+    distinct?: RegistrationBatchScalarFieldEnum | RegistrationBatchScalarFieldEnum[]
   }
 
   /**
@@ -10978,13 +11100,17 @@ export namespace Prisma {
 
   export type EventAvgAggregateOutputType = {
     preRegistrationFee: number | null
+    preRegistrationSiblingDiscount: number | null
     onsiteRegistrationFee: number | null
+    onsiteSiblingDiscount: number | null
     cookRegistrationFee: number | null
   }
 
   export type EventSumAggregateOutputType = {
     preRegistrationFee: number | null
+    preRegistrationSiblingDiscount: number | null
     onsiteRegistrationFee: number | null
+    onsiteSiblingDiscount: number | null
     cookRegistrationFee: number | null
   }
 
@@ -10996,11 +11122,12 @@ export namespace Prisma {
     banner: string | null
     startDate: Date | null
     endDate: Date | null
-    registrationDeadline: Date | null
     preRegistrationFee: number | null
+    preRegistrationSiblingDiscount: number | null
     preRegistrationStart: Date | null
     preRegistrationEnd: Date | null
     onsiteRegistrationFee: number | null
+    onsiteSiblingDiscount: number | null
     cookRegistrationFee: number | null
     status: $Enums.EventStatus | null
     createdAt: Date | null
@@ -11015,11 +11142,12 @@ export namespace Prisma {
     banner: string | null
     startDate: Date | null
     endDate: Date | null
-    registrationDeadline: Date | null
     preRegistrationFee: number | null
+    preRegistrationSiblingDiscount: number | null
     preRegistrationStart: Date | null
     preRegistrationEnd: Date | null
     onsiteRegistrationFee: number | null
+    onsiteSiblingDiscount: number | null
     cookRegistrationFee: number | null
     status: $Enums.EventStatus | null
     createdAt: Date | null
@@ -11034,11 +11162,12 @@ export namespace Prisma {
     banner: number
     startDate: number
     endDate: number
-    registrationDeadline: number
     preRegistrationFee: number
+    preRegistrationSiblingDiscount: number
     preRegistrationStart: number
     preRegistrationEnd: number
     onsiteRegistrationFee: number
+    onsiteSiblingDiscount: number
     cookRegistrationFee: number
     status: number
     createdAt: number
@@ -11049,13 +11178,17 @@ export namespace Prisma {
 
   export type EventAvgAggregateInputType = {
     preRegistrationFee?: true
+    preRegistrationSiblingDiscount?: true
     onsiteRegistrationFee?: true
+    onsiteSiblingDiscount?: true
     cookRegistrationFee?: true
   }
 
   export type EventSumAggregateInputType = {
     preRegistrationFee?: true
+    preRegistrationSiblingDiscount?: true
     onsiteRegistrationFee?: true
+    onsiteSiblingDiscount?: true
     cookRegistrationFee?: true
   }
 
@@ -11067,11 +11200,12 @@ export namespace Prisma {
     banner?: true
     startDate?: true
     endDate?: true
-    registrationDeadline?: true
     preRegistrationFee?: true
+    preRegistrationSiblingDiscount?: true
     preRegistrationStart?: true
     preRegistrationEnd?: true
     onsiteRegistrationFee?: true
+    onsiteSiblingDiscount?: true
     cookRegistrationFee?: true
     status?: true
     createdAt?: true
@@ -11086,11 +11220,12 @@ export namespace Prisma {
     banner?: true
     startDate?: true
     endDate?: true
-    registrationDeadline?: true
     preRegistrationFee?: true
+    preRegistrationSiblingDiscount?: true
     preRegistrationStart?: true
     preRegistrationEnd?: true
     onsiteRegistrationFee?: true
+    onsiteSiblingDiscount?: true
     cookRegistrationFee?: true
     status?: true
     createdAt?: true
@@ -11105,11 +11240,12 @@ export namespace Prisma {
     banner?: true
     startDate?: true
     endDate?: true
-    registrationDeadline?: true
     preRegistrationFee?: true
+    preRegistrationSiblingDiscount?: true
     preRegistrationStart?: true
     preRegistrationEnd?: true
     onsiteRegistrationFee?: true
+    onsiteSiblingDiscount?: true
     cookRegistrationFee?: true
     status?: true
     createdAt?: true
@@ -11211,11 +11347,12 @@ export namespace Prisma {
     banner: string | null
     startDate: Date
     endDate: Date
-    registrationDeadline: Date
     preRegistrationFee: number
+    preRegistrationSiblingDiscount: number
     preRegistrationStart: Date
     preRegistrationEnd: Date
     onsiteRegistrationFee: number
+    onsiteSiblingDiscount: number
     cookRegistrationFee: number
     status: $Enums.EventStatus
     createdAt: Date
@@ -11249,11 +11386,12 @@ export namespace Prisma {
     banner?: boolean
     startDate?: boolean
     endDate?: boolean
-    registrationDeadline?: boolean
     preRegistrationFee?: boolean
+    preRegistrationSiblingDiscount?: boolean
     preRegistrationStart?: boolean
     preRegistrationEnd?: boolean
     onsiteRegistrationFee?: boolean
+    onsiteSiblingDiscount?: boolean
     cookRegistrationFee?: boolean
     status?: boolean
     createdAt?: boolean
@@ -11270,11 +11408,12 @@ export namespace Prisma {
     banner?: boolean
     startDate?: boolean
     endDate?: boolean
-    registrationDeadline?: boolean
     preRegistrationFee?: boolean
+    preRegistrationSiblingDiscount?: boolean
     preRegistrationStart?: boolean
     preRegistrationEnd?: boolean
     onsiteRegistrationFee?: boolean
+    onsiteSiblingDiscount?: boolean
     cookRegistrationFee?: boolean
     status?: boolean
     createdAt?: boolean
@@ -11289,11 +11428,12 @@ export namespace Prisma {
     banner?: boolean
     startDate?: boolean
     endDate?: boolean
-    registrationDeadline?: boolean
     preRegistrationFee?: boolean
+    preRegistrationSiblingDiscount?: boolean
     preRegistrationStart?: boolean
     preRegistrationEnd?: boolean
     onsiteRegistrationFee?: boolean
+    onsiteSiblingDiscount?: boolean
     cookRegistrationFee?: boolean
     status?: boolean
     createdAt?: boolean
@@ -11308,18 +11448,19 @@ export namespace Prisma {
     banner?: boolean
     startDate?: boolean
     endDate?: boolean
-    registrationDeadline?: boolean
     preRegistrationFee?: boolean
+    preRegistrationSiblingDiscount?: boolean
     preRegistrationStart?: boolean
     preRegistrationEnd?: boolean
     onsiteRegistrationFee?: boolean
+    onsiteSiblingDiscount?: boolean
     cookRegistrationFee?: boolean
     status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "location" | "banner" | "startDate" | "endDate" | "registrationDeadline" | "preRegistrationFee" | "preRegistrationStart" | "preRegistrationEnd" | "onsiteRegistrationFee" | "cookRegistrationFee" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
+  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "location" | "banner" | "startDate" | "endDate" | "preRegistrationFee" | "preRegistrationSiblingDiscount" | "preRegistrationStart" | "preRegistrationEnd" | "onsiteRegistrationFee" | "onsiteSiblingDiscount" | "cookRegistrationFee" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
   export type EventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     registrations?: boolean | Event$registrationsArgs<ExtArgs>
     _count?: boolean | EventCountOutputTypeDefaultArgs<ExtArgs>
@@ -11340,11 +11481,12 @@ export namespace Prisma {
       banner: string | null
       startDate: Date
       endDate: Date
-      registrationDeadline: Date
       preRegistrationFee: number
+      preRegistrationSiblingDiscount: number
       preRegistrationStart: Date
       preRegistrationEnd: Date
       onsiteRegistrationFee: number
+      onsiteSiblingDiscount: number
       cookRegistrationFee: number
       status: $Enums.EventStatus
       createdAt: Date
@@ -11780,11 +11922,12 @@ export namespace Prisma {
     readonly banner: FieldRef<"Event", 'String'>
     readonly startDate: FieldRef<"Event", 'DateTime'>
     readonly endDate: FieldRef<"Event", 'DateTime'>
-    readonly registrationDeadline: FieldRef<"Event", 'DateTime'>
     readonly preRegistrationFee: FieldRef<"Event", 'Int'>
+    readonly preRegistrationSiblingDiscount: FieldRef<"Event", 'Int'>
     readonly preRegistrationStart: FieldRef<"Event", 'DateTime'>
     readonly preRegistrationEnd: FieldRef<"Event", 'DateTime'>
     readonly onsiteRegistrationFee: FieldRef<"Event", 'Int'>
+    readonly onsiteSiblingDiscount: FieldRef<"Event", 'Int'>
     readonly cookRegistrationFee: FieldRef<"Event", 'Int'>
     readonly status: FieldRef<"Event", 'EventStatus'>
     readonly createdAt: FieldRef<"Event", 'DateTime'>
@@ -12225,22 +12368,8 @@ export namespace Prisma {
 
   export type AggregateRegistration = {
     _count: RegistrationCountAggregateOutputType | null
-    _avg: RegistrationAvgAggregateOutputType | null
-    _sum: RegistrationSumAggregateOutputType | null
     _min: RegistrationMinAggregateOutputType | null
     _max: RegistrationMaxAggregateOutputType | null
-  }
-
-  export type RegistrationAvgAggregateOutputType = {
-    totalFee: number | null
-    delegateFeePerPerson: number | null
-    cookFeePerPerson: number | null
-  }
-
-  export type RegistrationSumAggregateOutputType = {
-    totalFee: number | null
-    delegateFeePerPerson: number | null
-    cookFeePerPerson: number | null
   }
 
   export type RegistrationMinAggregateOutputType = {
@@ -12248,17 +12377,8 @@ export namespace Prisma {
     eventId: string | null
     churchId: string | null
     presidentId: string | null
-    status: $Enums.RegistrationStatus | null
-    remarks: string | null
-    receiptImage: string | null
-    reviewedAt: Date | null
-    reviewedBy: string | null
     createdAt: Date | null
     updatedAt: Date | null
-    totalFee: number | null
-    delegateFeePerPerson: number | null
-    cookFeePerPerson: number | null
-    isPreRegistration: boolean | null
   }
 
   export type RegistrationMaxAggregateOutputType = {
@@ -12266,17 +12386,8 @@ export namespace Prisma {
     eventId: string | null
     churchId: string | null
     presidentId: string | null
-    status: $Enums.RegistrationStatus | null
-    remarks: string | null
-    receiptImage: string | null
-    reviewedAt: Date | null
-    reviewedBy: string | null
     createdAt: Date | null
     updatedAt: Date | null
-    totalFee: number | null
-    delegateFeePerPerson: number | null
-    cookFeePerPerson: number | null
-    isPreRegistration: boolean | null
   }
 
   export type RegistrationCountAggregateOutputType = {
@@ -12284,49 +12395,19 @@ export namespace Prisma {
     eventId: number
     churchId: number
     presidentId: number
-    status: number
-    remarks: number
-    receiptImage: number
-    reviewedAt: number
-    reviewedBy: number
     createdAt: number
     updatedAt: number
-    totalFee: number
-    delegateFeePerPerson: number
-    cookFeePerPerson: number
-    isPreRegistration: number
     _all: number
   }
 
-
-  export type RegistrationAvgAggregateInputType = {
-    totalFee?: true
-    delegateFeePerPerson?: true
-    cookFeePerPerson?: true
-  }
-
-  export type RegistrationSumAggregateInputType = {
-    totalFee?: true
-    delegateFeePerPerson?: true
-    cookFeePerPerson?: true
-  }
 
   export type RegistrationMinAggregateInputType = {
     id?: true
     eventId?: true
     churchId?: true
     presidentId?: true
-    status?: true
-    remarks?: true
-    receiptImage?: true
-    reviewedAt?: true
-    reviewedBy?: true
     createdAt?: true
     updatedAt?: true
-    totalFee?: true
-    delegateFeePerPerson?: true
-    cookFeePerPerson?: true
-    isPreRegistration?: true
   }
 
   export type RegistrationMaxAggregateInputType = {
@@ -12334,17 +12415,8 @@ export namespace Prisma {
     eventId?: true
     churchId?: true
     presidentId?: true
-    status?: true
-    remarks?: true
-    receiptImage?: true
-    reviewedAt?: true
-    reviewedBy?: true
     createdAt?: true
     updatedAt?: true
-    totalFee?: true
-    delegateFeePerPerson?: true
-    cookFeePerPerson?: true
-    isPreRegistration?: true
   }
 
   export type RegistrationCountAggregateInputType = {
@@ -12352,17 +12424,8 @@ export namespace Prisma {
     eventId?: true
     churchId?: true
     presidentId?: true
-    status?: true
-    remarks?: true
-    receiptImage?: true
-    reviewedAt?: true
-    reviewedBy?: true
     createdAt?: true
     updatedAt?: true
-    totalFee?: true
-    delegateFeePerPerson?: true
-    cookFeePerPerson?: true
-    isPreRegistration?: true
     _all?: true
   }
 
@@ -12404,18 +12467,6 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Select which fields to average
-    **/
-    _avg?: RegistrationAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: RegistrationSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
      * Select which fields to find the minimum value
     **/
     _min?: RegistrationMinAggregateInputType
@@ -12446,8 +12497,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: RegistrationCountAggregateInputType | true
-    _avg?: RegistrationAvgAggregateInputType
-    _sum?: RegistrationSumAggregateInputType
     _min?: RegistrationMinAggregateInputType
     _max?: RegistrationMaxAggregateInputType
   }
@@ -12457,20 +12506,9 @@ export namespace Prisma {
     eventId: string
     churchId: string
     presidentId: string
-    status: $Enums.RegistrationStatus
-    remarks: string | null
-    receiptImage: string | null
-    reviewedAt: Date | null
-    reviewedBy: string | null
     createdAt: Date
     updatedAt: Date
-    totalFee: number
-    delegateFeePerPerson: number
-    cookFeePerPerson: number
-    isPreRegistration: boolean
     _count: RegistrationCountAggregateOutputType | null
-    _avg: RegistrationAvgAggregateOutputType | null
-    _sum: RegistrationSumAggregateOutputType | null
     _min: RegistrationMinAggregateOutputType | null
     _max: RegistrationMaxAggregateOutputType | null
   }
@@ -12494,23 +12532,12 @@ export namespace Prisma {
     eventId?: boolean
     churchId?: boolean
     presidentId?: boolean
-    status?: boolean
-    remarks?: boolean
-    receiptImage?: boolean
-    reviewedAt?: boolean
-    reviewedBy?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    totalFee?: boolean
-    delegateFeePerPerson?: boolean
-    cookFeePerPerson?: boolean
-    isPreRegistration?: boolean
     event?: boolean | EventDefaultArgs<ExtArgs>
     church?: boolean | ChurchDefaultArgs<ExtArgs>
     president?: boolean | UserDefaultArgs<ExtArgs>
-    reviewer?: boolean | Registration$reviewerArgs<ExtArgs>
-    delegates?: boolean | Registration$delegatesArgs<ExtArgs>
-    cooks?: boolean | Registration$cooksArgs<ExtArgs>
+    batches?: boolean | Registration$batchesArgs<ExtArgs>
     _count?: boolean | RegistrationCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["registration"]>
 
@@ -12519,21 +12546,11 @@ export namespace Prisma {
     eventId?: boolean
     churchId?: boolean
     presidentId?: boolean
-    status?: boolean
-    remarks?: boolean
-    receiptImage?: boolean
-    reviewedAt?: boolean
-    reviewedBy?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    totalFee?: boolean
-    delegateFeePerPerson?: boolean
-    cookFeePerPerson?: boolean
-    isPreRegistration?: boolean
     event?: boolean | EventDefaultArgs<ExtArgs>
     church?: boolean | ChurchDefaultArgs<ExtArgs>
     president?: boolean | UserDefaultArgs<ExtArgs>
-    reviewer?: boolean | Registration$reviewerArgs<ExtArgs>
   }, ExtArgs["result"]["registration"]>
 
   export type RegistrationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -12541,21 +12558,11 @@ export namespace Prisma {
     eventId?: boolean
     churchId?: boolean
     presidentId?: boolean
-    status?: boolean
-    remarks?: boolean
-    receiptImage?: boolean
-    reviewedAt?: boolean
-    reviewedBy?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    totalFee?: boolean
-    delegateFeePerPerson?: boolean
-    cookFeePerPerson?: boolean
-    isPreRegistration?: boolean
     event?: boolean | EventDefaultArgs<ExtArgs>
     church?: boolean | ChurchDefaultArgs<ExtArgs>
     president?: boolean | UserDefaultArgs<ExtArgs>
-    reviewer?: boolean | Registration$reviewerArgs<ExtArgs>
   }, ExtArgs["result"]["registration"]>
 
   export type RegistrationSelectScalar = {
@@ -12563,40 +12570,27 @@ export namespace Prisma {
     eventId?: boolean
     churchId?: boolean
     presidentId?: boolean
-    status?: boolean
-    remarks?: boolean
-    receiptImage?: boolean
-    reviewedAt?: boolean
-    reviewedBy?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    totalFee?: boolean
-    delegateFeePerPerson?: boolean
-    cookFeePerPerson?: boolean
-    isPreRegistration?: boolean
   }
 
-  export type RegistrationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "eventId" | "churchId" | "presidentId" | "status" | "remarks" | "receiptImage" | "reviewedAt" | "reviewedBy" | "createdAt" | "updatedAt" | "totalFee" | "delegateFeePerPerson" | "cookFeePerPerson" | "isPreRegistration", ExtArgs["result"]["registration"]>
+  export type RegistrationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "eventId" | "churchId" | "presidentId" | "createdAt" | "updatedAt", ExtArgs["result"]["registration"]>
   export type RegistrationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     event?: boolean | EventDefaultArgs<ExtArgs>
     church?: boolean | ChurchDefaultArgs<ExtArgs>
     president?: boolean | UserDefaultArgs<ExtArgs>
-    reviewer?: boolean | Registration$reviewerArgs<ExtArgs>
-    delegates?: boolean | Registration$delegatesArgs<ExtArgs>
-    cooks?: boolean | Registration$cooksArgs<ExtArgs>
+    batches?: boolean | Registration$batchesArgs<ExtArgs>
     _count?: boolean | RegistrationCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type RegistrationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     event?: boolean | EventDefaultArgs<ExtArgs>
     church?: boolean | ChurchDefaultArgs<ExtArgs>
     president?: boolean | UserDefaultArgs<ExtArgs>
-    reviewer?: boolean | Registration$reviewerArgs<ExtArgs>
   }
   export type RegistrationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     event?: boolean | EventDefaultArgs<ExtArgs>
     church?: boolean | ChurchDefaultArgs<ExtArgs>
     president?: boolean | UserDefaultArgs<ExtArgs>
-    reviewer?: boolean | Registration$reviewerArgs<ExtArgs>
   }
 
   export type $RegistrationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -12605,26 +12599,15 @@ export namespace Prisma {
       event: Prisma.$EventPayload<ExtArgs>
       church: Prisma.$ChurchPayload<ExtArgs>
       president: Prisma.$UserPayload<ExtArgs>
-      reviewer: Prisma.$UserPayload<ExtArgs> | null
-      delegates: Prisma.$DelegatePayload<ExtArgs>[]
-      cooks: Prisma.$CookPayload<ExtArgs>[]
+      batches: Prisma.$RegistrationBatchPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       eventId: string
       churchId: string
       presidentId: string
-      status: $Enums.RegistrationStatus
-      remarks: string | null
-      receiptImage: string | null
-      reviewedAt: Date | null
-      reviewedBy: string | null
       createdAt: Date
       updatedAt: Date
-      totalFee: number
-      delegateFeePerPerson: number
-      cookFeePerPerson: number
-      isPreRegistration: boolean
     }, ExtArgs["result"]["registration"]>
     composites: {}
   }
@@ -13022,9 +13005,7 @@ export namespace Prisma {
     event<T extends EventDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EventDefaultArgs<ExtArgs>>): Prisma__EventClient<$Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     church<T extends ChurchDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ChurchDefaultArgs<ExtArgs>>): Prisma__ChurchClient<$Result.GetResult<Prisma.$ChurchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     president<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    reviewer<T extends Registration$reviewerArgs<ExtArgs> = {}>(args?: Subset<T, Registration$reviewerArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    delegates<T extends Registration$delegatesArgs<ExtArgs> = {}>(args?: Subset<T, Registration$delegatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DelegatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    cooks<T extends Registration$cooksArgs<ExtArgs> = {}>(args?: Subset<T, Registration$cooksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CookPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    batches<T extends Registration$batchesArgs<ExtArgs> = {}>(args?: Subset<T, Registration$batchesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RegistrationBatchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -13058,17 +13039,8 @@ export namespace Prisma {
     readonly eventId: FieldRef<"Registration", 'String'>
     readonly churchId: FieldRef<"Registration", 'String'>
     readonly presidentId: FieldRef<"Registration", 'String'>
-    readonly status: FieldRef<"Registration", 'RegistrationStatus'>
-    readonly remarks: FieldRef<"Registration", 'String'>
-    readonly receiptImage: FieldRef<"Registration", 'String'>
-    readonly reviewedAt: FieldRef<"Registration", 'DateTime'>
-    readonly reviewedBy: FieldRef<"Registration", 'String'>
     readonly createdAt: FieldRef<"Registration", 'DateTime'>
     readonly updatedAt: FieldRef<"Registration", 'DateTime'>
-    readonly totalFee: FieldRef<"Registration", 'Int'>
-    readonly delegateFeePerPerson: FieldRef<"Registration", 'Int'>
-    readonly cookFeePerPerson: FieldRef<"Registration", 'Int'>
-    readonly isPreRegistration: FieldRef<"Registration", 'Boolean'>
   }
     
 
@@ -13465,9 +13437,1272 @@ export namespace Prisma {
   }
 
   /**
-   * Registration.reviewer
+   * Registration.batches
    */
-  export type Registration$reviewerArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Registration$batchesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RegistrationBatch
+     */
+    select?: RegistrationBatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RegistrationBatch
+     */
+    omit?: RegistrationBatchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RegistrationBatchInclude<ExtArgs> | null
+    where?: RegistrationBatchWhereInput
+    orderBy?: RegistrationBatchOrderByWithRelationInput | RegistrationBatchOrderByWithRelationInput[]
+    cursor?: RegistrationBatchWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: RegistrationBatchScalarFieldEnum | RegistrationBatchScalarFieldEnum[]
+  }
+
+  /**
+   * Registration without action
+   */
+  export type RegistrationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Registration
+     */
+    select?: RegistrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Registration
+     */
+    omit?: RegistrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RegistrationInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model RegistrationBatch
+   */
+
+  export type AggregateRegistrationBatch = {
+    _count: RegistrationBatchCountAggregateOutputType | null
+    _avg: RegistrationBatchAvgAggregateOutputType | null
+    _sum: RegistrationBatchSumAggregateOutputType | null
+    _min: RegistrationBatchMinAggregateOutputType | null
+    _max: RegistrationBatchMaxAggregateOutputType | null
+  }
+
+  export type RegistrationBatchAvgAggregateOutputType = {
+    batchNumber: number | null
+    totalFee: number | null
+    delegateFeePerPerson: number | null
+    cookFeePerPerson: number | null
+  }
+
+  export type RegistrationBatchSumAggregateOutputType = {
+    batchNumber: number | null
+    totalFee: number | null
+    delegateFeePerPerson: number | null
+    cookFeePerPerson: number | null
+  }
+
+  export type RegistrationBatchMinAggregateOutputType = {
+    id: string | null
+    registrationId: string | null
+    batchNumber: number | null
+    status: $Enums.RegistrationStatus | null
+    remarks: string | null
+    receiptImage: string | null
+    reviewedAt: Date | null
+    reviewedBy: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    totalFee: number | null
+    delegateFeePerPerson: number | null
+    cookFeePerPerson: number | null
+    isPreRegistration: boolean | null
+  }
+
+  export type RegistrationBatchMaxAggregateOutputType = {
+    id: string | null
+    registrationId: string | null
+    batchNumber: number | null
+    status: $Enums.RegistrationStatus | null
+    remarks: string | null
+    receiptImage: string | null
+    reviewedAt: Date | null
+    reviewedBy: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    totalFee: number | null
+    delegateFeePerPerson: number | null
+    cookFeePerPerson: number | null
+    isPreRegistration: boolean | null
+  }
+
+  export type RegistrationBatchCountAggregateOutputType = {
+    id: number
+    registrationId: number
+    batchNumber: number
+    status: number
+    remarks: number
+    receiptImage: number
+    reviewedAt: number
+    reviewedBy: number
+    createdAt: number
+    updatedAt: number
+    totalFee: number
+    delegateFeePerPerson: number
+    cookFeePerPerson: number
+    isPreRegistration: number
+    _all: number
+  }
+
+
+  export type RegistrationBatchAvgAggregateInputType = {
+    batchNumber?: true
+    totalFee?: true
+    delegateFeePerPerson?: true
+    cookFeePerPerson?: true
+  }
+
+  export type RegistrationBatchSumAggregateInputType = {
+    batchNumber?: true
+    totalFee?: true
+    delegateFeePerPerson?: true
+    cookFeePerPerson?: true
+  }
+
+  export type RegistrationBatchMinAggregateInputType = {
+    id?: true
+    registrationId?: true
+    batchNumber?: true
+    status?: true
+    remarks?: true
+    receiptImage?: true
+    reviewedAt?: true
+    reviewedBy?: true
+    createdAt?: true
+    updatedAt?: true
+    totalFee?: true
+    delegateFeePerPerson?: true
+    cookFeePerPerson?: true
+    isPreRegistration?: true
+  }
+
+  export type RegistrationBatchMaxAggregateInputType = {
+    id?: true
+    registrationId?: true
+    batchNumber?: true
+    status?: true
+    remarks?: true
+    receiptImage?: true
+    reviewedAt?: true
+    reviewedBy?: true
+    createdAt?: true
+    updatedAt?: true
+    totalFee?: true
+    delegateFeePerPerson?: true
+    cookFeePerPerson?: true
+    isPreRegistration?: true
+  }
+
+  export type RegistrationBatchCountAggregateInputType = {
+    id?: true
+    registrationId?: true
+    batchNumber?: true
+    status?: true
+    remarks?: true
+    receiptImage?: true
+    reviewedAt?: true
+    reviewedBy?: true
+    createdAt?: true
+    updatedAt?: true
+    totalFee?: true
+    delegateFeePerPerson?: true
+    cookFeePerPerson?: true
+    isPreRegistration?: true
+    _all?: true
+  }
+
+  export type RegistrationBatchAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which RegistrationBatch to aggregate.
+     */
+    where?: RegistrationBatchWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RegistrationBatches to fetch.
+     */
+    orderBy?: RegistrationBatchOrderByWithRelationInput | RegistrationBatchOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: RegistrationBatchWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RegistrationBatches from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RegistrationBatches.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned RegistrationBatches
+    **/
+    _count?: true | RegistrationBatchCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: RegistrationBatchAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: RegistrationBatchSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: RegistrationBatchMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: RegistrationBatchMaxAggregateInputType
+  }
+
+  export type GetRegistrationBatchAggregateType<T extends RegistrationBatchAggregateArgs> = {
+        [P in keyof T & keyof AggregateRegistrationBatch]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateRegistrationBatch[P]>
+      : GetScalarType<T[P], AggregateRegistrationBatch[P]>
+  }
+
+
+
+
+  export type RegistrationBatchGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RegistrationBatchWhereInput
+    orderBy?: RegistrationBatchOrderByWithAggregationInput | RegistrationBatchOrderByWithAggregationInput[]
+    by: RegistrationBatchScalarFieldEnum[] | RegistrationBatchScalarFieldEnum
+    having?: RegistrationBatchScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: RegistrationBatchCountAggregateInputType | true
+    _avg?: RegistrationBatchAvgAggregateInputType
+    _sum?: RegistrationBatchSumAggregateInputType
+    _min?: RegistrationBatchMinAggregateInputType
+    _max?: RegistrationBatchMaxAggregateInputType
+  }
+
+  export type RegistrationBatchGroupByOutputType = {
+    id: string
+    registrationId: string
+    batchNumber: number
+    status: $Enums.RegistrationStatus
+    remarks: string | null
+    receiptImage: string | null
+    reviewedAt: Date | null
+    reviewedBy: string | null
+    createdAt: Date
+    updatedAt: Date
+    totalFee: number
+    delegateFeePerPerson: number
+    cookFeePerPerson: number
+    isPreRegistration: boolean
+    _count: RegistrationBatchCountAggregateOutputType | null
+    _avg: RegistrationBatchAvgAggregateOutputType | null
+    _sum: RegistrationBatchSumAggregateOutputType | null
+    _min: RegistrationBatchMinAggregateOutputType | null
+    _max: RegistrationBatchMaxAggregateOutputType | null
+  }
+
+  type GetRegistrationBatchGroupByPayload<T extends RegistrationBatchGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<RegistrationBatchGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof RegistrationBatchGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], RegistrationBatchGroupByOutputType[P]>
+            : GetScalarType<T[P], RegistrationBatchGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type RegistrationBatchSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    registrationId?: boolean
+    batchNumber?: boolean
+    status?: boolean
+    remarks?: boolean
+    receiptImage?: boolean
+    reviewedAt?: boolean
+    reviewedBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    totalFee?: boolean
+    delegateFeePerPerson?: boolean
+    cookFeePerPerson?: boolean
+    isPreRegistration?: boolean
+    registration?: boolean | RegistrationDefaultArgs<ExtArgs>
+    reviewer?: boolean | RegistrationBatch$reviewerArgs<ExtArgs>
+    delegates?: boolean | RegistrationBatch$delegatesArgs<ExtArgs>
+    cooks?: boolean | RegistrationBatch$cooksArgs<ExtArgs>
+    _count?: boolean | RegistrationBatchCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["registrationBatch"]>
+
+  export type RegistrationBatchSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    registrationId?: boolean
+    batchNumber?: boolean
+    status?: boolean
+    remarks?: boolean
+    receiptImage?: boolean
+    reviewedAt?: boolean
+    reviewedBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    totalFee?: boolean
+    delegateFeePerPerson?: boolean
+    cookFeePerPerson?: boolean
+    isPreRegistration?: boolean
+    registration?: boolean | RegistrationDefaultArgs<ExtArgs>
+    reviewer?: boolean | RegistrationBatch$reviewerArgs<ExtArgs>
+  }, ExtArgs["result"]["registrationBatch"]>
+
+  export type RegistrationBatchSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    registrationId?: boolean
+    batchNumber?: boolean
+    status?: boolean
+    remarks?: boolean
+    receiptImage?: boolean
+    reviewedAt?: boolean
+    reviewedBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    totalFee?: boolean
+    delegateFeePerPerson?: boolean
+    cookFeePerPerson?: boolean
+    isPreRegistration?: boolean
+    registration?: boolean | RegistrationDefaultArgs<ExtArgs>
+    reviewer?: boolean | RegistrationBatch$reviewerArgs<ExtArgs>
+  }, ExtArgs["result"]["registrationBatch"]>
+
+  export type RegistrationBatchSelectScalar = {
+    id?: boolean
+    registrationId?: boolean
+    batchNumber?: boolean
+    status?: boolean
+    remarks?: boolean
+    receiptImage?: boolean
+    reviewedAt?: boolean
+    reviewedBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    totalFee?: boolean
+    delegateFeePerPerson?: boolean
+    cookFeePerPerson?: boolean
+    isPreRegistration?: boolean
+  }
+
+  export type RegistrationBatchOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "registrationId" | "batchNumber" | "status" | "remarks" | "receiptImage" | "reviewedAt" | "reviewedBy" | "createdAt" | "updatedAt" | "totalFee" | "delegateFeePerPerson" | "cookFeePerPerson" | "isPreRegistration", ExtArgs["result"]["registrationBatch"]>
+  export type RegistrationBatchInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    registration?: boolean | RegistrationDefaultArgs<ExtArgs>
+    reviewer?: boolean | RegistrationBatch$reviewerArgs<ExtArgs>
+    delegates?: boolean | RegistrationBatch$delegatesArgs<ExtArgs>
+    cooks?: boolean | RegistrationBatch$cooksArgs<ExtArgs>
+    _count?: boolean | RegistrationBatchCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type RegistrationBatchIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    registration?: boolean | RegistrationDefaultArgs<ExtArgs>
+    reviewer?: boolean | RegistrationBatch$reviewerArgs<ExtArgs>
+  }
+  export type RegistrationBatchIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    registration?: boolean | RegistrationDefaultArgs<ExtArgs>
+    reviewer?: boolean | RegistrationBatch$reviewerArgs<ExtArgs>
+  }
+
+  export type $RegistrationBatchPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "RegistrationBatch"
+    objects: {
+      registration: Prisma.$RegistrationPayload<ExtArgs>
+      reviewer: Prisma.$UserPayload<ExtArgs> | null
+      delegates: Prisma.$DelegatePayload<ExtArgs>[]
+      cooks: Prisma.$CookPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      registrationId: string
+      batchNumber: number
+      status: $Enums.RegistrationStatus
+      remarks: string | null
+      receiptImage: string | null
+      reviewedAt: Date | null
+      reviewedBy: string | null
+      createdAt: Date
+      updatedAt: Date
+      totalFee: number
+      delegateFeePerPerson: number
+      cookFeePerPerson: number
+      isPreRegistration: boolean
+    }, ExtArgs["result"]["registrationBatch"]>
+    composites: {}
+  }
+
+  type RegistrationBatchGetPayload<S extends boolean | null | undefined | RegistrationBatchDefaultArgs> = $Result.GetResult<Prisma.$RegistrationBatchPayload, S>
+
+  type RegistrationBatchCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<RegistrationBatchFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: RegistrationBatchCountAggregateInputType | true
+    }
+
+  export interface RegistrationBatchDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['RegistrationBatch'], meta: { name: 'RegistrationBatch' } }
+    /**
+     * Find zero or one RegistrationBatch that matches the filter.
+     * @param {RegistrationBatchFindUniqueArgs} args - Arguments to find a RegistrationBatch
+     * @example
+     * // Get one RegistrationBatch
+     * const registrationBatch = await prisma.registrationBatch.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends RegistrationBatchFindUniqueArgs>(args: SelectSubset<T, RegistrationBatchFindUniqueArgs<ExtArgs>>): Prisma__RegistrationBatchClient<$Result.GetResult<Prisma.$RegistrationBatchPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one RegistrationBatch that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {RegistrationBatchFindUniqueOrThrowArgs} args - Arguments to find a RegistrationBatch
+     * @example
+     * // Get one RegistrationBatch
+     * const registrationBatch = await prisma.registrationBatch.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends RegistrationBatchFindUniqueOrThrowArgs>(args: SelectSubset<T, RegistrationBatchFindUniqueOrThrowArgs<ExtArgs>>): Prisma__RegistrationBatchClient<$Result.GetResult<Prisma.$RegistrationBatchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first RegistrationBatch that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RegistrationBatchFindFirstArgs} args - Arguments to find a RegistrationBatch
+     * @example
+     * // Get one RegistrationBatch
+     * const registrationBatch = await prisma.registrationBatch.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends RegistrationBatchFindFirstArgs>(args?: SelectSubset<T, RegistrationBatchFindFirstArgs<ExtArgs>>): Prisma__RegistrationBatchClient<$Result.GetResult<Prisma.$RegistrationBatchPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first RegistrationBatch that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RegistrationBatchFindFirstOrThrowArgs} args - Arguments to find a RegistrationBatch
+     * @example
+     * // Get one RegistrationBatch
+     * const registrationBatch = await prisma.registrationBatch.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends RegistrationBatchFindFirstOrThrowArgs>(args?: SelectSubset<T, RegistrationBatchFindFirstOrThrowArgs<ExtArgs>>): Prisma__RegistrationBatchClient<$Result.GetResult<Prisma.$RegistrationBatchPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more RegistrationBatches that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RegistrationBatchFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all RegistrationBatches
+     * const registrationBatches = await prisma.registrationBatch.findMany()
+     * 
+     * // Get first 10 RegistrationBatches
+     * const registrationBatches = await prisma.registrationBatch.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const registrationBatchWithIdOnly = await prisma.registrationBatch.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends RegistrationBatchFindManyArgs>(args?: SelectSubset<T, RegistrationBatchFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RegistrationBatchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a RegistrationBatch.
+     * @param {RegistrationBatchCreateArgs} args - Arguments to create a RegistrationBatch.
+     * @example
+     * // Create one RegistrationBatch
+     * const RegistrationBatch = await prisma.registrationBatch.create({
+     *   data: {
+     *     // ... data to create a RegistrationBatch
+     *   }
+     * })
+     * 
+     */
+    create<T extends RegistrationBatchCreateArgs>(args: SelectSubset<T, RegistrationBatchCreateArgs<ExtArgs>>): Prisma__RegistrationBatchClient<$Result.GetResult<Prisma.$RegistrationBatchPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many RegistrationBatches.
+     * @param {RegistrationBatchCreateManyArgs} args - Arguments to create many RegistrationBatches.
+     * @example
+     * // Create many RegistrationBatches
+     * const registrationBatch = await prisma.registrationBatch.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends RegistrationBatchCreateManyArgs>(args?: SelectSubset<T, RegistrationBatchCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many RegistrationBatches and returns the data saved in the database.
+     * @param {RegistrationBatchCreateManyAndReturnArgs} args - Arguments to create many RegistrationBatches.
+     * @example
+     * // Create many RegistrationBatches
+     * const registrationBatch = await prisma.registrationBatch.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many RegistrationBatches and only return the `id`
+     * const registrationBatchWithIdOnly = await prisma.registrationBatch.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends RegistrationBatchCreateManyAndReturnArgs>(args?: SelectSubset<T, RegistrationBatchCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RegistrationBatchPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a RegistrationBatch.
+     * @param {RegistrationBatchDeleteArgs} args - Arguments to delete one RegistrationBatch.
+     * @example
+     * // Delete one RegistrationBatch
+     * const RegistrationBatch = await prisma.registrationBatch.delete({
+     *   where: {
+     *     // ... filter to delete one RegistrationBatch
+     *   }
+     * })
+     * 
+     */
+    delete<T extends RegistrationBatchDeleteArgs>(args: SelectSubset<T, RegistrationBatchDeleteArgs<ExtArgs>>): Prisma__RegistrationBatchClient<$Result.GetResult<Prisma.$RegistrationBatchPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one RegistrationBatch.
+     * @param {RegistrationBatchUpdateArgs} args - Arguments to update one RegistrationBatch.
+     * @example
+     * // Update one RegistrationBatch
+     * const registrationBatch = await prisma.registrationBatch.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends RegistrationBatchUpdateArgs>(args: SelectSubset<T, RegistrationBatchUpdateArgs<ExtArgs>>): Prisma__RegistrationBatchClient<$Result.GetResult<Prisma.$RegistrationBatchPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more RegistrationBatches.
+     * @param {RegistrationBatchDeleteManyArgs} args - Arguments to filter RegistrationBatches to delete.
+     * @example
+     * // Delete a few RegistrationBatches
+     * const { count } = await prisma.registrationBatch.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends RegistrationBatchDeleteManyArgs>(args?: SelectSubset<T, RegistrationBatchDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more RegistrationBatches.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RegistrationBatchUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many RegistrationBatches
+     * const registrationBatch = await prisma.registrationBatch.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends RegistrationBatchUpdateManyArgs>(args: SelectSubset<T, RegistrationBatchUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more RegistrationBatches and returns the data updated in the database.
+     * @param {RegistrationBatchUpdateManyAndReturnArgs} args - Arguments to update many RegistrationBatches.
+     * @example
+     * // Update many RegistrationBatches
+     * const registrationBatch = await prisma.registrationBatch.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more RegistrationBatches and only return the `id`
+     * const registrationBatchWithIdOnly = await prisma.registrationBatch.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends RegistrationBatchUpdateManyAndReturnArgs>(args: SelectSubset<T, RegistrationBatchUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RegistrationBatchPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one RegistrationBatch.
+     * @param {RegistrationBatchUpsertArgs} args - Arguments to update or create a RegistrationBatch.
+     * @example
+     * // Update or create a RegistrationBatch
+     * const registrationBatch = await prisma.registrationBatch.upsert({
+     *   create: {
+     *     // ... data to create a RegistrationBatch
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the RegistrationBatch we want to update
+     *   }
+     * })
+     */
+    upsert<T extends RegistrationBatchUpsertArgs>(args: SelectSubset<T, RegistrationBatchUpsertArgs<ExtArgs>>): Prisma__RegistrationBatchClient<$Result.GetResult<Prisma.$RegistrationBatchPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of RegistrationBatches.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RegistrationBatchCountArgs} args - Arguments to filter RegistrationBatches to count.
+     * @example
+     * // Count the number of RegistrationBatches
+     * const count = await prisma.registrationBatch.count({
+     *   where: {
+     *     // ... the filter for the RegistrationBatches we want to count
+     *   }
+     * })
+    **/
+    count<T extends RegistrationBatchCountArgs>(
+      args?: Subset<T, RegistrationBatchCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], RegistrationBatchCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a RegistrationBatch.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RegistrationBatchAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends RegistrationBatchAggregateArgs>(args: Subset<T, RegistrationBatchAggregateArgs>): Prisma.PrismaPromise<GetRegistrationBatchAggregateType<T>>
+
+    /**
+     * Group by RegistrationBatch.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RegistrationBatchGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends RegistrationBatchGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: RegistrationBatchGroupByArgs['orderBy'] }
+        : { orderBy?: RegistrationBatchGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, RegistrationBatchGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetRegistrationBatchGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the RegistrationBatch model
+   */
+  readonly fields: RegistrationBatchFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for RegistrationBatch.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__RegistrationBatchClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    registration<T extends RegistrationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, RegistrationDefaultArgs<ExtArgs>>): Prisma__RegistrationClient<$Result.GetResult<Prisma.$RegistrationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    reviewer<T extends RegistrationBatch$reviewerArgs<ExtArgs> = {}>(args?: Subset<T, RegistrationBatch$reviewerArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    delegates<T extends RegistrationBatch$delegatesArgs<ExtArgs> = {}>(args?: Subset<T, RegistrationBatch$delegatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DelegatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    cooks<T extends RegistrationBatch$cooksArgs<ExtArgs> = {}>(args?: Subset<T, RegistrationBatch$cooksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CookPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the RegistrationBatch model
+   */
+  interface RegistrationBatchFieldRefs {
+    readonly id: FieldRef<"RegistrationBatch", 'String'>
+    readonly registrationId: FieldRef<"RegistrationBatch", 'String'>
+    readonly batchNumber: FieldRef<"RegistrationBatch", 'Int'>
+    readonly status: FieldRef<"RegistrationBatch", 'RegistrationStatus'>
+    readonly remarks: FieldRef<"RegistrationBatch", 'String'>
+    readonly receiptImage: FieldRef<"RegistrationBatch", 'String'>
+    readonly reviewedAt: FieldRef<"RegistrationBatch", 'DateTime'>
+    readonly reviewedBy: FieldRef<"RegistrationBatch", 'String'>
+    readonly createdAt: FieldRef<"RegistrationBatch", 'DateTime'>
+    readonly updatedAt: FieldRef<"RegistrationBatch", 'DateTime'>
+    readonly totalFee: FieldRef<"RegistrationBatch", 'Int'>
+    readonly delegateFeePerPerson: FieldRef<"RegistrationBatch", 'Int'>
+    readonly cookFeePerPerson: FieldRef<"RegistrationBatch", 'Int'>
+    readonly isPreRegistration: FieldRef<"RegistrationBatch", 'Boolean'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * RegistrationBatch findUnique
+   */
+  export type RegistrationBatchFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RegistrationBatch
+     */
+    select?: RegistrationBatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RegistrationBatch
+     */
+    omit?: RegistrationBatchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RegistrationBatchInclude<ExtArgs> | null
+    /**
+     * Filter, which RegistrationBatch to fetch.
+     */
+    where: RegistrationBatchWhereUniqueInput
+  }
+
+  /**
+   * RegistrationBatch findUniqueOrThrow
+   */
+  export type RegistrationBatchFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RegistrationBatch
+     */
+    select?: RegistrationBatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RegistrationBatch
+     */
+    omit?: RegistrationBatchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RegistrationBatchInclude<ExtArgs> | null
+    /**
+     * Filter, which RegistrationBatch to fetch.
+     */
+    where: RegistrationBatchWhereUniqueInput
+  }
+
+  /**
+   * RegistrationBatch findFirst
+   */
+  export type RegistrationBatchFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RegistrationBatch
+     */
+    select?: RegistrationBatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RegistrationBatch
+     */
+    omit?: RegistrationBatchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RegistrationBatchInclude<ExtArgs> | null
+    /**
+     * Filter, which RegistrationBatch to fetch.
+     */
+    where?: RegistrationBatchWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RegistrationBatches to fetch.
+     */
+    orderBy?: RegistrationBatchOrderByWithRelationInput | RegistrationBatchOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for RegistrationBatches.
+     */
+    cursor?: RegistrationBatchWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RegistrationBatches from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RegistrationBatches.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of RegistrationBatches.
+     */
+    distinct?: RegistrationBatchScalarFieldEnum | RegistrationBatchScalarFieldEnum[]
+  }
+
+  /**
+   * RegistrationBatch findFirstOrThrow
+   */
+  export type RegistrationBatchFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RegistrationBatch
+     */
+    select?: RegistrationBatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RegistrationBatch
+     */
+    omit?: RegistrationBatchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RegistrationBatchInclude<ExtArgs> | null
+    /**
+     * Filter, which RegistrationBatch to fetch.
+     */
+    where?: RegistrationBatchWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RegistrationBatches to fetch.
+     */
+    orderBy?: RegistrationBatchOrderByWithRelationInput | RegistrationBatchOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for RegistrationBatches.
+     */
+    cursor?: RegistrationBatchWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RegistrationBatches from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RegistrationBatches.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of RegistrationBatches.
+     */
+    distinct?: RegistrationBatchScalarFieldEnum | RegistrationBatchScalarFieldEnum[]
+  }
+
+  /**
+   * RegistrationBatch findMany
+   */
+  export type RegistrationBatchFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RegistrationBatch
+     */
+    select?: RegistrationBatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RegistrationBatch
+     */
+    omit?: RegistrationBatchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RegistrationBatchInclude<ExtArgs> | null
+    /**
+     * Filter, which RegistrationBatches to fetch.
+     */
+    where?: RegistrationBatchWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RegistrationBatches to fetch.
+     */
+    orderBy?: RegistrationBatchOrderByWithRelationInput | RegistrationBatchOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing RegistrationBatches.
+     */
+    cursor?: RegistrationBatchWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RegistrationBatches from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RegistrationBatches.
+     */
+    skip?: number
+    distinct?: RegistrationBatchScalarFieldEnum | RegistrationBatchScalarFieldEnum[]
+  }
+
+  /**
+   * RegistrationBatch create
+   */
+  export type RegistrationBatchCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RegistrationBatch
+     */
+    select?: RegistrationBatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RegistrationBatch
+     */
+    omit?: RegistrationBatchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RegistrationBatchInclude<ExtArgs> | null
+    /**
+     * The data needed to create a RegistrationBatch.
+     */
+    data: XOR<RegistrationBatchCreateInput, RegistrationBatchUncheckedCreateInput>
+  }
+
+  /**
+   * RegistrationBatch createMany
+   */
+  export type RegistrationBatchCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many RegistrationBatches.
+     */
+    data: RegistrationBatchCreateManyInput | RegistrationBatchCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * RegistrationBatch createManyAndReturn
+   */
+  export type RegistrationBatchCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RegistrationBatch
+     */
+    select?: RegistrationBatchSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the RegistrationBatch
+     */
+    omit?: RegistrationBatchOmit<ExtArgs> | null
+    /**
+     * The data used to create many RegistrationBatches.
+     */
+    data: RegistrationBatchCreateManyInput | RegistrationBatchCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RegistrationBatchIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * RegistrationBatch update
+   */
+  export type RegistrationBatchUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RegistrationBatch
+     */
+    select?: RegistrationBatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RegistrationBatch
+     */
+    omit?: RegistrationBatchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RegistrationBatchInclude<ExtArgs> | null
+    /**
+     * The data needed to update a RegistrationBatch.
+     */
+    data: XOR<RegistrationBatchUpdateInput, RegistrationBatchUncheckedUpdateInput>
+    /**
+     * Choose, which RegistrationBatch to update.
+     */
+    where: RegistrationBatchWhereUniqueInput
+  }
+
+  /**
+   * RegistrationBatch updateMany
+   */
+  export type RegistrationBatchUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update RegistrationBatches.
+     */
+    data: XOR<RegistrationBatchUpdateManyMutationInput, RegistrationBatchUncheckedUpdateManyInput>
+    /**
+     * Filter which RegistrationBatches to update
+     */
+    where?: RegistrationBatchWhereInput
+    /**
+     * Limit how many RegistrationBatches to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * RegistrationBatch updateManyAndReturn
+   */
+  export type RegistrationBatchUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RegistrationBatch
+     */
+    select?: RegistrationBatchSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the RegistrationBatch
+     */
+    omit?: RegistrationBatchOmit<ExtArgs> | null
+    /**
+     * The data used to update RegistrationBatches.
+     */
+    data: XOR<RegistrationBatchUpdateManyMutationInput, RegistrationBatchUncheckedUpdateManyInput>
+    /**
+     * Filter which RegistrationBatches to update
+     */
+    where?: RegistrationBatchWhereInput
+    /**
+     * Limit how many RegistrationBatches to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RegistrationBatchIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * RegistrationBatch upsert
+   */
+  export type RegistrationBatchUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RegistrationBatch
+     */
+    select?: RegistrationBatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RegistrationBatch
+     */
+    omit?: RegistrationBatchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RegistrationBatchInclude<ExtArgs> | null
+    /**
+     * The filter to search for the RegistrationBatch to update in case it exists.
+     */
+    where: RegistrationBatchWhereUniqueInput
+    /**
+     * In case the RegistrationBatch found by the `where` argument doesn't exist, create a new RegistrationBatch with this data.
+     */
+    create: XOR<RegistrationBatchCreateInput, RegistrationBatchUncheckedCreateInput>
+    /**
+     * In case the RegistrationBatch was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<RegistrationBatchUpdateInput, RegistrationBatchUncheckedUpdateInput>
+  }
+
+  /**
+   * RegistrationBatch delete
+   */
+  export type RegistrationBatchDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RegistrationBatch
+     */
+    select?: RegistrationBatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RegistrationBatch
+     */
+    omit?: RegistrationBatchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RegistrationBatchInclude<ExtArgs> | null
+    /**
+     * Filter which RegistrationBatch to delete.
+     */
+    where: RegistrationBatchWhereUniqueInput
+  }
+
+  /**
+   * RegistrationBatch deleteMany
+   */
+  export type RegistrationBatchDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which RegistrationBatches to delete
+     */
+    where?: RegistrationBatchWhereInput
+    /**
+     * Limit how many RegistrationBatches to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * RegistrationBatch.reviewer
+   */
+  export type RegistrationBatch$reviewerArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the User
      */
@@ -13484,9 +14719,9 @@ export namespace Prisma {
   }
 
   /**
-   * Registration.delegates
+   * RegistrationBatch.delegates
    */
-  export type Registration$delegatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type RegistrationBatch$delegatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Delegate
      */
@@ -13508,9 +14743,9 @@ export namespace Prisma {
   }
 
   /**
-   * Registration.cooks
+   * RegistrationBatch.cooks
    */
-  export type Registration$cooksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type RegistrationBatch$cooksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Cook
      */
@@ -13532,21 +14767,21 @@ export namespace Prisma {
   }
 
   /**
-   * Registration without action
+   * RegistrationBatch without action
    */
-  export type RegistrationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type RegistrationBatchDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Registration
+     * Select specific fields to fetch from the RegistrationBatch
      */
-    select?: RegistrationSelect<ExtArgs> | null
+    select?: RegistrationBatchSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Registration
+     * Omit specific fields from the RegistrationBatch
      */
-    omit?: RegistrationOmit<ExtArgs> | null
+    omit?: RegistrationBatchOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: RegistrationInclude<ExtArgs> | null
+    include?: RegistrationBatchInclude<ExtArgs> | null
   }
 
 
@@ -13576,7 +14811,7 @@ export namespace Prisma {
     nickname: string | null
     age: number | null
     gender: $Enums.Gender | null
-    registrationId: string | null
+    batchId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -13587,7 +14822,7 @@ export namespace Prisma {
     nickname: string | null
     age: number | null
     gender: $Enums.Gender | null
-    registrationId: string | null
+    batchId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -13598,7 +14833,7 @@ export namespace Prisma {
     nickname: number
     age: number
     gender: number
-    registrationId: number
+    batchId: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -13619,7 +14854,7 @@ export namespace Prisma {
     nickname?: true
     age?: true
     gender?: true
-    registrationId?: true
+    batchId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -13630,7 +14865,7 @@ export namespace Prisma {
     nickname?: true
     age?: true
     gender?: true
-    registrationId?: true
+    batchId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -13641,7 +14876,7 @@ export namespace Prisma {
     nickname?: true
     age?: true
     gender?: true
-    registrationId?: true
+    batchId?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -13739,7 +14974,7 @@ export namespace Prisma {
     nickname: string | null
     age: number
     gender: $Enums.Gender
-    registrationId: string
+    batchId: string
     createdAt: Date
     updatedAt: Date
     _count: DelegateCountAggregateOutputType | null
@@ -13769,10 +15004,10 @@ export namespace Prisma {
     nickname?: boolean
     age?: boolean
     gender?: boolean
-    registrationId?: boolean
+    batchId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    registration?: boolean | RegistrationDefaultArgs<ExtArgs>
+    batch?: boolean | RegistrationBatchDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["delegate"]>
 
   export type DelegateSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -13781,10 +15016,10 @@ export namespace Prisma {
     nickname?: boolean
     age?: boolean
     gender?: boolean
-    registrationId?: boolean
+    batchId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    registration?: boolean | RegistrationDefaultArgs<ExtArgs>
+    batch?: boolean | RegistrationBatchDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["delegate"]>
 
   export type DelegateSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -13793,10 +15028,10 @@ export namespace Prisma {
     nickname?: boolean
     age?: boolean
     gender?: boolean
-    registrationId?: boolean
+    batchId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    registration?: boolean | RegistrationDefaultArgs<ExtArgs>
+    batch?: boolean | RegistrationBatchDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["delegate"]>
 
   export type DelegateSelectScalar = {
@@ -13805,26 +15040,26 @@ export namespace Prisma {
     nickname?: boolean
     age?: boolean
     gender?: boolean
-    registrationId?: boolean
+    batchId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type DelegateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "fullName" | "nickname" | "age" | "gender" | "registrationId" | "createdAt" | "updatedAt", ExtArgs["result"]["delegate"]>
+  export type DelegateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "fullName" | "nickname" | "age" | "gender" | "batchId" | "createdAt" | "updatedAt", ExtArgs["result"]["delegate"]>
   export type DelegateInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    registration?: boolean | RegistrationDefaultArgs<ExtArgs>
+    batch?: boolean | RegistrationBatchDefaultArgs<ExtArgs>
   }
   export type DelegateIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    registration?: boolean | RegistrationDefaultArgs<ExtArgs>
+    batch?: boolean | RegistrationBatchDefaultArgs<ExtArgs>
   }
   export type DelegateIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    registration?: boolean | RegistrationDefaultArgs<ExtArgs>
+    batch?: boolean | RegistrationBatchDefaultArgs<ExtArgs>
   }
 
   export type $DelegatePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Delegate"
     objects: {
-      registration: Prisma.$RegistrationPayload<ExtArgs>
+      batch: Prisma.$RegistrationBatchPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -13832,7 +15067,7 @@ export namespace Prisma {
       nickname: string | null
       age: number
       gender: $Enums.Gender
-      registrationId: string
+      batchId: string
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["delegate"]>
@@ -14229,7 +15464,7 @@ export namespace Prisma {
    */
   export interface Prisma__DelegateClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    registration<T extends RegistrationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, RegistrationDefaultArgs<ExtArgs>>): Prisma__RegistrationClient<$Result.GetResult<Prisma.$RegistrationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    batch<T extends RegistrationBatchDefaultArgs<ExtArgs> = {}>(args?: Subset<T, RegistrationBatchDefaultArgs<ExtArgs>>): Prisma__RegistrationBatchClient<$Result.GetResult<Prisma.$RegistrationBatchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -14264,7 +15499,7 @@ export namespace Prisma {
     readonly nickname: FieldRef<"Delegate", 'String'>
     readonly age: FieldRef<"Delegate", 'Int'>
     readonly gender: FieldRef<"Delegate", 'Gender'>
-    readonly registrationId: FieldRef<"Delegate", 'String'>
+    readonly batchId: FieldRef<"Delegate", 'String'>
     readonly createdAt: FieldRef<"Delegate", 'DateTime'>
     readonly updatedAt: FieldRef<"Delegate", 'DateTime'>
   }
@@ -14707,7 +15942,7 @@ export namespace Prisma {
     nickname: string | null
     age: number | null
     gender: $Enums.Gender | null
-    registrationId: string | null
+    batchId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -14718,7 +15953,7 @@ export namespace Prisma {
     nickname: string | null
     age: number | null
     gender: $Enums.Gender | null
-    registrationId: string | null
+    batchId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -14729,7 +15964,7 @@ export namespace Prisma {
     nickname: number
     age: number
     gender: number
-    registrationId: number
+    batchId: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -14750,7 +15985,7 @@ export namespace Prisma {
     nickname?: true
     age?: true
     gender?: true
-    registrationId?: true
+    batchId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -14761,7 +15996,7 @@ export namespace Prisma {
     nickname?: true
     age?: true
     gender?: true
-    registrationId?: true
+    batchId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -14772,7 +16007,7 @@ export namespace Prisma {
     nickname?: true
     age?: true
     gender?: true
-    registrationId?: true
+    batchId?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -14870,7 +16105,7 @@ export namespace Prisma {
     nickname: string | null
     age: number
     gender: $Enums.Gender
-    registrationId: string
+    batchId: string
     createdAt: Date
     updatedAt: Date
     _count: CookCountAggregateOutputType | null
@@ -14900,10 +16135,10 @@ export namespace Prisma {
     nickname?: boolean
     age?: boolean
     gender?: boolean
-    registrationId?: boolean
+    batchId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    registration?: boolean | RegistrationDefaultArgs<ExtArgs>
+    batch?: boolean | RegistrationBatchDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["cook"]>
 
   export type CookSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -14912,10 +16147,10 @@ export namespace Prisma {
     nickname?: boolean
     age?: boolean
     gender?: boolean
-    registrationId?: boolean
+    batchId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    registration?: boolean | RegistrationDefaultArgs<ExtArgs>
+    batch?: boolean | RegistrationBatchDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["cook"]>
 
   export type CookSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -14924,10 +16159,10 @@ export namespace Prisma {
     nickname?: boolean
     age?: boolean
     gender?: boolean
-    registrationId?: boolean
+    batchId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    registration?: boolean | RegistrationDefaultArgs<ExtArgs>
+    batch?: boolean | RegistrationBatchDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["cook"]>
 
   export type CookSelectScalar = {
@@ -14936,26 +16171,26 @@ export namespace Prisma {
     nickname?: boolean
     age?: boolean
     gender?: boolean
-    registrationId?: boolean
+    batchId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type CookOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "fullName" | "nickname" | "age" | "gender" | "registrationId" | "createdAt" | "updatedAt", ExtArgs["result"]["cook"]>
+  export type CookOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "fullName" | "nickname" | "age" | "gender" | "batchId" | "createdAt" | "updatedAt", ExtArgs["result"]["cook"]>
   export type CookInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    registration?: boolean | RegistrationDefaultArgs<ExtArgs>
+    batch?: boolean | RegistrationBatchDefaultArgs<ExtArgs>
   }
   export type CookIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    registration?: boolean | RegistrationDefaultArgs<ExtArgs>
+    batch?: boolean | RegistrationBatchDefaultArgs<ExtArgs>
   }
   export type CookIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    registration?: boolean | RegistrationDefaultArgs<ExtArgs>
+    batch?: boolean | RegistrationBatchDefaultArgs<ExtArgs>
   }
 
   export type $CookPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Cook"
     objects: {
-      registration: Prisma.$RegistrationPayload<ExtArgs>
+      batch: Prisma.$RegistrationBatchPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -14963,7 +16198,7 @@ export namespace Prisma {
       nickname: string | null
       age: number
       gender: $Enums.Gender
-      registrationId: string
+      batchId: string
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["cook"]>
@@ -15360,7 +16595,7 @@ export namespace Prisma {
    */
   export interface Prisma__CookClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    registration<T extends RegistrationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, RegistrationDefaultArgs<ExtArgs>>): Prisma__RegistrationClient<$Result.GetResult<Prisma.$RegistrationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    batch<T extends RegistrationBatchDefaultArgs<ExtArgs> = {}>(args?: Subset<T, RegistrationBatchDefaultArgs<ExtArgs>>): Prisma__RegistrationBatchClient<$Result.GetResult<Prisma.$RegistrationBatchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -15395,7 +16630,7 @@ export namespace Prisma {
     readonly nickname: FieldRef<"Cook", 'String'>
     readonly age: FieldRef<"Cook", 'Int'>
     readonly gender: FieldRef<"Cook", 'Gender'>
-    readonly registrationId: FieldRef<"Cook", 'String'>
+    readonly batchId: FieldRef<"Cook", 'String'>
     readonly createdAt: FieldRef<"Cook", 'DateTime'>
     readonly updatedAt: FieldRef<"Cook", 'DateTime'>
   }
@@ -15937,11 +17172,12 @@ export namespace Prisma {
     banner: 'banner',
     startDate: 'startDate',
     endDate: 'endDate',
-    registrationDeadline: 'registrationDeadline',
     preRegistrationFee: 'preRegistrationFee',
+    preRegistrationSiblingDiscount: 'preRegistrationSiblingDiscount',
     preRegistrationStart: 'preRegistrationStart',
     preRegistrationEnd: 'preRegistrationEnd',
     onsiteRegistrationFee: 'onsiteRegistrationFee',
+    onsiteSiblingDiscount: 'onsiteSiblingDiscount',
     cookRegistrationFee: 'cookRegistrationFee',
     status: 'status',
     createdAt: 'createdAt',
@@ -15956,6 +17192,17 @@ export namespace Prisma {
     eventId: 'eventId',
     churchId: 'churchId',
     presidentId: 'presidentId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type RegistrationScalarFieldEnum = (typeof RegistrationScalarFieldEnum)[keyof typeof RegistrationScalarFieldEnum]
+
+
+  export const RegistrationBatchScalarFieldEnum: {
+    id: 'id',
+    registrationId: 'registrationId',
+    batchNumber: 'batchNumber',
     status: 'status',
     remarks: 'remarks',
     receiptImage: 'receiptImage',
@@ -15969,7 +17216,7 @@ export namespace Prisma {
     isPreRegistration: 'isPreRegistration'
   };
 
-  export type RegistrationScalarFieldEnum = (typeof RegistrationScalarFieldEnum)[keyof typeof RegistrationScalarFieldEnum]
+  export type RegistrationBatchScalarFieldEnum = (typeof RegistrationBatchScalarFieldEnum)[keyof typeof RegistrationBatchScalarFieldEnum]
 
 
   export const DelegateScalarFieldEnum: {
@@ -15978,7 +17225,7 @@ export namespace Prisma {
     nickname: 'nickname',
     age: 'age',
     gender: 'gender',
-    registrationId: 'registrationId',
+    batchId: 'batchId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -15992,7 +17239,7 @@ export namespace Prisma {
     nickname: 'nickname',
     age: 'age',
     gender: 'gender',
-    registrationId: 'registrationId',
+    batchId: 'batchId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -16168,7 +17415,7 @@ export namespace Prisma {
     accounts?: AccountListRelationFilter
     church?: XOR<ChurchNullableScalarRelationFilter, ChurchWhereInput> | null
     registrations?: RegistrationListRelationFilter
-    reviewedRegistrations?: RegistrationListRelationFilter
+    reviewedBatches?: RegistrationBatchListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -16185,7 +17432,7 @@ export namespace Prisma {
     accounts?: AccountOrderByRelationAggregateInput
     church?: ChurchOrderByWithRelationInput
     registrations?: RegistrationOrderByRelationAggregateInput
-    reviewedRegistrations?: RegistrationOrderByRelationAggregateInput
+    reviewedBatches?: RegistrationBatchOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -16205,7 +17452,7 @@ export namespace Prisma {
     accounts?: AccountListRelationFilter
     church?: XOR<ChurchNullableScalarRelationFilter, ChurchWhereInput> | null
     registrations?: RegistrationListRelationFilter
-    reviewedRegistrations?: RegistrationListRelationFilter
+    reviewedBatches?: RegistrationBatchListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -16698,11 +17945,12 @@ export namespace Prisma {
     banner?: StringNullableFilter<"Event"> | string | null
     startDate?: DateTimeFilter<"Event"> | Date | string
     endDate?: DateTimeFilter<"Event"> | Date | string
-    registrationDeadline?: DateTimeFilter<"Event"> | Date | string
     preRegistrationFee?: IntFilter<"Event"> | number
+    preRegistrationSiblingDiscount?: IntFilter<"Event"> | number
     preRegistrationStart?: DateTimeFilter<"Event"> | Date | string
     preRegistrationEnd?: DateTimeFilter<"Event"> | Date | string
     onsiteRegistrationFee?: IntFilter<"Event"> | number
+    onsiteSiblingDiscount?: IntFilter<"Event"> | number
     cookRegistrationFee?: IntFilter<"Event"> | number
     status?: EnumEventStatusFilter<"Event"> | $Enums.EventStatus
     createdAt?: DateTimeFilter<"Event"> | Date | string
@@ -16718,11 +17966,12 @@ export namespace Prisma {
     banner?: SortOrderInput | SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
-    registrationDeadline?: SortOrder
     preRegistrationFee?: SortOrder
+    preRegistrationSiblingDiscount?: SortOrder
     preRegistrationStart?: SortOrder
     preRegistrationEnd?: SortOrder
     onsiteRegistrationFee?: SortOrder
+    onsiteSiblingDiscount?: SortOrder
     cookRegistrationFee?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
@@ -16741,11 +17990,12 @@ export namespace Prisma {
     banner?: StringNullableFilter<"Event"> | string | null
     startDate?: DateTimeFilter<"Event"> | Date | string
     endDate?: DateTimeFilter<"Event"> | Date | string
-    registrationDeadline?: DateTimeFilter<"Event"> | Date | string
     preRegistrationFee?: IntFilter<"Event"> | number
+    preRegistrationSiblingDiscount?: IntFilter<"Event"> | number
     preRegistrationStart?: DateTimeFilter<"Event"> | Date | string
     preRegistrationEnd?: DateTimeFilter<"Event"> | Date | string
     onsiteRegistrationFee?: IntFilter<"Event"> | number
+    onsiteSiblingDiscount?: IntFilter<"Event"> | number
     cookRegistrationFee?: IntFilter<"Event"> | number
     status?: EnumEventStatusFilter<"Event"> | $Enums.EventStatus
     createdAt?: DateTimeFilter<"Event"> | Date | string
@@ -16761,11 +18011,12 @@ export namespace Prisma {
     banner?: SortOrderInput | SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
-    registrationDeadline?: SortOrder
     preRegistrationFee?: SortOrder
+    preRegistrationSiblingDiscount?: SortOrder
     preRegistrationStart?: SortOrder
     preRegistrationEnd?: SortOrder
     onsiteRegistrationFee?: SortOrder
+    onsiteSiblingDiscount?: SortOrder
     cookRegistrationFee?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
@@ -16788,11 +18039,12 @@ export namespace Prisma {
     banner?: StringNullableWithAggregatesFilter<"Event"> | string | null
     startDate?: DateTimeWithAggregatesFilter<"Event"> | Date | string
     endDate?: DateTimeWithAggregatesFilter<"Event"> | Date | string
-    registrationDeadline?: DateTimeWithAggregatesFilter<"Event"> | Date | string
     preRegistrationFee?: IntWithAggregatesFilter<"Event"> | number
+    preRegistrationSiblingDiscount?: IntWithAggregatesFilter<"Event"> | number
     preRegistrationStart?: DateTimeWithAggregatesFilter<"Event"> | Date | string
     preRegistrationEnd?: DateTimeWithAggregatesFilter<"Event"> | Date | string
     onsiteRegistrationFee?: IntWithAggregatesFilter<"Event"> | number
+    onsiteSiblingDiscount?: IntWithAggregatesFilter<"Event"> | number
     cookRegistrationFee?: IntWithAggregatesFilter<"Event"> | number
     status?: EnumEventStatusWithAggregatesFilter<"Event"> | $Enums.EventStatus
     createdAt?: DateTimeWithAggregatesFilter<"Event"> | Date | string
@@ -16807,23 +18059,12 @@ export namespace Prisma {
     eventId?: StringFilter<"Registration"> | string
     churchId?: StringFilter<"Registration"> | string
     presidentId?: StringFilter<"Registration"> | string
-    status?: EnumRegistrationStatusFilter<"Registration"> | $Enums.RegistrationStatus
-    remarks?: StringNullableFilter<"Registration"> | string | null
-    receiptImage?: StringNullableFilter<"Registration"> | string | null
-    reviewedAt?: DateTimeNullableFilter<"Registration"> | Date | string | null
-    reviewedBy?: StringNullableFilter<"Registration"> | string | null
     createdAt?: DateTimeFilter<"Registration"> | Date | string
     updatedAt?: DateTimeFilter<"Registration"> | Date | string
-    totalFee?: IntFilter<"Registration"> | number
-    delegateFeePerPerson?: IntFilter<"Registration"> | number
-    cookFeePerPerson?: IntFilter<"Registration"> | number
-    isPreRegistration?: BoolFilter<"Registration"> | boolean
     event?: XOR<EventScalarRelationFilter, EventWhereInput>
     church?: XOR<ChurchScalarRelationFilter, ChurchWhereInput>
     president?: XOR<UserScalarRelationFilter, UserWhereInput>
-    reviewer?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
-    delegates?: DelegateListRelationFilter
-    cooks?: CookListRelationFilter
+    batches?: RegistrationBatchListRelationFilter
   }
 
   export type RegistrationOrderByWithRelationInput = {
@@ -16831,23 +18072,12 @@ export namespace Prisma {
     eventId?: SortOrder
     churchId?: SortOrder
     presidentId?: SortOrder
-    status?: SortOrder
-    remarks?: SortOrderInput | SortOrder
-    receiptImage?: SortOrderInput | SortOrder
-    reviewedAt?: SortOrderInput | SortOrder
-    reviewedBy?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    totalFee?: SortOrder
-    delegateFeePerPerson?: SortOrder
-    cookFeePerPerson?: SortOrder
-    isPreRegistration?: SortOrder
     event?: EventOrderByWithRelationInput
     church?: ChurchOrderByWithRelationInput
     president?: UserOrderByWithRelationInput
-    reviewer?: UserOrderByWithRelationInput
-    delegates?: DelegateOrderByRelationAggregateInput
-    cooks?: CookOrderByRelationAggregateInput
+    batches?: RegistrationBatchOrderByRelationAggregateInput
   }
 
   export type RegistrationWhereUniqueInput = Prisma.AtLeast<{
@@ -16859,23 +18089,12 @@ export namespace Prisma {
     eventId?: StringFilter<"Registration"> | string
     churchId?: StringFilter<"Registration"> | string
     presidentId?: StringFilter<"Registration"> | string
-    status?: EnumRegistrationStatusFilter<"Registration"> | $Enums.RegistrationStatus
-    remarks?: StringNullableFilter<"Registration"> | string | null
-    receiptImage?: StringNullableFilter<"Registration"> | string | null
-    reviewedAt?: DateTimeNullableFilter<"Registration"> | Date | string | null
-    reviewedBy?: StringNullableFilter<"Registration"> | string | null
     createdAt?: DateTimeFilter<"Registration"> | Date | string
     updatedAt?: DateTimeFilter<"Registration"> | Date | string
-    totalFee?: IntFilter<"Registration"> | number
-    delegateFeePerPerson?: IntFilter<"Registration"> | number
-    cookFeePerPerson?: IntFilter<"Registration"> | number
-    isPreRegistration?: BoolFilter<"Registration"> | boolean
     event?: XOR<EventScalarRelationFilter, EventWhereInput>
     church?: XOR<ChurchScalarRelationFilter, ChurchWhereInput>
     president?: XOR<UserScalarRelationFilter, UserWhereInput>
-    reviewer?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
-    delegates?: DelegateListRelationFilter
-    cooks?: CookListRelationFilter
+    batches?: RegistrationBatchListRelationFilter
   }, "id" | "eventId_churchId">
 
   export type RegistrationOrderByWithAggregationInput = {
@@ -16883,6 +18102,53 @@ export namespace Prisma {
     eventId?: SortOrder
     churchId?: SortOrder
     presidentId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: RegistrationCountOrderByAggregateInput
+    _max?: RegistrationMaxOrderByAggregateInput
+    _min?: RegistrationMinOrderByAggregateInput
+  }
+
+  export type RegistrationScalarWhereWithAggregatesInput = {
+    AND?: RegistrationScalarWhereWithAggregatesInput | RegistrationScalarWhereWithAggregatesInput[]
+    OR?: RegistrationScalarWhereWithAggregatesInput[]
+    NOT?: RegistrationScalarWhereWithAggregatesInput | RegistrationScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Registration"> | string
+    eventId?: StringWithAggregatesFilter<"Registration"> | string
+    churchId?: StringWithAggregatesFilter<"Registration"> | string
+    presidentId?: StringWithAggregatesFilter<"Registration"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"Registration"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Registration"> | Date | string
+  }
+
+  export type RegistrationBatchWhereInput = {
+    AND?: RegistrationBatchWhereInput | RegistrationBatchWhereInput[]
+    OR?: RegistrationBatchWhereInput[]
+    NOT?: RegistrationBatchWhereInput | RegistrationBatchWhereInput[]
+    id?: StringFilter<"RegistrationBatch"> | string
+    registrationId?: StringFilter<"RegistrationBatch"> | string
+    batchNumber?: IntFilter<"RegistrationBatch"> | number
+    status?: EnumRegistrationStatusFilter<"RegistrationBatch"> | $Enums.RegistrationStatus
+    remarks?: StringNullableFilter<"RegistrationBatch"> | string | null
+    receiptImage?: StringNullableFilter<"RegistrationBatch"> | string | null
+    reviewedAt?: DateTimeNullableFilter<"RegistrationBatch"> | Date | string | null
+    reviewedBy?: StringNullableFilter<"RegistrationBatch"> | string | null
+    createdAt?: DateTimeFilter<"RegistrationBatch"> | Date | string
+    updatedAt?: DateTimeFilter<"RegistrationBatch"> | Date | string
+    totalFee?: IntFilter<"RegistrationBatch"> | number
+    delegateFeePerPerson?: IntFilter<"RegistrationBatch"> | number
+    cookFeePerPerson?: IntFilter<"RegistrationBatch"> | number
+    isPreRegistration?: BoolFilter<"RegistrationBatch"> | boolean
+    registration?: XOR<RegistrationScalarRelationFilter, RegistrationWhereInput>
+    reviewer?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    delegates?: DelegateListRelationFilter
+    cooks?: CookListRelationFilter
+  }
+
+  export type RegistrationBatchOrderByWithRelationInput = {
+    id?: SortOrder
+    registrationId?: SortOrder
+    batchNumber?: SortOrder
     status?: SortOrder
     remarks?: SortOrderInput | SortOrder
     receiptImage?: SortOrderInput | SortOrder
@@ -16894,32 +18160,76 @@ export namespace Prisma {
     delegateFeePerPerson?: SortOrder
     cookFeePerPerson?: SortOrder
     isPreRegistration?: SortOrder
-    _count?: RegistrationCountOrderByAggregateInput
-    _avg?: RegistrationAvgOrderByAggregateInput
-    _max?: RegistrationMaxOrderByAggregateInput
-    _min?: RegistrationMinOrderByAggregateInput
-    _sum?: RegistrationSumOrderByAggregateInput
+    registration?: RegistrationOrderByWithRelationInput
+    reviewer?: UserOrderByWithRelationInput
+    delegates?: DelegateOrderByRelationAggregateInput
+    cooks?: CookOrderByRelationAggregateInput
   }
 
-  export type RegistrationScalarWhereWithAggregatesInput = {
-    AND?: RegistrationScalarWhereWithAggregatesInput | RegistrationScalarWhereWithAggregatesInput[]
-    OR?: RegistrationScalarWhereWithAggregatesInput[]
-    NOT?: RegistrationScalarWhereWithAggregatesInput | RegistrationScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Registration"> | string
-    eventId?: StringWithAggregatesFilter<"Registration"> | string
-    churchId?: StringWithAggregatesFilter<"Registration"> | string
-    presidentId?: StringWithAggregatesFilter<"Registration"> | string
-    status?: EnumRegistrationStatusWithAggregatesFilter<"Registration"> | $Enums.RegistrationStatus
-    remarks?: StringNullableWithAggregatesFilter<"Registration"> | string | null
-    receiptImage?: StringNullableWithAggregatesFilter<"Registration"> | string | null
-    reviewedAt?: DateTimeNullableWithAggregatesFilter<"Registration"> | Date | string | null
-    reviewedBy?: StringNullableWithAggregatesFilter<"Registration"> | string | null
-    createdAt?: DateTimeWithAggregatesFilter<"Registration"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"Registration"> | Date | string
-    totalFee?: IntWithAggregatesFilter<"Registration"> | number
-    delegateFeePerPerson?: IntWithAggregatesFilter<"Registration"> | number
-    cookFeePerPerson?: IntWithAggregatesFilter<"Registration"> | number
-    isPreRegistration?: BoolWithAggregatesFilter<"Registration"> | boolean
+  export type RegistrationBatchWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: RegistrationBatchWhereInput | RegistrationBatchWhereInput[]
+    OR?: RegistrationBatchWhereInput[]
+    NOT?: RegistrationBatchWhereInput | RegistrationBatchWhereInput[]
+    registrationId?: StringFilter<"RegistrationBatch"> | string
+    batchNumber?: IntFilter<"RegistrationBatch"> | number
+    status?: EnumRegistrationStatusFilter<"RegistrationBatch"> | $Enums.RegistrationStatus
+    remarks?: StringNullableFilter<"RegistrationBatch"> | string | null
+    receiptImage?: StringNullableFilter<"RegistrationBatch"> | string | null
+    reviewedAt?: DateTimeNullableFilter<"RegistrationBatch"> | Date | string | null
+    reviewedBy?: StringNullableFilter<"RegistrationBatch"> | string | null
+    createdAt?: DateTimeFilter<"RegistrationBatch"> | Date | string
+    updatedAt?: DateTimeFilter<"RegistrationBatch"> | Date | string
+    totalFee?: IntFilter<"RegistrationBatch"> | number
+    delegateFeePerPerson?: IntFilter<"RegistrationBatch"> | number
+    cookFeePerPerson?: IntFilter<"RegistrationBatch"> | number
+    isPreRegistration?: BoolFilter<"RegistrationBatch"> | boolean
+    registration?: XOR<RegistrationScalarRelationFilter, RegistrationWhereInput>
+    reviewer?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    delegates?: DelegateListRelationFilter
+    cooks?: CookListRelationFilter
+  }, "id">
+
+  export type RegistrationBatchOrderByWithAggregationInput = {
+    id?: SortOrder
+    registrationId?: SortOrder
+    batchNumber?: SortOrder
+    status?: SortOrder
+    remarks?: SortOrderInput | SortOrder
+    receiptImage?: SortOrderInput | SortOrder
+    reviewedAt?: SortOrderInput | SortOrder
+    reviewedBy?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    totalFee?: SortOrder
+    delegateFeePerPerson?: SortOrder
+    cookFeePerPerson?: SortOrder
+    isPreRegistration?: SortOrder
+    _count?: RegistrationBatchCountOrderByAggregateInput
+    _avg?: RegistrationBatchAvgOrderByAggregateInput
+    _max?: RegistrationBatchMaxOrderByAggregateInput
+    _min?: RegistrationBatchMinOrderByAggregateInput
+    _sum?: RegistrationBatchSumOrderByAggregateInput
+  }
+
+  export type RegistrationBatchScalarWhereWithAggregatesInput = {
+    AND?: RegistrationBatchScalarWhereWithAggregatesInput | RegistrationBatchScalarWhereWithAggregatesInput[]
+    OR?: RegistrationBatchScalarWhereWithAggregatesInput[]
+    NOT?: RegistrationBatchScalarWhereWithAggregatesInput | RegistrationBatchScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"RegistrationBatch"> | string
+    registrationId?: StringWithAggregatesFilter<"RegistrationBatch"> | string
+    batchNumber?: IntWithAggregatesFilter<"RegistrationBatch"> | number
+    status?: EnumRegistrationStatusWithAggregatesFilter<"RegistrationBatch"> | $Enums.RegistrationStatus
+    remarks?: StringNullableWithAggregatesFilter<"RegistrationBatch"> | string | null
+    receiptImage?: StringNullableWithAggregatesFilter<"RegistrationBatch"> | string | null
+    reviewedAt?: DateTimeNullableWithAggregatesFilter<"RegistrationBatch"> | Date | string | null
+    reviewedBy?: StringNullableWithAggregatesFilter<"RegistrationBatch"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"RegistrationBatch"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"RegistrationBatch"> | Date | string
+    totalFee?: IntWithAggregatesFilter<"RegistrationBatch"> | number
+    delegateFeePerPerson?: IntWithAggregatesFilter<"RegistrationBatch"> | number
+    cookFeePerPerson?: IntWithAggregatesFilter<"RegistrationBatch"> | number
+    isPreRegistration?: BoolWithAggregatesFilter<"RegistrationBatch"> | boolean
   }
 
   export type DelegateWhereInput = {
@@ -16931,10 +18241,10 @@ export namespace Prisma {
     nickname?: StringNullableFilter<"Delegate"> | string | null
     age?: IntFilter<"Delegate"> | number
     gender?: EnumGenderFilter<"Delegate"> | $Enums.Gender
-    registrationId?: StringFilter<"Delegate"> | string
+    batchId?: StringFilter<"Delegate"> | string
     createdAt?: DateTimeFilter<"Delegate"> | Date | string
     updatedAt?: DateTimeFilter<"Delegate"> | Date | string
-    registration?: XOR<RegistrationScalarRelationFilter, RegistrationWhereInput>
+    batch?: XOR<RegistrationBatchScalarRelationFilter, RegistrationBatchWhereInput>
   }
 
   export type DelegateOrderByWithRelationInput = {
@@ -16943,10 +18253,10 @@ export namespace Prisma {
     nickname?: SortOrderInput | SortOrder
     age?: SortOrder
     gender?: SortOrder
-    registrationId?: SortOrder
+    batchId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    registration?: RegistrationOrderByWithRelationInput
+    batch?: RegistrationBatchOrderByWithRelationInput
   }
 
   export type DelegateWhereUniqueInput = Prisma.AtLeast<{
@@ -16958,10 +18268,10 @@ export namespace Prisma {
     nickname?: StringNullableFilter<"Delegate"> | string | null
     age?: IntFilter<"Delegate"> | number
     gender?: EnumGenderFilter<"Delegate"> | $Enums.Gender
-    registrationId?: StringFilter<"Delegate"> | string
+    batchId?: StringFilter<"Delegate"> | string
     createdAt?: DateTimeFilter<"Delegate"> | Date | string
     updatedAt?: DateTimeFilter<"Delegate"> | Date | string
-    registration?: XOR<RegistrationScalarRelationFilter, RegistrationWhereInput>
+    batch?: XOR<RegistrationBatchScalarRelationFilter, RegistrationBatchWhereInput>
   }, "id">
 
   export type DelegateOrderByWithAggregationInput = {
@@ -16970,7 +18280,7 @@ export namespace Prisma {
     nickname?: SortOrderInput | SortOrder
     age?: SortOrder
     gender?: SortOrder
-    registrationId?: SortOrder
+    batchId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: DelegateCountOrderByAggregateInput
@@ -16989,7 +18299,7 @@ export namespace Prisma {
     nickname?: StringNullableWithAggregatesFilter<"Delegate"> | string | null
     age?: IntWithAggregatesFilter<"Delegate"> | number
     gender?: EnumGenderWithAggregatesFilter<"Delegate"> | $Enums.Gender
-    registrationId?: StringWithAggregatesFilter<"Delegate"> | string
+    batchId?: StringWithAggregatesFilter<"Delegate"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Delegate"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Delegate"> | Date | string
   }
@@ -17003,10 +18313,10 @@ export namespace Prisma {
     nickname?: StringNullableFilter<"Cook"> | string | null
     age?: IntFilter<"Cook"> | number
     gender?: EnumGenderFilter<"Cook"> | $Enums.Gender
-    registrationId?: StringFilter<"Cook"> | string
+    batchId?: StringFilter<"Cook"> | string
     createdAt?: DateTimeFilter<"Cook"> | Date | string
     updatedAt?: DateTimeFilter<"Cook"> | Date | string
-    registration?: XOR<RegistrationScalarRelationFilter, RegistrationWhereInput>
+    batch?: XOR<RegistrationBatchScalarRelationFilter, RegistrationBatchWhereInput>
   }
 
   export type CookOrderByWithRelationInput = {
@@ -17015,10 +18325,10 @@ export namespace Prisma {
     nickname?: SortOrderInput | SortOrder
     age?: SortOrder
     gender?: SortOrder
-    registrationId?: SortOrder
+    batchId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    registration?: RegistrationOrderByWithRelationInput
+    batch?: RegistrationBatchOrderByWithRelationInput
   }
 
   export type CookWhereUniqueInput = Prisma.AtLeast<{
@@ -17030,10 +18340,10 @@ export namespace Prisma {
     nickname?: StringNullableFilter<"Cook"> | string | null
     age?: IntFilter<"Cook"> | number
     gender?: EnumGenderFilter<"Cook"> | $Enums.Gender
-    registrationId?: StringFilter<"Cook"> | string
+    batchId?: StringFilter<"Cook"> | string
     createdAt?: DateTimeFilter<"Cook"> | Date | string
     updatedAt?: DateTimeFilter<"Cook"> | Date | string
-    registration?: XOR<RegistrationScalarRelationFilter, RegistrationWhereInput>
+    batch?: XOR<RegistrationBatchScalarRelationFilter, RegistrationBatchWhereInput>
   }, "id">
 
   export type CookOrderByWithAggregationInput = {
@@ -17042,7 +18352,7 @@ export namespace Prisma {
     nickname?: SortOrderInput | SortOrder
     age?: SortOrder
     gender?: SortOrder
-    registrationId?: SortOrder
+    batchId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: CookCountOrderByAggregateInput
@@ -17061,7 +18371,7 @@ export namespace Prisma {
     nickname?: StringNullableWithAggregatesFilter<"Cook"> | string | null
     age?: IntWithAggregatesFilter<"Cook"> | number
     gender?: EnumGenderWithAggregatesFilter<"Cook"> | $Enums.Gender
-    registrationId?: StringWithAggregatesFilter<"Cook"> | string
+    batchId?: StringWithAggregatesFilter<"Cook"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Cook"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Cook"> | Date | string
   }
@@ -17079,7 +18389,7 @@ export namespace Prisma {
     accounts?: AccountCreateNestedManyWithoutUserInput
     church?: ChurchCreateNestedOneWithoutPresidentsInput
     registrations?: RegistrationCreateNestedManyWithoutPresidentInput
-    reviewedRegistrations?: RegistrationCreateNestedManyWithoutReviewerInput
+    reviewedBatches?: RegistrationBatchCreateNestedManyWithoutReviewerInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -17095,7 +18405,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     registrations?: RegistrationUncheckedCreateNestedManyWithoutPresidentInput
-    reviewedRegistrations?: RegistrationUncheckedCreateNestedManyWithoutReviewerInput
+    reviewedBatches?: RegistrationBatchUncheckedCreateNestedManyWithoutReviewerInput
   }
 
   export type UserUpdateInput = {
@@ -17111,7 +18421,7 @@ export namespace Prisma {
     accounts?: AccountUpdateManyWithoutUserNestedInput
     church?: ChurchUpdateOneWithoutPresidentsNestedInput
     registrations?: RegistrationUpdateManyWithoutPresidentNestedInput
-    reviewedRegistrations?: RegistrationUpdateManyWithoutReviewerNestedInput
+    reviewedBatches?: RegistrationBatchUpdateManyWithoutReviewerNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -17127,7 +18437,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     registrations?: RegistrationUncheckedUpdateManyWithoutPresidentNestedInput
-    reviewedRegistrations?: RegistrationUncheckedUpdateManyWithoutReviewerNestedInput
+    reviewedBatches?: RegistrationBatchUncheckedUpdateManyWithoutReviewerNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -17657,11 +18967,12 @@ export namespace Prisma {
     banner?: string | null
     startDate: Date | string
     endDate: Date | string
-    registrationDeadline: Date | string
     preRegistrationFee: number
+    preRegistrationSiblingDiscount?: number
     preRegistrationStart: Date | string
     preRegistrationEnd: Date | string
     onsiteRegistrationFee: number
+    onsiteSiblingDiscount?: number
     cookRegistrationFee: number
     status?: $Enums.EventStatus
     createdAt?: Date | string
@@ -17677,11 +18988,12 @@ export namespace Prisma {
     banner?: string | null
     startDate: Date | string
     endDate: Date | string
-    registrationDeadline: Date | string
     preRegistrationFee: number
+    preRegistrationSiblingDiscount?: number
     preRegistrationStart: Date | string
     preRegistrationEnd: Date | string
     onsiteRegistrationFee: number
+    onsiteSiblingDiscount?: number
     cookRegistrationFee: number
     status?: $Enums.EventStatus
     createdAt?: Date | string
@@ -17697,11 +19009,12 @@ export namespace Prisma {
     banner?: NullableStringFieldUpdateOperationsInput | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    registrationDeadline?: DateTimeFieldUpdateOperationsInput | Date | string
     preRegistrationFee?: IntFieldUpdateOperationsInput | number
+    preRegistrationSiblingDiscount?: IntFieldUpdateOperationsInput | number
     preRegistrationStart?: DateTimeFieldUpdateOperationsInput | Date | string
     preRegistrationEnd?: DateTimeFieldUpdateOperationsInput | Date | string
     onsiteRegistrationFee?: IntFieldUpdateOperationsInput | number
+    onsiteSiblingDiscount?: IntFieldUpdateOperationsInput | number
     cookRegistrationFee?: IntFieldUpdateOperationsInput | number
     status?: EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17717,11 +19030,12 @@ export namespace Prisma {
     banner?: NullableStringFieldUpdateOperationsInput | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    registrationDeadline?: DateTimeFieldUpdateOperationsInput | Date | string
     preRegistrationFee?: IntFieldUpdateOperationsInput | number
+    preRegistrationSiblingDiscount?: IntFieldUpdateOperationsInput | number
     preRegistrationStart?: DateTimeFieldUpdateOperationsInput | Date | string
     preRegistrationEnd?: DateTimeFieldUpdateOperationsInput | Date | string
     onsiteRegistrationFee?: IntFieldUpdateOperationsInput | number
+    onsiteSiblingDiscount?: IntFieldUpdateOperationsInput | number
     cookRegistrationFee?: IntFieldUpdateOperationsInput | number
     status?: EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17737,11 +19051,12 @@ export namespace Prisma {
     banner?: string | null
     startDate: Date | string
     endDate: Date | string
-    registrationDeadline: Date | string
     preRegistrationFee: number
+    preRegistrationSiblingDiscount?: number
     preRegistrationStart: Date | string
     preRegistrationEnd: Date | string
     onsiteRegistrationFee: number
+    onsiteSiblingDiscount?: number
     cookRegistrationFee: number
     status?: $Enums.EventStatus
     createdAt?: Date | string
@@ -17756,11 +19071,12 @@ export namespace Prisma {
     banner?: NullableStringFieldUpdateOperationsInput | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    registrationDeadline?: DateTimeFieldUpdateOperationsInput | Date | string
     preRegistrationFee?: IntFieldUpdateOperationsInput | number
+    preRegistrationSiblingDiscount?: IntFieldUpdateOperationsInput | number
     preRegistrationStart?: DateTimeFieldUpdateOperationsInput | Date | string
     preRegistrationEnd?: DateTimeFieldUpdateOperationsInput | Date | string
     onsiteRegistrationFee?: IntFieldUpdateOperationsInput | number
+    onsiteSiblingDiscount?: IntFieldUpdateOperationsInput | number
     cookRegistrationFee?: IntFieldUpdateOperationsInput | number
     status?: EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17775,11 +19091,12 @@ export namespace Prisma {
     banner?: NullableStringFieldUpdateOperationsInput | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    registrationDeadline?: DateTimeFieldUpdateOperationsInput | Date | string
     preRegistrationFee?: IntFieldUpdateOperationsInput | number
+    preRegistrationSiblingDiscount?: IntFieldUpdateOperationsInput | number
     preRegistrationStart?: DateTimeFieldUpdateOperationsInput | Date | string
     preRegistrationEnd?: DateTimeFieldUpdateOperationsInput | Date | string
     onsiteRegistrationFee?: IntFieldUpdateOperationsInput | number
+    onsiteSiblingDiscount?: IntFieldUpdateOperationsInput | number
     cookRegistrationFee?: IntFieldUpdateOperationsInput | number
     status?: EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17788,6 +19105,71 @@ export namespace Prisma {
 
   export type RegistrationCreateInput = {
     id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    event: EventCreateNestedOneWithoutRegistrationsInput
+    church: ChurchCreateNestedOneWithoutRegistrationsInput
+    president: UserCreateNestedOneWithoutRegistrationsInput
+    batches?: RegistrationBatchCreateNestedManyWithoutRegistrationInput
+  }
+
+  export type RegistrationUncheckedCreateInput = {
+    id?: string
+    eventId: string
+    churchId: string
+    presidentId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    batches?: RegistrationBatchUncheckedCreateNestedManyWithoutRegistrationInput
+  }
+
+  export type RegistrationUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    event?: EventUpdateOneRequiredWithoutRegistrationsNestedInput
+    church?: ChurchUpdateOneRequiredWithoutRegistrationsNestedInput
+    president?: UserUpdateOneRequiredWithoutRegistrationsNestedInput
+    batches?: RegistrationBatchUpdateManyWithoutRegistrationNestedInput
+  }
+
+  export type RegistrationUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    eventId?: StringFieldUpdateOperationsInput | string
+    churchId?: StringFieldUpdateOperationsInput | string
+    presidentId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    batches?: RegistrationBatchUncheckedUpdateManyWithoutRegistrationNestedInput
+  }
+
+  export type RegistrationCreateManyInput = {
+    id?: string
+    eventId: string
+    churchId: string
+    presidentId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RegistrationUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RegistrationUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    eventId?: StringFieldUpdateOperationsInput | string
+    churchId?: StringFieldUpdateOperationsInput | string
+    presidentId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RegistrationBatchCreateInput = {
+    id?: string
+    batchNumber: number
     status?: $Enums.RegistrationStatus
     remarks?: string | null
     receiptImage?: string | null
@@ -17798,19 +19180,16 @@ export namespace Prisma {
     delegateFeePerPerson?: number
     cookFeePerPerson?: number
     isPreRegistration?: boolean
-    event: EventCreateNestedOneWithoutRegistrationsInput
-    church: ChurchCreateNestedOneWithoutRegistrationsInput
-    president: UserCreateNestedOneWithoutRegistrationsInput
-    reviewer?: UserCreateNestedOneWithoutReviewedRegistrationsInput
-    delegates?: DelegateCreateNestedManyWithoutRegistrationInput
-    cooks?: CookCreateNestedManyWithoutRegistrationInput
+    registration: RegistrationCreateNestedOneWithoutBatchesInput
+    reviewer?: UserCreateNestedOneWithoutReviewedBatchesInput
+    delegates?: DelegateCreateNestedManyWithoutBatchInput
+    cooks?: CookCreateNestedManyWithoutBatchInput
   }
 
-  export type RegistrationUncheckedCreateInput = {
+  export type RegistrationBatchUncheckedCreateInput = {
     id?: string
-    eventId: string
-    churchId: string
-    presidentId: string
+    registrationId: string
+    batchNumber: number
     status?: $Enums.RegistrationStatus
     remarks?: string | null
     receiptImage?: string | null
@@ -17822,12 +19201,13 @@ export namespace Prisma {
     delegateFeePerPerson?: number
     cookFeePerPerson?: number
     isPreRegistration?: boolean
-    delegates?: DelegateUncheckedCreateNestedManyWithoutRegistrationInput
-    cooks?: CookUncheckedCreateNestedManyWithoutRegistrationInput
+    delegates?: DelegateUncheckedCreateNestedManyWithoutBatchInput
+    cooks?: CookUncheckedCreateNestedManyWithoutBatchInput
   }
 
-  export type RegistrationUpdateInput = {
+  export type RegistrationBatchUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    batchNumber?: IntFieldUpdateOperationsInput | number
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
     receiptImage?: NullableStringFieldUpdateOperationsInput | string | null
@@ -17838,19 +19218,16 @@ export namespace Prisma {
     delegateFeePerPerson?: IntFieldUpdateOperationsInput | number
     cookFeePerPerson?: IntFieldUpdateOperationsInput | number
     isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
-    event?: EventUpdateOneRequiredWithoutRegistrationsNestedInput
-    church?: ChurchUpdateOneRequiredWithoutRegistrationsNestedInput
-    president?: UserUpdateOneRequiredWithoutRegistrationsNestedInput
-    reviewer?: UserUpdateOneWithoutReviewedRegistrationsNestedInput
-    delegates?: DelegateUpdateManyWithoutRegistrationNestedInput
-    cooks?: CookUpdateManyWithoutRegistrationNestedInput
+    registration?: RegistrationUpdateOneRequiredWithoutBatchesNestedInput
+    reviewer?: UserUpdateOneWithoutReviewedBatchesNestedInput
+    delegates?: DelegateUpdateManyWithoutBatchNestedInput
+    cooks?: CookUpdateManyWithoutBatchNestedInput
   }
 
-  export type RegistrationUncheckedUpdateInput = {
+  export type RegistrationBatchUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    eventId?: StringFieldUpdateOperationsInput | string
-    churchId?: StringFieldUpdateOperationsInput | string
-    presidentId?: StringFieldUpdateOperationsInput | string
+    registrationId?: StringFieldUpdateOperationsInput | string
+    batchNumber?: IntFieldUpdateOperationsInput | number
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
     receiptImage?: NullableStringFieldUpdateOperationsInput | string | null
@@ -17862,15 +19239,14 @@ export namespace Prisma {
     delegateFeePerPerson?: IntFieldUpdateOperationsInput | number
     cookFeePerPerson?: IntFieldUpdateOperationsInput | number
     isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
-    delegates?: DelegateUncheckedUpdateManyWithoutRegistrationNestedInput
-    cooks?: CookUncheckedUpdateManyWithoutRegistrationNestedInput
+    delegates?: DelegateUncheckedUpdateManyWithoutBatchNestedInput
+    cooks?: CookUncheckedUpdateManyWithoutBatchNestedInput
   }
 
-  export type RegistrationCreateManyInput = {
+  export type RegistrationBatchCreateManyInput = {
     id?: string
-    eventId: string
-    churchId: string
-    presidentId: string
+    registrationId: string
+    batchNumber: number
     status?: $Enums.RegistrationStatus
     remarks?: string | null
     receiptImage?: string | null
@@ -17884,8 +19260,9 @@ export namespace Prisma {
     isPreRegistration?: boolean
   }
 
-  export type RegistrationUpdateManyMutationInput = {
+  export type RegistrationBatchUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    batchNumber?: IntFieldUpdateOperationsInput | number
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
     receiptImage?: NullableStringFieldUpdateOperationsInput | string | null
@@ -17898,11 +19275,10 @@ export namespace Prisma {
     isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
   }
 
-  export type RegistrationUncheckedUpdateManyInput = {
+  export type RegistrationBatchUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    eventId?: StringFieldUpdateOperationsInput | string
-    churchId?: StringFieldUpdateOperationsInput | string
-    presidentId?: StringFieldUpdateOperationsInput | string
+    registrationId?: StringFieldUpdateOperationsInput | string
+    batchNumber?: IntFieldUpdateOperationsInput | number
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
     receiptImage?: NullableStringFieldUpdateOperationsInput | string | null
@@ -17924,7 +19300,7 @@ export namespace Prisma {
     gender: $Enums.Gender
     createdAt?: Date | string
     updatedAt?: Date | string
-    registration: RegistrationCreateNestedOneWithoutDelegatesInput
+    batch: RegistrationBatchCreateNestedOneWithoutDelegatesInput
   }
 
   export type DelegateUncheckedCreateInput = {
@@ -17933,7 +19309,7 @@ export namespace Prisma {
     nickname?: string | null
     age: number
     gender: $Enums.Gender
-    registrationId: string
+    batchId: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -17946,7 +19322,7 @@ export namespace Prisma {
     gender?: EnumGenderFieldUpdateOperationsInput | $Enums.Gender
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    registration?: RegistrationUpdateOneRequiredWithoutDelegatesNestedInput
+    batch?: RegistrationBatchUpdateOneRequiredWithoutDelegatesNestedInput
   }
 
   export type DelegateUncheckedUpdateInput = {
@@ -17955,7 +19331,7 @@ export namespace Prisma {
     nickname?: NullableStringFieldUpdateOperationsInput | string | null
     age?: IntFieldUpdateOperationsInput | number
     gender?: EnumGenderFieldUpdateOperationsInput | $Enums.Gender
-    registrationId?: StringFieldUpdateOperationsInput | string
+    batchId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -17966,7 +19342,7 @@ export namespace Prisma {
     nickname?: string | null
     age: number
     gender: $Enums.Gender
-    registrationId: string
+    batchId: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -17987,7 +19363,7 @@ export namespace Prisma {
     nickname?: NullableStringFieldUpdateOperationsInput | string | null
     age?: IntFieldUpdateOperationsInput | number
     gender?: EnumGenderFieldUpdateOperationsInput | $Enums.Gender
-    registrationId?: StringFieldUpdateOperationsInput | string
+    batchId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -18000,7 +19376,7 @@ export namespace Prisma {
     gender: $Enums.Gender
     createdAt?: Date | string
     updatedAt?: Date | string
-    registration: RegistrationCreateNestedOneWithoutCooksInput
+    batch: RegistrationBatchCreateNestedOneWithoutCooksInput
   }
 
   export type CookUncheckedCreateInput = {
@@ -18009,7 +19385,7 @@ export namespace Prisma {
     nickname?: string | null
     age: number
     gender: $Enums.Gender
-    registrationId: string
+    batchId: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -18022,7 +19398,7 @@ export namespace Prisma {
     gender?: EnumGenderFieldUpdateOperationsInput | $Enums.Gender
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    registration?: RegistrationUpdateOneRequiredWithoutCooksNestedInput
+    batch?: RegistrationBatchUpdateOneRequiredWithoutCooksNestedInput
   }
 
   export type CookUncheckedUpdateInput = {
@@ -18031,7 +19407,7 @@ export namespace Prisma {
     nickname?: NullableStringFieldUpdateOperationsInput | string | null
     age?: IntFieldUpdateOperationsInput | number
     gender?: EnumGenderFieldUpdateOperationsInput | $Enums.Gender
-    registrationId?: StringFieldUpdateOperationsInput | string
+    batchId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -18042,7 +19418,7 @@ export namespace Prisma {
     nickname?: string | null
     age: number
     gender: $Enums.Gender
-    registrationId: string
+    batchId: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -18063,7 +19439,7 @@ export namespace Prisma {
     nickname?: NullableStringFieldUpdateOperationsInput | string | null
     age?: IntFieldUpdateOperationsInput | number
     gender?: EnumGenderFieldUpdateOperationsInput | $Enums.Gender
-    registrationId?: StringFieldUpdateOperationsInput | string
+    batchId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -18144,6 +19520,12 @@ export namespace Prisma {
     none?: RegistrationWhereInput
   }
 
+  export type RegistrationBatchListRelationFilter = {
+    every?: RegistrationBatchWhereInput
+    some?: RegistrationBatchWhereInput
+    none?: RegistrationBatchWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -18158,6 +19540,10 @@ export namespace Prisma {
   }
 
   export type RegistrationOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type RegistrationBatchOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -18562,11 +19948,12 @@ export namespace Prisma {
     banner?: SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
-    registrationDeadline?: SortOrder
     preRegistrationFee?: SortOrder
+    preRegistrationSiblingDiscount?: SortOrder
     preRegistrationStart?: SortOrder
     preRegistrationEnd?: SortOrder
     onsiteRegistrationFee?: SortOrder
+    onsiteSiblingDiscount?: SortOrder
     cookRegistrationFee?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
@@ -18575,7 +19962,9 @@ export namespace Prisma {
 
   export type EventAvgOrderByAggregateInput = {
     preRegistrationFee?: SortOrder
+    preRegistrationSiblingDiscount?: SortOrder
     onsiteRegistrationFee?: SortOrder
+    onsiteSiblingDiscount?: SortOrder
     cookRegistrationFee?: SortOrder
   }
 
@@ -18587,11 +19976,12 @@ export namespace Prisma {
     banner?: SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
-    registrationDeadline?: SortOrder
     preRegistrationFee?: SortOrder
+    preRegistrationSiblingDiscount?: SortOrder
     preRegistrationStart?: SortOrder
     preRegistrationEnd?: SortOrder
     onsiteRegistrationFee?: SortOrder
+    onsiteSiblingDiscount?: SortOrder
     cookRegistrationFee?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
@@ -18606,11 +19996,12 @@ export namespace Prisma {
     banner?: SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
-    registrationDeadline?: SortOrder
     preRegistrationFee?: SortOrder
+    preRegistrationSiblingDiscount?: SortOrder
     preRegistrationStart?: SortOrder
     preRegistrationEnd?: SortOrder
     onsiteRegistrationFee?: SortOrder
+    onsiteSiblingDiscount?: SortOrder
     cookRegistrationFee?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
@@ -18619,7 +20010,9 @@ export namespace Prisma {
 
   export type EventSumOrderByAggregateInput = {
     preRegistrationFee?: SortOrder
+    preRegistrationSiblingDiscount?: SortOrder
     onsiteRegistrationFee?: SortOrder
+    onsiteSiblingDiscount?: SortOrder
     cookRegistrationFee?: SortOrder
   }
 
@@ -18649,6 +20042,43 @@ export namespace Prisma {
     _max?: NestedEnumEventStatusFilter<$PrismaModel>
   }
 
+  export type EventScalarRelationFilter = {
+    is?: EventWhereInput
+    isNot?: EventWhereInput
+  }
+
+  export type RegistrationEventIdChurchIdCompoundUniqueInput = {
+    eventId: string
+    churchId: string
+  }
+
+  export type RegistrationCountOrderByAggregateInput = {
+    id?: SortOrder
+    eventId?: SortOrder
+    churchId?: SortOrder
+    presidentId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RegistrationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    eventId?: SortOrder
+    churchId?: SortOrder
+    presidentId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RegistrationMinOrderByAggregateInput = {
+    id?: SortOrder
+    eventId?: SortOrder
+    churchId?: SortOrder
+    presidentId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
   export type EnumRegistrationStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.RegistrationStatus | EnumRegistrationStatusFieldRefInput<$PrismaModel>
     in?: $Enums.RegistrationStatus[] | ListEnumRegistrationStatusFieldRefInput<$PrismaModel>
@@ -18656,9 +20086,9 @@ export namespace Prisma {
     not?: NestedEnumRegistrationStatusFilter<$PrismaModel> | $Enums.RegistrationStatus
   }
 
-  export type EventScalarRelationFilter = {
-    is?: EventWhereInput
-    isNot?: EventWhereInput
+  export type RegistrationScalarRelationFilter = {
+    is?: RegistrationWhereInput
+    isNot?: RegistrationWhereInput
   }
 
   export type UserNullableScalarRelationFilter = {
@@ -18686,16 +20116,10 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
-  export type RegistrationEventIdChurchIdCompoundUniqueInput = {
-    eventId: string
-    churchId: string
-  }
-
-  export type RegistrationCountOrderByAggregateInput = {
+  export type RegistrationBatchCountOrderByAggregateInput = {
     id?: SortOrder
-    eventId?: SortOrder
-    churchId?: SortOrder
-    presidentId?: SortOrder
+    registrationId?: SortOrder
+    batchNumber?: SortOrder
     status?: SortOrder
     remarks?: SortOrder
     receiptImage?: SortOrder
@@ -18709,17 +20133,17 @@ export namespace Prisma {
     isPreRegistration?: SortOrder
   }
 
-  export type RegistrationAvgOrderByAggregateInput = {
+  export type RegistrationBatchAvgOrderByAggregateInput = {
+    batchNumber?: SortOrder
     totalFee?: SortOrder
     delegateFeePerPerson?: SortOrder
     cookFeePerPerson?: SortOrder
   }
 
-  export type RegistrationMaxOrderByAggregateInput = {
+  export type RegistrationBatchMaxOrderByAggregateInput = {
     id?: SortOrder
-    eventId?: SortOrder
-    churchId?: SortOrder
-    presidentId?: SortOrder
+    registrationId?: SortOrder
+    batchNumber?: SortOrder
     status?: SortOrder
     remarks?: SortOrder
     receiptImage?: SortOrder
@@ -18733,11 +20157,10 @@ export namespace Prisma {
     isPreRegistration?: SortOrder
   }
 
-  export type RegistrationMinOrderByAggregateInput = {
+  export type RegistrationBatchMinOrderByAggregateInput = {
     id?: SortOrder
-    eventId?: SortOrder
-    churchId?: SortOrder
-    presidentId?: SortOrder
+    registrationId?: SortOrder
+    batchNumber?: SortOrder
     status?: SortOrder
     remarks?: SortOrder
     receiptImage?: SortOrder
@@ -18751,7 +20174,8 @@ export namespace Prisma {
     isPreRegistration?: SortOrder
   }
 
-  export type RegistrationSumOrderByAggregateInput = {
+  export type RegistrationBatchSumOrderByAggregateInput = {
+    batchNumber?: SortOrder
     totalFee?: SortOrder
     delegateFeePerPerson?: SortOrder
     cookFeePerPerson?: SortOrder
@@ -18774,9 +20198,9 @@ export namespace Prisma {
     not?: NestedEnumGenderFilter<$PrismaModel> | $Enums.Gender
   }
 
-  export type RegistrationScalarRelationFilter = {
-    is?: RegistrationWhereInput
-    isNot?: RegistrationWhereInput
+  export type RegistrationBatchScalarRelationFilter = {
+    is?: RegistrationBatchWhereInput
+    isNot?: RegistrationBatchWhereInput
   }
 
   export type DelegateCountOrderByAggregateInput = {
@@ -18785,7 +20209,7 @@ export namespace Prisma {
     nickname?: SortOrder
     age?: SortOrder
     gender?: SortOrder
-    registrationId?: SortOrder
+    batchId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -18800,7 +20224,7 @@ export namespace Prisma {
     nickname?: SortOrder
     age?: SortOrder
     gender?: SortOrder
-    registrationId?: SortOrder
+    batchId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -18811,7 +20235,7 @@ export namespace Prisma {
     nickname?: SortOrder
     age?: SortOrder
     gender?: SortOrder
-    registrationId?: SortOrder
+    batchId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -18836,7 +20260,7 @@ export namespace Prisma {
     nickname?: SortOrder
     age?: SortOrder
     gender?: SortOrder
-    registrationId?: SortOrder
+    batchId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -18851,7 +20275,7 @@ export namespace Prisma {
     nickname?: SortOrder
     age?: SortOrder
     gender?: SortOrder
-    registrationId?: SortOrder
+    batchId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -18862,7 +20286,7 @@ export namespace Prisma {
     nickname?: SortOrder
     age?: SortOrder
     gender?: SortOrder
-    registrationId?: SortOrder
+    batchId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -18898,11 +20322,11 @@ export namespace Prisma {
     connect?: RegistrationWhereUniqueInput | RegistrationWhereUniqueInput[]
   }
 
-  export type RegistrationCreateNestedManyWithoutReviewerInput = {
-    create?: XOR<RegistrationCreateWithoutReviewerInput, RegistrationUncheckedCreateWithoutReviewerInput> | RegistrationCreateWithoutReviewerInput[] | RegistrationUncheckedCreateWithoutReviewerInput[]
-    connectOrCreate?: RegistrationCreateOrConnectWithoutReviewerInput | RegistrationCreateOrConnectWithoutReviewerInput[]
-    createMany?: RegistrationCreateManyReviewerInputEnvelope
-    connect?: RegistrationWhereUniqueInput | RegistrationWhereUniqueInput[]
+  export type RegistrationBatchCreateNestedManyWithoutReviewerInput = {
+    create?: XOR<RegistrationBatchCreateWithoutReviewerInput, RegistrationBatchUncheckedCreateWithoutReviewerInput> | RegistrationBatchCreateWithoutReviewerInput[] | RegistrationBatchUncheckedCreateWithoutReviewerInput[]
+    connectOrCreate?: RegistrationBatchCreateOrConnectWithoutReviewerInput | RegistrationBatchCreateOrConnectWithoutReviewerInput[]
+    createMany?: RegistrationBatchCreateManyReviewerInputEnvelope
+    connect?: RegistrationBatchWhereUniqueInput | RegistrationBatchWhereUniqueInput[]
   }
 
   export type SessionUncheckedCreateNestedManyWithoutUserInput = {
@@ -18926,11 +20350,11 @@ export namespace Prisma {
     connect?: RegistrationWhereUniqueInput | RegistrationWhereUniqueInput[]
   }
 
-  export type RegistrationUncheckedCreateNestedManyWithoutReviewerInput = {
-    create?: XOR<RegistrationCreateWithoutReviewerInput, RegistrationUncheckedCreateWithoutReviewerInput> | RegistrationCreateWithoutReviewerInput[] | RegistrationUncheckedCreateWithoutReviewerInput[]
-    connectOrCreate?: RegistrationCreateOrConnectWithoutReviewerInput | RegistrationCreateOrConnectWithoutReviewerInput[]
-    createMany?: RegistrationCreateManyReviewerInputEnvelope
-    connect?: RegistrationWhereUniqueInput | RegistrationWhereUniqueInput[]
+  export type RegistrationBatchUncheckedCreateNestedManyWithoutReviewerInput = {
+    create?: XOR<RegistrationBatchCreateWithoutReviewerInput, RegistrationBatchUncheckedCreateWithoutReviewerInput> | RegistrationBatchCreateWithoutReviewerInput[] | RegistrationBatchUncheckedCreateWithoutReviewerInput[]
+    connectOrCreate?: RegistrationBatchCreateOrConnectWithoutReviewerInput | RegistrationBatchCreateOrConnectWithoutReviewerInput[]
+    createMany?: RegistrationBatchCreateManyReviewerInputEnvelope
+    connect?: RegistrationBatchWhereUniqueInput | RegistrationBatchWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -19005,18 +20429,18 @@ export namespace Prisma {
     deleteMany?: RegistrationScalarWhereInput | RegistrationScalarWhereInput[]
   }
 
-  export type RegistrationUpdateManyWithoutReviewerNestedInput = {
-    create?: XOR<RegistrationCreateWithoutReviewerInput, RegistrationUncheckedCreateWithoutReviewerInput> | RegistrationCreateWithoutReviewerInput[] | RegistrationUncheckedCreateWithoutReviewerInput[]
-    connectOrCreate?: RegistrationCreateOrConnectWithoutReviewerInput | RegistrationCreateOrConnectWithoutReviewerInput[]
-    upsert?: RegistrationUpsertWithWhereUniqueWithoutReviewerInput | RegistrationUpsertWithWhereUniqueWithoutReviewerInput[]
-    createMany?: RegistrationCreateManyReviewerInputEnvelope
-    set?: RegistrationWhereUniqueInput | RegistrationWhereUniqueInput[]
-    disconnect?: RegistrationWhereUniqueInput | RegistrationWhereUniqueInput[]
-    delete?: RegistrationWhereUniqueInput | RegistrationWhereUniqueInput[]
-    connect?: RegistrationWhereUniqueInput | RegistrationWhereUniqueInput[]
-    update?: RegistrationUpdateWithWhereUniqueWithoutReviewerInput | RegistrationUpdateWithWhereUniqueWithoutReviewerInput[]
-    updateMany?: RegistrationUpdateManyWithWhereWithoutReviewerInput | RegistrationUpdateManyWithWhereWithoutReviewerInput[]
-    deleteMany?: RegistrationScalarWhereInput | RegistrationScalarWhereInput[]
+  export type RegistrationBatchUpdateManyWithoutReviewerNestedInput = {
+    create?: XOR<RegistrationBatchCreateWithoutReviewerInput, RegistrationBatchUncheckedCreateWithoutReviewerInput> | RegistrationBatchCreateWithoutReviewerInput[] | RegistrationBatchUncheckedCreateWithoutReviewerInput[]
+    connectOrCreate?: RegistrationBatchCreateOrConnectWithoutReviewerInput | RegistrationBatchCreateOrConnectWithoutReviewerInput[]
+    upsert?: RegistrationBatchUpsertWithWhereUniqueWithoutReviewerInput | RegistrationBatchUpsertWithWhereUniqueWithoutReviewerInput[]
+    createMany?: RegistrationBatchCreateManyReviewerInputEnvelope
+    set?: RegistrationBatchWhereUniqueInput | RegistrationBatchWhereUniqueInput[]
+    disconnect?: RegistrationBatchWhereUniqueInput | RegistrationBatchWhereUniqueInput[]
+    delete?: RegistrationBatchWhereUniqueInput | RegistrationBatchWhereUniqueInput[]
+    connect?: RegistrationBatchWhereUniqueInput | RegistrationBatchWhereUniqueInput[]
+    update?: RegistrationBatchUpdateWithWhereUniqueWithoutReviewerInput | RegistrationBatchUpdateWithWhereUniqueWithoutReviewerInput[]
+    updateMany?: RegistrationBatchUpdateManyWithWhereWithoutReviewerInput | RegistrationBatchUpdateManyWithWhereWithoutReviewerInput[]
+    deleteMany?: RegistrationBatchScalarWhereInput | RegistrationBatchScalarWhereInput[]
   }
 
   export type SessionUncheckedUpdateManyWithoutUserNestedInput = {
@@ -19061,18 +20485,18 @@ export namespace Prisma {
     deleteMany?: RegistrationScalarWhereInput | RegistrationScalarWhereInput[]
   }
 
-  export type RegistrationUncheckedUpdateManyWithoutReviewerNestedInput = {
-    create?: XOR<RegistrationCreateWithoutReviewerInput, RegistrationUncheckedCreateWithoutReviewerInput> | RegistrationCreateWithoutReviewerInput[] | RegistrationUncheckedCreateWithoutReviewerInput[]
-    connectOrCreate?: RegistrationCreateOrConnectWithoutReviewerInput | RegistrationCreateOrConnectWithoutReviewerInput[]
-    upsert?: RegistrationUpsertWithWhereUniqueWithoutReviewerInput | RegistrationUpsertWithWhereUniqueWithoutReviewerInput[]
-    createMany?: RegistrationCreateManyReviewerInputEnvelope
-    set?: RegistrationWhereUniqueInput | RegistrationWhereUniqueInput[]
-    disconnect?: RegistrationWhereUniqueInput | RegistrationWhereUniqueInput[]
-    delete?: RegistrationWhereUniqueInput | RegistrationWhereUniqueInput[]
-    connect?: RegistrationWhereUniqueInput | RegistrationWhereUniqueInput[]
-    update?: RegistrationUpdateWithWhereUniqueWithoutReviewerInput | RegistrationUpdateWithWhereUniqueWithoutReviewerInput[]
-    updateMany?: RegistrationUpdateManyWithWhereWithoutReviewerInput | RegistrationUpdateManyWithWhereWithoutReviewerInput[]
-    deleteMany?: RegistrationScalarWhereInput | RegistrationScalarWhereInput[]
+  export type RegistrationBatchUncheckedUpdateManyWithoutReviewerNestedInput = {
+    create?: XOR<RegistrationBatchCreateWithoutReviewerInput, RegistrationBatchUncheckedCreateWithoutReviewerInput> | RegistrationBatchCreateWithoutReviewerInput[] | RegistrationBatchUncheckedCreateWithoutReviewerInput[]
+    connectOrCreate?: RegistrationBatchCreateOrConnectWithoutReviewerInput | RegistrationBatchCreateOrConnectWithoutReviewerInput[]
+    upsert?: RegistrationBatchUpsertWithWhereUniqueWithoutReviewerInput | RegistrationBatchUpsertWithWhereUniqueWithoutReviewerInput[]
+    createMany?: RegistrationBatchCreateManyReviewerInputEnvelope
+    set?: RegistrationBatchWhereUniqueInput | RegistrationBatchWhereUniqueInput[]
+    disconnect?: RegistrationBatchWhereUniqueInput | RegistrationBatchWhereUniqueInput[]
+    delete?: RegistrationBatchWhereUniqueInput | RegistrationBatchWhereUniqueInput[]
+    connect?: RegistrationBatchWhereUniqueInput | RegistrationBatchWhereUniqueInput[]
+    update?: RegistrationBatchUpdateWithWhereUniqueWithoutReviewerInput | RegistrationBatchUpdateWithWhereUniqueWithoutReviewerInput[]
+    updateMany?: RegistrationBatchUpdateManyWithWhereWithoutReviewerInput | RegistrationBatchUpdateManyWithWhereWithoutReviewerInput[]
+    deleteMany?: RegistrationBatchScalarWhereInput | RegistrationBatchScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutSessionsInput = {
@@ -19411,42 +20835,18 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
-  export type UserCreateNestedOneWithoutReviewedRegistrationsInput = {
-    create?: XOR<UserCreateWithoutReviewedRegistrationsInput, UserUncheckedCreateWithoutReviewedRegistrationsInput>
-    connectOrCreate?: UserCreateOrConnectWithoutReviewedRegistrationsInput
-    connect?: UserWhereUniqueInput
+  export type RegistrationBatchCreateNestedManyWithoutRegistrationInput = {
+    create?: XOR<RegistrationBatchCreateWithoutRegistrationInput, RegistrationBatchUncheckedCreateWithoutRegistrationInput> | RegistrationBatchCreateWithoutRegistrationInput[] | RegistrationBatchUncheckedCreateWithoutRegistrationInput[]
+    connectOrCreate?: RegistrationBatchCreateOrConnectWithoutRegistrationInput | RegistrationBatchCreateOrConnectWithoutRegistrationInput[]
+    createMany?: RegistrationBatchCreateManyRegistrationInputEnvelope
+    connect?: RegistrationBatchWhereUniqueInput | RegistrationBatchWhereUniqueInput[]
   }
 
-  export type DelegateCreateNestedManyWithoutRegistrationInput = {
-    create?: XOR<DelegateCreateWithoutRegistrationInput, DelegateUncheckedCreateWithoutRegistrationInput> | DelegateCreateWithoutRegistrationInput[] | DelegateUncheckedCreateWithoutRegistrationInput[]
-    connectOrCreate?: DelegateCreateOrConnectWithoutRegistrationInput | DelegateCreateOrConnectWithoutRegistrationInput[]
-    createMany?: DelegateCreateManyRegistrationInputEnvelope
-    connect?: DelegateWhereUniqueInput | DelegateWhereUniqueInput[]
-  }
-
-  export type CookCreateNestedManyWithoutRegistrationInput = {
-    create?: XOR<CookCreateWithoutRegistrationInput, CookUncheckedCreateWithoutRegistrationInput> | CookCreateWithoutRegistrationInput[] | CookUncheckedCreateWithoutRegistrationInput[]
-    connectOrCreate?: CookCreateOrConnectWithoutRegistrationInput | CookCreateOrConnectWithoutRegistrationInput[]
-    createMany?: CookCreateManyRegistrationInputEnvelope
-    connect?: CookWhereUniqueInput | CookWhereUniqueInput[]
-  }
-
-  export type DelegateUncheckedCreateNestedManyWithoutRegistrationInput = {
-    create?: XOR<DelegateCreateWithoutRegistrationInput, DelegateUncheckedCreateWithoutRegistrationInput> | DelegateCreateWithoutRegistrationInput[] | DelegateUncheckedCreateWithoutRegistrationInput[]
-    connectOrCreate?: DelegateCreateOrConnectWithoutRegistrationInput | DelegateCreateOrConnectWithoutRegistrationInput[]
-    createMany?: DelegateCreateManyRegistrationInputEnvelope
-    connect?: DelegateWhereUniqueInput | DelegateWhereUniqueInput[]
-  }
-
-  export type CookUncheckedCreateNestedManyWithoutRegistrationInput = {
-    create?: XOR<CookCreateWithoutRegistrationInput, CookUncheckedCreateWithoutRegistrationInput> | CookCreateWithoutRegistrationInput[] | CookUncheckedCreateWithoutRegistrationInput[]
-    connectOrCreate?: CookCreateOrConnectWithoutRegistrationInput | CookCreateOrConnectWithoutRegistrationInput[]
-    createMany?: CookCreateManyRegistrationInputEnvelope
-    connect?: CookWhereUniqueInput | CookWhereUniqueInput[]
-  }
-
-  export type EnumRegistrationStatusFieldUpdateOperationsInput = {
-    set?: $Enums.RegistrationStatus
+  export type RegistrationBatchUncheckedCreateNestedManyWithoutRegistrationInput = {
+    create?: XOR<RegistrationBatchCreateWithoutRegistrationInput, RegistrationBatchUncheckedCreateWithoutRegistrationInput> | RegistrationBatchCreateWithoutRegistrationInput[] | RegistrationBatchUncheckedCreateWithoutRegistrationInput[]
+    connectOrCreate?: RegistrationBatchCreateOrConnectWithoutRegistrationInput | RegistrationBatchCreateOrConnectWithoutRegistrationInput[]
+    createMany?: RegistrationBatchCreateManyRegistrationInputEnvelope
+    connect?: RegistrationBatchWhereUniqueInput | RegistrationBatchWhereUniqueInput[]
   }
 
   export type EventUpdateOneRequiredWithoutRegistrationsNestedInput = {
@@ -19473,102 +20873,182 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutRegistrationsInput, UserUpdateWithoutRegistrationsInput>, UserUncheckedUpdateWithoutRegistrationsInput>
   }
 
-  export type UserUpdateOneWithoutReviewedRegistrationsNestedInput = {
-    create?: XOR<UserCreateWithoutReviewedRegistrationsInput, UserUncheckedCreateWithoutReviewedRegistrationsInput>
-    connectOrCreate?: UserCreateOrConnectWithoutReviewedRegistrationsInput
-    upsert?: UserUpsertWithoutReviewedRegistrationsInput
+  export type RegistrationBatchUpdateManyWithoutRegistrationNestedInput = {
+    create?: XOR<RegistrationBatchCreateWithoutRegistrationInput, RegistrationBatchUncheckedCreateWithoutRegistrationInput> | RegistrationBatchCreateWithoutRegistrationInput[] | RegistrationBatchUncheckedCreateWithoutRegistrationInput[]
+    connectOrCreate?: RegistrationBatchCreateOrConnectWithoutRegistrationInput | RegistrationBatchCreateOrConnectWithoutRegistrationInput[]
+    upsert?: RegistrationBatchUpsertWithWhereUniqueWithoutRegistrationInput | RegistrationBatchUpsertWithWhereUniqueWithoutRegistrationInput[]
+    createMany?: RegistrationBatchCreateManyRegistrationInputEnvelope
+    set?: RegistrationBatchWhereUniqueInput | RegistrationBatchWhereUniqueInput[]
+    disconnect?: RegistrationBatchWhereUniqueInput | RegistrationBatchWhereUniqueInput[]
+    delete?: RegistrationBatchWhereUniqueInput | RegistrationBatchWhereUniqueInput[]
+    connect?: RegistrationBatchWhereUniqueInput | RegistrationBatchWhereUniqueInput[]
+    update?: RegistrationBatchUpdateWithWhereUniqueWithoutRegistrationInput | RegistrationBatchUpdateWithWhereUniqueWithoutRegistrationInput[]
+    updateMany?: RegistrationBatchUpdateManyWithWhereWithoutRegistrationInput | RegistrationBatchUpdateManyWithWhereWithoutRegistrationInput[]
+    deleteMany?: RegistrationBatchScalarWhereInput | RegistrationBatchScalarWhereInput[]
+  }
+
+  export type RegistrationBatchUncheckedUpdateManyWithoutRegistrationNestedInput = {
+    create?: XOR<RegistrationBatchCreateWithoutRegistrationInput, RegistrationBatchUncheckedCreateWithoutRegistrationInput> | RegistrationBatchCreateWithoutRegistrationInput[] | RegistrationBatchUncheckedCreateWithoutRegistrationInput[]
+    connectOrCreate?: RegistrationBatchCreateOrConnectWithoutRegistrationInput | RegistrationBatchCreateOrConnectWithoutRegistrationInput[]
+    upsert?: RegistrationBatchUpsertWithWhereUniqueWithoutRegistrationInput | RegistrationBatchUpsertWithWhereUniqueWithoutRegistrationInput[]
+    createMany?: RegistrationBatchCreateManyRegistrationInputEnvelope
+    set?: RegistrationBatchWhereUniqueInput | RegistrationBatchWhereUniqueInput[]
+    disconnect?: RegistrationBatchWhereUniqueInput | RegistrationBatchWhereUniqueInput[]
+    delete?: RegistrationBatchWhereUniqueInput | RegistrationBatchWhereUniqueInput[]
+    connect?: RegistrationBatchWhereUniqueInput | RegistrationBatchWhereUniqueInput[]
+    update?: RegistrationBatchUpdateWithWhereUniqueWithoutRegistrationInput | RegistrationBatchUpdateWithWhereUniqueWithoutRegistrationInput[]
+    updateMany?: RegistrationBatchUpdateManyWithWhereWithoutRegistrationInput | RegistrationBatchUpdateManyWithWhereWithoutRegistrationInput[]
+    deleteMany?: RegistrationBatchScalarWhereInput | RegistrationBatchScalarWhereInput[]
+  }
+
+  export type RegistrationCreateNestedOneWithoutBatchesInput = {
+    create?: XOR<RegistrationCreateWithoutBatchesInput, RegistrationUncheckedCreateWithoutBatchesInput>
+    connectOrCreate?: RegistrationCreateOrConnectWithoutBatchesInput
+    connect?: RegistrationWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutReviewedBatchesInput = {
+    create?: XOR<UserCreateWithoutReviewedBatchesInput, UserUncheckedCreateWithoutReviewedBatchesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutReviewedBatchesInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type DelegateCreateNestedManyWithoutBatchInput = {
+    create?: XOR<DelegateCreateWithoutBatchInput, DelegateUncheckedCreateWithoutBatchInput> | DelegateCreateWithoutBatchInput[] | DelegateUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: DelegateCreateOrConnectWithoutBatchInput | DelegateCreateOrConnectWithoutBatchInput[]
+    createMany?: DelegateCreateManyBatchInputEnvelope
+    connect?: DelegateWhereUniqueInput | DelegateWhereUniqueInput[]
+  }
+
+  export type CookCreateNestedManyWithoutBatchInput = {
+    create?: XOR<CookCreateWithoutBatchInput, CookUncheckedCreateWithoutBatchInput> | CookCreateWithoutBatchInput[] | CookUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: CookCreateOrConnectWithoutBatchInput | CookCreateOrConnectWithoutBatchInput[]
+    createMany?: CookCreateManyBatchInputEnvelope
+    connect?: CookWhereUniqueInput | CookWhereUniqueInput[]
+  }
+
+  export type DelegateUncheckedCreateNestedManyWithoutBatchInput = {
+    create?: XOR<DelegateCreateWithoutBatchInput, DelegateUncheckedCreateWithoutBatchInput> | DelegateCreateWithoutBatchInput[] | DelegateUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: DelegateCreateOrConnectWithoutBatchInput | DelegateCreateOrConnectWithoutBatchInput[]
+    createMany?: DelegateCreateManyBatchInputEnvelope
+    connect?: DelegateWhereUniqueInput | DelegateWhereUniqueInput[]
+  }
+
+  export type CookUncheckedCreateNestedManyWithoutBatchInput = {
+    create?: XOR<CookCreateWithoutBatchInput, CookUncheckedCreateWithoutBatchInput> | CookCreateWithoutBatchInput[] | CookUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: CookCreateOrConnectWithoutBatchInput | CookCreateOrConnectWithoutBatchInput[]
+    createMany?: CookCreateManyBatchInputEnvelope
+    connect?: CookWhereUniqueInput | CookWhereUniqueInput[]
+  }
+
+  export type EnumRegistrationStatusFieldUpdateOperationsInput = {
+    set?: $Enums.RegistrationStatus
+  }
+
+  export type RegistrationUpdateOneRequiredWithoutBatchesNestedInput = {
+    create?: XOR<RegistrationCreateWithoutBatchesInput, RegistrationUncheckedCreateWithoutBatchesInput>
+    connectOrCreate?: RegistrationCreateOrConnectWithoutBatchesInput
+    upsert?: RegistrationUpsertWithoutBatchesInput
+    connect?: RegistrationWhereUniqueInput
+    update?: XOR<XOR<RegistrationUpdateToOneWithWhereWithoutBatchesInput, RegistrationUpdateWithoutBatchesInput>, RegistrationUncheckedUpdateWithoutBatchesInput>
+  }
+
+  export type UserUpdateOneWithoutReviewedBatchesNestedInput = {
+    create?: XOR<UserCreateWithoutReviewedBatchesInput, UserUncheckedCreateWithoutReviewedBatchesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutReviewedBatchesInput
+    upsert?: UserUpsertWithoutReviewedBatchesInput
     disconnect?: UserWhereInput | boolean
     delete?: UserWhereInput | boolean
     connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutReviewedRegistrationsInput, UserUpdateWithoutReviewedRegistrationsInput>, UserUncheckedUpdateWithoutReviewedRegistrationsInput>
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutReviewedBatchesInput, UserUpdateWithoutReviewedBatchesInput>, UserUncheckedUpdateWithoutReviewedBatchesInput>
   }
 
-  export type DelegateUpdateManyWithoutRegistrationNestedInput = {
-    create?: XOR<DelegateCreateWithoutRegistrationInput, DelegateUncheckedCreateWithoutRegistrationInput> | DelegateCreateWithoutRegistrationInput[] | DelegateUncheckedCreateWithoutRegistrationInput[]
-    connectOrCreate?: DelegateCreateOrConnectWithoutRegistrationInput | DelegateCreateOrConnectWithoutRegistrationInput[]
-    upsert?: DelegateUpsertWithWhereUniqueWithoutRegistrationInput | DelegateUpsertWithWhereUniqueWithoutRegistrationInput[]
-    createMany?: DelegateCreateManyRegistrationInputEnvelope
+  export type DelegateUpdateManyWithoutBatchNestedInput = {
+    create?: XOR<DelegateCreateWithoutBatchInput, DelegateUncheckedCreateWithoutBatchInput> | DelegateCreateWithoutBatchInput[] | DelegateUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: DelegateCreateOrConnectWithoutBatchInput | DelegateCreateOrConnectWithoutBatchInput[]
+    upsert?: DelegateUpsertWithWhereUniqueWithoutBatchInput | DelegateUpsertWithWhereUniqueWithoutBatchInput[]
+    createMany?: DelegateCreateManyBatchInputEnvelope
     set?: DelegateWhereUniqueInput | DelegateWhereUniqueInput[]
     disconnect?: DelegateWhereUniqueInput | DelegateWhereUniqueInput[]
     delete?: DelegateWhereUniqueInput | DelegateWhereUniqueInput[]
     connect?: DelegateWhereUniqueInput | DelegateWhereUniqueInput[]
-    update?: DelegateUpdateWithWhereUniqueWithoutRegistrationInput | DelegateUpdateWithWhereUniqueWithoutRegistrationInput[]
-    updateMany?: DelegateUpdateManyWithWhereWithoutRegistrationInput | DelegateUpdateManyWithWhereWithoutRegistrationInput[]
+    update?: DelegateUpdateWithWhereUniqueWithoutBatchInput | DelegateUpdateWithWhereUniqueWithoutBatchInput[]
+    updateMany?: DelegateUpdateManyWithWhereWithoutBatchInput | DelegateUpdateManyWithWhereWithoutBatchInput[]
     deleteMany?: DelegateScalarWhereInput | DelegateScalarWhereInput[]
   }
 
-  export type CookUpdateManyWithoutRegistrationNestedInput = {
-    create?: XOR<CookCreateWithoutRegistrationInput, CookUncheckedCreateWithoutRegistrationInput> | CookCreateWithoutRegistrationInput[] | CookUncheckedCreateWithoutRegistrationInput[]
-    connectOrCreate?: CookCreateOrConnectWithoutRegistrationInput | CookCreateOrConnectWithoutRegistrationInput[]
-    upsert?: CookUpsertWithWhereUniqueWithoutRegistrationInput | CookUpsertWithWhereUniqueWithoutRegistrationInput[]
-    createMany?: CookCreateManyRegistrationInputEnvelope
+  export type CookUpdateManyWithoutBatchNestedInput = {
+    create?: XOR<CookCreateWithoutBatchInput, CookUncheckedCreateWithoutBatchInput> | CookCreateWithoutBatchInput[] | CookUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: CookCreateOrConnectWithoutBatchInput | CookCreateOrConnectWithoutBatchInput[]
+    upsert?: CookUpsertWithWhereUniqueWithoutBatchInput | CookUpsertWithWhereUniqueWithoutBatchInput[]
+    createMany?: CookCreateManyBatchInputEnvelope
     set?: CookWhereUniqueInput | CookWhereUniqueInput[]
     disconnect?: CookWhereUniqueInput | CookWhereUniqueInput[]
     delete?: CookWhereUniqueInput | CookWhereUniqueInput[]
     connect?: CookWhereUniqueInput | CookWhereUniqueInput[]
-    update?: CookUpdateWithWhereUniqueWithoutRegistrationInput | CookUpdateWithWhereUniqueWithoutRegistrationInput[]
-    updateMany?: CookUpdateManyWithWhereWithoutRegistrationInput | CookUpdateManyWithWhereWithoutRegistrationInput[]
+    update?: CookUpdateWithWhereUniqueWithoutBatchInput | CookUpdateWithWhereUniqueWithoutBatchInput[]
+    updateMany?: CookUpdateManyWithWhereWithoutBatchInput | CookUpdateManyWithWhereWithoutBatchInput[]
     deleteMany?: CookScalarWhereInput | CookScalarWhereInput[]
   }
 
-  export type DelegateUncheckedUpdateManyWithoutRegistrationNestedInput = {
-    create?: XOR<DelegateCreateWithoutRegistrationInput, DelegateUncheckedCreateWithoutRegistrationInput> | DelegateCreateWithoutRegistrationInput[] | DelegateUncheckedCreateWithoutRegistrationInput[]
-    connectOrCreate?: DelegateCreateOrConnectWithoutRegistrationInput | DelegateCreateOrConnectWithoutRegistrationInput[]
-    upsert?: DelegateUpsertWithWhereUniqueWithoutRegistrationInput | DelegateUpsertWithWhereUniqueWithoutRegistrationInput[]
-    createMany?: DelegateCreateManyRegistrationInputEnvelope
+  export type DelegateUncheckedUpdateManyWithoutBatchNestedInput = {
+    create?: XOR<DelegateCreateWithoutBatchInput, DelegateUncheckedCreateWithoutBatchInput> | DelegateCreateWithoutBatchInput[] | DelegateUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: DelegateCreateOrConnectWithoutBatchInput | DelegateCreateOrConnectWithoutBatchInput[]
+    upsert?: DelegateUpsertWithWhereUniqueWithoutBatchInput | DelegateUpsertWithWhereUniqueWithoutBatchInput[]
+    createMany?: DelegateCreateManyBatchInputEnvelope
     set?: DelegateWhereUniqueInput | DelegateWhereUniqueInput[]
     disconnect?: DelegateWhereUniqueInput | DelegateWhereUniqueInput[]
     delete?: DelegateWhereUniqueInput | DelegateWhereUniqueInput[]
     connect?: DelegateWhereUniqueInput | DelegateWhereUniqueInput[]
-    update?: DelegateUpdateWithWhereUniqueWithoutRegistrationInput | DelegateUpdateWithWhereUniqueWithoutRegistrationInput[]
-    updateMany?: DelegateUpdateManyWithWhereWithoutRegistrationInput | DelegateUpdateManyWithWhereWithoutRegistrationInput[]
+    update?: DelegateUpdateWithWhereUniqueWithoutBatchInput | DelegateUpdateWithWhereUniqueWithoutBatchInput[]
+    updateMany?: DelegateUpdateManyWithWhereWithoutBatchInput | DelegateUpdateManyWithWhereWithoutBatchInput[]
     deleteMany?: DelegateScalarWhereInput | DelegateScalarWhereInput[]
   }
 
-  export type CookUncheckedUpdateManyWithoutRegistrationNestedInput = {
-    create?: XOR<CookCreateWithoutRegistrationInput, CookUncheckedCreateWithoutRegistrationInput> | CookCreateWithoutRegistrationInput[] | CookUncheckedCreateWithoutRegistrationInput[]
-    connectOrCreate?: CookCreateOrConnectWithoutRegistrationInput | CookCreateOrConnectWithoutRegistrationInput[]
-    upsert?: CookUpsertWithWhereUniqueWithoutRegistrationInput | CookUpsertWithWhereUniqueWithoutRegistrationInput[]
-    createMany?: CookCreateManyRegistrationInputEnvelope
+  export type CookUncheckedUpdateManyWithoutBatchNestedInput = {
+    create?: XOR<CookCreateWithoutBatchInput, CookUncheckedCreateWithoutBatchInput> | CookCreateWithoutBatchInput[] | CookUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: CookCreateOrConnectWithoutBatchInput | CookCreateOrConnectWithoutBatchInput[]
+    upsert?: CookUpsertWithWhereUniqueWithoutBatchInput | CookUpsertWithWhereUniqueWithoutBatchInput[]
+    createMany?: CookCreateManyBatchInputEnvelope
     set?: CookWhereUniqueInput | CookWhereUniqueInput[]
     disconnect?: CookWhereUniqueInput | CookWhereUniqueInput[]
     delete?: CookWhereUniqueInput | CookWhereUniqueInput[]
     connect?: CookWhereUniqueInput | CookWhereUniqueInput[]
-    update?: CookUpdateWithWhereUniqueWithoutRegistrationInput | CookUpdateWithWhereUniqueWithoutRegistrationInput[]
-    updateMany?: CookUpdateManyWithWhereWithoutRegistrationInput | CookUpdateManyWithWhereWithoutRegistrationInput[]
+    update?: CookUpdateWithWhereUniqueWithoutBatchInput | CookUpdateWithWhereUniqueWithoutBatchInput[]
+    updateMany?: CookUpdateManyWithWhereWithoutBatchInput | CookUpdateManyWithWhereWithoutBatchInput[]
     deleteMany?: CookScalarWhereInput | CookScalarWhereInput[]
   }
 
-  export type RegistrationCreateNestedOneWithoutDelegatesInput = {
-    create?: XOR<RegistrationCreateWithoutDelegatesInput, RegistrationUncheckedCreateWithoutDelegatesInput>
-    connectOrCreate?: RegistrationCreateOrConnectWithoutDelegatesInput
-    connect?: RegistrationWhereUniqueInput
+  export type RegistrationBatchCreateNestedOneWithoutDelegatesInput = {
+    create?: XOR<RegistrationBatchCreateWithoutDelegatesInput, RegistrationBatchUncheckedCreateWithoutDelegatesInput>
+    connectOrCreate?: RegistrationBatchCreateOrConnectWithoutDelegatesInput
+    connect?: RegistrationBatchWhereUniqueInput
   }
 
   export type EnumGenderFieldUpdateOperationsInput = {
     set?: $Enums.Gender
   }
 
-  export type RegistrationUpdateOneRequiredWithoutDelegatesNestedInput = {
-    create?: XOR<RegistrationCreateWithoutDelegatesInput, RegistrationUncheckedCreateWithoutDelegatesInput>
-    connectOrCreate?: RegistrationCreateOrConnectWithoutDelegatesInput
-    upsert?: RegistrationUpsertWithoutDelegatesInput
-    connect?: RegistrationWhereUniqueInput
-    update?: XOR<XOR<RegistrationUpdateToOneWithWhereWithoutDelegatesInput, RegistrationUpdateWithoutDelegatesInput>, RegistrationUncheckedUpdateWithoutDelegatesInput>
+  export type RegistrationBatchUpdateOneRequiredWithoutDelegatesNestedInput = {
+    create?: XOR<RegistrationBatchCreateWithoutDelegatesInput, RegistrationBatchUncheckedCreateWithoutDelegatesInput>
+    connectOrCreate?: RegistrationBatchCreateOrConnectWithoutDelegatesInput
+    upsert?: RegistrationBatchUpsertWithoutDelegatesInput
+    connect?: RegistrationBatchWhereUniqueInput
+    update?: XOR<XOR<RegistrationBatchUpdateToOneWithWhereWithoutDelegatesInput, RegistrationBatchUpdateWithoutDelegatesInput>, RegistrationBatchUncheckedUpdateWithoutDelegatesInput>
   }
 
-  export type RegistrationCreateNestedOneWithoutCooksInput = {
-    create?: XOR<RegistrationCreateWithoutCooksInput, RegistrationUncheckedCreateWithoutCooksInput>
-    connectOrCreate?: RegistrationCreateOrConnectWithoutCooksInput
-    connect?: RegistrationWhereUniqueInput
+  export type RegistrationBatchCreateNestedOneWithoutCooksInput = {
+    create?: XOR<RegistrationBatchCreateWithoutCooksInput, RegistrationBatchUncheckedCreateWithoutCooksInput>
+    connectOrCreate?: RegistrationBatchCreateOrConnectWithoutCooksInput
+    connect?: RegistrationBatchWhereUniqueInput
   }
 
-  export type RegistrationUpdateOneRequiredWithoutCooksNestedInput = {
-    create?: XOR<RegistrationCreateWithoutCooksInput, RegistrationUncheckedCreateWithoutCooksInput>
-    connectOrCreate?: RegistrationCreateOrConnectWithoutCooksInput
-    upsert?: RegistrationUpsertWithoutCooksInput
-    connect?: RegistrationWhereUniqueInput
-    update?: XOR<XOR<RegistrationUpdateToOneWithWhereWithoutCooksInput, RegistrationUpdateWithoutCooksInput>, RegistrationUncheckedUpdateWithoutCooksInput>
+  export type RegistrationBatchUpdateOneRequiredWithoutCooksNestedInput = {
+    create?: XOR<RegistrationBatchCreateWithoutCooksInput, RegistrationBatchUncheckedCreateWithoutCooksInput>
+    connectOrCreate?: RegistrationBatchCreateOrConnectWithoutCooksInput
+    upsert?: RegistrationBatchUpsertWithoutCooksInput
+    connect?: RegistrationBatchWhereUniqueInput
+    update?: XOR<XOR<RegistrationBatchUpdateToOneWithWhereWithoutCooksInput, RegistrationBatchUpdateWithoutCooksInput>, RegistrationBatchUncheckedUpdateWithoutCooksInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -19910,40 +21390,20 @@ export namespace Prisma {
 
   export type RegistrationCreateWithoutPresidentInput = {
     id?: string
-    status?: $Enums.RegistrationStatus
-    remarks?: string | null
-    receiptImage?: string | null
-    reviewedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    totalFee?: number
-    delegateFeePerPerson?: number
-    cookFeePerPerson?: number
-    isPreRegistration?: boolean
     event: EventCreateNestedOneWithoutRegistrationsInput
     church: ChurchCreateNestedOneWithoutRegistrationsInput
-    reviewer?: UserCreateNestedOneWithoutReviewedRegistrationsInput
-    delegates?: DelegateCreateNestedManyWithoutRegistrationInput
-    cooks?: CookCreateNestedManyWithoutRegistrationInput
+    batches?: RegistrationBatchCreateNestedManyWithoutRegistrationInput
   }
 
   export type RegistrationUncheckedCreateWithoutPresidentInput = {
     id?: string
     eventId: string
     churchId: string
-    status?: $Enums.RegistrationStatus
-    remarks?: string | null
-    receiptImage?: string | null
-    reviewedAt?: Date | string | null
-    reviewedBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    totalFee?: number
-    delegateFeePerPerson?: number
-    cookFeePerPerson?: number
-    isPreRegistration?: boolean
-    delegates?: DelegateUncheckedCreateNestedManyWithoutRegistrationInput
-    cooks?: CookUncheckedCreateNestedManyWithoutRegistrationInput
+    batches?: RegistrationBatchUncheckedCreateNestedManyWithoutRegistrationInput
   }
 
   export type RegistrationCreateOrConnectWithoutPresidentInput = {
@@ -19956,8 +21416,9 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type RegistrationCreateWithoutReviewerInput = {
+  export type RegistrationBatchCreateWithoutReviewerInput = {
     id?: string
+    batchNumber: number
     status?: $Enums.RegistrationStatus
     remarks?: string | null
     receiptImage?: string | null
@@ -19968,18 +21429,15 @@ export namespace Prisma {
     delegateFeePerPerson?: number
     cookFeePerPerson?: number
     isPreRegistration?: boolean
-    event: EventCreateNestedOneWithoutRegistrationsInput
-    church: ChurchCreateNestedOneWithoutRegistrationsInput
-    president: UserCreateNestedOneWithoutRegistrationsInput
-    delegates?: DelegateCreateNestedManyWithoutRegistrationInput
-    cooks?: CookCreateNestedManyWithoutRegistrationInput
+    registration: RegistrationCreateNestedOneWithoutBatchesInput
+    delegates?: DelegateCreateNestedManyWithoutBatchInput
+    cooks?: CookCreateNestedManyWithoutBatchInput
   }
 
-  export type RegistrationUncheckedCreateWithoutReviewerInput = {
+  export type RegistrationBatchUncheckedCreateWithoutReviewerInput = {
     id?: string
-    eventId: string
-    churchId: string
-    presidentId: string
+    registrationId: string
+    batchNumber: number
     status?: $Enums.RegistrationStatus
     remarks?: string | null
     receiptImage?: string | null
@@ -19990,17 +21448,17 @@ export namespace Prisma {
     delegateFeePerPerson?: number
     cookFeePerPerson?: number
     isPreRegistration?: boolean
-    delegates?: DelegateUncheckedCreateNestedManyWithoutRegistrationInput
-    cooks?: CookUncheckedCreateNestedManyWithoutRegistrationInput
+    delegates?: DelegateUncheckedCreateNestedManyWithoutBatchInput
+    cooks?: CookUncheckedCreateNestedManyWithoutBatchInput
   }
 
-  export type RegistrationCreateOrConnectWithoutReviewerInput = {
-    where: RegistrationWhereUniqueInput
-    create: XOR<RegistrationCreateWithoutReviewerInput, RegistrationUncheckedCreateWithoutReviewerInput>
+  export type RegistrationBatchCreateOrConnectWithoutReviewerInput = {
+    where: RegistrationBatchWhereUniqueInput
+    create: XOR<RegistrationBatchCreateWithoutReviewerInput, RegistrationBatchUncheckedCreateWithoutReviewerInput>
   }
 
-  export type RegistrationCreateManyReviewerInputEnvelope = {
-    data: RegistrationCreateManyReviewerInput | RegistrationCreateManyReviewerInput[]
+  export type RegistrationBatchCreateManyReviewerInputEnvelope = {
+    data: RegistrationBatchCreateManyReviewerInput | RegistrationBatchCreateManyReviewerInput[]
     skipDuplicates?: boolean
   }
 
@@ -20124,33 +21582,44 @@ export namespace Prisma {
     eventId?: StringFilter<"Registration"> | string
     churchId?: StringFilter<"Registration"> | string
     presidentId?: StringFilter<"Registration"> | string
-    status?: EnumRegistrationStatusFilter<"Registration"> | $Enums.RegistrationStatus
-    remarks?: StringNullableFilter<"Registration"> | string | null
-    receiptImage?: StringNullableFilter<"Registration"> | string | null
-    reviewedAt?: DateTimeNullableFilter<"Registration"> | Date | string | null
-    reviewedBy?: StringNullableFilter<"Registration"> | string | null
     createdAt?: DateTimeFilter<"Registration"> | Date | string
     updatedAt?: DateTimeFilter<"Registration"> | Date | string
-    totalFee?: IntFilter<"Registration"> | number
-    delegateFeePerPerson?: IntFilter<"Registration"> | number
-    cookFeePerPerson?: IntFilter<"Registration"> | number
-    isPreRegistration?: BoolFilter<"Registration"> | boolean
   }
 
-  export type RegistrationUpsertWithWhereUniqueWithoutReviewerInput = {
-    where: RegistrationWhereUniqueInput
-    update: XOR<RegistrationUpdateWithoutReviewerInput, RegistrationUncheckedUpdateWithoutReviewerInput>
-    create: XOR<RegistrationCreateWithoutReviewerInput, RegistrationUncheckedCreateWithoutReviewerInput>
+  export type RegistrationBatchUpsertWithWhereUniqueWithoutReviewerInput = {
+    where: RegistrationBatchWhereUniqueInput
+    update: XOR<RegistrationBatchUpdateWithoutReviewerInput, RegistrationBatchUncheckedUpdateWithoutReviewerInput>
+    create: XOR<RegistrationBatchCreateWithoutReviewerInput, RegistrationBatchUncheckedCreateWithoutReviewerInput>
   }
 
-  export type RegistrationUpdateWithWhereUniqueWithoutReviewerInput = {
-    where: RegistrationWhereUniqueInput
-    data: XOR<RegistrationUpdateWithoutReviewerInput, RegistrationUncheckedUpdateWithoutReviewerInput>
+  export type RegistrationBatchUpdateWithWhereUniqueWithoutReviewerInput = {
+    where: RegistrationBatchWhereUniqueInput
+    data: XOR<RegistrationBatchUpdateWithoutReviewerInput, RegistrationBatchUncheckedUpdateWithoutReviewerInput>
   }
 
-  export type RegistrationUpdateManyWithWhereWithoutReviewerInput = {
-    where: RegistrationScalarWhereInput
-    data: XOR<RegistrationUpdateManyMutationInput, RegistrationUncheckedUpdateManyWithoutReviewerInput>
+  export type RegistrationBatchUpdateManyWithWhereWithoutReviewerInput = {
+    where: RegistrationBatchScalarWhereInput
+    data: XOR<RegistrationBatchUpdateManyMutationInput, RegistrationBatchUncheckedUpdateManyWithoutReviewerInput>
+  }
+
+  export type RegistrationBatchScalarWhereInput = {
+    AND?: RegistrationBatchScalarWhereInput | RegistrationBatchScalarWhereInput[]
+    OR?: RegistrationBatchScalarWhereInput[]
+    NOT?: RegistrationBatchScalarWhereInput | RegistrationBatchScalarWhereInput[]
+    id?: StringFilter<"RegistrationBatch"> | string
+    registrationId?: StringFilter<"RegistrationBatch"> | string
+    batchNumber?: IntFilter<"RegistrationBatch"> | number
+    status?: EnumRegistrationStatusFilter<"RegistrationBatch"> | $Enums.RegistrationStatus
+    remarks?: StringNullableFilter<"RegistrationBatch"> | string | null
+    receiptImage?: StringNullableFilter<"RegistrationBatch"> | string | null
+    reviewedAt?: DateTimeNullableFilter<"RegistrationBatch"> | Date | string | null
+    reviewedBy?: StringNullableFilter<"RegistrationBatch"> | string | null
+    createdAt?: DateTimeFilter<"RegistrationBatch"> | Date | string
+    updatedAt?: DateTimeFilter<"RegistrationBatch"> | Date | string
+    totalFee?: IntFilter<"RegistrationBatch"> | number
+    delegateFeePerPerson?: IntFilter<"RegistrationBatch"> | number
+    cookFeePerPerson?: IntFilter<"RegistrationBatch"> | number
+    isPreRegistration?: BoolFilter<"RegistrationBatch"> | boolean
   }
 
   export type UserCreateWithoutSessionsInput = {
@@ -20165,7 +21634,7 @@ export namespace Prisma {
     accounts?: AccountCreateNestedManyWithoutUserInput
     church?: ChurchCreateNestedOneWithoutPresidentsInput
     registrations?: RegistrationCreateNestedManyWithoutPresidentInput
-    reviewedRegistrations?: RegistrationCreateNestedManyWithoutReviewerInput
+    reviewedBatches?: RegistrationBatchCreateNestedManyWithoutReviewerInput
   }
 
   export type UserUncheckedCreateWithoutSessionsInput = {
@@ -20180,7 +21649,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     registrations?: RegistrationUncheckedCreateNestedManyWithoutPresidentInput
-    reviewedRegistrations?: RegistrationUncheckedCreateNestedManyWithoutReviewerInput
+    reviewedBatches?: RegistrationBatchUncheckedCreateNestedManyWithoutReviewerInput
   }
 
   export type UserCreateOrConnectWithoutSessionsInput = {
@@ -20211,7 +21680,7 @@ export namespace Prisma {
     accounts?: AccountUpdateManyWithoutUserNestedInput
     church?: ChurchUpdateOneWithoutPresidentsNestedInput
     registrations?: RegistrationUpdateManyWithoutPresidentNestedInput
-    reviewedRegistrations?: RegistrationUpdateManyWithoutReviewerNestedInput
+    reviewedBatches?: RegistrationBatchUpdateManyWithoutReviewerNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -20226,7 +21695,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     registrations?: RegistrationUncheckedUpdateManyWithoutPresidentNestedInput
-    reviewedRegistrations?: RegistrationUncheckedUpdateManyWithoutReviewerNestedInput
+    reviewedBatches?: RegistrationBatchUncheckedUpdateManyWithoutReviewerNestedInput
   }
 
   export type UserCreateWithoutAccountsInput = {
@@ -20241,7 +21710,7 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     church?: ChurchCreateNestedOneWithoutPresidentsInput
     registrations?: RegistrationCreateNestedManyWithoutPresidentInput
-    reviewedRegistrations?: RegistrationCreateNestedManyWithoutReviewerInput
+    reviewedBatches?: RegistrationBatchCreateNestedManyWithoutReviewerInput
   }
 
   export type UserUncheckedCreateWithoutAccountsInput = {
@@ -20256,7 +21725,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     registrations?: RegistrationUncheckedCreateNestedManyWithoutPresidentInput
-    reviewedRegistrations?: RegistrationUncheckedCreateNestedManyWithoutReviewerInput
+    reviewedBatches?: RegistrationBatchUncheckedCreateNestedManyWithoutReviewerInput
   }
 
   export type UserCreateOrConnectWithoutAccountsInput = {
@@ -20287,7 +21756,7 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     church?: ChurchUpdateOneWithoutPresidentsNestedInput
     registrations?: RegistrationUpdateManyWithoutPresidentNestedInput
-    reviewedRegistrations?: RegistrationUpdateManyWithoutReviewerNestedInput
+    reviewedBatches?: RegistrationBatchUpdateManyWithoutReviewerNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -20302,7 +21771,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     registrations?: RegistrationUncheckedUpdateManyWithoutPresidentNestedInput
-    reviewedRegistrations?: RegistrationUncheckedUpdateManyWithoutReviewerNestedInput
+    reviewedBatches?: RegistrationBatchUncheckedUpdateManyWithoutReviewerNestedInput
   }
 
   export type ChurchCreateWithoutDivisionInput = {
@@ -20458,7 +21927,7 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     registrations?: RegistrationCreateNestedManyWithoutPresidentInput
-    reviewedRegistrations?: RegistrationCreateNestedManyWithoutReviewerInput
+    reviewedBatches?: RegistrationBatchCreateNestedManyWithoutReviewerInput
   }
 
   export type UserUncheckedCreateWithoutChurchInput = {
@@ -20473,7 +21942,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     registrations?: RegistrationUncheckedCreateNestedManyWithoutPresidentInput
-    reviewedRegistrations?: RegistrationUncheckedCreateNestedManyWithoutReviewerInput
+    reviewedBatches?: RegistrationBatchUncheckedCreateNestedManyWithoutReviewerInput
   }
 
   export type UserCreateOrConnectWithoutChurchInput = {
@@ -20488,40 +21957,20 @@ export namespace Prisma {
 
   export type RegistrationCreateWithoutChurchInput = {
     id?: string
-    status?: $Enums.RegistrationStatus
-    remarks?: string | null
-    receiptImage?: string | null
-    reviewedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    totalFee?: number
-    delegateFeePerPerson?: number
-    cookFeePerPerson?: number
-    isPreRegistration?: boolean
     event: EventCreateNestedOneWithoutRegistrationsInput
     president: UserCreateNestedOneWithoutRegistrationsInput
-    reviewer?: UserCreateNestedOneWithoutReviewedRegistrationsInput
-    delegates?: DelegateCreateNestedManyWithoutRegistrationInput
-    cooks?: CookCreateNestedManyWithoutRegistrationInput
+    batches?: RegistrationBatchCreateNestedManyWithoutRegistrationInput
   }
 
   export type RegistrationUncheckedCreateWithoutChurchInput = {
     id?: string
     eventId: string
     presidentId: string
-    status?: $Enums.RegistrationStatus
-    remarks?: string | null
-    receiptImage?: string | null
-    reviewedAt?: Date | string | null
-    reviewedBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    totalFee?: number
-    delegateFeePerPerson?: number
-    cookFeePerPerson?: number
-    isPreRegistration?: boolean
-    delegates?: DelegateUncheckedCreateNestedManyWithoutRegistrationInput
-    cooks?: CookUncheckedCreateNestedManyWithoutRegistrationInput
+    batches?: RegistrationBatchUncheckedCreateNestedManyWithoutRegistrationInput
   }
 
   export type RegistrationCreateOrConnectWithoutChurchInput = {
@@ -20739,40 +22188,20 @@ export namespace Prisma {
 
   export type RegistrationCreateWithoutEventInput = {
     id?: string
-    status?: $Enums.RegistrationStatus
-    remarks?: string | null
-    receiptImage?: string | null
-    reviewedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    totalFee?: number
-    delegateFeePerPerson?: number
-    cookFeePerPerson?: number
-    isPreRegistration?: boolean
     church: ChurchCreateNestedOneWithoutRegistrationsInput
     president: UserCreateNestedOneWithoutRegistrationsInput
-    reviewer?: UserCreateNestedOneWithoutReviewedRegistrationsInput
-    delegates?: DelegateCreateNestedManyWithoutRegistrationInput
-    cooks?: CookCreateNestedManyWithoutRegistrationInput
+    batches?: RegistrationBatchCreateNestedManyWithoutRegistrationInput
   }
 
   export type RegistrationUncheckedCreateWithoutEventInput = {
     id?: string
     churchId: string
     presidentId: string
-    status?: $Enums.RegistrationStatus
-    remarks?: string | null
-    receiptImage?: string | null
-    reviewedAt?: Date | string | null
-    reviewedBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    totalFee?: number
-    delegateFeePerPerson?: number
-    cookFeePerPerson?: number
-    isPreRegistration?: boolean
-    delegates?: DelegateUncheckedCreateNestedManyWithoutRegistrationInput
-    cooks?: CookUncheckedCreateNestedManyWithoutRegistrationInput
+    batches?: RegistrationBatchUncheckedCreateNestedManyWithoutRegistrationInput
   }
 
   export type RegistrationCreateOrConnectWithoutEventInput = {
@@ -20809,11 +22238,12 @@ export namespace Prisma {
     banner?: string | null
     startDate: Date | string
     endDate: Date | string
-    registrationDeadline: Date | string
     preRegistrationFee: number
+    preRegistrationSiblingDiscount?: number
     preRegistrationStart: Date | string
     preRegistrationEnd: Date | string
     onsiteRegistrationFee: number
+    onsiteSiblingDiscount?: number
     cookRegistrationFee: number
     status?: $Enums.EventStatus
     createdAt?: Date | string
@@ -20828,11 +22258,12 @@ export namespace Prisma {
     banner?: string | null
     startDate: Date | string
     endDate: Date | string
-    registrationDeadline: Date | string
     preRegistrationFee: number
+    preRegistrationSiblingDiscount?: number
     preRegistrationStart: Date | string
     preRegistrationEnd: Date | string
     onsiteRegistrationFee: number
+    onsiteSiblingDiscount?: number
     cookRegistrationFee: number
     status?: $Enums.EventStatus
     createdAt?: Date | string
@@ -20881,7 +22312,7 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     church?: ChurchCreateNestedOneWithoutPresidentsInput
-    reviewedRegistrations?: RegistrationCreateNestedManyWithoutReviewerInput
+    reviewedBatches?: RegistrationBatchCreateNestedManyWithoutReviewerInput
   }
 
   export type UserUncheckedCreateWithoutRegistrationsInput = {
@@ -20896,7 +22327,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
-    reviewedRegistrations?: RegistrationUncheckedCreateNestedManyWithoutReviewerInput
+    reviewedBatches?: RegistrationBatchUncheckedCreateNestedManyWithoutReviewerInput
   }
 
   export type UserCreateOrConnectWithoutRegistrationsInput = {
@@ -20904,98 +22335,49 @@ export namespace Prisma {
     create: XOR<UserCreateWithoutRegistrationsInput, UserUncheckedCreateWithoutRegistrationsInput>
   }
 
-  export type UserCreateWithoutReviewedRegistrationsInput = {
+  export type RegistrationBatchCreateWithoutRegistrationInput = {
     id?: string
-    name: string
-    email: string
-    role?: $Enums.UserRole
-    emailVerified?: boolean
-    image?: string | null
+    batchNumber: number
+    status?: $Enums.RegistrationStatus
+    remarks?: string | null
+    receiptImage?: string | null
+    reviewedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    sessions?: SessionCreateNestedManyWithoutUserInput
-    accounts?: AccountCreateNestedManyWithoutUserInput
-    church?: ChurchCreateNestedOneWithoutPresidentsInput
-    registrations?: RegistrationCreateNestedManyWithoutPresidentInput
+    totalFee?: number
+    delegateFeePerPerson?: number
+    cookFeePerPerson?: number
+    isPreRegistration?: boolean
+    reviewer?: UserCreateNestedOneWithoutReviewedBatchesInput
+    delegates?: DelegateCreateNestedManyWithoutBatchInput
+    cooks?: CookCreateNestedManyWithoutBatchInput
   }
 
-  export type UserUncheckedCreateWithoutReviewedRegistrationsInput = {
+  export type RegistrationBatchUncheckedCreateWithoutRegistrationInput = {
     id?: string
-    name: string
-    email: string
-    role?: $Enums.UserRole
-    emailVerified?: boolean
-    image?: string | null
-    churchId?: string | null
+    batchNumber: number
+    status?: $Enums.RegistrationStatus
+    remarks?: string | null
+    receiptImage?: string | null
+    reviewedAt?: Date | string | null
+    reviewedBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
-    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
-    registrations?: RegistrationUncheckedCreateNestedManyWithoutPresidentInput
+    totalFee?: number
+    delegateFeePerPerson?: number
+    cookFeePerPerson?: number
+    isPreRegistration?: boolean
+    delegates?: DelegateUncheckedCreateNestedManyWithoutBatchInput
+    cooks?: CookUncheckedCreateNestedManyWithoutBatchInput
   }
 
-  export type UserCreateOrConnectWithoutReviewedRegistrationsInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutReviewedRegistrationsInput, UserUncheckedCreateWithoutReviewedRegistrationsInput>
+  export type RegistrationBatchCreateOrConnectWithoutRegistrationInput = {
+    where: RegistrationBatchWhereUniqueInput
+    create: XOR<RegistrationBatchCreateWithoutRegistrationInput, RegistrationBatchUncheckedCreateWithoutRegistrationInput>
   }
 
-  export type DelegateCreateWithoutRegistrationInput = {
-    id?: string
-    fullName: string
-    nickname?: string | null
-    age: number
-    gender: $Enums.Gender
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type DelegateUncheckedCreateWithoutRegistrationInput = {
-    id?: string
-    fullName: string
-    nickname?: string | null
-    age: number
-    gender: $Enums.Gender
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type DelegateCreateOrConnectWithoutRegistrationInput = {
-    where: DelegateWhereUniqueInput
-    create: XOR<DelegateCreateWithoutRegistrationInput, DelegateUncheckedCreateWithoutRegistrationInput>
-  }
-
-  export type DelegateCreateManyRegistrationInputEnvelope = {
-    data: DelegateCreateManyRegistrationInput | DelegateCreateManyRegistrationInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type CookCreateWithoutRegistrationInput = {
-    id?: string
-    fullName: string
-    nickname?: string | null
-    age: number
-    gender: $Enums.Gender
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type CookUncheckedCreateWithoutRegistrationInput = {
-    id?: string
-    fullName: string
-    nickname?: string | null
-    age: number
-    gender: $Enums.Gender
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type CookCreateOrConnectWithoutRegistrationInput = {
-    where: CookWhereUniqueInput
-    create: XOR<CookCreateWithoutRegistrationInput, CookUncheckedCreateWithoutRegistrationInput>
-  }
-
-  export type CookCreateManyRegistrationInputEnvelope = {
-    data: CookCreateManyRegistrationInput | CookCreateManyRegistrationInput[]
+  export type RegistrationBatchCreateManyRegistrationInputEnvelope = {
+    data: RegistrationBatchCreateManyRegistrationInput | RegistrationBatchCreateManyRegistrationInput[]
     skipDuplicates?: boolean
   }
 
@@ -21018,11 +22400,12 @@ export namespace Prisma {
     banner?: NullableStringFieldUpdateOperationsInput | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    registrationDeadline?: DateTimeFieldUpdateOperationsInput | Date | string
     preRegistrationFee?: IntFieldUpdateOperationsInput | number
+    preRegistrationSiblingDiscount?: IntFieldUpdateOperationsInput | number
     preRegistrationStart?: DateTimeFieldUpdateOperationsInput | Date | string
     preRegistrationEnd?: DateTimeFieldUpdateOperationsInput | Date | string
     onsiteRegistrationFee?: IntFieldUpdateOperationsInput | number
+    onsiteSiblingDiscount?: IntFieldUpdateOperationsInput | number
     cookRegistrationFee?: IntFieldUpdateOperationsInput | number
     status?: EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -21037,11 +22420,12 @@ export namespace Prisma {
     banner?: NullableStringFieldUpdateOperationsInput | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    registrationDeadline?: DateTimeFieldUpdateOperationsInput | Date | string
     preRegistrationFee?: IntFieldUpdateOperationsInput | number
+    preRegistrationSiblingDiscount?: IntFieldUpdateOperationsInput | number
     preRegistrationStart?: DateTimeFieldUpdateOperationsInput | Date | string
     preRegistrationEnd?: DateTimeFieldUpdateOperationsInput | Date | string
     onsiteRegistrationFee?: IntFieldUpdateOperationsInput | number
+    onsiteSiblingDiscount?: IntFieldUpdateOperationsInput | number
     cookRegistrationFee?: IntFieldUpdateOperationsInput | number
     status?: EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -21102,7 +22486,7 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     church?: ChurchUpdateOneWithoutPresidentsNestedInput
-    reviewedRegistrations?: RegistrationUpdateManyWithoutReviewerNestedInput
+    reviewedBatches?: RegistrationBatchUpdateManyWithoutReviewerNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRegistrationsInput = {
@@ -21117,21 +22501,184 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
-    reviewedRegistrations?: RegistrationUncheckedUpdateManyWithoutReviewerNestedInput
+    reviewedBatches?: RegistrationBatchUncheckedUpdateManyWithoutReviewerNestedInput
   }
 
-  export type UserUpsertWithoutReviewedRegistrationsInput = {
-    update: XOR<UserUpdateWithoutReviewedRegistrationsInput, UserUncheckedUpdateWithoutReviewedRegistrationsInput>
-    create: XOR<UserCreateWithoutReviewedRegistrationsInput, UserUncheckedCreateWithoutReviewedRegistrationsInput>
+  export type RegistrationBatchUpsertWithWhereUniqueWithoutRegistrationInput = {
+    where: RegistrationBatchWhereUniqueInput
+    update: XOR<RegistrationBatchUpdateWithoutRegistrationInput, RegistrationBatchUncheckedUpdateWithoutRegistrationInput>
+    create: XOR<RegistrationBatchCreateWithoutRegistrationInput, RegistrationBatchUncheckedCreateWithoutRegistrationInput>
+  }
+
+  export type RegistrationBatchUpdateWithWhereUniqueWithoutRegistrationInput = {
+    where: RegistrationBatchWhereUniqueInput
+    data: XOR<RegistrationBatchUpdateWithoutRegistrationInput, RegistrationBatchUncheckedUpdateWithoutRegistrationInput>
+  }
+
+  export type RegistrationBatchUpdateManyWithWhereWithoutRegistrationInput = {
+    where: RegistrationBatchScalarWhereInput
+    data: XOR<RegistrationBatchUpdateManyMutationInput, RegistrationBatchUncheckedUpdateManyWithoutRegistrationInput>
+  }
+
+  export type RegistrationCreateWithoutBatchesInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    event: EventCreateNestedOneWithoutRegistrationsInput
+    church: ChurchCreateNestedOneWithoutRegistrationsInput
+    president: UserCreateNestedOneWithoutRegistrationsInput
+  }
+
+  export type RegistrationUncheckedCreateWithoutBatchesInput = {
+    id?: string
+    eventId: string
+    churchId: string
+    presidentId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RegistrationCreateOrConnectWithoutBatchesInput = {
+    where: RegistrationWhereUniqueInput
+    create: XOR<RegistrationCreateWithoutBatchesInput, RegistrationUncheckedCreateWithoutBatchesInput>
+  }
+
+  export type UserCreateWithoutReviewedBatchesInput = {
+    id?: string
+    name: string
+    email: string
+    role?: $Enums.UserRole
+    emailVerified?: boolean
+    image?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    church?: ChurchCreateNestedOneWithoutPresidentsInput
+    registrations?: RegistrationCreateNestedManyWithoutPresidentInput
+  }
+
+  export type UserUncheckedCreateWithoutReviewedBatchesInput = {
+    id?: string
+    name: string
+    email: string
+    role?: $Enums.UserRole
+    emailVerified?: boolean
+    image?: string | null
+    churchId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    registrations?: RegistrationUncheckedCreateNestedManyWithoutPresidentInput
+  }
+
+  export type UserCreateOrConnectWithoutReviewedBatchesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutReviewedBatchesInput, UserUncheckedCreateWithoutReviewedBatchesInput>
+  }
+
+  export type DelegateCreateWithoutBatchInput = {
+    id?: string
+    fullName: string
+    nickname?: string | null
+    age: number
+    gender: $Enums.Gender
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DelegateUncheckedCreateWithoutBatchInput = {
+    id?: string
+    fullName: string
+    nickname?: string | null
+    age: number
+    gender: $Enums.Gender
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DelegateCreateOrConnectWithoutBatchInput = {
+    where: DelegateWhereUniqueInput
+    create: XOR<DelegateCreateWithoutBatchInput, DelegateUncheckedCreateWithoutBatchInput>
+  }
+
+  export type DelegateCreateManyBatchInputEnvelope = {
+    data: DelegateCreateManyBatchInput | DelegateCreateManyBatchInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CookCreateWithoutBatchInput = {
+    id?: string
+    fullName: string
+    nickname?: string | null
+    age: number
+    gender: $Enums.Gender
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CookUncheckedCreateWithoutBatchInput = {
+    id?: string
+    fullName: string
+    nickname?: string | null
+    age: number
+    gender: $Enums.Gender
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CookCreateOrConnectWithoutBatchInput = {
+    where: CookWhereUniqueInput
+    create: XOR<CookCreateWithoutBatchInput, CookUncheckedCreateWithoutBatchInput>
+  }
+
+  export type CookCreateManyBatchInputEnvelope = {
+    data: CookCreateManyBatchInput | CookCreateManyBatchInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type RegistrationUpsertWithoutBatchesInput = {
+    update: XOR<RegistrationUpdateWithoutBatchesInput, RegistrationUncheckedUpdateWithoutBatchesInput>
+    create: XOR<RegistrationCreateWithoutBatchesInput, RegistrationUncheckedCreateWithoutBatchesInput>
+    where?: RegistrationWhereInput
+  }
+
+  export type RegistrationUpdateToOneWithWhereWithoutBatchesInput = {
+    where?: RegistrationWhereInput
+    data: XOR<RegistrationUpdateWithoutBatchesInput, RegistrationUncheckedUpdateWithoutBatchesInput>
+  }
+
+  export type RegistrationUpdateWithoutBatchesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    event?: EventUpdateOneRequiredWithoutRegistrationsNestedInput
+    church?: ChurchUpdateOneRequiredWithoutRegistrationsNestedInput
+    president?: UserUpdateOneRequiredWithoutRegistrationsNestedInput
+  }
+
+  export type RegistrationUncheckedUpdateWithoutBatchesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    eventId?: StringFieldUpdateOperationsInput | string
+    churchId?: StringFieldUpdateOperationsInput | string
+    presidentId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserUpsertWithoutReviewedBatchesInput = {
+    update: XOR<UserUpdateWithoutReviewedBatchesInput, UserUncheckedUpdateWithoutReviewedBatchesInput>
+    create: XOR<UserCreateWithoutReviewedBatchesInput, UserUncheckedCreateWithoutReviewedBatchesInput>
     where?: UserWhereInput
   }
 
-  export type UserUpdateToOneWithWhereWithoutReviewedRegistrationsInput = {
+  export type UserUpdateToOneWithWhereWithoutReviewedBatchesInput = {
     where?: UserWhereInput
-    data: XOR<UserUpdateWithoutReviewedRegistrationsInput, UserUncheckedUpdateWithoutReviewedRegistrationsInput>
+    data: XOR<UserUpdateWithoutReviewedBatchesInput, UserUncheckedUpdateWithoutReviewedBatchesInput>
   }
 
-  export type UserUpdateWithoutReviewedRegistrationsInput = {
+  export type UserUpdateWithoutReviewedBatchesInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -21146,7 +22693,7 @@ export namespace Prisma {
     registrations?: RegistrationUpdateManyWithoutPresidentNestedInput
   }
 
-  export type UserUncheckedUpdateWithoutReviewedRegistrationsInput = {
+  export type UserUncheckedUpdateWithoutReviewedBatchesInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -21161,20 +22708,20 @@ export namespace Prisma {
     registrations?: RegistrationUncheckedUpdateManyWithoutPresidentNestedInput
   }
 
-  export type DelegateUpsertWithWhereUniqueWithoutRegistrationInput = {
+  export type DelegateUpsertWithWhereUniqueWithoutBatchInput = {
     where: DelegateWhereUniqueInput
-    update: XOR<DelegateUpdateWithoutRegistrationInput, DelegateUncheckedUpdateWithoutRegistrationInput>
-    create: XOR<DelegateCreateWithoutRegistrationInput, DelegateUncheckedCreateWithoutRegistrationInput>
+    update: XOR<DelegateUpdateWithoutBatchInput, DelegateUncheckedUpdateWithoutBatchInput>
+    create: XOR<DelegateCreateWithoutBatchInput, DelegateUncheckedCreateWithoutBatchInput>
   }
 
-  export type DelegateUpdateWithWhereUniqueWithoutRegistrationInput = {
+  export type DelegateUpdateWithWhereUniqueWithoutBatchInput = {
     where: DelegateWhereUniqueInput
-    data: XOR<DelegateUpdateWithoutRegistrationInput, DelegateUncheckedUpdateWithoutRegistrationInput>
+    data: XOR<DelegateUpdateWithoutBatchInput, DelegateUncheckedUpdateWithoutBatchInput>
   }
 
-  export type DelegateUpdateManyWithWhereWithoutRegistrationInput = {
+  export type DelegateUpdateManyWithWhereWithoutBatchInput = {
     where: DelegateScalarWhereInput
-    data: XOR<DelegateUpdateManyMutationInput, DelegateUncheckedUpdateManyWithoutRegistrationInput>
+    data: XOR<DelegateUpdateManyMutationInput, DelegateUncheckedUpdateManyWithoutBatchInput>
   }
 
   export type DelegateScalarWhereInput = {
@@ -21186,25 +22733,25 @@ export namespace Prisma {
     nickname?: StringNullableFilter<"Delegate"> | string | null
     age?: IntFilter<"Delegate"> | number
     gender?: EnumGenderFilter<"Delegate"> | $Enums.Gender
-    registrationId?: StringFilter<"Delegate"> | string
+    batchId?: StringFilter<"Delegate"> | string
     createdAt?: DateTimeFilter<"Delegate"> | Date | string
     updatedAt?: DateTimeFilter<"Delegate"> | Date | string
   }
 
-  export type CookUpsertWithWhereUniqueWithoutRegistrationInput = {
+  export type CookUpsertWithWhereUniqueWithoutBatchInput = {
     where: CookWhereUniqueInput
-    update: XOR<CookUpdateWithoutRegistrationInput, CookUncheckedUpdateWithoutRegistrationInput>
-    create: XOR<CookCreateWithoutRegistrationInput, CookUncheckedCreateWithoutRegistrationInput>
+    update: XOR<CookUpdateWithoutBatchInput, CookUncheckedUpdateWithoutBatchInput>
+    create: XOR<CookCreateWithoutBatchInput, CookUncheckedCreateWithoutBatchInput>
   }
 
-  export type CookUpdateWithWhereUniqueWithoutRegistrationInput = {
+  export type CookUpdateWithWhereUniqueWithoutBatchInput = {
     where: CookWhereUniqueInput
-    data: XOR<CookUpdateWithoutRegistrationInput, CookUncheckedUpdateWithoutRegistrationInput>
+    data: XOR<CookUpdateWithoutBatchInput, CookUncheckedUpdateWithoutBatchInput>
   }
 
-  export type CookUpdateManyWithWhereWithoutRegistrationInput = {
+  export type CookUpdateManyWithWhereWithoutBatchInput = {
     where: CookScalarWhereInput
-    data: XOR<CookUpdateManyMutationInput, CookUncheckedUpdateManyWithoutRegistrationInput>
+    data: XOR<CookUpdateManyMutationInput, CookUncheckedUpdateManyWithoutBatchInput>
   }
 
   export type CookScalarWhereInput = {
@@ -21216,13 +22763,14 @@ export namespace Prisma {
     nickname?: StringNullableFilter<"Cook"> | string | null
     age?: IntFilter<"Cook"> | number
     gender?: EnumGenderFilter<"Cook"> | $Enums.Gender
-    registrationId?: StringFilter<"Cook"> | string
+    batchId?: StringFilter<"Cook"> | string
     createdAt?: DateTimeFilter<"Cook"> | Date | string
     updatedAt?: DateTimeFilter<"Cook"> | Date | string
   }
 
-  export type RegistrationCreateWithoutDelegatesInput = {
+  export type RegistrationBatchCreateWithoutDelegatesInput = {
     id?: string
+    batchNumber: number
     status?: $Enums.RegistrationStatus
     remarks?: string | null
     receiptImage?: string | null
@@ -21233,110 +22781,15 @@ export namespace Prisma {
     delegateFeePerPerson?: number
     cookFeePerPerson?: number
     isPreRegistration?: boolean
-    event: EventCreateNestedOneWithoutRegistrationsInput
-    church: ChurchCreateNestedOneWithoutRegistrationsInput
-    president: UserCreateNestedOneWithoutRegistrationsInput
-    reviewer?: UserCreateNestedOneWithoutReviewedRegistrationsInput
-    cooks?: CookCreateNestedManyWithoutRegistrationInput
+    registration: RegistrationCreateNestedOneWithoutBatchesInput
+    reviewer?: UserCreateNestedOneWithoutReviewedBatchesInput
+    cooks?: CookCreateNestedManyWithoutBatchInput
   }
 
-  export type RegistrationUncheckedCreateWithoutDelegatesInput = {
+  export type RegistrationBatchUncheckedCreateWithoutDelegatesInput = {
     id?: string
-    eventId: string
-    churchId: string
-    presidentId: string
-    status?: $Enums.RegistrationStatus
-    remarks?: string | null
-    receiptImage?: string | null
-    reviewedAt?: Date | string | null
-    reviewedBy?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    totalFee?: number
-    delegateFeePerPerson?: number
-    cookFeePerPerson?: number
-    isPreRegistration?: boolean
-    cooks?: CookUncheckedCreateNestedManyWithoutRegistrationInput
-  }
-
-  export type RegistrationCreateOrConnectWithoutDelegatesInput = {
-    where: RegistrationWhereUniqueInput
-    create: XOR<RegistrationCreateWithoutDelegatesInput, RegistrationUncheckedCreateWithoutDelegatesInput>
-  }
-
-  export type RegistrationUpsertWithoutDelegatesInput = {
-    update: XOR<RegistrationUpdateWithoutDelegatesInput, RegistrationUncheckedUpdateWithoutDelegatesInput>
-    create: XOR<RegistrationCreateWithoutDelegatesInput, RegistrationUncheckedCreateWithoutDelegatesInput>
-    where?: RegistrationWhereInput
-  }
-
-  export type RegistrationUpdateToOneWithWhereWithoutDelegatesInput = {
-    where?: RegistrationWhereInput
-    data: XOR<RegistrationUpdateWithoutDelegatesInput, RegistrationUncheckedUpdateWithoutDelegatesInput>
-  }
-
-  export type RegistrationUpdateWithoutDelegatesInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
-    remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    receiptImage?: NullableStringFieldUpdateOperationsInput | string | null
-    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    totalFee?: IntFieldUpdateOperationsInput | number
-    delegateFeePerPerson?: IntFieldUpdateOperationsInput | number
-    cookFeePerPerson?: IntFieldUpdateOperationsInput | number
-    isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
-    event?: EventUpdateOneRequiredWithoutRegistrationsNestedInput
-    church?: ChurchUpdateOneRequiredWithoutRegistrationsNestedInput
-    president?: UserUpdateOneRequiredWithoutRegistrationsNestedInput
-    reviewer?: UserUpdateOneWithoutReviewedRegistrationsNestedInput
-    cooks?: CookUpdateManyWithoutRegistrationNestedInput
-  }
-
-  export type RegistrationUncheckedUpdateWithoutDelegatesInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    eventId?: StringFieldUpdateOperationsInput | string
-    churchId?: StringFieldUpdateOperationsInput | string
-    presidentId?: StringFieldUpdateOperationsInput | string
-    status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
-    remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    receiptImage?: NullableStringFieldUpdateOperationsInput | string | null
-    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    totalFee?: IntFieldUpdateOperationsInput | number
-    delegateFeePerPerson?: IntFieldUpdateOperationsInput | number
-    cookFeePerPerson?: IntFieldUpdateOperationsInput | number
-    isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
-    cooks?: CookUncheckedUpdateManyWithoutRegistrationNestedInput
-  }
-
-  export type RegistrationCreateWithoutCooksInput = {
-    id?: string
-    status?: $Enums.RegistrationStatus
-    remarks?: string | null
-    receiptImage?: string | null
-    reviewedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    totalFee?: number
-    delegateFeePerPerson?: number
-    cookFeePerPerson?: number
-    isPreRegistration?: boolean
-    event: EventCreateNestedOneWithoutRegistrationsInput
-    church: ChurchCreateNestedOneWithoutRegistrationsInput
-    president: UserCreateNestedOneWithoutRegistrationsInput
-    reviewer?: UserCreateNestedOneWithoutReviewedRegistrationsInput
-    delegates?: DelegateCreateNestedManyWithoutRegistrationInput
-  }
-
-  export type RegistrationUncheckedCreateWithoutCooksInput = {
-    id?: string
-    eventId: string
-    churchId: string
-    presidentId: string
+    registrationId: string
+    batchNumber: number
     status?: $Enums.RegistrationStatus
     remarks?: string | null
     receiptImage?: string | null
@@ -21348,27 +22801,28 @@ export namespace Prisma {
     delegateFeePerPerson?: number
     cookFeePerPerson?: number
     isPreRegistration?: boolean
-    delegates?: DelegateUncheckedCreateNestedManyWithoutRegistrationInput
+    cooks?: CookUncheckedCreateNestedManyWithoutBatchInput
   }
 
-  export type RegistrationCreateOrConnectWithoutCooksInput = {
-    where: RegistrationWhereUniqueInput
-    create: XOR<RegistrationCreateWithoutCooksInput, RegistrationUncheckedCreateWithoutCooksInput>
+  export type RegistrationBatchCreateOrConnectWithoutDelegatesInput = {
+    where: RegistrationBatchWhereUniqueInput
+    create: XOR<RegistrationBatchCreateWithoutDelegatesInput, RegistrationBatchUncheckedCreateWithoutDelegatesInput>
   }
 
-  export type RegistrationUpsertWithoutCooksInput = {
-    update: XOR<RegistrationUpdateWithoutCooksInput, RegistrationUncheckedUpdateWithoutCooksInput>
-    create: XOR<RegistrationCreateWithoutCooksInput, RegistrationUncheckedCreateWithoutCooksInput>
-    where?: RegistrationWhereInput
+  export type RegistrationBatchUpsertWithoutDelegatesInput = {
+    update: XOR<RegistrationBatchUpdateWithoutDelegatesInput, RegistrationBatchUncheckedUpdateWithoutDelegatesInput>
+    create: XOR<RegistrationBatchCreateWithoutDelegatesInput, RegistrationBatchUncheckedCreateWithoutDelegatesInput>
+    where?: RegistrationBatchWhereInput
   }
 
-  export type RegistrationUpdateToOneWithWhereWithoutCooksInput = {
-    where?: RegistrationWhereInput
-    data: XOR<RegistrationUpdateWithoutCooksInput, RegistrationUncheckedUpdateWithoutCooksInput>
+  export type RegistrationBatchUpdateToOneWithWhereWithoutDelegatesInput = {
+    where?: RegistrationBatchWhereInput
+    data: XOR<RegistrationBatchUpdateWithoutDelegatesInput, RegistrationBatchUncheckedUpdateWithoutDelegatesInput>
   }
 
-  export type RegistrationUpdateWithoutCooksInput = {
+  export type RegistrationBatchUpdateWithoutDelegatesInput = {
     id?: StringFieldUpdateOperationsInput | string
+    batchNumber?: IntFieldUpdateOperationsInput | number
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
     receiptImage?: NullableStringFieldUpdateOperationsInput | string | null
@@ -21379,18 +22833,15 @@ export namespace Prisma {
     delegateFeePerPerson?: IntFieldUpdateOperationsInput | number
     cookFeePerPerson?: IntFieldUpdateOperationsInput | number
     isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
-    event?: EventUpdateOneRequiredWithoutRegistrationsNestedInput
-    church?: ChurchUpdateOneRequiredWithoutRegistrationsNestedInput
-    president?: UserUpdateOneRequiredWithoutRegistrationsNestedInput
-    reviewer?: UserUpdateOneWithoutReviewedRegistrationsNestedInput
-    delegates?: DelegateUpdateManyWithoutRegistrationNestedInput
+    registration?: RegistrationUpdateOneRequiredWithoutBatchesNestedInput
+    reviewer?: UserUpdateOneWithoutReviewedBatchesNestedInput
+    cooks?: CookUpdateManyWithoutBatchNestedInput
   }
 
-  export type RegistrationUncheckedUpdateWithoutCooksInput = {
+  export type RegistrationBatchUncheckedUpdateWithoutDelegatesInput = {
     id?: StringFieldUpdateOperationsInput | string
-    eventId?: StringFieldUpdateOperationsInput | string
-    churchId?: StringFieldUpdateOperationsInput | string
-    presidentId?: StringFieldUpdateOperationsInput | string
+    registrationId?: StringFieldUpdateOperationsInput | string
+    batchNumber?: IntFieldUpdateOperationsInput | number
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
     receiptImage?: NullableStringFieldUpdateOperationsInput | string | null
@@ -21402,7 +22853,95 @@ export namespace Prisma {
     delegateFeePerPerson?: IntFieldUpdateOperationsInput | number
     cookFeePerPerson?: IntFieldUpdateOperationsInput | number
     isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
-    delegates?: DelegateUncheckedUpdateManyWithoutRegistrationNestedInput
+    cooks?: CookUncheckedUpdateManyWithoutBatchNestedInput
+  }
+
+  export type RegistrationBatchCreateWithoutCooksInput = {
+    id?: string
+    batchNumber: number
+    status?: $Enums.RegistrationStatus
+    remarks?: string | null
+    receiptImage?: string | null
+    reviewedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    totalFee?: number
+    delegateFeePerPerson?: number
+    cookFeePerPerson?: number
+    isPreRegistration?: boolean
+    registration: RegistrationCreateNestedOneWithoutBatchesInput
+    reviewer?: UserCreateNestedOneWithoutReviewedBatchesInput
+    delegates?: DelegateCreateNestedManyWithoutBatchInput
+  }
+
+  export type RegistrationBatchUncheckedCreateWithoutCooksInput = {
+    id?: string
+    registrationId: string
+    batchNumber: number
+    status?: $Enums.RegistrationStatus
+    remarks?: string | null
+    receiptImage?: string | null
+    reviewedAt?: Date | string | null
+    reviewedBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    totalFee?: number
+    delegateFeePerPerson?: number
+    cookFeePerPerson?: number
+    isPreRegistration?: boolean
+    delegates?: DelegateUncheckedCreateNestedManyWithoutBatchInput
+  }
+
+  export type RegistrationBatchCreateOrConnectWithoutCooksInput = {
+    where: RegistrationBatchWhereUniqueInput
+    create: XOR<RegistrationBatchCreateWithoutCooksInput, RegistrationBatchUncheckedCreateWithoutCooksInput>
+  }
+
+  export type RegistrationBatchUpsertWithoutCooksInput = {
+    update: XOR<RegistrationBatchUpdateWithoutCooksInput, RegistrationBatchUncheckedUpdateWithoutCooksInput>
+    create: XOR<RegistrationBatchCreateWithoutCooksInput, RegistrationBatchUncheckedCreateWithoutCooksInput>
+    where?: RegistrationBatchWhereInput
+  }
+
+  export type RegistrationBatchUpdateToOneWithWhereWithoutCooksInput = {
+    where?: RegistrationBatchWhereInput
+    data: XOR<RegistrationBatchUpdateWithoutCooksInput, RegistrationBatchUncheckedUpdateWithoutCooksInput>
+  }
+
+  export type RegistrationBatchUpdateWithoutCooksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchNumber?: IntFieldUpdateOperationsInput | number
+    status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
+    remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptImage?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalFee?: IntFieldUpdateOperationsInput | number
+    delegateFeePerPerson?: IntFieldUpdateOperationsInput | number
+    cookFeePerPerson?: IntFieldUpdateOperationsInput | number
+    isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
+    registration?: RegistrationUpdateOneRequiredWithoutBatchesNestedInput
+    reviewer?: UserUpdateOneWithoutReviewedBatchesNestedInput
+    delegates?: DelegateUpdateManyWithoutBatchNestedInput
+  }
+
+  export type RegistrationBatchUncheckedUpdateWithoutCooksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    registrationId?: StringFieldUpdateOperationsInput | string
+    batchNumber?: IntFieldUpdateOperationsInput | number
+    status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
+    remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptImage?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalFee?: IntFieldUpdateOperationsInput | number
+    delegateFeePerPerson?: IntFieldUpdateOperationsInput | number
+    cookFeePerPerson?: IntFieldUpdateOperationsInput | number
+    isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
+    delegates?: DelegateUncheckedUpdateManyWithoutBatchNestedInput
   }
 
   export type SessionCreateManyUserInput = {
@@ -21434,24 +22973,14 @@ export namespace Prisma {
     id?: string
     eventId: string
     churchId: string
-    status?: $Enums.RegistrationStatus
-    remarks?: string | null
-    receiptImage?: string | null
-    reviewedAt?: Date | string | null
-    reviewedBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    totalFee?: number
-    delegateFeePerPerson?: number
-    cookFeePerPerson?: number
-    isPreRegistration?: boolean
   }
 
-  export type RegistrationCreateManyReviewerInput = {
+  export type RegistrationBatchCreateManyReviewerInput = {
     id?: string
-    eventId: string
-    churchId: string
-    presidentId: string
+    registrationId: string
+    batchNumber: number
     status?: $Enums.RegistrationStatus
     remarks?: string | null
     receiptImage?: string | null
@@ -21541,61 +23070,33 @@ export namespace Prisma {
 
   export type RegistrationUpdateWithoutPresidentInput = {
     id?: StringFieldUpdateOperationsInput | string
-    status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
-    remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    receiptImage?: NullableStringFieldUpdateOperationsInput | string | null
-    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    totalFee?: IntFieldUpdateOperationsInput | number
-    delegateFeePerPerson?: IntFieldUpdateOperationsInput | number
-    cookFeePerPerson?: IntFieldUpdateOperationsInput | number
-    isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
     event?: EventUpdateOneRequiredWithoutRegistrationsNestedInput
     church?: ChurchUpdateOneRequiredWithoutRegistrationsNestedInput
-    reviewer?: UserUpdateOneWithoutReviewedRegistrationsNestedInput
-    delegates?: DelegateUpdateManyWithoutRegistrationNestedInput
-    cooks?: CookUpdateManyWithoutRegistrationNestedInput
+    batches?: RegistrationBatchUpdateManyWithoutRegistrationNestedInput
   }
 
   export type RegistrationUncheckedUpdateWithoutPresidentInput = {
     id?: StringFieldUpdateOperationsInput | string
     eventId?: StringFieldUpdateOperationsInput | string
     churchId?: StringFieldUpdateOperationsInput | string
-    status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
-    remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    receiptImage?: NullableStringFieldUpdateOperationsInput | string | null
-    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    totalFee?: IntFieldUpdateOperationsInput | number
-    delegateFeePerPerson?: IntFieldUpdateOperationsInput | number
-    cookFeePerPerson?: IntFieldUpdateOperationsInput | number
-    isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
-    delegates?: DelegateUncheckedUpdateManyWithoutRegistrationNestedInput
-    cooks?: CookUncheckedUpdateManyWithoutRegistrationNestedInput
+    batches?: RegistrationBatchUncheckedUpdateManyWithoutRegistrationNestedInput
   }
 
   export type RegistrationUncheckedUpdateManyWithoutPresidentInput = {
     id?: StringFieldUpdateOperationsInput | string
     eventId?: StringFieldUpdateOperationsInput | string
     churchId?: StringFieldUpdateOperationsInput | string
-    status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
-    remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    receiptImage?: NullableStringFieldUpdateOperationsInput | string | null
-    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    totalFee?: IntFieldUpdateOperationsInput | number
-    delegateFeePerPerson?: IntFieldUpdateOperationsInput | number
-    cookFeePerPerson?: IntFieldUpdateOperationsInput | number
-    isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
   }
 
-  export type RegistrationUpdateWithoutReviewerInput = {
+  export type RegistrationBatchUpdateWithoutReviewerInput = {
     id?: StringFieldUpdateOperationsInput | string
+    batchNumber?: IntFieldUpdateOperationsInput | number
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
     receiptImage?: NullableStringFieldUpdateOperationsInput | string | null
@@ -21606,18 +23107,15 @@ export namespace Prisma {
     delegateFeePerPerson?: IntFieldUpdateOperationsInput | number
     cookFeePerPerson?: IntFieldUpdateOperationsInput | number
     isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
-    event?: EventUpdateOneRequiredWithoutRegistrationsNestedInput
-    church?: ChurchUpdateOneRequiredWithoutRegistrationsNestedInput
-    president?: UserUpdateOneRequiredWithoutRegistrationsNestedInput
-    delegates?: DelegateUpdateManyWithoutRegistrationNestedInput
-    cooks?: CookUpdateManyWithoutRegistrationNestedInput
+    registration?: RegistrationUpdateOneRequiredWithoutBatchesNestedInput
+    delegates?: DelegateUpdateManyWithoutBatchNestedInput
+    cooks?: CookUpdateManyWithoutBatchNestedInput
   }
 
-  export type RegistrationUncheckedUpdateWithoutReviewerInput = {
+  export type RegistrationBatchUncheckedUpdateWithoutReviewerInput = {
     id?: StringFieldUpdateOperationsInput | string
-    eventId?: StringFieldUpdateOperationsInput | string
-    churchId?: StringFieldUpdateOperationsInput | string
-    presidentId?: StringFieldUpdateOperationsInput | string
+    registrationId?: StringFieldUpdateOperationsInput | string
+    batchNumber?: IntFieldUpdateOperationsInput | number
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
     receiptImage?: NullableStringFieldUpdateOperationsInput | string | null
@@ -21628,15 +23126,14 @@ export namespace Prisma {
     delegateFeePerPerson?: IntFieldUpdateOperationsInput | number
     cookFeePerPerson?: IntFieldUpdateOperationsInput | number
     isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
-    delegates?: DelegateUncheckedUpdateManyWithoutRegistrationNestedInput
-    cooks?: CookUncheckedUpdateManyWithoutRegistrationNestedInput
+    delegates?: DelegateUncheckedUpdateManyWithoutBatchNestedInput
+    cooks?: CookUncheckedUpdateManyWithoutBatchNestedInput
   }
 
-  export type RegistrationUncheckedUpdateManyWithoutReviewerInput = {
+  export type RegistrationBatchUncheckedUpdateManyWithoutReviewerInput = {
     id?: StringFieldUpdateOperationsInput | string
-    eventId?: StringFieldUpdateOperationsInput | string
-    churchId?: StringFieldUpdateOperationsInput | string
-    presidentId?: StringFieldUpdateOperationsInput | string
+    registrationId?: StringFieldUpdateOperationsInput | string
+    batchNumber?: IntFieldUpdateOperationsInput | number
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
     receiptImage?: NullableStringFieldUpdateOperationsInput | string | null
@@ -21698,17 +23195,8 @@ export namespace Prisma {
     id?: string
     eventId: string
     presidentId: string
-    status?: $Enums.RegistrationStatus
-    remarks?: string | null
-    receiptImage?: string | null
-    reviewedAt?: Date | string | null
-    reviewedBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    totalFee?: number
-    delegateFeePerPerson?: number
-    cookFeePerPerson?: number
-    isPreRegistration?: boolean
   }
 
   export type UserUpdateWithoutChurchInput = {
@@ -21723,7 +23211,7 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     registrations?: RegistrationUpdateManyWithoutPresidentNestedInput
-    reviewedRegistrations?: RegistrationUpdateManyWithoutReviewerNestedInput
+    reviewedBatches?: RegistrationBatchUpdateManyWithoutReviewerNestedInput
   }
 
   export type UserUncheckedUpdateWithoutChurchInput = {
@@ -21738,7 +23226,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     registrations?: RegistrationUncheckedUpdateManyWithoutPresidentNestedInput
-    reviewedRegistrations?: RegistrationUncheckedUpdateManyWithoutReviewerNestedInput
+    reviewedBatches?: RegistrationBatchUncheckedUpdateManyWithoutReviewerNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutChurchInput = {
@@ -21754,63 +23242,67 @@ export namespace Prisma {
 
   export type RegistrationUpdateWithoutChurchInput = {
     id?: StringFieldUpdateOperationsInput | string
-    status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
-    remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    receiptImage?: NullableStringFieldUpdateOperationsInput | string | null
-    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    totalFee?: IntFieldUpdateOperationsInput | number
-    delegateFeePerPerson?: IntFieldUpdateOperationsInput | number
-    cookFeePerPerson?: IntFieldUpdateOperationsInput | number
-    isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
     event?: EventUpdateOneRequiredWithoutRegistrationsNestedInput
     president?: UserUpdateOneRequiredWithoutRegistrationsNestedInput
-    reviewer?: UserUpdateOneWithoutReviewedRegistrationsNestedInput
-    delegates?: DelegateUpdateManyWithoutRegistrationNestedInput
-    cooks?: CookUpdateManyWithoutRegistrationNestedInput
+    batches?: RegistrationBatchUpdateManyWithoutRegistrationNestedInput
   }
 
   export type RegistrationUncheckedUpdateWithoutChurchInput = {
     id?: StringFieldUpdateOperationsInput | string
     eventId?: StringFieldUpdateOperationsInput | string
     presidentId?: StringFieldUpdateOperationsInput | string
-    status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
-    remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    receiptImage?: NullableStringFieldUpdateOperationsInput | string | null
-    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    totalFee?: IntFieldUpdateOperationsInput | number
-    delegateFeePerPerson?: IntFieldUpdateOperationsInput | number
-    cookFeePerPerson?: IntFieldUpdateOperationsInput | number
-    isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
-    delegates?: DelegateUncheckedUpdateManyWithoutRegistrationNestedInput
-    cooks?: CookUncheckedUpdateManyWithoutRegistrationNestedInput
+    batches?: RegistrationBatchUncheckedUpdateManyWithoutRegistrationNestedInput
   }
 
   export type RegistrationUncheckedUpdateManyWithoutChurchInput = {
     id?: StringFieldUpdateOperationsInput | string
     eventId?: StringFieldUpdateOperationsInput | string
     presidentId?: StringFieldUpdateOperationsInput | string
-    status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
-    remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    receiptImage?: NullableStringFieldUpdateOperationsInput | string | null
-    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    totalFee?: IntFieldUpdateOperationsInput | number
-    delegateFeePerPerson?: IntFieldUpdateOperationsInput | number
-    cookFeePerPerson?: IntFieldUpdateOperationsInput | number
-    isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type RegistrationCreateManyEventInput = {
     id?: string
     churchId: string
     presidentId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RegistrationUpdateWithoutEventInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    church?: ChurchUpdateOneRequiredWithoutRegistrationsNestedInput
+    president?: UserUpdateOneRequiredWithoutRegistrationsNestedInput
+    batches?: RegistrationBatchUpdateManyWithoutRegistrationNestedInput
+  }
+
+  export type RegistrationUncheckedUpdateWithoutEventInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    churchId?: StringFieldUpdateOperationsInput | string
+    presidentId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    batches?: RegistrationBatchUncheckedUpdateManyWithoutRegistrationNestedInput
+  }
+
+  export type RegistrationUncheckedUpdateManyWithoutEventInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    churchId?: StringFieldUpdateOperationsInput | string
+    presidentId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RegistrationBatchCreateManyRegistrationInput = {
+    id?: string
+    batchNumber: number
     status?: $Enums.RegistrationStatus
     remarks?: string | null
     receiptImage?: string | null
@@ -21824,8 +23316,9 @@ export namespace Prisma {
     isPreRegistration?: boolean
   }
 
-  export type RegistrationUpdateWithoutEventInput = {
+  export type RegistrationBatchUpdateWithoutRegistrationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    batchNumber?: IntFieldUpdateOperationsInput | number
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
     receiptImage?: NullableStringFieldUpdateOperationsInput | string | null
@@ -21836,36 +23329,14 @@ export namespace Prisma {
     delegateFeePerPerson?: IntFieldUpdateOperationsInput | number
     cookFeePerPerson?: IntFieldUpdateOperationsInput | number
     isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
-    church?: ChurchUpdateOneRequiredWithoutRegistrationsNestedInput
-    president?: UserUpdateOneRequiredWithoutRegistrationsNestedInput
-    reviewer?: UserUpdateOneWithoutReviewedRegistrationsNestedInput
-    delegates?: DelegateUpdateManyWithoutRegistrationNestedInput
-    cooks?: CookUpdateManyWithoutRegistrationNestedInput
+    reviewer?: UserUpdateOneWithoutReviewedBatchesNestedInput
+    delegates?: DelegateUpdateManyWithoutBatchNestedInput
+    cooks?: CookUpdateManyWithoutBatchNestedInput
   }
 
-  export type RegistrationUncheckedUpdateWithoutEventInput = {
+  export type RegistrationBatchUncheckedUpdateWithoutRegistrationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    churchId?: StringFieldUpdateOperationsInput | string
-    presidentId?: StringFieldUpdateOperationsInput | string
-    status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
-    remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    receiptImage?: NullableStringFieldUpdateOperationsInput | string | null
-    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    totalFee?: IntFieldUpdateOperationsInput | number
-    delegateFeePerPerson?: IntFieldUpdateOperationsInput | number
-    cookFeePerPerson?: IntFieldUpdateOperationsInput | number
-    isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
-    delegates?: DelegateUncheckedUpdateManyWithoutRegistrationNestedInput
-    cooks?: CookUncheckedUpdateManyWithoutRegistrationNestedInput
-  }
-
-  export type RegistrationUncheckedUpdateManyWithoutEventInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    churchId?: StringFieldUpdateOperationsInput | string
-    presidentId?: StringFieldUpdateOperationsInput | string
+    batchNumber?: IntFieldUpdateOperationsInput | number
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
     receiptImage?: NullableStringFieldUpdateOperationsInput | string | null
@@ -21877,9 +23348,27 @@ export namespace Prisma {
     delegateFeePerPerson?: IntFieldUpdateOperationsInput | number
     cookFeePerPerson?: IntFieldUpdateOperationsInput | number
     isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
+    delegates?: DelegateUncheckedUpdateManyWithoutBatchNestedInput
+    cooks?: CookUncheckedUpdateManyWithoutBatchNestedInput
   }
 
-  export type DelegateCreateManyRegistrationInput = {
+  export type RegistrationBatchUncheckedUpdateManyWithoutRegistrationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchNumber?: IntFieldUpdateOperationsInput | number
+    status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
+    remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptImage?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalFee?: IntFieldUpdateOperationsInput | number
+    delegateFeePerPerson?: IntFieldUpdateOperationsInput | number
+    cookFeePerPerson?: IntFieldUpdateOperationsInput | number
+    isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type DelegateCreateManyBatchInput = {
     id?: string
     fullName: string
     nickname?: string | null
@@ -21889,7 +23378,7 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type CookCreateManyRegistrationInput = {
+  export type CookCreateManyBatchInput = {
     id?: string
     fullName: string
     nickname?: string | null
@@ -21899,7 +23388,7 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type DelegateUpdateWithoutRegistrationInput = {
+  export type DelegateUpdateWithoutBatchInput = {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     nickname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -21909,7 +23398,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type DelegateUncheckedUpdateWithoutRegistrationInput = {
+  export type DelegateUncheckedUpdateWithoutBatchInput = {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     nickname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -21919,7 +23408,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type DelegateUncheckedUpdateManyWithoutRegistrationInput = {
+  export type DelegateUncheckedUpdateManyWithoutBatchInput = {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     nickname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -21929,7 +23418,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type CookUpdateWithoutRegistrationInput = {
+  export type CookUpdateWithoutBatchInput = {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     nickname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -21939,7 +23428,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type CookUncheckedUpdateWithoutRegistrationInput = {
+  export type CookUncheckedUpdateWithoutBatchInput = {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     nickname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -21949,7 +23438,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type CookUncheckedUpdateManyWithoutRegistrationInput = {
+  export type CookUncheckedUpdateManyWithoutBatchInput = {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     nickname?: NullableStringFieldUpdateOperationsInput | string | null

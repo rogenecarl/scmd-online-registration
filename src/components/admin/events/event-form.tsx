@@ -47,11 +47,12 @@ interface EventFormProps {
     banner: string | null;
     startDate: Date;
     endDate: Date;
-    registrationDeadline: Date;
     preRegistrationFee: number;
+    preRegistrationSiblingDiscount: number;
     preRegistrationStart: Date;
     preRegistrationEnd: Date;
     onsiteRegistrationFee: number;
+    onsiteSiblingDiscount: number;
     cookRegistrationFee: number;
     status: EventStatus;
   };
@@ -83,11 +84,12 @@ export function EventForm({ mode, initialData }: EventFormProps) {
       banner: initialData?.banner ?? null,
       startDate: initialData?.startDate ?? new Date(),
       endDate: initialData?.endDate ?? new Date(),
-      registrationDeadline: initialData?.registrationDeadline ?? new Date(),
       preRegistrationFee: initialData?.preRegistrationFee ?? 0,
+      preRegistrationSiblingDiscount: initialData?.preRegistrationSiblingDiscount ?? 0,
       preRegistrationStart: initialData?.preRegistrationStart ?? new Date(),
       preRegistrationEnd: initialData?.preRegistrationEnd ?? new Date(),
       onsiteRegistrationFee: initialData?.onsiteRegistrationFee ?? 0,
+      onsiteSiblingDiscount: initialData?.onsiteSiblingDiscount ?? 0,
       cookRegistrationFee: initialData?.cookRegistrationFee ?? 0,
       status: initialData?.status ?? "UPCOMING",
     },
@@ -248,7 +250,7 @@ export function EventForm({ mode, initialData }: EventFormProps) {
               <CardTitle className="text-base md:text-lg">Event Dates</CardTitle>
             </div>
             <CardDescription className="text-xs md:text-sm">
-              Set the event dates and registration deadline
+              Set the start and end dates for the event
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4 p-4 md:p-6 pt-0 md:pt-0">
@@ -297,31 +299,6 @@ export function EventForm({ mode, initialData }: EventFormProps) {
                 )}
               />
             </div>
-
-            <FormField
-              control={form.control}
-              name="registrationDeadline"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Registration Deadline *</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="datetime-local"
-                      value={
-                        field.value
-                          ? formatDateForInput(new Date(field.value))
-                          : ""
-                      }
-                      onChange={(e) => field.onChange(new Date(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormDescription>
-                    The final date when registrations will be accepted
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
           </CardContent>
         </Card>
 
@@ -396,106 +373,188 @@ export function EventForm({ mode, initialData }: EventFormProps) {
               Set the registration fees in Philippine Peso (whole numbers only)
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4 p-4 md:p-6 pt-0 md:pt-0">
-            <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-              <FormField
-                control={form.control}
-                name="preRegistrationFee"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Pre-Registration Fee *</FormLabel>
-                    <FormControl>
-                      <div className="flex h-9 items-center gap-2 rounded-md border border-input bg-background px-3 ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
-                        <span className="text-muted-foreground">₱</span>
-                        <input
-                          type="number"
-                          step="1"
-                          min="0"
-                          className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-                          placeholder="0"
-                          {...field}
-                          value={field.value || ""}
-                          onChange={(e) =>
-                            field.onChange(
-                              e.target.value === ""
-                                ? 0
-                                : parseInt(e.target.value, 10)
-                            )
-                          }
-                        />
-                      </div>
-                    </FormControl>
-                    <FormDescription>Early bird delegate fee</FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+          <CardContent className="space-y-6 p-4 md:p-6 pt-0 md:pt-0">
+            {/* Pre-Registration Fees */}
+            <div>
+              <h4 className="text-sm font-medium mb-3">Pre-Registration (Early Bird)</h4>
+              <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
+                <FormField
+                  control={form.control}
+                  name="preRegistrationFee"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Regular Fee *</FormLabel>
+                      <FormControl>
+                        <div className="flex h-9 items-center gap-2 rounded-md border border-input bg-background px-3 ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
+                          <span className="text-muted-foreground">₱</span>
+                          <input
+                            type="number"
+                            step="1"
+                            min="0"
+                            className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                            placeholder="0"
+                            {...field}
+                            value={field.value || ""}
+                            onChange={(e) =>
+                              field.onChange(
+                                e.target.value === ""
+                                  ? 0
+                                  : parseInt(e.target.value, 10)
+                              )
+                            }
+                          />
+                        </div>
+                      </FormControl>
+                      <FormDescription>Per delegate</FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-              <FormField
-                control={form.control}
-                name="onsiteRegistrationFee"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>On-Site Registration Fee *</FormLabel>
-                    <FormControl>
-                      <div className="flex h-9 items-center gap-2 rounded-md border border-input bg-background px-3 ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
-                        <span className="text-muted-foreground">₱</span>
-                        <input
-                          type="number"
-                          step="1"
-                          min="0"
-                          className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-                          placeholder="0"
-                          {...field}
-                          value={field.value || ""}
-                          onChange={(e) =>
-                            field.onChange(
-                              e.target.value === ""
-                                ? 0
-                                : parseInt(e.target.value, 10)
-                            )
-                          }
-                        />
-                      </div>
-                    </FormControl>
-                    <FormDescription>Regular delegate fee</FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                <FormField
+                  control={form.control}
+                  name="preRegistrationSiblingDiscount"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Sibling Discount (3+)</FormLabel>
+                      <FormControl>
+                        <div className="flex h-9 items-center gap-2 rounded-md border border-input bg-background px-3 ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
+                          <span className="text-muted-foreground">₱</span>
+                          <input
+                            type="number"
+                            step="1"
+                            min="0"
+                            className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                            placeholder="0"
+                            {...field}
+                            value={field.value || ""}
+                            onChange={(e) =>
+                              field.onChange(
+                                e.target.value === ""
+                                  ? 0
+                                  : parseInt(e.target.value, 10)
+                              )
+                            }
+                          />
+                        </div>
+                      </FormControl>
+                      <FormDescription>For 3 or more siblings</FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
 
-              <FormField
-                control={form.control}
-                name="cookRegistrationFee"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Cook Registration Fee *</FormLabel>
-                    <FormControl>
-                      <div className="flex h-9 items-center gap-2 rounded-md border border-input bg-background px-3 ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
-                        <span className="text-muted-foreground">₱</span>
-                        <input
-                          type="number"
-                          step="1"
-                          min="0"
-                          className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-                          placeholder="0"
-                          {...field}
-                          value={field.value || ""}
-                          onChange={(e) =>
-                            field.onChange(
-                              e.target.value === ""
-                                ? 0
-                                : parseInt(e.target.value, 10)
-                            )
-                          }
-                        />
-                      </div>
-                    </FormControl>
-                    <FormDescription>Fee per cook</FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+            {/* On-Site Registration Fees */}
+            <div>
+              <h4 className="text-sm font-medium mb-3">On-Site Registration (Regular)</h4>
+              <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
+                <FormField
+                  control={form.control}
+                  name="onsiteRegistrationFee"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Regular Fee *</FormLabel>
+                      <FormControl>
+                        <div className="flex h-9 items-center gap-2 rounded-md border border-input bg-background px-3 ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
+                          <span className="text-muted-foreground">₱</span>
+                          <input
+                            type="number"
+                            step="1"
+                            min="0"
+                            className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                            placeholder="0"
+                            {...field}
+                            value={field.value || ""}
+                            onChange={(e) =>
+                              field.onChange(
+                                e.target.value === ""
+                                  ? 0
+                                  : parseInt(e.target.value, 10)
+                              )
+                            }
+                          />
+                        </div>
+                      </FormControl>
+                      <FormDescription>Per delegate</FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="onsiteSiblingDiscount"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Sibling Discount (3+)</FormLabel>
+                      <FormControl>
+                        <div className="flex h-9 items-center gap-2 rounded-md border border-input bg-background px-3 ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
+                          <span className="text-muted-foreground">₱</span>
+                          <input
+                            type="number"
+                            step="1"
+                            min="0"
+                            className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                            placeholder="0"
+                            {...field}
+                            value={field.value || ""}
+                            onChange={(e) =>
+                              field.onChange(
+                                e.target.value === ""
+                                  ? 0
+                                  : parseInt(e.target.value, 10)
+                              )
+                            }
+                          />
+                        </div>
+                      </FormControl>
+                      <FormDescription>For 3 or more siblings</FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
+
+            {/* Cook Fee */}
+            <div>
+              <h4 className="text-sm font-medium mb-3">Cook Registration</h4>
+              <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
+                <FormField
+                  control={form.control}
+                  name="cookRegistrationFee"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Cook Fee *</FormLabel>
+                      <FormControl>
+                        <div className="flex h-9 items-center gap-2 rounded-md border border-input bg-background px-3 ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
+                          <span className="text-muted-foreground">₱</span>
+                          <input
+                            type="number"
+                            step="1"
+                            min="0"
+                            className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                            placeholder="0"
+                            {...field}
+                            value={field.value || ""}
+                            onChange={(e) =>
+                              field.onChange(
+                                e.target.value === ""
+                                  ? 0
+                                  : parseInt(e.target.value, 10)
+                              )
+                            }
+                          />
+                        </div>
+                      </FormControl>
+                      <FormDescription>Per cook</FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
             </div>
           </CardContent>
         </Card>

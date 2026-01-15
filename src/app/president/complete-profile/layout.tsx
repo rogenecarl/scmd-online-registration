@@ -9,8 +9,8 @@ export default async function CompleteProfileLayout({
   await requireRole("PRESIDENT");
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-muted/50">
-      <div className="container max-w-4xl py-12">
+    <div className="min-h-screen bg-gradient-to-br from-background to-muted/50 flex items-center justify-center px-4 py-8">
+      <div className="w-full max-w-lg">
         <div className="mb-8 text-center">
           <h1 className="text-3xl font-bold">SCMD Events</h1>
           <p className="mt-2 text-muted-foreground">

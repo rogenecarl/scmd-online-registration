@@ -60,8 +60,8 @@ function EventDetailContent() {
     );
   }
 
-  const deadlinePassed = isPast(new Date(event.registrationDeadline));
-  const canRegister = !event.hasRegistration && !deadlinePassed;
+  const eventStarted = isPast(new Date(event.startDate));
+  const canRegister = !event.hasRegistration && !eventStarted;
 
   return (
     <div className="space-y-4 md:space-y-6">
@@ -170,16 +170,16 @@ function EventDetailContent() {
                 <div className="flex items-start gap-3 sm:col-span-2">
                   <div className={cn(
                     "flex h-8 w-8 md:h-10 md:w-10 shrink-0 items-center justify-center rounded-lg",
-                    deadlinePassed ? "bg-red-500/10 text-red-600" : "bg-emerald-500/10 text-emerald-600"
+                    eventStarted ? "bg-red-500/10 text-red-600" : "bg-emerald-500/10 text-emerald-600"
                   )}>
                     <Clock className="h-4 w-4 md:h-5 md:w-5" />
                   </div>
                   <div className="min-w-0">
-                    <p className="text-xs md:text-sm font-medium text-muted-foreground">Registration Deadline</p>
-                    <p className={cn("text-sm md:text-base font-semibold", deadlinePassed && "text-red-600")}>
-                      {format(new Date(event.registrationDeadline), "MMM d, yyyy 'at' h:mm a")}
+                    <p className="text-xs md:text-sm font-medium text-muted-foreground">Registration Status</p>
+                    <p className={cn("text-sm md:text-base font-semibold", eventStarted && "text-red-600")}>
+                      {eventStarted ? "Registration Closed" : "Registration Open"}
                     </p>
-                    {deadlinePassed && (
+                    {eventStarted && (
                       <Badge variant="destructive" className="mt-1">Closed</Badge>
                     )}
                   </div>
@@ -221,6 +221,14 @@ function EventDetailContent() {
                   </span>
                   <span className="font-medium">{formatCurrency(event.preRegistrationFee)}</span>
                 </div>
+                {event.preRegistrationSiblingDiscount > 0 && (
+                  <div className="flex items-center justify-between text-xs md:text-sm text-muted-foreground">
+                    <span className="flex items-center gap-2 pl-5">
+                      Sibling Discount (3+)
+                    </span>
+                    <span className="font-medium">{formatCurrency(event.preRegistrationSiblingDiscount)}</span>
+                  </div>
+                )}
                 <div className="flex items-center justify-between text-xs md:text-sm">
                   <span className="flex items-center gap-2">
                     <Users className="h-3 w-3 md:h-4 md:w-4 text-muted-foreground" />
@@ -228,6 +236,14 @@ function EventDetailContent() {
                   </span>
                   <span className="font-medium">{formatCurrency(event.onsiteRegistrationFee)}</span>
                 </div>
+                {event.onsiteSiblingDiscount > 0 && (
+                  <div className="flex items-center justify-between text-xs md:text-sm text-muted-foreground">
+                    <span className="flex items-center gap-2 pl-5">
+                      Sibling Discount (3+)
+                    </span>
+                    <span className="font-medium">{formatCurrency(event.onsiteSiblingDiscount)}</span>
+                  </div>
+                )}
                 <div className="flex items-center justify-between text-xs md:text-sm">
                   <span className="flex items-center gap-2">
                     <ChefHat className="h-3 w-3 md:h-4 md:w-4 text-muted-foreground" />

@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { format } from "date-fns";
-import { Calendar, MapPin, Clock, ArrowRight, Search, CalendarDays } from "lucide-react";
+import { Calendar, MapPin, ArrowRight, Search, CalendarDays } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -29,7 +29,7 @@ function getStatusColor(status: string) {
 
 function isRegistrationOpen(event: PublicEvent): boolean {
   const now = new Date();
-  return now <= new Date(event.registrationDeadline);
+  return now < new Date(event.startDate);
 }
 
 function isPreRegistration(event: PublicEvent): boolean {
@@ -111,12 +111,6 @@ function EventCard({ event, index }: { event: PublicEvent; index: number }) {
               <Calendar className="h-4 w-4 flex-shrink-0 text-primary" />
               <span>
                 {format(new Date(event.startDate), "MMM d")} - {format(new Date(event.endDate), "MMM d, yyyy")}
-              </span>
-            </div>
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <Clock className="h-4 w-4 flex-shrink-0 text-primary" />
-              <span>
-                Registration until {format(new Date(event.registrationDeadline), "MMM d, yyyy")}
               </span>
             </div>
           </div>

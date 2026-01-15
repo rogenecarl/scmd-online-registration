@@ -27,7 +27,6 @@ interface EventCardProps {
     banner: string | null;
     startDate: Date;
     endDate: Date;
-    registrationDeadline: Date;
     preRegistrationFee: number;
     preRegistrationStart: Date;
     preRegistrationEnd: Date;
@@ -92,8 +91,8 @@ function getFeeInfo(event: EventCardProps["event"]): { fee: number; type: string
 
 export function EventCard({ event }: EventCardProps) {
   const feeInfo = getFeeInfo(event);
-  const deadlinePassed = isPast(new Date(event.registrationDeadline));
-  const canRegister = !event.hasRegistration && !deadlinePassed;
+  const eventStarted = isPast(new Date(event.startDate));
+  const canRegister = !event.hasRegistration && !eventStarted;
 
   return (
     <div className="overflow-hidden rounded-xl border border-border bg-card transition-all hover:shadow-lg hover:shadow-black/5">
@@ -146,14 +145,14 @@ export function EventCard({ event }: EventCardProps) {
 
           <div className="flex items-center gap-2 text-xs md:text-sm">
             <Clock className="h-3.5 w-3.5 md:h-4 md:w-4 shrink-0 text-muted-foreground" />
-            <span className={cn(deadlinePassed && "text-red-600")}>
-              {deadlinePassed ? "Registration Closed" : `Deadline: ${format(new Date(event.registrationDeadline), "MMM d, yyyy")}`}
+            <span className={cn(eventStarted && "text-red-600")}>
+              {eventStarted ? "Registration Closed" : "Registration Open"}
             </span>
           </div>
         </div>
 
         {/* Fee Information */}
-        {!event.hasRegistration && !deadlinePassed && (
+        {!event.hasRegistration && !eventStarted && (
           <div className="mt-3 md:mt-4 rounded-lg bg-muted/50 p-3 md:p-4">
             <div className="flex items-center justify-between gap-2">
               <div>

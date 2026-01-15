@@ -12,9 +12,9 @@ import { CooksTable } from "./cooks-table";
 import { ApprovalDialog } from "./approval-dialog";
 import { RejectionDialog } from "./rejection-dialog";
 import {
-  useRegistration,
-  useApproveRegistration,
-  useRejectRegistration,
+  useBatch,
+  useApproveBatch,
+  useRejectBatch,
 } from "@/hooks/use-registrations";
 import { formatDate, formatDateTime, formatCurrency } from "@/lib/utils";
 import {
@@ -33,30 +33,36 @@ import {
   Loader2,
   Receipt,
   ExternalLink,
+  Hash,
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
-interface RegistrationDetailProps {
-  registrationId: string;
+interface BatchDetailProps {
+  batchId: string;
 }
 
-export function RegistrationDetail({ registrationId }: RegistrationDetailProps) {
+// Renamed from RegistrationDetail to BatchDetail but keeping export name for compatibility
+export function RegistrationDetail({ registrationId }: { registrationId: string }) {
+  return <BatchDetail batchId={registrationId} />;
+}
+
+export function BatchDetail({ batchId }: BatchDetailProps) {
   const router = useRouter();
-  const { data: registration, isLoading, error } = useRegistration(registrationId);
-  const approveMutation = useApproveRegistration();
-  const rejectMutation = useRejectRegistration();
+  const { data: batch, isLoading, error } = useBatch(batchId);
+  const approveMutation = useApproveBatch();
+  const rejectMutation = useRejectBatch();
 
   const [showApprovalDialog, setShowApprovalDialog] = useState(false);
   const [showRejectionDialog, setShowRejectionDialog] = useState(false);
 
   const handleApprove = async () => {
-    await approveMutation.mutateAsync(registrationId);
+    await approveMutation.mutateAsync(batchId);
     setShowApprovalDialog(false);
   };
 
   const handleReject = async (remarks: string) => {
-    await rejectMutation.mutateAsync({ registrationId, remarks });
+    await rejectMutation.mutateAsync({ batchId, remarks });
     setShowRejectionDialog(false);
   };
 
@@ -68,13 +74,13 @@ export function RegistrationDetail({ registrationId }: RegistrationDetailProps) 
     );
   }
 
-  if (error || !registration) {
+  if (error || !batch) {
     return (
       <div className="flex flex-col items-center justify-center py-12 px-4">
         <AlertCircle className="h-10 w-10 md:h-12 md:w-12 text-destructive mb-4" />
-        <h2 className="text-base md:text-lg font-semibold text-center">Registration Not Found</h2>
+        <h2 className="text-base md:text-lg font-semibold text-center">Batch Not Found</h2>
         <p className="text-sm md:text-base text-muted-foreground mb-4 text-center">
-          {error?.message || "The registration you're looking for doesn't exist."}
+          {error?.message || "The batch you're looking for doesn't exist."}
         </p>
         <Button variant="outline" onClick={() => router.back()} className="touch-target">
           <ArrowLeft className="mr-2 h-4 w-4" />
@@ -85,11 +91,11 @@ export function RegistrationDetail({ registrationId }: RegistrationDetailProps) 
   }
 
   // Use stored fees (captured at registration time)
-  const delegateFee = registration.delegateFeePerPerson;
-  const cookFee = registration.cookFeePerPerson;
-  const totalDelegateFees = registration.delegates.length * delegateFee;
-  const totalCookFees = registration.cooks.length * cookFee;
-  const totalFees = registration.totalFee;
+  const delegateFee = batch.delegateFeePerPerson;
+  const cookFee = batch.cookFeePerPerson;
+  const totalDelegateFees = batch.delegates.length * delegateFee;
+  const totalCookFees = batch.cooks.length * cookFee;
+  const totalFees = batch.totalFee;
 
   return (
     <div className="space-y-4 md:space-y-6">
@@ -102,15 +108,21 @@ export function RegistrationDetail({ registrationId }: RegistrationDetailProps) 
             </Link>
           </Button>
           <div className="min-w-0">
-            <h1 className="text-xl md:text-2xl font-bold">Registration Details</h1>
+            <div className="flex items-center gap-2">
+              <h1 className="text-xl md:text-2xl font-bold">Batch #{batch.batchNumber}</h1>
+              <Badge variant="outline" className="hidden sm:flex">
+                <Hash className="h-3 w-3 mr-1" />
+                {batch.id.slice(0, 8)}
+              </Badge>
+            </div>
             <p className="text-xs md:text-sm text-muted-foreground">
-              Submitted on {formatDateTime(registration.createdAt)}
+              Submitted on {formatDateTime(batch.createdAt)}
             </p>
           </div>
         </div>
 
         {/* Action Buttons */}
-        {registration.status === "PENDING" && (
+        {batch.status === "PENDING" && (
           <div className="flex gap-2 [&>button]:flex-1 md:[&>button]:flex-none">
             <Button
               variant="outline"
@@ -132,34 +144,34 @@ export function RegistrationDetail({ registrationId }: RegistrationDetailProps) 
       </div>
 
       {/* Status Banner */}
-      {registration.status !== "PENDING" && (
+      {batch.status !== "PENDING" && (
         <Card className={
-          registration.status === "APPROVED"
+          batch.status === "APPROVED"
             ? "border-green-200 bg-green-50 dark:border-green-900 dark:bg-green-950/30"
             : "border-red-200 bg-red-50 dark:border-red-900 dark:bg-red-950/30"
         }>
           <CardContent className="py-3 md:py-4">
             <div className="flex items-start gap-3 md:gap-4">
-              {registration.status === "APPROVED" ? (
+              {batch.status === "APPROVED" ? (
                 <CheckCircle className="h-5 w-5 md:h-6 md:w-6 text-green-600 dark:text-green-400 shrink-0 mt-0.5" />
               ) : (
                 <XCircle className="h-5 w-5 md:h-6 md:w-6 text-red-600 dark:text-red-400 shrink-0 mt-0.5" />
               )}
               <div className="min-w-0">
                 <p className="text-sm md:text-base font-semibold">
-                  Registration {registration.status.toLowerCase()}
+                  Batch {batch.status.toLowerCase()}
                 </p>
-                {registration.reviewer && (
+                {batch.reviewer && (
                   <p className="text-xs md:text-sm text-muted-foreground">
-                    by {registration.reviewer.name} on{" "}
-                    {registration.reviewedAt
-                      ? formatDateTime(registration.reviewedAt)
+                    by {batch.reviewer.name} on{" "}
+                    {batch.reviewedAt
+                      ? formatDateTime(batch.reviewedAt)
                       : "Unknown date"}
                   </p>
                 )}
-                {registration.status === "REJECTED" && registration.remarks && (
+                {batch.status === "REJECTED" && batch.remarks && (
                   <p className="text-xs md:text-sm mt-1">
-                    <strong>Reason:</strong> {registration.remarks}
+                    <strong>Reason:</strong> {batch.remarks}
                   </p>
                 )}
               </div>
@@ -180,21 +192,21 @@ export function RegistrationDetail({ registrationId }: RegistrationDetailProps) 
           <CardContent className="p-4 pt-0 md:p-6 md:pt-0 space-y-3 md:space-y-4">
             <div>
               <p className="text-xs md:text-sm text-muted-foreground">Event Name</p>
-              <p className="text-sm md:text-base font-medium">{registration.event.name}</p>
+              <p className="text-sm md:text-base font-medium">{batch.registration.event.name}</p>
             </div>
             <div className="flex items-center gap-2 text-sm">
               <MapPin className="h-3 w-3 md:h-4 md:w-4 text-muted-foreground shrink-0" />
-              <span className="text-xs md:text-sm">{registration.event.location}</span>
+              <span className="text-xs md:text-sm">{batch.registration.event.location}</span>
             </div>
             <div className="flex items-center gap-2 text-sm">
               <Clock className="h-3 w-3 md:h-4 md:w-4 text-muted-foreground shrink-0" />
               <span className="text-xs md:text-sm">
-                {formatDate(registration.event.startDate)} -{" "}
-                {formatDate(registration.event.endDate)}
+                {formatDate(batch.registration.event.startDate)} -{" "}
+                {formatDate(batch.registration.event.endDate)}
               </span>
             </div>
             <div>
-              <EventStatusBadge status={registration.event.status} />
+              <EventStatusBadge status={batch.registration.event.status} />
             </div>
           </CardContent>
         </Card>
@@ -210,20 +222,20 @@ export function RegistrationDetail({ registrationId }: RegistrationDetailProps) 
           <CardContent className="p-4 pt-0 md:p-6 md:pt-0 space-y-3 md:space-y-4">
             <div>
               <p className="text-xs md:text-sm text-muted-foreground">Church Name</p>
-              <p className="text-sm md:text-base font-medium">{registration.church.name}</p>
+              <p className="text-sm md:text-base font-medium">{batch.registration.church.name}</p>
             </div>
             <div>
               <p className="text-xs md:text-sm text-muted-foreground">Division</p>
-              <p className="text-sm md:text-base">{registration.church.division.name}</p>
+              <p className="text-sm md:text-base">{batch.registration.church.division.name}</p>
             </div>
             <Separator />
             <div className="flex items-center gap-2">
               <User className="h-3 w-3 md:h-4 md:w-4 text-muted-foreground shrink-0" />
-              <span className="text-sm md:text-base font-medium">{registration.president.name}</span>
+              <span className="text-sm md:text-base font-medium">{batch.registration.president.name}</span>
             </div>
             <div className="flex items-center gap-2">
               <Mail className="h-3 w-3 md:h-4 md:w-4 text-muted-foreground shrink-0" />
-              <span className="text-xs md:text-sm break-all">{registration.president.email}</span>
+              <span className="text-xs md:text-sm break-all">{batch.registration.president.email}</span>
             </div>
           </CardContent>
         </Card>
@@ -235,7 +247,7 @@ export function RegistrationDetail({ registrationId }: RegistrationDetailProps) 
           <CardTitle className="text-base md:text-lg">Fee Summary</CardTitle>
           <CardDescription className="text-xs md:text-sm">
             Registration fees based on{" "}
-            {registration.isPreRegistration ? "pre-registration" : "on-site"} rates
+            {batch.isPreRegistration ? "pre-registration" : "on-site"} rates
             (recorded at registration time)
           </CardDescription>
         </CardHeader>
@@ -244,7 +256,7 @@ export function RegistrationDetail({ registrationId }: RegistrationDetailProps) 
             <div className="flex items-center gap-3 p-3 md:p-4 rounded-lg bg-muted/50">
               <Users className="h-6 w-6 md:h-8 md:w-8 text-primary shrink-0" />
               <div className="min-w-0">
-                <p className="text-xl md:text-2xl font-bold">{registration.delegates.length}</p>
+                <p className="text-xl md:text-2xl font-bold">{batch.delegates.length}</p>
                 <p className="text-xs md:text-sm text-muted-foreground">
                   Delegates @ {formatCurrency(delegateFee)}
                 </p>
@@ -254,7 +266,7 @@ export function RegistrationDetail({ registrationId }: RegistrationDetailProps) 
             <div className="flex items-center gap-3 p-3 md:p-4 rounded-lg bg-muted/50">
               <ChefHat className="h-6 w-6 md:h-8 md:w-8 text-primary shrink-0" />
               <div className="min-w-0">
-                <p className="text-xl md:text-2xl font-bold">{registration.cooks.length}</p>
+                <p className="text-xl md:text-2xl font-bold">{batch.cooks.length}</p>
                 <p className="text-xs md:text-sm text-muted-foreground">
                   Cooks @ {formatCurrency(cookFee)}
                 </p>
@@ -285,11 +297,11 @@ export function RegistrationDetail({ registrationId }: RegistrationDetailProps) 
           </CardDescription>
         </CardHeader>
         <CardContent className="p-4 pt-0 md:p-6 md:pt-0">
-          {registration.receiptImage ? (
+          {batch.receiptImage ? (
             <div className="space-y-3 md:space-y-4">
               <div className="relative aspect-video max-w-lg overflow-hidden rounded-lg border">
                 <Image
-                  src={registration.receiptImage}
+                  src={batch.receiptImage}
                   alt="Payment receipt"
                   fill
                   className="object-contain"
@@ -298,7 +310,7 @@ export function RegistrationDetail({ registrationId }: RegistrationDetailProps) 
               </div>
               <Button variant="outline" size="sm" asChild className="touch-target">
                 <a
-                  href={registration.receiptImage}
+                  href={batch.receiptImage}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -324,13 +336,13 @@ export function RegistrationDetail({ registrationId }: RegistrationDetailProps) 
               <Users className="h-4 w-4 md:h-5 md:w-5" />
               Delegates
             </CardTitle>
-            <Badge variant="secondary">{registration.delegates.length}</Badge>
+            <Badge variant="secondary">{batch.delegates.length}</Badge>
           </div>
         </CardHeader>
         <CardContent className="p-4 pt-0 md:p-6 md:pt-0">
           <div className="overflow-x-auto -mx-4 md:mx-0">
             <div className="min-w-[400px] px-4 md:px-0 md:min-w-0">
-              <DelegatesTable delegates={registration.delegates} />
+              <DelegatesTable delegates={batch.delegates} />
             </div>
           </div>
         </CardContent>
@@ -344,28 +356,28 @@ export function RegistrationDetail({ registrationId }: RegistrationDetailProps) 
               <ChefHat className="h-4 w-4 md:h-5 md:w-5" />
               Cooks
             </CardTitle>
-            <Badge variant="secondary">{registration.cooks.length}</Badge>
+            <Badge variant="secondary">{batch.cooks.length}</Badge>
           </div>
         </CardHeader>
         <CardContent className="p-4 pt-0 md:p-6 md:pt-0">
           <div className="overflow-x-auto -mx-4 md:mx-0">
             <div className="min-w-[400px] px-4 md:px-0 md:min-w-0">
-              <CooksTable cooks={registration.cooks} />
+              <CooksTable cooks={batch.cooks} />
             </div>
           </div>
         </CardContent>
       </Card>
 
-      {/* Registration Status */}
+      {/* Batch Status */}
       <Card>
         <CardHeader className="p-4 md:p-6">
-          <CardTitle className="text-base md:text-lg">Registration Status</CardTitle>
+          <CardTitle className="text-base md:text-lg">Batch Status</CardTitle>
         </CardHeader>
         <CardContent className="p-4 pt-0 md:p-6 md:pt-0">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
-            <RegistrationStatusBadge status={registration.status} />
+            <RegistrationStatusBadge status={batch.status} />
             <span className="text-xs md:text-sm text-muted-foreground">
-              Last updated: {formatDateTime(registration.updatedAt)}
+              Last updated: {formatDateTime(batch.updatedAt)}
             </span>
           </div>
         </CardContent>

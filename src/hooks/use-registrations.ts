@@ -8,30 +8,39 @@ import {
   getEventForRegistration,
   getMyRegistrations,
   getMyRegistrationById,
+  getBatchById,
   createRegistration,
-  updateRegistration,
+  createBatch,
+  updateBatch,
+  cancelBatch,
   cancelRegistration,
 } from "@/actions/registrations";
 import {
   getRegistrations,
   getRegistrationById,
+  getPendingBatches,
+  getBatches,
+  getBatchById as getAdminBatchById,
+  getPendingBatchesCount,
+  approveBatch,
+  rejectBatch,
   approveRegistration,
   rejectRegistration,
-  getPendingRegistrationsCount,
   getEventsForFilter,
   getChurchesForFilter,
   getDivisionsForFilter,
   type RegistrationFilters,
 } from "@/actions/approval";
-import type { CreateRegistrationInput, UpdateRegistrationInput } from "@/schemas";
+import type {
+  CreateRegistrationInput,
+  CreateBatchInput,
+  UpdateBatchInput,
+} from "@/schemas";
 
 // ==========================================
 // PRESIDENT QUERIES
 // ==========================================
 
-/**
- * Get all available events for registration
- */
 export function useAvailableEvents() {
   return useQuery({
     queryKey: queryKeys.presidentEvents.available(),
@@ -43,9 +52,6 @@ export function useAvailableEvents() {
   });
 }
 
-/**
- * Get event details for registration page
- */
 export function useEventForRegistration(eventId: string) {
   return useQuery({
     queryKey: queryKeys.presidentEvents.forRegistration(eventId),
@@ -58,9 +64,6 @@ export function useEventForRegistration(eventId: string) {
   });
 }
 
-/**
- * Get all registrations for current president's church
- */
 export function useMyRegistrations() {
   return useQuery({
     queryKey: queryKeys.registrations.my(),
@@ -72,9 +75,6 @@ export function useMyRegistrations() {
   });
 }
 
-/**
- * Get a single registration with full details
- */
 export function useMyRegistration(id: string) {
   return useQuery({
     queryKey: queryKeys.registrations.myDetail(id),
@@ -87,13 +87,22 @@ export function useMyRegistration(id: string) {
   });
 }
 
+export function useMyBatch(batchId: string) {
+  return useQuery({
+    queryKey: queryKeys.batches.myDetail(batchId),
+    queryFn: async () => {
+      const result = await getBatchById(batchId);
+      if (!result.success) throw new Error(result.error);
+      return result.data;
+    },
+    enabled: !!batchId,
+  });
+}
+
 // ==========================================
 // PRESIDENT MUTATIONS
 // ==========================================
 
-/**
- * Create a new registration
- */
 export function useCreateRegistration() {
   const queryClient = useQueryClient();
 
@@ -121,21 +130,48 @@ export function useCreateRegistration() {
   });
 }
 
-/**
- * Update an existing registration
- */
-export function useUpdateRegistration() {
+export function useCreateBatch() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (input: CreateBatchInput) => {
+      const result = await createBatch(input);
+      if (!result.success) {
+        const error = new Error(result.error) as Error & {
+          fieldErrors?: Record<string, string[]>;
+        };
+        error.fieldErrors = result.fieldErrors;
+        throw error;
+      }
+      return result.data;
+    },
+    onSuccess: (data, variables) => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.registrations.all });
+      queryClient.invalidateQueries({ queryKey: queryKeys.batches.all });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.registrations.myDetail(variables.registrationId),
+      });
+      queryClient.invalidateQueries({ queryKey: queryKeys.dashboard.president() });
+      toast.success(`Batch #${data.batchNumber} submitted successfully`);
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || "Failed to add batch");
+    },
+  });
+}
+
+export function useUpdateBatch() {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async ({
-      id,
+      batchId,
       input,
     }: {
-      id: string;
-      input: UpdateRegistrationInput;
+      batchId: string;
+      input: UpdateBatchInput;
     }) => {
-      const result = await updateRegistration(id, input);
+      const result = await updateBatch(batchId, input);
       if (!result.success) {
         const error = new Error(result.error) as Error & {
           fieldErrors?: Record<string, string[]>;
@@ -147,21 +183,42 @@ export function useUpdateRegistration() {
     },
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.registrations.all });
+      queryClient.invalidateQueries({ queryKey: queryKeys.batches.all });
       queryClient.invalidateQueries({
-        queryKey: queryKeys.registrations.myDetail(variables.id),
+        queryKey: queryKeys.batches.myDetail(variables.batchId),
       });
       queryClient.invalidateQueries({ queryKey: queryKeys.dashboard.president() });
-      toast.success("Registration updated successfully");
+      toast.success("Batch updated successfully");
     },
     onError: (error: Error) => {
-      toast.error(error.message || "Failed to update registration");
+      toast.error(error.message || "Failed to update batch");
     },
   });
 }
 
-/**
- * Cancel a pending registration
- */
+export function useCancelBatch() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (batchId: string) => {
+      const result = await cancelBatch(batchId);
+      if (!result.success) throw new Error(result.error);
+      return result.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.registrations.all });
+      queryClient.invalidateQueries({ queryKey: queryKeys.batches.all });
+      queryClient.invalidateQueries({ queryKey: queryKeys.presidentEvents.all });
+      queryClient.invalidateQueries({ queryKey: queryKeys.dashboard.president() });
+      toast.success("Batch cancelled");
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || "Failed to cancel batch");
+    },
+  });
+}
+
+// Legacy function - kept for backwards compatibility
 export function useCancelRegistration() {
   const queryClient = useQueryClient();
 
@@ -183,13 +240,53 @@ export function useCancelRegistration() {
   });
 }
 
+// Legacy function - kept for backwards compatibility
+export function useUpdateRegistration() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      id,
+      input,
+    }: {
+      id: string;
+      input: { delegates: CreateRegistrationInput["delegates"]; cooks: CreateRegistrationInput["cooks"]; receiptImage: string };
+    }) => {
+      // Get the pending batch for this registration
+      const regResult = await getMyRegistrationById(id);
+      if (!regResult.success) throw new Error(regResult.error);
+
+      const pendingBatch = regResult.data.batches.find((b) => b.status === "PENDING");
+      if (!pendingBatch) throw new Error("No pending batch to update");
+
+      const result = await updateBatch(pendingBatch.id, input);
+      if (!result.success) {
+        const error = new Error(result.error) as Error & {
+          fieldErrors?: Record<string, string[]>;
+        };
+        error.fieldErrors = result.fieldErrors;
+        throw error;
+      }
+      return { id, statusReset: false };
+    },
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.registrations.all });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.registrations.myDetail(variables.id),
+      });
+      queryClient.invalidateQueries({ queryKey: queryKeys.dashboard.president() });
+      toast.success("Registration updated successfully");
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || "Failed to update registration");
+    },
+  });
+}
+
 // ==========================================
 // ADMIN QUERIES
 // ==========================================
 
-/**
- * Get all registrations with filtering (Admin only)
- */
 export function useRegistrations(filters: RegistrationFilters = {}) {
   return useQuery({
     queryKey: [...queryKeys.registrations.list(), filters],
@@ -201,9 +298,6 @@ export function useRegistrations(filters: RegistrationFilters = {}) {
   });
 }
 
-/**
- * Get a single registration with full details (Admin only)
- */
 export function useRegistration(id: string) {
   return useQuery({
     queryKey: queryKeys.registrations.detail(id),
@@ -216,23 +310,56 @@ export function useRegistration(id: string) {
   });
 }
 
-/**
- * Get pending registrations count for dashboard
- */
-export function usePendingRegistrationsCount() {
+export function usePendingBatches(filters: RegistrationFilters = {}) {
   return useQuery({
-    queryKey: queryKeys.registrations.pending(),
+    queryKey: [...queryKeys.batches.pending(), filters],
     queryFn: async () => {
-      const result = await getPendingRegistrationsCount();
+      const result = await getPendingBatches(filters);
       if (!result.success) throw new Error(result.error);
       return result.data;
     },
   });
 }
 
-/**
- * Get events for filter dropdown
- */
+export function useBatches(filters: RegistrationFilters = {}) {
+  return useQuery({
+    queryKey: [...queryKeys.batches.list(), filters],
+    queryFn: async () => {
+      const result = await getBatches(filters);
+      if (!result.success) throw new Error(result.error);
+      return result.data;
+    },
+  });
+}
+
+export function useBatch(id: string) {
+  return useQuery({
+    queryKey: queryKeys.batches.detail(id),
+    queryFn: async () => {
+      const result = await getAdminBatchById(id);
+      if (!result.success) throw new Error(result.error);
+      return result.data;
+    },
+    enabled: !!id,
+  });
+}
+
+export function usePendingBatchesCount() {
+  return useQuery({
+    queryKey: queryKeys.batches.pendingCount(),
+    queryFn: async () => {
+      const result = await getPendingBatchesCount();
+      if (!result.success) throw new Error(result.error);
+      return result.data;
+    },
+  });
+}
+
+// Legacy - returns pending batches count
+export function usePendingRegistrationsCount() {
+  return usePendingBatchesCount();
+}
+
 export function useEventsForFilter() {
   return useQuery({
     queryKey: [...queryKeys.events.all, "filter"],
@@ -244,9 +371,6 @@ export function useEventsForFilter() {
   });
 }
 
-/**
- * Get churches for filter dropdown
- */
 export function useChurchesForFilter() {
   return useQuery({
     queryKey: [...queryKeys.churches.all, "filter"],
@@ -258,9 +382,6 @@ export function useChurchesForFilter() {
   });
 }
 
-/**
- * Get divisions for filter dropdown
- */
 export function useDivisionsForFilter() {
   return useQuery({
     queryKey: [...queryKeys.divisions.all, "filter"],
@@ -276,9 +397,61 @@ export function useDivisionsForFilter() {
 // ADMIN MUTATIONS
 // ==========================================
 
-/**
- * Approve a registration
- */
+export function useApproveBatch() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (batchId: string) => {
+      const result = await approveBatch(batchId);
+      if (!result.success) throw new Error(result.error);
+      return result.data;
+    },
+    onSuccess: (_, batchId) => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.registrations.all });
+      queryClient.invalidateQueries({ queryKey: queryKeys.batches.all });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.batches.detail(batchId),
+      });
+      queryClient.invalidateQueries({ queryKey: queryKeys.dashboard.admin() });
+      toast.success("Batch approved successfully");
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || "Failed to approve batch");
+    },
+  });
+}
+
+export function useRejectBatch() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      batchId,
+      remarks,
+    }: {
+      batchId: string;
+      remarks: string;
+    }) => {
+      const result = await rejectBatch(batchId, remarks);
+      if (!result.success) throw new Error(result.error);
+      return result.data;
+    },
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.registrations.all });
+      queryClient.invalidateQueries({ queryKey: queryKeys.batches.all });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.batches.detail(variables.batchId),
+      });
+      queryClient.invalidateQueries({ queryKey: queryKeys.dashboard.admin() });
+      toast.success("Batch rejected");
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || "Failed to reject batch");
+    },
+  });
+}
+
+// Legacy functions - kept for backwards compatibility
 export function useApproveRegistration() {
   const queryClient = useQueryClient();
 
@@ -290,6 +463,7 @@ export function useApproveRegistration() {
     },
     onSuccess: (_, registrationId) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.registrations.all });
+      queryClient.invalidateQueries({ queryKey: queryKeys.batches.all });
       queryClient.invalidateQueries({
         queryKey: queryKeys.registrations.detail(registrationId),
       });
@@ -302,9 +476,6 @@ export function useApproveRegistration() {
   });
 }
 
-/**
- * Reject a registration with remarks
- */
 export function useRejectRegistration() {
   const queryClient = useQueryClient();
 
@@ -322,6 +493,7 @@ export function useRejectRegistration() {
     },
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.registrations.all });
+      queryClient.invalidateQueries({ queryKey: queryKeys.batches.all });
       queryClient.invalidateQueries({
         queryKey: queryKeys.registrations.detail(variables.registrationId),
       });

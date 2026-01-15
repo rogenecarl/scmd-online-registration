@@ -13,13 +13,13 @@ import {
 import { TableSkeleton, MobileFilterSheet, FilterGroup } from "@/components/shared";
 import { EmptyState } from "@/components/shared/empty-state";
 import {
-  useRegistrations,
+  useBatches,
   useEventsForFilter,
   useDivisionsForFilter,
-  useApproveRegistration,
-  useRejectRegistration,
+  useApproveBatch,
+  useRejectBatch,
 } from "@/hooks/use-registrations";
-import { getRegistrationColumns } from "./registration-columns";
+import { getBatchColumns } from "./registration-columns";
 import { ApprovalDialog } from "./approval-dialog";
 import { RejectionDialog } from "./rejection-dialog";
 import { useDebounce } from "@/hooks/use-debounce";
@@ -66,11 +66,11 @@ export function RegistrationTable() {
     divisionId: divisionFilter !== "ALL" ? divisionFilter : undefined,
   };
 
-  const { data, isLoading, error, isFetching } = useRegistrations(filters);
+  const { data, isLoading, error, isFetching } = useBatches(filters);
   const { data: events } = useEventsForFilter();
   const { data: divisions } = useDivisionsForFilter();
-  const approveMutation = useApproveRegistration();
-  const rejectMutation = useRejectRegistration();
+  const approveMutation = useApproveBatch();
+  const rejectMutation = useRejectBatch();
 
   const handleApprove = (id: string) => {
     setApproveTarget(id);
@@ -89,12 +89,12 @@ export function RegistrationTable() {
 
   const confirmReject = async (remarks: string) => {
     if (rejectTarget) {
-      await rejectMutation.mutateAsync({ registrationId: rejectTarget, remarks });
+      await rejectMutation.mutateAsync({ batchId: rejectTarget, remarks });
       setRejectTarget(null);
     }
   };
 
-  const columns = getRegistrationColumns({
+  const columns = getBatchColumns({
     onApprove: handleApprove,
     onReject: handleReject,
   });
@@ -113,9 +113,9 @@ export function RegistrationTable() {
     );
   }
 
-  const registrations = data?.items ?? [];
+  const batches = data?.items ?? [];
   const hasFilters = debouncedSearch || statusFilter !== "ALL" || eventFilter !== "ALL" || divisionFilter !== "ALL";
-  const hasData = registrations.length > 0 || hasFilters;
+  const hasData = batches.length > 0 || hasFilters;
 
   // Count active filters for mobile badge
   const activeFilterCount = [
@@ -252,11 +252,11 @@ export function RegistrationTable() {
       {hasData ? (
         <PaginatedDataTable
           columns={columns}
-          data={registrations}
+          data={batches}
           emptyMessage={
             hasFilters
-              ? "No registrations match your filters"
-              : "No registrations found"
+              ? "No batches match your filters"
+              : "No batches found"
           }
           isLoading={isFetching}
           pagination={{
@@ -271,8 +271,8 @@ export function RegistrationTable() {
       ) : (
         <EmptyState
           icon={ClipboardCheck}
-          title="No registrations yet"
-          description="Registrations will appear here once churches submit them"
+          title="No batches yet"
+          description="Registration batches will appear here once churches submit them"
         />
       )}
 

@@ -59,14 +59,14 @@ function DashboardContent() {
         />
         <StatsCard
           title="Pending Approvals"
-          value={data.stats.pendingRegistrations}
+          value={data.stats.pendingBatches}
           description="Awaiting admin review"
           icon={Clock}
         />
         <StatsCard
-          title="Approved Registrations"
-          value={data.stats.approvedRegistrations}
-          description="Confirmed registrations"
+          title="Approved Batches"
+          value={data.stats.approvedBatches}
+          description="Confirmed batches"
           icon={CheckCircle}
         />
       </StatsGrid>

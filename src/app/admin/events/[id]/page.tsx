@@ -122,13 +122,6 @@ export default async function EventDetailPage({ params }: Props) {
               label="End Date"
               value={format(new Date(event.endDate), "MMM d, yyyy 'at' h:mm a")}
             />
-            <DetailInfoRow
-              label="Registration Deadline"
-              value={format(
-                new Date(event.registrationDeadline),
-                "MMM d, yyyy 'at' h:mm a"
-              )}
-            />
           </dl>
         </DetailCard>
 
@@ -162,8 +155,16 @@ export default async function EventDetailPage({ params }: Props) {
               value={`₱${Number(event.preRegistrationFee).toLocaleString()}`}
             />
             <DetailInfoRow
+              label="Pre-Reg Sibling Discount (3+)"
+              value={`₱${Number(event.preRegistrationSiblingDiscount).toLocaleString()}`}
+            />
+            <DetailInfoRow
               label="On-Site Registration Fee"
               value={`₱${Number(event.onsiteRegistrationFee).toLocaleString()}`}
+            />
+            <DetailInfoRow
+              label="On-Site Sibling Discount (3+)"
+              value={`₱${Number(event.onsiteSiblingDiscount).toLocaleString()}`}
             />
             <DetailInfoRow
               label="Cook Registration Fee"

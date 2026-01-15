@@ -3,9 +3,8 @@
 import Link from "next/link";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/dashboard";
 import { Button } from "@/components/ui/button";
-import { Calendar, MapPin, Clock, CheckCircle, AlertCircle, XCircle } from "lucide-react";
+import { Calendar, MapPin, CheckCircle, AlertCircle } from "lucide-react";
 import { format } from "date-fns";
-import type { RegistrationStatus } from "@/lib/generated/prisma";
 import { cn } from "@/lib/utils";
 
 interface UpcomingEvent {
@@ -13,50 +12,59 @@ interface UpcomingEvent {
   name: string;
   location: string;
   startDate: Date;
-  registrationDeadline: Date;
   hasRegistration: boolean;
-  registrationStatus: RegistrationStatus | null;
+  hasPendingBatch: boolean;
+  hasApprovedBatch: boolean;
 }
 
 interface UpcomingEventsCardProps {
   events: UpcomingEvent[];
 }
 
-function getStatusBadge(status: RegistrationStatus | null, hasRegistration: boolean) {
-  if (!hasRegistration) {
+function getStatusBadge(event: UpcomingEvent) {
+  if (!event.hasRegistration) {
     return (
       <span className="inline-flex items-center gap-1 rounded-full bg-blue-500/10 px-1.5 md:px-2 py-0.5 text-[10px] md:text-xs font-medium text-blue-600">
-        <Clock className="h-2.5 w-2.5 md:h-3 md:w-3" />
+        <Calendar className="h-2.5 w-2.5 md:h-3 md:w-3" />
         <span className="hidden sm:inline">Not </span>Registered
       </span>
     );
   }
 
-  switch (status) {
-    case "PENDING":
-      return (
-        <span className="inline-flex items-center gap-1 rounded-full bg-yellow-500/10 px-1.5 md:px-2 py-0.5 text-[10px] md:text-xs font-medium text-yellow-600">
-          <AlertCircle className="h-2.5 w-2.5 md:h-3 md:w-3" />
-          Pending
-        </span>
-      );
-    case "APPROVED":
-      return (
-        <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-1.5 md:px-2 py-0.5 text-[10px] md:text-xs font-medium text-emerald-600">
-          <CheckCircle className="h-2.5 w-2.5 md:h-3 md:w-3" />
-          Approved
-        </span>
-      );
-    case "REJECTED":
-      return (
-        <span className="inline-flex items-center gap-1 rounded-full bg-red-500/10 px-1.5 md:px-2 py-0.5 text-[10px] md:text-xs font-medium text-red-600">
-          <XCircle className="h-2.5 w-2.5 md:h-3 md:w-3" />
-          Rejected
-        </span>
-      );
-    default:
-      return null;
+  // Has registration - show status based on batches
+  if (event.hasPendingBatch && event.hasApprovedBatch) {
+    return (
+      <span className="inline-flex items-center gap-1 rounded-full bg-yellow-500/10 px-1.5 md:px-2 py-0.5 text-[10px] md:text-xs font-medium text-yellow-600">
+        <AlertCircle className="h-2.5 w-2.5 md:h-3 md:w-3" />
+        Partial
+      </span>
+    );
   }
+
+  if (event.hasPendingBatch) {
+    return (
+      <span className="inline-flex items-center gap-1 rounded-full bg-yellow-500/10 px-1.5 md:px-2 py-0.5 text-[10px] md:text-xs font-medium text-yellow-600">
+        <AlertCircle className="h-2.5 w-2.5 md:h-3 md:w-3" />
+        Pending
+      </span>
+    );
+  }
+
+  if (event.hasApprovedBatch) {
+    return (
+      <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-1.5 md:px-2 py-0.5 text-[10px] md:text-xs font-medium text-emerald-600">
+        <CheckCircle className="h-2.5 w-2.5 md:h-3 md:w-3" />
+        Approved
+      </span>
+    );
+  }
+
+  // Registered but no approved or pending batches (all rejected?)
+  return (
+    <span className="inline-flex items-center gap-1 rounded-full bg-gray-500/10 px-1.5 md:px-2 py-0.5 text-[10px] md:text-xs font-medium text-gray-600">
+      Registered
+    </span>
+  );
 }
 
 export function UpcomingEventsCard({ events }: UpcomingEventsCardProps) {
@@ -96,7 +104,7 @@ export function UpcomingEventsCard({ events }: UpcomingEventsCardProps) {
                 <div className="flex flex-col gap-2 md:hidden">
                   <div className="flex items-start justify-between gap-2">
                     <h4 className="font-medium text-sm truncate flex-1">{event.name}</h4>
-                    {getStatusBadge(event.registrationStatus, event.hasRegistration)}
+                    {getStatusBadge(event)}
                   </div>
                   <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
                     <span className="flex items-center gap-1">
@@ -108,9 +116,6 @@ export function UpcomingEventsCard({ events }: UpcomingEventsCardProps) {
                       {format(new Date(event.startDate), "MMM d, yyyy")}
                     </span>
                   </div>
-                  <p className="text-[10px] text-muted-foreground">
-                    Deadline: {format(new Date(event.registrationDeadline), "MMM d, h:mm a")}
-                  </p>
                   {!event.hasRegistration && (
                     <Button size="sm" asChild className="w-full mt-1 touch-target">
                       <Link href={`/president/events/${event.id}/register`}>
@@ -118,7 +123,7 @@ export function UpcomingEventsCard({ events }: UpcomingEventsCardProps) {
                       </Link>
                     </Button>
                   )}
-                  {event.hasRegistration && event.registrationStatus === "PENDING" && (
+                  {event.hasRegistration && (
                     <Button variant="outline" size="sm" asChild className="w-full mt-1 touch-target">
                       <Link href={`/president/events/${event.id}`}>
                         View
@@ -132,7 +137,7 @@ export function UpcomingEventsCard({ events }: UpcomingEventsCardProps) {
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
                       <h4 className="font-medium">{event.name}</h4>
-                      {getStatusBadge(event.registrationStatus, event.hasRegistration)}
+                      {getStatusBadge(event)}
                     </div>
                     <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
                       <span className="flex items-center gap-1">
@@ -144,9 +149,6 @@ export function UpcomingEventsCard({ events }: UpcomingEventsCardProps) {
                         {format(new Date(event.startDate), "MMM d, yyyy")}
                       </span>
                     </div>
-                    <p className="text-xs text-muted-foreground">
-                      Deadline: {format(new Date(event.registrationDeadline), "MMM d, yyyy 'at' h:mm a")}
-                    </p>
                   </div>
                   {!event.hasRegistration && (
                     <Button size="sm" asChild className="touch-target">
@@ -155,7 +157,7 @@ export function UpcomingEventsCard({ events }: UpcomingEventsCardProps) {
                       </Link>
                     </Button>
                   )}
-                  {event.hasRegistration && event.registrationStatus === "PENDING" && (
+                  {event.hasRegistration && (
                     <Button variant="outline" size="sm" asChild className="touch-target">
                       <Link href={`/president/events/${event.id}`}>
                         View

@@ -39,6 +39,7 @@ export type PresidentProfile = {
 // ==========================================
 
 const completeProfileSchema = z.object({
+  name: z.string().min(1, "Please enter your full name"),
   churchId: z.string().min(1, "Please select a church"),
 });
 
@@ -195,10 +196,13 @@ export async function completePresidentProfile(
       }
     }
 
-    // Update user with church assignment
+    // Update user with name and church assignment
     await prisma.user.update({
       where: { id: session.user.id },
-      data: { churchId: validated.data.churchId },
+      data: {
+        name: validated.data.name,
+        churchId: validated.data.churchId,
+      },
     });
 
     revalidatePath("/president");

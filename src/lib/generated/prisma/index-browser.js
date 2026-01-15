@@ -207,11 +207,12 @@ exports.Prisma.EventScalarFieldEnum = {
   banner: 'banner',
   startDate: 'startDate',
   endDate: 'endDate',
-  registrationDeadline: 'registrationDeadline',
   preRegistrationFee: 'preRegistrationFee',
+  preRegistrationSiblingDiscount: 'preRegistrationSiblingDiscount',
   preRegistrationStart: 'preRegistrationStart',
   preRegistrationEnd: 'preRegistrationEnd',
   onsiteRegistrationFee: 'onsiteRegistrationFee',
+  onsiteSiblingDiscount: 'onsiteSiblingDiscount',
   cookRegistrationFee: 'cookRegistrationFee',
   status: 'status',
   createdAt: 'createdAt',
@@ -223,6 +224,14 @@ exports.Prisma.RegistrationScalarFieldEnum = {
   eventId: 'eventId',
   churchId: 'churchId',
   presidentId: 'presidentId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.RegistrationBatchScalarFieldEnum = {
+  id: 'id',
+  registrationId: 'registrationId',
+  batchNumber: 'batchNumber',
   status: 'status',
   remarks: 'remarks',
   receiptImage: 'receiptImage',
@@ -242,7 +251,7 @@ exports.Prisma.DelegateScalarFieldEnum = {
   nickname: 'nickname',
   age: 'age',
   gender: 'gender',
-  registrationId: 'registrationId',
+  batchId: 'batchId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -253,7 +262,7 @@ exports.Prisma.CookScalarFieldEnum = {
   nickname: 'nickname',
   age: 'age',
   gender: 'gender',
-  registrationId: 'registrationId',
+  batchId: 'batchId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -307,6 +316,7 @@ exports.Prisma.ModelName = {
   Pastor: 'Pastor',
   Event: 'Event',
   Registration: 'Registration',
+  RegistrationBatch: 'RegistrationBatch',
   Delegate: 'Delegate',
   Cook: 'Cook'
 };

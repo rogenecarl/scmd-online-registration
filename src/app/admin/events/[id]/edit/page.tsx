@@ -41,11 +41,12 @@ export default async function EditEventPage({ params }: Props) {
           banner: event.banner,
           startDate: new Date(event.startDate),
           endDate: new Date(event.endDate),
-          registrationDeadline: new Date(event.registrationDeadline),
           preRegistrationFee: event.preRegistrationFee,
+          preRegistrationSiblingDiscount: event.preRegistrationSiblingDiscount,
           preRegistrationStart: new Date(event.preRegistrationStart),
           preRegistrationEnd: new Date(event.preRegistrationEnd),
           onsiteRegistrationFee: event.onsiteRegistrationFee,
+          onsiteSiblingDiscount: event.onsiteSiblingDiscount,
           cookRegistrationFee: event.cookRegistrationFee,
           status: event.status,
         }}

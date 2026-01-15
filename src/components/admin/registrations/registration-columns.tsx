@@ -1,6 +1,6 @@
 "use client";
 
-import type { AdminRegistration } from "@/actions/approval";
+import type { AdminBatch } from "@/actions/approval";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -23,31 +23,31 @@ export type Column<T> = {
   mobileFullWidth?: boolean;
 };
 
-type RegistrationColumnsProps = {
+type BatchColumnsProps = {
   onApprove: (id: string) => void;
   onReject: (id: string) => void;
 };
 
-export function getRegistrationColumns({
+export function getBatchColumns({
   onApprove,
   onReject,
-}: RegistrationColumnsProps): Column<AdminRegistration>[] {
+}: BatchColumnsProps): Column<AdminBatch>[] {
   return [
     {
       key: "church",
       header: "Church",
       mobilePriority: "primary",
       mobileFullWidth: true,
-      render: (registration) => (
+      render: (batch) => (
         <div>
           <Link
-            href={`/admin/registrations/${registration.id}`}
+            href={`/admin/registrations/${batch.id}`}
             className="font-medium hover:underline"
           >
-            {registration.church.name}
+            {batch.registration.church.name}
           </Link>
           <p className="text-xs text-muted-foreground">
-            {registration.church.division.name}
+            {batch.registration.church.division.name} - Batch #{batch.batchNumber}
           </p>
         </div>
       ),
@@ -56,14 +56,14 @@ export function getRegistrationColumns({
       key: "event",
       header: "Event",
       mobilePriority: "primary",
-      render: (registration) => (
+      render: (batch) => (
         <div>
-          <span className="font-medium">{registration.event.name}</span>
+          <span className="font-medium">{batch.registration.event.name}</span>
           <div className="flex items-center gap-2 mt-1">
             <span className="text-xs text-muted-foreground">
-              {formatDate(registration.event.startDate)}
+              {formatDate(batch.registration.event.startDate)}
             </span>
-            <EventStatusBadge status={registration.event.status} />
+            <EventStatusBadge status={batch.registration.event.status} />
           </div>
         </div>
       ),
@@ -72,11 +72,11 @@ export function getRegistrationColumns({
       key: "president",
       header: "Submitted By",
       mobilePriority: "hidden",
-      render: (registration) => (
+      render: (batch) => (
         <div>
-          <span>{registration.president.name}</span>
+          <span>{batch.registration.president.name}</span>
           <p className="text-xs text-muted-foreground">
-            {registration.president.email}
+            {batch.registration.president.email}
           </p>
         </div>
       ),
@@ -87,15 +87,15 @@ export function getRegistrationColumns({
       className: "text-center",
       mobilePriority: "secondary",
       mobileLabel: "Participants",
-      render: (registration) => (
+      render: (batch) => (
         <div className="flex items-center justify-center gap-3">
           <div className="flex items-center gap-1" title="Delegates">
             <Users className="h-4 w-4 text-muted-foreground" />
-            <Badge variant="secondary">{registration._count.delegates}</Badge>
+            <Badge variant="secondary">{batch._count.delegates}</Badge>
           </div>
           <div className="flex items-center gap-1" title="Cooks">
             <ChefHat className="h-4 w-4 text-muted-foreground" />
-            <Badge variant="secondary">{registration._count.cooks}</Badge>
+            <Badge variant="secondary">{batch._count.cooks}</Badge>
           </div>
         </div>
       ),
@@ -105,8 +105,8 @@ export function getRegistrationColumns({
       header: "Status",
       className: "text-center",
       mobilePriority: "primary",
-      render: (registration) => (
-        <RegistrationStatusBadge status={registration.status} />
+      render: (batch) => (
+        <RegistrationStatusBadge status={batch.status} />
       ),
     },
     {
@@ -114,9 +114,9 @@ export function getRegistrationColumns({
       header: "Submitted",
       mobilePriority: "secondary",
       mobileLabel: "Submitted",
-      render: (registration) => (
+      render: (batch) => (
         <span className="text-muted-foreground text-sm">
-          {formatDate(registration.createdAt)}
+          {formatDate(batch.createdAt)}
         </span>
       ),
     },
@@ -125,19 +125,19 @@ export function getRegistrationColumns({
       header: "",
       className: "w-32",
       mobilePriority: "primary",
-      render: (registration) => (
+      render: (batch) => (
         <div className="flex items-center gap-1">
           <Button variant="ghost" size="icon" asChild>
-            <Link href={`/admin/registrations/${registration.id}`}>
+            <Link href={`/admin/registrations/${batch.id}`}>
               <Eye className="h-4 w-4" />
             </Link>
           </Button>
-          {registration.status === "PENDING" && (
+          {batch.status === "PENDING" && (
             <>
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={() => onApprove(registration.id)}
+                onClick={() => onApprove(batch.id)}
                 title="Approve"
               >
                 <CheckCircle className="h-4 w-4 text-green-600" />
@@ -145,7 +145,7 @@ export function getRegistrationColumns({
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={() => onReject(registration.id)}
+                onClick={() => onReject(batch.id)}
                 title="Reject"
               >
                 <XCircle className="h-4 w-4 text-destructive" />
@@ -157,3 +157,6 @@ export function getRegistrationColumns({
     },
   ];
 }
+
+// Legacy alias for backwards compatibility
+export const getRegistrationColumns = getBatchColumns;

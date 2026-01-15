@@ -56,38 +56,38 @@ export function AdminOverview() {
     );
   }
 
-  const { stats, recentRegistrations, eventsSummary } = dashboard;
+  const { stats, recentBatches, eventsSummary } = dashboard;
 
-  // Transform recent registrations for ActivityFeed
-  const activityItems = recentRegistrations.map((reg) => ({
-    id: reg.id,
-    title: `${reg.church.name} registered for ${reg.event.name}`,
-    description: `${reg._count.delegates} delegates, ${reg._count.cooks} cooks`,
-    timestamp: formatDistanceToNow(new Date(reg.createdAt), { addSuffix: true }),
+  // Transform recent batches for ActivityFeed
+  const activityItems = recentBatches.map((batch) => ({
+    id: batch.id,
+    title: `${batch.church.name} - Batch #${batch.batchNumber}`,
+    description: `${batch.delegateCount} delegates, ${batch.cookCount} cooks for ${batch.event.name}`,
+    timestamp: formatDistanceToNow(new Date(batch.createdAt), { addSuffix: true }),
     icon:
-      reg.status === "APPROVED"
+      batch.status === "APPROVED"
         ? CheckCircle
-        : reg.status === "REJECTED"
+        : batch.status === "REJECTED"
           ? XCircle
           : Clock,
     iconColor:
-      reg.status === "APPROVED"
+      batch.status === "APPROVED"
         ? "bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400"
-        : reg.status === "REJECTED"
+        : batch.status === "REJECTED"
           ? "bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400"
           : "bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400",
   }));
 
-  // Registration columns with mobile support
-  const registrationColumns = [
+  // Batch columns with mobile support
+  const batchColumns = [
     {
       key: "church",
       header: "Church",
       mobilePriority: "primary" as const,
-      render: (item: (typeof recentRegistrations)[0]) => (
+      render: (item: (typeof recentBatches)[0]) => (
         <div>
           <p className="font-medium">{item.church.name}</p>
-          <p className="text-xs text-muted-foreground">{item.event.name}</p>
+          <p className="text-xs text-muted-foreground">{item.event.name} - Batch #{item.batchNumber}</p>
         </div>
       ),
     },
@@ -96,15 +96,15 @@ export function AdminOverview() {
       header: "Attendees",
       mobilePriority: "primary" as const,
       mobileLabel: "Attendees",
-      render: (item: (typeof recentRegistrations)[0]) => (
+      render: (item: (typeof recentBatches)[0]) => (
         <div className="flex items-center gap-2 text-sm">
           <span className="flex items-center gap-1">
             <UserCheck className="h-3 w-3" />
-            {item._count.delegates}
+            {item.delegateCount}
           </span>
           <span className="flex items-center gap-1">
             <ChefHat className="h-3 w-3" />
-            {item._count.cooks}
+            {item.cookCount}
           </span>
         </div>
       ),
@@ -114,7 +114,7 @@ export function AdminOverview() {
       header: "Status",
       mobilePriority: "primary" as const,
       mobileLabel: "Status",
-      render: (item: (typeof recentRegistrations)[0]) => (
+      render: (item: (typeof recentBatches)[0]) => (
         <RegistrationStatusBadge status={item.status} />
       ),
     },
@@ -123,7 +123,7 @@ export function AdminOverview() {
       header: "Date",
       mobilePriority: "secondary" as const,
       mobileLabel: "Date",
-      render: (item: (typeof recentRegistrations)[0]) => (
+      render: (item: (typeof recentBatches)[0]) => (
         <span className="text-sm text-muted-foreground">
           {format(new Date(item.createdAt), "MMM d, yyyy")}
         </span>
@@ -152,7 +152,7 @@ export function AdminOverview() {
       mobilePriority: "primary" as const,
       mobileLabel: "Registrations",
       render: (item: (typeof eventsSummary)[0]) => (
-        <span className="text-sm font-medium">{item._count.registrations}</span>
+        <span className="text-sm font-medium">{item.registrationCount}</span>
       ),
     },
     {
@@ -180,13 +180,13 @@ export function AdminOverview() {
               <span className="hidden sm:inline"> Here&apos;s an overview of SCMD Online Registration.</span>
             </p>
           </div>
-          {stats.pendingRegistrations > 0 && (
+          {stats.pendingBatches > 0 && (
             <Link
               href="/admin/registrations?status=PENDING"
               className="flex items-center justify-center gap-2 rounded-lg bg-amber-100 dark:bg-amber-900/30 px-3 py-2 text-sm font-medium text-amber-700 dark:text-amber-400 hover:bg-amber-200 dark:hover:bg-amber-900/50 transition-colors touch-target w-full sm:w-auto"
             >
               <Clock className="h-4 w-4" />
-              {stats.pendingRegistrations} Pending Approval
+              {stats.pendingBatches} Pending Approval
             </Link>
           )}
         </div>
@@ -220,7 +220,7 @@ export function AdminOverview() {
         />
       </StatsGrid>
 
-      {/* Stats Grid - Row 2: Registrations */}
+      {/* Stats Grid - Row 2: Batches */}
       <StatsGrid columns={4}>
         <StatsCard
           title="Total Registrations"
@@ -229,20 +229,20 @@ export function AdminOverview() {
           icon={FileText}
         />
         <StatsCard
-          title="Pending"
-          value={stats.pendingRegistrations.toString()}
+          title="Pending Batches"
+          value={stats.pendingBatches.toString()}
           description="Awaiting approval"
           icon={Clock}
         />
         <StatsCard
-          title="Approved"
-          value={stats.approvedRegistrations.toString()}
+          title="Approved Batches"
+          value={stats.approvedBatches.toString()}
           description="Confirmed"
           icon={CheckCircle}
         />
         <StatsCard
-          title="Rejected"
-          value={stats.rejectedRegistrations.toString()}
+          title="Rejected Batches"
+          value={stats.rejectedBatches.toString()}
           description="Declined"
           icon={XCircle}
         />
@@ -266,7 +266,7 @@ export function AdminOverview() {
 
       {/* Main Content Grid */}
       <div className="grid gap-4 md:gap-6 lg:grid-cols-3">
-        {/* Recent Registrations */}
+        {/* Recent Batches */}
         <div className="lg:col-span-2">
           <Card className="h-full">
             <CardHeader
@@ -282,21 +282,21 @@ export function AdminOverview() {
                 </Button>
               }
             >
-              <CardTitle className="text-base md:text-lg">Recent Registrations</CardTitle>
+              <CardTitle className="text-base md:text-lg">Recent Batches</CardTitle>
               <CardDescription className="text-xs md:text-sm">
-                Latest church registrations for events
+                Latest registration batches for events
               </CardDescription>
             </CardHeader>
             <CardContent className="p-3 md:p-6 pt-0 md:pt-0">
-              {recentRegistrations.length > 0 ? (
+              {recentBatches.length > 0 ? (
                 <DataTable
-                  columns={registrationColumns}
-                  data={recentRegistrations}
-                  emptyMessage="No registrations found"
+                  columns={batchColumns}
+                  data={recentBatches}
+                  emptyMessage="No batches found"
                 />
               ) : (
                 <div className="text-center py-6 md:py-8 text-muted-foreground text-sm">
-                  No registrations yet
+                  No batches yet
                 </div>
               )}
             </CardContent>
@@ -363,12 +363,12 @@ export function AdminOverview() {
             <div className="space-y-2 md:space-y-3">
               <ActionItem
                 icon={FileText}
-                title="Review Registrations"
-                description="Approve or reject pending registrations"
+                title="Review Batches"
+                description="Approve or reject pending registration batches"
                 href="/admin/registrations?status=PENDING"
                 badge={
-                  stats.pendingRegistrations > 0
-                    ? stats.pendingRegistrations
+                  stats.pendingBatches > 0
+                    ? stats.pendingBatches
                     : undefined
                 }
               />

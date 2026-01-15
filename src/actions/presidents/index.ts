@@ -444,18 +444,18 @@ export async function deactivatePresident(
       return { success: false, error: "President not found" };
     }
 
-    // Check for pending registrations
-    const pendingRegistrations = await prisma.registration.count({
+    // Check for pending batches
+    const pendingBatches = await prisma.registrationBatch.count({
       where: {
-        presidentId: id,
+        registration: { presidentId: id },
         status: "PENDING",
       },
     });
 
-    if (pendingRegistrations > 0) {
+    if (pendingBatches > 0) {
       return {
         success: false,
-        error: `Cannot deactivate president with ${pendingRegistrations} pending registration(s).`,
+        error: `Cannot deactivate president with ${pendingBatches} pending batch(es).`,
       };
     }
 

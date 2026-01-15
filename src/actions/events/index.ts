@@ -20,7 +20,6 @@ export type EventWithCounts = {
   location: string;
   startDate: Date;
   endDate: Date;
-  registrationDeadline: Date;
   status: EventStatus;
   createdAt: Date;
   _count: {
@@ -36,11 +35,12 @@ export type EventDetail = {
   banner: string | null;
   startDate: Date;
   endDate: Date;
-  registrationDeadline: Date;
   preRegistrationFee: number;
+  preRegistrationSiblingDiscount: number;
   preRegistrationStart: Date;
   preRegistrationEnd: Date;
   onsiteRegistrationFee: number;
+  onsiteSiblingDiscount: number;
   cookRegistrationFee: number;
   status: EventStatus;
   createdAt: Date;
@@ -82,11 +82,12 @@ function toEventDetail(
     banner: event.banner,
     startDate: event.startDate,
     endDate: event.endDate,
-    registrationDeadline: event.registrationDeadline,
     preRegistrationFee: event.preRegistrationFee,
+    preRegistrationSiblingDiscount: event.preRegistrationSiblingDiscount,
     preRegistrationStart: event.preRegistrationStart,
     preRegistrationEnd: event.preRegistrationEnd,
     onsiteRegistrationFee: event.onsiteRegistrationFee,
+    onsiteSiblingDiscount: event.onsiteSiblingDiscount,
     cookRegistrationFee: event.cookRegistrationFee,
     status: event.status,
     createdAt: event.createdAt,
@@ -186,7 +187,12 @@ export async function getEventWithRegistrations(
         registrations: {
           include: {
             church: { select: { id: true, name: true } },
-            _count: { select: { delegates: true, cooks: true } },
+            batches: {
+              select: {
+                status: true,
+                _count: { select: { delegates: true, cooks: true } },
+              },
+            },
           },
           orderBy: { createdAt: "desc" },
         },
@@ -197,26 +203,64 @@ export async function getEventWithRegistrations(
       return { success: false, error: "Event not found" };
     }
 
-    // Calculate stats
+    // Calculate stats from batches
+    let pendingCount = 0;
+    let approvedCount = 0;
+    let rejectedCount = 0;
+    let totalDelegates = 0;
+    let totalCooks = 0;
+
+    // Build registration list with aggregated batch data
+    const registrations = event.registrations.map((reg) => {
+      let delegateCount = 0;
+      let cookCount = 0;
+      let hasPendingBatch = false;
+      let hasApprovedBatch = false;
+      let hasRejectedBatch = false;
+
+      for (const batch of reg.batches) {
+        delegateCount += batch._count.delegates;
+        cookCount += batch._count.cooks;
+        totalDelegates += batch._count.delegates;
+        totalCooks += batch._count.cooks;
+
+        if (batch.status === "PENDING") {
+          hasPendingBatch = true;
+          pendingCount++;
+        } else if (batch.status === "APPROVED") {
+          hasApprovedBatch = true;
+          approvedCount++;
+        } else if (batch.status === "REJECTED") {
+          hasRejectedBatch = true;
+          rejectedCount++;
+        }
+      }
+
+      // Compute overall status: pending > approved > rejected > none
+      let status = "PENDING";
+      if (hasPendingBatch) {
+        status = "PENDING";
+      } else if (hasApprovedBatch) {
+        status = "APPROVED";
+      } else if (hasRejectedBatch) {
+        status = "REJECTED";
+      }
+
+      return {
+        id: reg.id,
+        status,
+        church: reg.church,
+        _count: { delegates: delegateCount, cooks: cookCount },
+      };
+    });
+
     const stats = {
       totalRegistrations: event.registrations.length,
-      pendingRegistrations: event.registrations.filter(
-        (r) => r.status === "PENDING"
-      ).length,
-      approvedRegistrations: event.registrations.filter(
-        (r) => r.status === "APPROVED"
-      ).length,
-      rejectedRegistrations: event.registrations.filter(
-        (r) => r.status === "REJECTED"
-      ).length,
-      totalDelegates: event.registrations.reduce(
-        (sum, r) => sum + r._count.delegates,
-        0
-      ),
-      totalCooks: event.registrations.reduce(
-        (sum, r) => sum + r._count.cooks,
-        0
-      ),
+      pendingRegistrations: pendingCount,
+      approvedRegistrations: approvedCount,
+      rejectedRegistrations: rejectedCount,
+      totalDelegates,
+      totalCooks,
     };
 
     const eventDetail = toEventDetail(event);
@@ -224,7 +268,7 @@ export async function getEventWithRegistrations(
       success: true,
       data: {
         ...eventDetail,
-        registrations: event.registrations,
+        registrations,
         stats,
       },
     };
@@ -261,11 +305,12 @@ export async function createEvent(
         banner: validated.data.banner || null,
         startDate: validated.data.startDate,
         endDate: validated.data.endDate,
-        registrationDeadline: validated.data.registrationDeadline,
         preRegistrationFee: validated.data.preRegistrationFee,
+        preRegistrationSiblingDiscount: validated.data.preRegistrationSiblingDiscount,
         preRegistrationStart: validated.data.preRegistrationStart,
         preRegistrationEnd: validated.data.preRegistrationEnd,
         onsiteRegistrationFee: validated.data.onsiteRegistrationFee,
+        onsiteSiblingDiscount: validated.data.onsiteSiblingDiscount,
         cookRegistrationFee: validated.data.cookRegistrationFee,
         status: validated.data.status,
       },
@@ -315,11 +360,12 @@ export async function updateEvent(
         banner: validated.data.banner || null,
         startDate: validated.data.startDate,
         endDate: validated.data.endDate,
-        registrationDeadline: validated.data.registrationDeadline,
         preRegistrationFee: validated.data.preRegistrationFee,
+        preRegistrationSiblingDiscount: validated.data.preRegistrationSiblingDiscount,
         preRegistrationStart: validated.data.preRegistrationStart,
         preRegistrationEnd: validated.data.preRegistrationEnd,
         onsiteRegistrationFee: validated.data.onsiteRegistrationFee,
+        onsiteSiblingDiscount: validated.data.onsiteSiblingDiscount,
         cookRegistrationFee: validated.data.cookRegistrationFee,
         status: validated.data.status,
       },
@@ -438,11 +484,12 @@ export type PublicEvent = {
   banner: string | null;
   startDate: Date;
   endDate: Date;
-  registrationDeadline: Date;
   preRegistrationFee: number;
+  preRegistrationSiblingDiscount: number;
   preRegistrationStart: Date;
   preRegistrationEnd: Date;
   onsiteRegistrationFee: number;
+  onsiteSiblingDiscount: number;
   cookRegistrationFee: number;
   status: EventStatus;
 };
@@ -484,11 +531,12 @@ export async function getPublicEvents(params: {
           banner: true,
           startDate: true,
           endDate: true,
-          registrationDeadline: true,
           preRegistrationFee: true,
+          preRegistrationSiblingDiscount: true,
           preRegistrationStart: true,
           preRegistrationEnd: true,
           onsiteRegistrationFee: true,
+          onsiteSiblingDiscount: true,
           cookRegistrationFee: true,
           status: true,
         },
@@ -534,11 +582,12 @@ export async function getPublicEventById(
         banner: true,
         startDate: true,
         endDate: true,
-        registrationDeadline: true,
         preRegistrationFee: true,
+        preRegistrationSiblingDiscount: true,
         preRegistrationStart: true,
         preRegistrationEnd: true,
         onsiteRegistrationFee: true,
+        onsiteSiblingDiscount: true,
         cookRegistrationFee: true,
         status: true,
       },

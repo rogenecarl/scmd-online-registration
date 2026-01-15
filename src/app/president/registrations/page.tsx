@@ -22,25 +22,43 @@ import { format } from "date-fns";
 import { cn, formatCurrency } from "@/lib/utils";
 import type { RegistrationStatus, EventStatus } from "@/lib/generated/prisma";
 
-function getStatusIcon(status: RegistrationStatus) {
+function getStatusIcon(status: RegistrationStatus | null, hasPendingBatch: boolean) {
+  if (hasPendingBatch) {
+    return <Clock className="h-4 w-4 text-yellow-600" />;
+  }
   switch (status) {
-    case "PENDING":
-      return <Clock className="h-4 w-4 text-yellow-600" />;
     case "APPROVED":
       return <CheckCircle className="h-4 w-4 text-emerald-600" />;
     case "REJECTED":
       return <XCircle className="h-4 w-4 text-red-600" />;
+    default:
+      return <Clock className="h-4 w-4 text-gray-600" />;
   }
 }
 
-function getStatusColor(status: RegistrationStatus) {
+function getStatusColor(status: RegistrationStatus | null, hasPendingBatch: boolean) {
+  if (hasPendingBatch) {
+    return "bg-yellow-500/10 text-yellow-600 border-yellow-200";
+  }
   switch (status) {
-    case "PENDING":
-      return "bg-yellow-500/10 text-yellow-600 border-yellow-200";
     case "APPROVED":
       return "bg-emerald-500/10 text-emerald-600 border-emerald-200";
     case "REJECTED":
       return "bg-red-500/10 text-red-600 border-red-200";
+    default:
+      return "bg-gray-500/10 text-gray-600 border-gray-200";
+  }
+}
+
+function getStatusLabel(status: RegistrationStatus | null, hasPendingBatch: boolean) {
+  if (hasPendingBatch) return "pending";
+  switch (status) {
+    case "APPROVED":
+      return "approved";
+    case "REJECTED":
+      return "rejected";
+    default:
+      return "no batches";
   }
 }
 
@@ -114,11 +132,11 @@ function RegistrationsContent() {
                     <span
                       className={cn(
                         "inline-flex shrink-0 items-center gap-1 rounded-full border px-1.5 py-0.5 text-[10px] font-medium",
-                        getStatusColor(registration.status)
+                        getStatusColor(registration.latestBatchStatus, registration.hasPendingBatch)
                       )}
                     >
-                      {getStatusIcon(registration.status)}
-                      {registration.status.toLowerCase()}
+                      {getStatusIcon(registration.latestBatchStatus, registration.hasPendingBatch)}
+                      {getStatusLabel(registration.latestBatchStatus, registration.hasPendingBatch)}
                     </span>
                   </div>
 
@@ -130,12 +148,12 @@ function RegistrationsContent() {
                     </span>
                     <span className="flex items-center gap-1">
                       <Users className="h-3 w-3" />
-                      {registration._count.delegates}
+                      {registration.totalDelegates}
                     </span>
-                    {registration._count.cooks > 0 && (
+                    {registration.totalCooks > 0 && (
                       <span className="flex items-center gap-1">
                         <ChefHat className="h-3 w-3" />
-                        {registration._count.cooks}
+                        {registration.totalCooks}
                       </span>
                     )}
                     <span className="flex items-center gap-1 font-medium text-primary">
@@ -174,11 +192,11 @@ function RegistrationsContent() {
                       <span
                         className={cn(
                           "inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs font-medium",
-                          getStatusColor(registration.status)
+                          getStatusColor(registration.latestBatchStatus, registration.hasPendingBatch)
                         )}
                       >
-                        {getStatusIcon(registration.status)}
-                        {registration.status.toLowerCase()}
+                        {getStatusIcon(registration.latestBatchStatus, registration.hasPendingBatch)}
+                        {getStatusLabel(registration.latestBatchStatus, registration.hasPendingBatch)}
                       </span>
                     </div>
 
@@ -190,12 +208,12 @@ function RegistrationsContent() {
                       </span>
                       <span className="flex items-center gap-1">
                         <Users className="h-3.5 w-3.5" />
-                        {registration._count.delegates} delegates
+                        {registration.totalDelegates} delegates
                       </span>
-                      {registration._count.cooks > 0 && (
+                      {registration.totalCooks > 0 && (
                         <span className="flex items-center gap-1">
                           <ChefHat className="h-3.5 w-3.5" />
-                          {registration._count.cooks} cooks
+                          {registration.totalCooks} cooks
                         </span>
                       )}
                       <span className="flex items-center gap-1 font-medium text-primary">

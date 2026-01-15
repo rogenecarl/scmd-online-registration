@@ -23,6 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
 import {
   Card,
   CardContent,
@@ -35,9 +36,10 @@ import {
   useDivisionsWithChurches,
   useCompleteProfile,
 } from "@/hooks/use-president-profile";
-import { Loader2, Building2, Church, AlertCircle, CheckCircle } from "lucide-react";
+import { Loader2, Building2, Church, AlertCircle, CheckCircle, User } from "lucide-react";
 
 const formSchema = z.object({
+  name: z.string().min(1, "Please enter your full name"),
   divisionId: z.string().min(1, "Please select a division"),
   churchId: z.string().min(1, "Please select a church"),
 });
@@ -52,6 +54,7 @@ export function CompleteProfileForm() {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      name: "",
       divisionId: "",
       churchId: "",
     },
@@ -63,7 +66,7 @@ export function CompleteProfileForm() {
   const availableChurches = selectedDivisionData?.churches ?? [];
 
   const onSubmit = (data: FormValues) => {
-    completeProfileMutation.mutate({ churchId: data.churchId });
+    completeProfileMutation.mutate({ name: data.name, churchId: data.churchId });
   };
 
   const handleDivisionChange = (value: string) => {
@@ -112,6 +115,27 @@ export function CompleteProfileForm() {
       <CardContent className="p-4 md:p-6 pt-0 md:pt-0">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            {/* Full Name Input */}
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="flex items-center gap-2">
+                    <User className="h-4 w-4" />
+                    Full Name
+                  </FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter your full name" {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    Enter your full name as it should appear on registrations
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             {/* Division Selection */}
             <FormField
               control={form.control}

@@ -6,7 +6,6 @@ import { format } from "date-fns";
 import {
   Calendar,
   MapPin,
-  Clock,
   ArrowLeft,
   ArrowRight,
   CalendarDays,
@@ -50,7 +49,7 @@ function getStatusConfig(status: string) {
 
 function isRegistrationOpen(event: PublicEvent): boolean {
   const now = new Date();
-  return now <= new Date(event.registrationDeadline);
+  return now < new Date(event.startDate);
 }
 
 function isPreRegistration(event: PublicEvent): boolean {
@@ -70,7 +69,6 @@ export function EventDetailContent({ event }: EventDetailContentProps) {
   const registrationOpen = isRegistrationOpen(event);
   const preReg = isPreRegistration(event);
   const daysUntilEvent = getDaysUntil(new Date(event.startDate));
-  const daysUntilDeadline = getDaysUntil(new Date(event.registrationDeadline));
 
   return (
     <section className="relative min-h-screen bg-background pt-20 pb-16">
@@ -185,24 +183,6 @@ export function EventDetailContent({ event }: EventDetailContentProps) {
                     </div>
                   </div>
 
-                  {/* Registration Deadline */}
-                  <div className="flex items-start gap-3 p-4 rounded-xl bg-background/50 border border-border">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-                      <Clock className="h-5 w-5 text-primary" />
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium text-muted-foreground">Registration Deadline</p>
-                      <p className="text-foreground font-semibold">
-                        {format(new Date(event.registrationDeadline), "MMMM d, yyyy")}
-                      </p>
-                      {registrationOpen && daysUntilDeadline > 0 && (
-                        <p className="text-xs text-amber-600 dark:text-amber-400 mt-0.5">
-                          {daysUntilDeadline} days left
-                        </p>
-                      )}
-                    </div>
-                  </div>
-
                   {/* Early Bird Period */}
                   <div className="flex items-start gap-3 p-4 rounded-xl bg-background/50 border border-border">
                     <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-500/10">
@@ -254,6 +234,11 @@ export function EventDetailContent({ event }: EventDetailContentProps) {
                         <p className="text-2xl font-bold text-amber-600 dark:text-amber-400">
                           ₱{event.preRegistrationFee.toLocaleString()}
                         </p>
+                        {event.preRegistrationSiblingDiscount > 0 && (
+                          <p className="text-xs text-muted-foreground mt-1">
+                            Sibling (3+): ₱{event.preRegistrationSiblingDiscount.toLocaleString()}
+                          </p>
+                        )}
                       </div>
                       {preReg && (
                         <Badge className="bg-amber-500 text-white border-amber-600 shadow-sm">
@@ -270,6 +255,11 @@ export function EventDetailContent({ event }: EventDetailContentProps) {
                         <p className="text-2xl font-bold text-foreground">
                           ₱{event.onsiteRegistrationFee.toLocaleString()}
                         </p>
+                        {event.onsiteSiblingDiscount > 0 && (
+                          <p className="text-xs text-muted-foreground mt-1">
+                            Sibling (3+): ₱{event.onsiteSiblingDiscount.toLocaleString()}
+                          </p>
+                        )}
                       </div>
                       {!preReg && registrationOpen && (
                         <Badge className="bg-primary text-primary-foreground shadow-sm">

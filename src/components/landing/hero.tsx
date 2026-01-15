@@ -96,10 +96,10 @@ export function Hero() {
           {/* Stats Preview */}
           <div className="animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-700 mt-20 w-full max-w-4xl">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <StatCard label="Divisions" value="10+" />
-              <StatCard label="Churches" value="100+" />
-              <StatCard label="Events" value="50+" />
-              <StatCard label="Delegates" value="5,000+" />
+              <StatCard label="Divisions" value="8" />
+              <StatCard label="Churches" value="78" />
+              <StatCard label="Events" value="1" />
+              <StatCard label="Delegates" value="1,000+" />
             </div>
           </div>
         </div>

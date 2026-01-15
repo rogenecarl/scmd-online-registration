@@ -68,6 +68,22 @@ export const queryKeys = {
       [...queryKeys.registrations.all, "my", "detail", id] as const,
   },
 
+  // Batch queries (new batch-based system)
+  batches: {
+    all: ["batches"] as const,
+    list: () => [...queryKeys.batches.all, "list"] as const,
+    pending: () => [...queryKeys.batches.all, "pending"] as const,
+    pendingCount: () => [...queryKeys.batches.all, "pendingCount"] as const,
+    byRegistration: (registrationId: string) =>
+      [...queryKeys.batches.all, "byRegistration", registrationId] as const,
+    byStatus: (status: string) =>
+      [...queryKeys.batches.all, "byStatus", status] as const,
+    detail: (id: string) => [...queryKeys.batches.all, "detail", id] as const,
+    // President-specific
+    myDetail: (id: string) =>
+      [...queryKeys.batches.all, "my", "detail", id] as const,
+  },
+
   // President events queries
   presidentEvents: {
     all: ["presidentEvents"] as const,

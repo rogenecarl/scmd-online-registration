@@ -57,11 +57,11 @@ model User {
   updatedAt     DateTime  @updatedAt
 
   // Relations
-  sessions             Session[]
-  accounts             Account[]
-  church               Church?        @relation("ChurchPresidents", fields: [churchId], references: [id])
-  registrations        Registration[]
-  reviewedRegistrations Registration[] @relation("RegistrationReviewer")
+  sessions       Session[]
+  accounts       Account[]
+  church         Church?             @relation("ChurchPresidents", fields: [churchId], references: [id])
+  registrations  Registration[]
+  reviewedBatches RegistrationBatch[] @relation("BatchReviewer")
 
   @@unique([email])
   @@index([churchId])
@@ -190,16 +190,17 @@ model Event {
   banner               String?     // Banner image URL from Supabase Storage
   startDate            DateTime    @map("start_date")
   endDate              DateTime    @map("end_date")
-  registrationDeadline DateTime    @map("registration_deadline")
 
   // Pre-registration period (fees in Philippine Peso - whole numbers)
-  preRegistrationFee   Int         @map("pre_registration_fee")
-  preRegistrationStart DateTime    @map("pre_registration_start")
-  preRegistrationEnd   DateTime    @map("pre_registration_end")
+  preRegistrationFee            Int         @map("pre_registration_fee")
+  preRegistrationSiblingDiscount Int        @default(0) @map("pre_registration_sibling_discount") // Discounted fee for 3+ siblings
+  preRegistrationStart          DateTime    @map("pre_registration_start")
+  preRegistrationEnd            DateTime    @map("pre_registration_end")
 
   // On-site & Cook registration fees (in Philippine Peso - whole numbers)
-  onsiteRegistrationFee Int        @map("onsite_registration_fee")
-  cookRegistrationFee   Int        @map("cook_registration_fee")
+  onsiteRegistrationFee    Int        @map("onsite_registration_fee")
+  onsiteSiblingDiscount    Int        @default(0) @map("onsite_sibling_discount") // Discounted fee for 3+ siblings
+  cookRegistrationFee      Int        @map("cook_registration_fee")
 
   status    EventStatus @default(UPCOMING)
   createdAt DateTime    @default(now()) @map("created_at")
@@ -213,72 +214,91 @@ model Event {
   @@map("event")
 }
 
+// Registration is now a lightweight container for church+event
+// All delegates/cooks are organized into batches
 model Registration {
-  id          String             @id @default(cuid())
-  eventId     String             @map("event_id")
-  churchId    String             @map("church_id")
-  presidentId String             @map("president_id")
-  status      RegistrationStatus @default(PENDING)
-  remarks     String?            @db.Text
-  receiptImage String?           @map("receipt_image") // Payment receipt image URL from Supabase Storage
-  reviewedAt  DateTime?          @map("reviewed_at")
-  reviewedBy  String?            @map("reviewed_by")
-  createdAt   DateTime           @default(now()) @map("created_at")
-  updatedAt   DateTime           @updatedAt @map("updated_at")
-
-  // Fee tracking (captured at registration time)
-  totalFee             Int      @default(0) @map("total_fee")
-  delegateFeePerPerson Int      @default(0) @map("delegate_fee_per_person")
-  cookFeePerPerson     Int      @default(0) @map("cook_fee_per_person")
-  isPreRegistration    Boolean  @default(false) @map("is_pre_registration")
+  id          String   @id @default(cuid())
+  eventId     String   @map("event_id")
+  churchId    String   @map("church_id")
+  presidentId String   @map("president_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
 
   // Relations
-  event     Event      @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  church    Church     @relation(fields: [churchId], references: [id], onDelete: Cascade)
-  president User       @relation(fields: [presidentId], references: [id], onDelete: Cascade)
-  reviewer  User?      @relation("RegistrationReviewer", fields: [reviewedBy], references: [id])
-  delegates Delegate[]
-  cooks     Cook[]
+  event     Event               @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  church    Church              @relation(fields: [churchId], references: [id], onDelete: Cascade)
+  president User                @relation(fields: [presidentId], references: [id], onDelete: Cascade)
+  batches   RegistrationBatch[]
 
   // Unique constraint: One registration per church per event
   @@unique([eventId, churchId])
   @@index([eventId])
   @@index([churchId])
   @@index([presidentId])
-  @@index([status])
   @@map("registration")
 }
 
-model Delegate {
-  id             String   @id @default(cuid())
-  fullName       String   @map("full_name")
-  nickname       String?
-  age            Int
-  gender         Gender
-  registrationId String   @map("registration_id")
-  createdAt      DateTime @default(now()) @map("created_at")
-  updatedAt      DateTime @updatedAt @map("updated_at")
+// Each batch is independently approved
+// Presidents can submit multiple batches, each with its own status
+model RegistrationBatch {
+  id             String             @id @default(cuid())
+  registrationId String             @map("registration_id")
+  batchNumber    Int                @map("batch_number") // Sequential batch number (1, 2, 3...)
+  status         RegistrationStatus @default(PENDING)
+  remarks        String?            @db.Text
+  receiptImage   String?            @map("receipt_image") // Payment receipt image URL
+  reviewedAt     DateTime?          @map("reviewed_at")
+  reviewedBy     String?            @map("reviewed_by")
+  createdAt      DateTime           @default(now()) @map("created_at")
+  updatedAt      DateTime           @updatedAt @map("updated_at")
+
+  // Fee tracking (captured at batch submission time)
+  totalFee             Int     @default(0) @map("total_fee")
+  delegateFeePerPerson Int     @default(0) @map("delegate_fee_per_person")
+  cookFeePerPerson     Int     @default(0) @map("cook_fee_per_person")
+  isPreRegistration    Boolean @default(false) @map("is_pre_registration")
 
   // Relations
   registration Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+  reviewer     User?        @relation("BatchReviewer", fields: [reviewedBy], references: [id])
+  delegates    Delegate[]
+  cooks        Cook[]
 
   @@index([registrationId])
+  @@index([status])
+  @@map("registration_batch")
+}
+
+model Delegate {
+  id        String   @id @default(cuid())
+  fullName  String   @map("full_name")
+  nickname  String?
+  age       Int
+  gender    Gender
+  batchId   String   @map("batch_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  batch RegistrationBatch @relation(fields: [batchId], references: [id], onDelete: Cascade)
+
+  @@index([batchId])
   @@map("delegate")
 }
 
 model Cook {
-  id             String   @id @default(cuid())
-  fullName       String   @map("full_name")
-  nickname       String?
-  age            Int
-  gender         Gender
-  registrationId String   @map("registration_id")
-  createdAt      DateTime @default(now()) @map("created_at")
-  updatedAt      DateTime @updatedAt @map("updated_at")
+  id        String   @id @default(cuid())
+  fullName  String   @map("full_name")
+  nickname  String?
+  age       Int
+  gender    Gender
+  batchId   String   @map("batch_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   // Relations
-  registration Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+  batch RegistrationBatch @relation(fields: [batchId], references: [id], onDelete: Cascade)
 
-  @@index([registrationId])
+  @@index([batchId])
   @@map("cook")
 }

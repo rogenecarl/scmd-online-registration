@@ -49,13 +49,10 @@ export const createEventSchema = eventBaseSchema
       .union([z.string(), z.date()])
       .transform((val) => (typeof val === "string" ? new Date(val) : val))
       .refine((date) => !isNaN(date.getTime()), "Invalid end date"),
-    registrationDeadline: z
-      .union([z.string(), z.date()])
-      .transform((val) => (typeof val === "string" ? new Date(val) : val))
-      .refine((date) => !isNaN(date.getTime()), "Invalid registration deadline"),
 
     // Pre-registration fields (in Philippine Peso)
     preRegistrationFee: pesoSchema,
+    preRegistrationSiblingDiscount: pesoSchema.default(0), // Discounted fee for 3+ siblings
     preRegistrationStart: z
       .union([z.string(), z.date()])
       .transform((val) => (typeof val === "string" ? new Date(val) : val))
@@ -67,6 +64,7 @@ export const createEventSchema = eventBaseSchema
 
     // Other fees (in Philippine Peso)
     onsiteRegistrationFee: pesoSchema,
+    onsiteSiblingDiscount: pesoSchema.default(0), // Discounted fee for 3+ siblings
     cookRegistrationFee: pesoSchema,
 
     status: EventStatusEnum.default("UPCOMING"),
@@ -84,12 +82,8 @@ export const createEventSchema = eventBaseSchema
     message: "Pre-registration must start before event",
     path: ["preRegistrationStart"],
   })
-  .refine((data) => data.registrationDeadline <= data.startDate, {
-    message: "Registration deadline must be before event starts",
-    path: ["registrationDeadline"],
-  })
-  .refine((data) => data.preRegistrationEnd <= data.registrationDeadline, {
-    message: "Pre-registration must end before or on registration deadline",
+  .refine((data) => data.preRegistrationEnd <= data.startDate, {
+    message: "Pre-registration must end before event starts",
     path: ["preRegistrationEnd"],
   });
 

@@ -130,8 +130,10 @@ Bucket name: `ScmdStorage`, max file size: 5MB, allowed types: JPEG, PNG, WebP.
 | `src/components/admin/` | Admin CRUD components (tables, forms, columns) |
 | `src/components/president/` | President dashboard components |
 | `src/components/dashboard/` | Shared dashboard components (sidebar, header, stats) |
-| `src/hooks/` | `useAuth()` hook with role helpers (isAdmin, isPresident) |
+| `src/components/providers/` | Context providers including SessionProvider for auth state |
+| `src/hooks/` | `useAuth()` hook with role helpers (isAdmin, isPresident, isUser) |
 | `src/lib/` | Core utilities (auth, db, supabase, gemini, query-keys) |
+| `src/types/` | TypeScript types including `ActionResponse`, `Role`, and pagination types |
 
 ### Patterns
 
@@ -139,6 +141,8 @@ Bucket name: `ScmdStorage`, max file size: 5MB, allowed types: JPEG, PNG, WebP.
 - **Prisma Client**: Generated to `src/lib/generated/prisma`, imported via singleton in `src/lib/db.ts`
 - **Form Validation**: Zod schemas exported with inferred types (e.g., `DivisionInput = z.infer<typeof divisionSchema>`)
 - **Tables**: Use column definitions in `*-columns.tsx`, table component in `*-table.tsx`, form in `*-form.tsx`
+- **Client Auth**: Use `useAuth()` hook from `src/hooks/use-auth.ts` - provides `isAdmin`, `isPresident`, `isUser` role checks
+- **Server Auth**: Use `requireAuth()` and `requireRole()` from `src/lib/auth-server.ts` in Server Components/Actions
 
 ### Environment Variables
 

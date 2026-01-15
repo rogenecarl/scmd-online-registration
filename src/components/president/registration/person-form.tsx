@@ -17,13 +17,19 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Trash2 } from "lucide-react";
-import type { Control } from "react-hook-form";
-import type { CreateRegistrationInput } from "@/schemas";
+import type { Control, FieldValues } from "react-hook-form";
+
+// Generic control type that works with CreateRegistrationInput, CreateBatchInput, and UpdateBatchInput
+// All three have delegates and cooks arrays with the same structure
+type PersonArrayForm = FieldValues & {
+  delegates: { fullName: string; nickname?: string; age: number; gender: "MALE" | "FEMALE" }[];
+  cooks: { fullName: string; nickname?: string; age: number; gender: "MALE" | "FEMALE" }[];
+};
 
 interface PersonFormProps {
   type: "delegates" | "cooks";
   index: number;
-  control: Control<CreateRegistrationInput>;
+  control: Control<PersonArrayForm>;
   onRemove: () => void;
   canRemove: boolean;
 }

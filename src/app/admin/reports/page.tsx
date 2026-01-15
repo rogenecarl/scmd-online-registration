@@ -108,14 +108,14 @@ export default function ReportsPage() {
       render: (row: ExportData["rows"][0]) => (
         <Badge
           variant={
-            row.registrationStatus === "APPROVED"
+            row.batchStatus === "APPROVED"
               ? "default"
-              : row.registrationStatus === "PENDING"
+              : row.batchStatus === "PENDING"
                 ? "secondary"
                 : "destructive"
           }
         >
-          {row.registrationStatus}
+          {row.batchStatus}
         </Badge>
       ),
     },
@@ -182,9 +182,9 @@ export default function ReportsPage() {
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
               <SummaryCard
                 icon={FileText}
-                title="Registrations"
-                value={exportData.summary.totalRegistrations}
-                description="Total church registrations"
+                title="Batches"
+                value={exportData.summary.totalBatches}
+                description="Total registration batches"
               />
               <SummaryCard
                 icon={Users}
@@ -210,7 +210,7 @@ export default function ReportsPage() {
             {Object.keys(exportData.summary.byStatus).length > 0 && (
               <div className="mt-6">
                 <h4 className="text-sm font-medium mb-3">
-                  Registrations by Status
+                  Batches by Status
                 </h4>
                 <div className="flex flex-wrap gap-2">
                   {Object.entries(exportData.summary.byStatus).map(
@@ -238,7 +238,7 @@ export default function ReportsPage() {
             {Object.keys(exportData.summary.byDivision).length > 0 && (
               <div className="mt-6">
                 <h4 className="text-sm font-medium mb-3">
-                  Registrations by Division
+                  Batches by Division
                 </h4>
                 <div className="grid gap-2 md:grid-cols-2 lg:grid-cols-4">
                   {Object.entries(exportData.summary.byDivision).map(
