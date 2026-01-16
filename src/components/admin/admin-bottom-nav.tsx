@@ -8,6 +8,7 @@ import {
   Building2,
   Church,
   Users,
+  UsersRound,
   FileText,
   Settings,
   UserCog,
@@ -40,6 +41,11 @@ export const adminBottomNavItems: BottomNavItem[] = [
 
 // Secondary items shown in "More" menu
 export const adminMoreNavItems: BottomNavItem[] = [
+  {
+    icon: UsersRound,
+    label: "Delegates",
+    href: "/admin/delegates",
+  },
   {
     icon: Church,
     label: "Churches",

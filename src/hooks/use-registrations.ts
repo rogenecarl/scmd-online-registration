@@ -14,6 +14,10 @@ import {
   updateBatch,
   cancelBatch,
   cancelRegistration,
+  getApprovedParticipants,
+  getApprovedParticipantsSummary,
+  getEventsWithApprovedParticipants,
+  type ApprovedParticipantsFilters,
 } from "@/actions/registrations";
 import {
   getRegistrations,
@@ -29,7 +33,12 @@ import {
   getEventsForFilter,
   getChurchesForFilter,
   getDivisionsForFilter,
+  getAdminApprovedParticipants,
+  getAdminParticipantsSummary,
+  getEventsWithApprovedParticipantsAdmin,
+  getChurchesWithApprovedParticipants,
   type RegistrationFilters,
+  type AdminParticipantsFilters,
 } from "@/actions/approval";
 import type {
   CreateRegistrationInput,
@@ -96,6 +105,39 @@ export function useMyBatch(batchId: string) {
       return result.data;
     },
     enabled: !!batchId,
+  });
+}
+
+export function useApprovedParticipants(filters: ApprovedParticipantsFilters = {}) {
+  return useQuery({
+    queryKey: [...queryKeys.approvedParticipants.list(), filters],
+    queryFn: async () => {
+      const result = await getApprovedParticipants(filters);
+      if (!result.success) throw new Error(result.error);
+      return result.data;
+    },
+  });
+}
+
+export function useApprovedParticipantsSummary() {
+  return useQuery({
+    queryKey: queryKeys.approvedParticipants.summary(),
+    queryFn: async () => {
+      const result = await getApprovedParticipantsSummary();
+      if (!result.success) throw new Error(result.error);
+      return result.data;
+    },
+  });
+}
+
+export function useEventsWithApprovedParticipants() {
+  return useQuery({
+    queryKey: queryKeys.approvedParticipants.events(),
+    queryFn: async () => {
+      const result = await getEventsWithApprovedParticipants();
+      if (!result.success) throw new Error(result.error);
+      return result.data;
+    },
   });
 }
 
@@ -502,6 +544,58 @@ export function useRejectRegistration() {
     },
     onError: (error: Error) => {
       toast.error(error.message || "Failed to reject registration");
+    },
+  });
+}
+
+// ==========================================
+// ADMIN PARTICIPANTS QUERIES
+// ==========================================
+
+export function useAdminApprovedParticipants(filters: AdminParticipantsFilters = {}) {
+  return useQuery({
+    queryKey: [...queryKeys.adminParticipants.list(), filters],
+    queryFn: async () => {
+      const result = await getAdminApprovedParticipants(filters);
+      if (!result.success) throw new Error(result.error);
+      return result.data;
+    },
+  });
+}
+
+export function useAdminParticipantsSummary(
+  filters: Pick<AdminParticipantsFilters, "eventId" | "churchId" | "divisionId"> = {}
+) {
+  return useQuery({
+    queryKey: [...queryKeys.adminParticipants.summary(), filters],
+    queryFn: async () => {
+      const result = await getAdminParticipantsSummary(filters);
+      if (!result.success) throw new Error(result.error);
+      return result.data;
+    },
+  });
+}
+
+export function useEventsWithApprovedParticipantsAdmin() {
+  return useQuery({
+    queryKey: queryKeys.adminParticipants.events(),
+    queryFn: async () => {
+      const result = await getEventsWithApprovedParticipantsAdmin();
+      if (!result.success) throw new Error(result.error);
+      return result.data;
+    },
+  });
+}
+
+export function useChurchesWithApprovedParticipants(
+  filters: Pick<AdminParticipantsFilters, "eventId" | "divisionId"> = {}
+) {
+  return useQuery({
+    queryKey: [...queryKeys.adminParticipants.churches(), filters],
+    queryFn: async () => {
+      const result = await getChurchesWithApprovedParticipants(filters);
+      if (!result.success) throw new Error(result.error);
+      return result.data;
     },
   });
 }

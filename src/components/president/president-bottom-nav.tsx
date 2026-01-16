@@ -6,9 +6,10 @@ import {
   Calendar,
   ClipboardCheck,
   Settings,
+  Users,
 } from "lucide-react";
 
-// Primary items shown in bottom nav (4 items - no "More" needed)
+// Primary items shown in bottom nav (4 items max)
 export const presidentBottomNavItems: BottomNavItem[] = [
   {
     icon: LayoutDashboard,
@@ -26,11 +27,17 @@ export const presidentBottomNavItems: BottomNavItem[] = [
     href: "/president/registrations",
   },
   {
+    icon: Users,
+    label: "Delegates",
+    href: "/president/delegates",
+  },
+];
+
+// Additional items for "More" menu
+export const presidentMoreNavItems: BottomNavItem[] = [
+  {
     icon: Settings,
     label: "Settings",
     href: "/president/settings",
   },
 ];
-
-// No "More" items needed for president (only 4 nav items)
-export const presidentMoreNavItems: BottomNavItem[] = [];

@@ -1198,3 +1198,300 @@ export async function updateRegistration(
     return { success: false, error: "Failed to update registration" };
   }
 }
+
+// ==========================================
+// APPROVED PARTICIPANTS QUERIES
+// ==========================================
+
+export type ParticipantType = "delegate" | "sibling" | "cook";
+
+export type ApprovedParticipant = {
+  id: string;
+  fullName: string;
+  nickname: string | null;
+  age: number;
+  gender: Gender;
+  type: ParticipantType;
+  eventId: string;
+  eventName: string;
+  batchNumber: number;
+  registrationId: string;
+};
+
+export type ApprovedParticipantsFilters = {
+  page?: number;
+  pageSize?: number;
+  search?: string;
+  type?: ParticipantType;
+  eventId?: string;
+  gender?: Gender;
+};
+
+export type ApprovedParticipantsResponse = {
+  items: ApprovedParticipant[];
+  page: number;
+  pageSize: number;
+  total: number;
+  totalPages: number;
+};
+
+export type ApprovedParticipantsSummary = {
+  totalDelegates: number;
+  totalSiblings: number;
+  totalCooks: number;
+  totalParticipants: number;
+};
+
+export async function getApprovedParticipants(
+  filters: ApprovedParticipantsFilters = {}
+): Promise<ActionResponse<ApprovedParticipantsResponse>> {
+  await requireRole("PRESIDENT");
+
+  try {
+    const churchId = await getPresidentChurchId();
+    if (!churchId) {
+      return { success: false, error: "You must be assigned to a church" };
+    }
+
+    const {
+      page = 1,
+      pageSize = 10,
+      search,
+      type,
+      eventId,
+      gender,
+    } = filters;
+
+    // Get all approved batches for the church
+    const approvedBatches = await prisma.registrationBatch.findMany({
+      where: {
+        status: "APPROVED",
+        registration: {
+          churchId,
+          ...(eventId && { eventId }),
+        },
+      },
+      include: {
+        registration: {
+          include: {
+            event: {
+              select: { id: true, name: true },
+            },
+          },
+        },
+        delegates: {
+          select: {
+            id: true,
+            fullName: true,
+            nickname: true,
+            age: true,
+            gender: true,
+            isSibling: true,
+          },
+        },
+        cooks: {
+          select: {
+            id: true,
+            fullName: true,
+            nickname: true,
+            age: true,
+            gender: true,
+          },
+        },
+      },
+      orderBy: { createdAt: "desc" },
+    });
+
+    // Transform data into unified participant list
+    let participants: ApprovedParticipant[] = [];
+
+    for (const batch of approvedBatches) {
+      // Add delegates (non-siblings)
+      if (type === undefined || type === "delegate") {
+        const delegates = batch.delegates
+          .filter((d) => !d.isSibling)
+          .map((d) => ({
+            id: d.id,
+            fullName: d.fullName,
+            nickname: d.nickname,
+            age: d.age,
+            gender: d.gender,
+            type: "delegate" as ParticipantType,
+            eventId: batch.registration.event.id,
+            eventName: batch.registration.event.name,
+            batchNumber: batch.batchNumber,
+            registrationId: batch.registration.id,
+          }));
+        participants.push(...delegates);
+      }
+
+      // Add siblings
+      if (type === undefined || type === "sibling") {
+        const siblings = batch.delegates
+          .filter((d) => d.isSibling)
+          .map((d) => ({
+            id: d.id,
+            fullName: d.fullName,
+            nickname: d.nickname,
+            age: d.age,
+            gender: d.gender,
+            type: "sibling" as ParticipantType,
+            eventId: batch.registration.event.id,
+            eventName: batch.registration.event.name,
+            batchNumber: batch.batchNumber,
+            registrationId: batch.registration.id,
+          }));
+        participants.push(...siblings);
+      }
+
+      // Add cooks
+      if (type === undefined || type === "cook") {
+        const cooks = batch.cooks.map((c) => ({
+          id: c.id,
+          fullName: c.fullName,
+          nickname: c.nickname,
+          age: c.age,
+          gender: c.gender,
+          type: "cook" as ParticipantType,
+          eventId: batch.registration.event.id,
+          eventName: batch.registration.event.name,
+          batchNumber: batch.batchNumber,
+          registrationId: batch.registration.id,
+        }));
+        participants.push(...cooks);
+      }
+    }
+
+    // Apply gender filter
+    if (gender) {
+      participants = participants.filter((p) => p.gender === gender);
+    }
+
+    // Apply search filter
+    if (search) {
+      const searchLower = search.toLowerCase();
+      participants = participants.filter(
+        (p) =>
+          p.fullName.toLowerCase().includes(searchLower) ||
+          p.nickname?.toLowerCase().includes(searchLower) ||
+          p.eventName.toLowerCase().includes(searchLower)
+      );
+    }
+
+    // Sort by event name, then by full name
+    participants.sort((a, b) => {
+      const eventCompare = a.eventName.localeCompare(b.eventName);
+      if (eventCompare !== 0) return eventCompare;
+      return a.fullName.localeCompare(b.fullName);
+    });
+
+    // Pagination
+    const total = participants.length;
+    const totalPages = Math.ceil(total / pageSize);
+    const startIndex = (page - 1) * pageSize;
+    const paginatedItems = participants.slice(startIndex, startIndex + pageSize);
+
+    return {
+      success: true,
+      data: {
+        items: paginatedItems,
+        page,
+        pageSize,
+        total,
+        totalPages,
+      },
+    };
+  } catch (error) {
+    console.error("Failed to fetch approved participants:", error);
+    return { success: false, error: "Failed to fetch approved participants" };
+  }
+}
+
+export async function getApprovedParticipantsSummary(): Promise<
+  ActionResponse<ApprovedParticipantsSummary>
+> {
+  await requireRole("PRESIDENT");
+
+  try {
+    const churchId = await getPresidentChurchId();
+    if (!churchId) {
+      return { success: false, error: "You must be assigned to a church" };
+    }
+
+    // Get all approved batches for the church
+    const approvedBatches = await prisma.registrationBatch.findMany({
+      where: {
+        status: "APPROVED",
+        registration: { churchId },
+      },
+      include: {
+        delegates: {
+          select: { isSibling: true },
+        },
+        _count: {
+          select: { cooks: true },
+        },
+      },
+    });
+
+    let totalDelegates = 0;
+    let totalSiblings = 0;
+    let totalCooks = 0;
+
+    for (const batch of approvedBatches) {
+      totalDelegates += batch.delegates.filter((d) => !d.isSibling).length;
+      totalSiblings += batch.delegates.filter((d) => d.isSibling).length;
+      totalCooks += batch._count.cooks;
+    }
+
+    return {
+      success: true,
+      data: {
+        totalDelegates,
+        totalSiblings,
+        totalCooks,
+        totalParticipants: totalDelegates + totalSiblings + totalCooks,
+      },
+    };
+  } catch (error) {
+    console.error("Failed to fetch participants summary:", error);
+    return { success: false, error: "Failed to fetch participants summary" };
+  }
+}
+
+export async function getEventsWithApprovedParticipants(): Promise<
+  ActionResponse<{ id: string; name: string }[]>
+> {
+  await requireRole("PRESIDENT");
+
+  try {
+    const churchId = await getPresidentChurchId();
+    if (!churchId) {
+      return { success: false, error: "You must be assigned to a church" };
+    }
+
+    const registrations = await prisma.registration.findMany({
+      where: {
+        churchId,
+        batches: {
+          some: { status: "APPROVED" },
+        },
+      },
+      include: {
+        event: {
+          select: { id: true, name: true },
+        },
+      },
+    });
+
+    const events = registrations.map((r) => r.event);
+    const uniqueEvents = Array.from(
+      new Map(events.map((e) => [e.id, e])).values()
+    );
+
+    return { success: true, data: uniqueEvents };
+  } catch (error) {
+    console.error("Failed to fetch events with approved participants:", error);
+    return { success: false, error: "Failed to fetch events" };
+  }
+}

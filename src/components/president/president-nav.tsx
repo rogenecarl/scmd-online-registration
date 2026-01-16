@@ -6,6 +6,7 @@ import {
   Calendar,
   ClipboardCheck,
   Settings,
+  Users,
 } from "lucide-react";
 
 export const presidentNavSections: NavSection[] = [
@@ -31,6 +32,11 @@ export const presidentNavSections: NavSection[] = [
         title: "My Registrations",
         href: "/president/registrations",
         icon: ClipboardCheck,
+      },
+      {
+        title: "View Delegates",
+        href: "/president/delegates",
+        icon: Users,
       },
     ],
   },

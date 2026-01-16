@@ -92,6 +92,23 @@ export const queryKeys = {
       [...queryKeys.presidentEvents.all, "forRegistration", eventId] as const,
   },
 
+  // Approved participants queries (president)
+  approvedParticipants: {
+    all: ["approvedParticipants"] as const,
+    list: () => [...queryKeys.approvedParticipants.all, "list"] as const,
+    summary: () => [...queryKeys.approvedParticipants.all, "summary"] as const,
+    events: () => [...queryKeys.approvedParticipants.all, "events"] as const,
+  },
+
+  // Admin participants queries
+  adminParticipants: {
+    all: ["adminParticipants"] as const,
+    list: () => [...queryKeys.adminParticipants.all, "list"] as const,
+    summary: () => [...queryKeys.adminParticipants.all, "summary"] as const,
+    events: () => [...queryKeys.adminParticipants.all, "events"] as const,
+    churches: () => [...queryKeys.adminParticipants.all, "churches"] as const,
+  },
+
   // Dashboard queries
   dashboard: {
     all: ["dashboard"] as const,

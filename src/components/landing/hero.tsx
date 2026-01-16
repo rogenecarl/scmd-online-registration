@@ -2,47 +2,42 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Calendar, Users, Church, ClipboardCheck } from "lucide-react";
+import { ArrowRight, Calendar, Users, ClipboardCheck } from "lucide-react";
 
 export function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-background pt-16">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
+      {/* Base Gradient Background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-white to-violet-50/50 dark:from-slate-950 dark:via-slate-900 dark:to-violet-950/30" />
+
+      {/* Secondary Gradient Layer for Depth */}
+      <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-primary/5 dark:from-slate-950 dark:via-transparent dark:to-violet-500/10" />
+
       {/* Background Effects */}
       <div className="absolute inset-0 overflow-hidden">
         {/* Gradient Orbs */}
-        <div className="absolute top-1/4 -left-32 h-96 w-96 rounded-full bg-primary/10 blur-[128px] animate-pulse" />
-        <div className="absolute top-1/3 -right-32 h-96 w-96 rounded-full bg-violet-500/10 blur-[128px] animate-pulse delay-700" />
-        <div className="absolute bottom-1/4 left-1/3 h-64 w-64 rounded-full bg-blue-500/10 blur-[100px] animate-pulse delay-1000" />
+        <div className="absolute top-1/4 -left-32 h-[500px] w-[500px] rounded-full bg-primary/15 blur-[128px] animate-pulse" />
+        <div className="absolute top-1/3 -right-32 h-[500px] w-[500px] rounded-full bg-violet-500/15 blur-[128px] animate-pulse delay-700" />
+        <div className="absolute bottom-1/4 left-1/3 h-80 w-80 rounded-full bg-blue-500/10 blur-[100px] animate-pulse delay-1000" />
 
         {/* Grid Pattern */}
         <div
-          className="absolute inset-0 opacity-[0.015] dark:opacity-[0.03]"
+          className="absolute inset-0 opacity-[0.02] dark:opacity-[0.04]"
           style={{
             backgroundImage: `linear-gradient(to right, currentColor 1px, transparent 1px), linear-gradient(to bottom, currentColor 1px, transparent 1px)`,
             backgroundSize: "64px 64px",
           }}
         />
 
-        {/* Radial Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background" />
+        {/* Bottom Fade Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-white/80 dark:to-slate-950/80" />
       </div>
 
       {/* Content */}
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
         <div className="flex flex-col items-center text-center">
-          {/* Badge */}
-          <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 mb-8">
-            <div className="inline-flex items-center gap-2 rounded-full border border-border bg-background/50 backdrop-blur-sm px-4 py-1.5 text-sm font-medium text-muted-foreground shadow-sm">
-              <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
-              </span>
-              SCMD Event Registration Portal
-            </div>
-          </div>
-
           {/* Headline */}
-          <h1 className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-100 max-w-4xl text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl xl:text-7xl">
+          <h1 className="animate-in fade-in slide-in-from-bottom-4 duration-700 max-w-4xl text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl xl:text-7xl">
             Register for{" "}
             <span className="relative">
               <span className="relative z-10 bg-gradient-to-r from-primary via-violet-600 to-primary bg-clip-text text-transparent dark:from-white dark:via-violet-400 dark:to-white">
@@ -74,11 +69,7 @@ export function Hero() {
           </div>
 
           {/* Feature Pills */}
-          <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-500 mt-16 grid grid-cols-1 sm:grid-cols-4 gap-4 sm:gap-6">
-            <FeaturePill
-              icon={<Church className="h-4 w-4" />}
-              text="Multi-church support"
-            />
+          <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-500 mt-16 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
             <FeaturePill
               icon={<Users className="h-4 w-4" />}
               text="Delegate management"
@@ -94,12 +85,11 @@ export function Hero() {
           </div>
 
           {/* Stats Preview */}
-          <div className="animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-700 mt-20 w-full max-w-4xl">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-700 mt-20 w-full max-w-3xl">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <StatCard label="Divisions" value="8" />
               <StatCard label="Churches" value="78" />
-              <StatCard label="Events" value="1" />
-              <StatCard label="Delegates" value="1,000+" />
+              <StatCard label="event available" value="1" />
             </div>
           </div>
         </div>

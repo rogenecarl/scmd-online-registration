@@ -1145,3 +1145,412 @@ export async function getDivisionsForFilter(): Promise<
     return { success: false, error: "Failed to fetch divisions" };
   }
 }
+
+// ==========================================
+// ADMIN APPROVED PARTICIPANTS QUERIES
+// ==========================================
+
+export type AdminParticipantType = "delegate" | "sibling" | "cook";
+
+export type AdminApprovedParticipant = {
+  id: string;
+  fullName: string;
+  nickname: string | null;
+  age: number;
+  gender: Gender;
+  type: AdminParticipantType;
+  eventId: string;
+  eventName: string;
+  churchId: string;
+  churchName: string;
+  divisionId: string;
+  divisionName: string;
+  batchNumber: number;
+  registrationId: string;
+};
+
+export type AdminParticipantsFilters = {
+  page?: number;
+  pageSize?: number;
+  search?: string;
+  type?: AdminParticipantType;
+  eventId?: string;
+  churchId?: string;
+  divisionId?: string;
+  gender?: Gender;
+};
+
+export type AdminParticipantsResponse = {
+  items: AdminApprovedParticipant[];
+  page: number;
+  pageSize: number;
+  total: number;
+  totalPages: number;
+};
+
+export type AdminParticipantsSummary = {
+  totalDelegates: number;
+  totalSiblings: number;
+  totalCooks: number;
+  totalParticipants: number;
+  churchCount: number;
+};
+
+export async function getAdminApprovedParticipants(
+  filters: AdminParticipantsFilters = {}
+): Promise<ActionResponse<AdminParticipantsResponse>> {
+  await requireRole("ADMIN");
+
+  try {
+    const {
+      page = 1,
+      pageSize = 20,
+      search,
+      type,
+      eventId,
+      churchId,
+      divisionId,
+      gender,
+    } = filters;
+
+    // Build where clause for approved batches
+    const whereClause: Record<string, unknown> = {
+      status: "APPROVED",
+    };
+
+    if (eventId) {
+      whereClause.registration = { ...whereClause.registration as object, eventId };
+    }
+
+    if (churchId) {
+      whereClause.registration = { ...whereClause.registration as object, churchId };
+    }
+
+    if (divisionId) {
+      whereClause.registration = {
+        ...whereClause.registration as object,
+        church: { divisionId },
+      };
+    }
+
+    // Get all approved batches
+    const approvedBatches = await prisma.registrationBatch.findMany({
+      where: whereClause,
+      include: {
+        registration: {
+          include: {
+            event: {
+              select: { id: true, name: true },
+            },
+            church: {
+              select: {
+                id: true,
+                name: true,
+                division: {
+                  select: { id: true, name: true },
+                },
+              },
+            },
+          },
+        },
+        delegates: {
+          select: {
+            id: true,
+            fullName: true,
+            nickname: true,
+            age: true,
+            gender: true,
+            isSibling: true,
+          },
+        },
+        cooks: {
+          select: {
+            id: true,
+            fullName: true,
+            nickname: true,
+            age: true,
+            gender: true,
+          },
+        },
+      },
+      orderBy: { createdAt: "desc" },
+    });
+
+    // Transform data into unified participant list
+    let participants: AdminApprovedParticipant[] = [];
+
+    for (const batch of approvedBatches) {
+      const church = batch.registration.church;
+      const event = batch.registration.event;
+
+      // Add delegates (non-siblings)
+      if (type === undefined || type === "delegate") {
+        const delegates = batch.delegates
+          .filter((d) => !d.isSibling)
+          .map((d) => ({
+            id: d.id,
+            fullName: d.fullName,
+            nickname: d.nickname,
+            age: d.age,
+            gender: d.gender,
+            type: "delegate" as AdminParticipantType,
+            eventId: event.id,
+            eventName: event.name,
+            churchId: church.id,
+            churchName: church.name,
+            divisionId: church.division.id,
+            divisionName: church.division.name,
+            batchNumber: batch.batchNumber,
+            registrationId: batch.registration.id,
+          }));
+        participants.push(...delegates);
+      }
+
+      // Add siblings
+      if (type === undefined || type === "sibling") {
+        const siblings = batch.delegates
+          .filter((d) => d.isSibling)
+          .map((d) => ({
+            id: d.id,
+            fullName: d.fullName,
+            nickname: d.nickname,
+            age: d.age,
+            gender: d.gender,
+            type: "sibling" as AdminParticipantType,
+            eventId: event.id,
+            eventName: event.name,
+            churchId: church.id,
+            churchName: church.name,
+            divisionId: church.division.id,
+            divisionName: church.division.name,
+            batchNumber: batch.batchNumber,
+            registrationId: batch.registration.id,
+          }));
+        participants.push(...siblings);
+      }
+
+      // Add cooks
+      if (type === undefined || type === "cook") {
+        const cooks = batch.cooks.map((c) => ({
+          id: c.id,
+          fullName: c.fullName,
+          nickname: c.nickname,
+          age: c.age,
+          gender: c.gender,
+          type: "cook" as AdminParticipantType,
+          eventId: event.id,
+          eventName: event.name,
+          churchId: church.id,
+          churchName: church.name,
+          divisionId: church.division.id,
+          divisionName: church.division.name,
+          batchNumber: batch.batchNumber,
+          registrationId: batch.registration.id,
+        }));
+        participants.push(...cooks);
+      }
+    }
+
+    // Apply gender filter
+    if (gender) {
+      participants = participants.filter((p) => p.gender === gender);
+    }
+
+    // Apply search filter
+    if (search) {
+      const searchLower = search.toLowerCase();
+      participants = participants.filter(
+        (p) =>
+          p.fullName.toLowerCase().includes(searchLower) ||
+          p.nickname?.toLowerCase().includes(searchLower) ||
+          p.churchName.toLowerCase().includes(searchLower) ||
+          p.eventName.toLowerCase().includes(searchLower) ||
+          p.divisionName.toLowerCase().includes(searchLower)
+      );
+    }
+
+    // Sort by church name, then by full name
+    participants.sort((a, b) => {
+      const churchCompare = a.churchName.localeCompare(b.churchName);
+      if (churchCompare !== 0) return churchCompare;
+      return a.fullName.localeCompare(b.fullName);
+    });
+
+    // Pagination
+    const total = participants.length;
+    const totalPages = Math.ceil(total / pageSize);
+    const startIndex = (page - 1) * pageSize;
+    const paginatedItems = participants.slice(startIndex, startIndex + pageSize);
+
+    return {
+      success: true,
+      data: {
+        items: paginatedItems,
+        page,
+        pageSize,
+        total,
+        totalPages,
+      },
+    };
+  } catch (error) {
+    console.error("Failed to fetch approved participants:", error);
+    return { success: false, error: "Failed to fetch approved participants" };
+  }
+}
+
+export async function getAdminParticipantsSummary(
+  filters: Pick<AdminParticipantsFilters, "eventId" | "churchId" | "divisionId"> = {}
+): Promise<ActionResponse<AdminParticipantsSummary>> {
+  await requireRole("ADMIN");
+
+  try {
+    const { eventId, churchId, divisionId } = filters;
+
+    // Build where clause
+    const whereClause: Record<string, unknown> = {
+      status: "APPROVED",
+    };
+
+    if (eventId) {
+      whereClause.registration = { ...whereClause.registration as object, eventId };
+    }
+
+    if (churchId) {
+      whereClause.registration = { ...whereClause.registration as object, churchId };
+    }
+
+    if (divisionId) {
+      whereClause.registration = {
+        ...whereClause.registration as object,
+        church: { divisionId },
+      };
+    }
+
+    // Get all approved batches
+    const approvedBatches = await prisma.registrationBatch.findMany({
+      where: whereClause,
+      include: {
+        registration: {
+          select: { churchId: true },
+        },
+        delegates: {
+          select: { isSibling: true },
+        },
+        _count: {
+          select: { cooks: true },
+        },
+      },
+    });
+
+    let totalDelegates = 0;
+    let totalSiblings = 0;
+    let totalCooks = 0;
+    const churchIds = new Set<string>();
+
+    for (const batch of approvedBatches) {
+      totalDelegates += batch.delegates.filter((d) => !d.isSibling).length;
+      totalSiblings += batch.delegates.filter((d) => d.isSibling).length;
+      totalCooks += batch._count.cooks;
+      churchIds.add(batch.registration.churchId);
+    }
+
+    return {
+      success: true,
+      data: {
+        totalDelegates,
+        totalSiblings,
+        totalCooks,
+        totalParticipants: totalDelegates + totalSiblings + totalCooks,
+        churchCount: churchIds.size,
+      },
+    };
+  } catch (error) {
+    console.error("Failed to fetch participants summary:", error);
+    return { success: false, error: "Failed to fetch participants summary" };
+  }
+}
+
+export async function getChurchesWithApprovedParticipants(
+  filters: Pick<AdminParticipantsFilters, "eventId" | "divisionId"> = {}
+): Promise<ActionResponse<{ id: string; name: string; divisionName: string }[]>> {
+  await requireRole("ADMIN");
+
+  try {
+    const { eventId, divisionId } = filters;
+
+    // Build where clause
+    const whereClause: Record<string, unknown> = {
+      batches: {
+        some: { status: "APPROVED" },
+      },
+    };
+
+    if (eventId) {
+      whereClause.eventId = eventId;
+    }
+
+    if (divisionId) {
+      whereClause.church = { divisionId };
+    }
+
+    const registrations = await prisma.registration.findMany({
+      where: whereClause,
+      include: {
+        church: {
+          select: {
+            id: true,
+            name: true,
+            division: {
+              select: { name: true },
+            },
+          },
+        },
+      },
+      distinct: ["churchId"],
+    });
+
+    const churches = registrations.map((r) => ({
+      id: r.church.id,
+      name: r.church.name,
+      divisionName: r.church.division.name,
+    }));
+
+    // Sort by name
+    churches.sort((a, b) => a.name.localeCompare(b.name));
+
+    return { success: true, data: churches };
+  } catch (error) {
+    console.error("Failed to fetch churches with approved participants:", error);
+    return { success: false, error: "Failed to fetch churches" };
+  }
+}
+
+export async function getEventsWithApprovedParticipantsAdmin(): Promise<
+  ActionResponse<{ id: string; name: string }[]>
+> {
+  await requireRole("ADMIN");
+
+  try {
+    const registrations = await prisma.registration.findMany({
+      where: {
+        batches: {
+          some: { status: "APPROVED" },
+        },
+      },
+      include: {
+        event: {
+          select: { id: true, name: true },
+        },
+      },
+      distinct: ["eventId"],
+    });
+
+    const events = registrations.map((r) => r.event);
+    events.sort((a, b) => a.name.localeCompare(b.name));
+
+    return { success: true, data: events };
+  } catch (error) {
+    console.error("Failed to fetch events with approved participants:", error);
+    return { success: false, error: "Failed to fetch events" };
+  }
+}
