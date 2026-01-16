@@ -27,6 +27,7 @@ import {
 } from "@/schemas";
 import { PersonDialog, type PersonFormData, type PersonType } from "./person-dialog";
 import { PersonTable } from "./person-table";
+import { ImageExtractDialog } from "./image-extract-dialog";
 import { FeeSummary } from "./fee-summary";
 import { ImageUpload } from "@/components/shared/image-upload";
 import { uploadFile } from "@/lib/supabase-storage";
@@ -93,6 +94,15 @@ export function RegistrationForm({ mode, event, registrationId, batchData }: Reg
     open: false,
     type: "delegate",
     mode: "add",
+  });
+
+  // Image extract dialog state
+  const [imageExtractDialog, setImageExtractDialog] = useState<{
+    open: boolean;
+    type: PersonType;
+  }>({
+    open: false,
+    type: "delegate",
   });
 
   // Form for receipt preview
@@ -232,6 +242,29 @@ export function RegistrationForm({ mode, event, registrationId, batchData }: Reg
         store.removeCook(index);
         break;
     }
+  };
+
+  // Open image extract dialog
+  const openImageExtractDialog = (type: PersonType) => {
+    setImageExtractDialog({ open: true, type });
+  };
+
+  // Handle extracted persons from image
+  const handleExtractedPersons = (persons: PersonFormData[]) => {
+    const { type } = imageExtractDialog;
+    persons.forEach((person) => {
+      switch (type) {
+        case "delegate":
+          store.addDelegate(person);
+          break;
+        case "sibling":
+          store.addSibling(person);
+          break;
+        case "cook":
+          store.addCook(person);
+          break;
+      }
+    });
   };
 
   // Handle file selection for deferred upload
@@ -422,6 +455,14 @@ export function RegistrationForm({ mode, event, registrationId, batchData }: Reg
         onSubmit={handleDialogSubmit}
       />
 
+      {/* Image Extract Dialog */}
+      <ImageExtractDialog
+        open={imageExtractDialog.open}
+        onOpenChange={(open) => setImageExtractDialog((prev) => ({ ...prev, open }))}
+        type={imageExtractDialog.type}
+        onExtracted={handleExtractedPersons}
+      />
+
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 md:space-y-8">
           <div className="grid gap-6 md:gap-8 lg:grid-cols-3">
@@ -478,6 +519,7 @@ export function RegistrationForm({ mode, event, registrationId, batchData }: Reg
                     onAdd={() => openAddDialog("delegate")}
                     onEdit={(index) => openEditDialog("delegate", index)}
                     onRemove={(index) => handleRemove("delegate", index)}
+                    onImportFromImage={() => openImageExtractDialog("delegate")}
                     maxCount={100}
                     emptyMessage={
                       mode === "create"
@@ -529,6 +571,7 @@ export function RegistrationForm({ mode, event, registrationId, batchData }: Reg
                       onAdd={() => openAddDialog("sibling")}
                       onEdit={(index) => openEditDialog("sibling", index)}
                       onRemove={(index) => handleRemove("sibling", index)}
+                      onImportFromImage={() => openImageExtractDialog("sibling")}
                       maxCount={50}
                       discountApplied={siblingDiscountApplies}
                       emptyMessage="No siblings added yet. Add 3 or more siblings to get the discounted rate."
@@ -552,6 +595,7 @@ export function RegistrationForm({ mode, event, registrationId, batchData }: Reg
                     onAdd={() => openAddDialog("cook")}
                     onEdit={(index) => openEditDialog("cook", index)}
                     onRemove={(index) => handleRemove("cook", index)}
+                    onImportFromImage={() => openImageExtractDialog("cook")}
                     maxCount={50}
                     emptyMessage="No cooks added. This section is optional."
                   />

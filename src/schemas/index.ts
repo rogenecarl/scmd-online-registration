@@ -12,3 +12,4 @@ export * from "./cook.schema";
 export * from "./registration.schema";
 export * from "./president.schema";
 export * from "./approval.schema";
+export * from "./extracted-person.schema";

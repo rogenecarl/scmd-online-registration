@@ -20,6 +20,7 @@ import {
   Plus,
   ChevronLeft,
   ChevronRight,
+  ImageIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { PersonFormData, PersonType } from "./person-dialog";
@@ -30,6 +31,7 @@ interface PersonTableProps {
   onAdd: () => void;
   onEdit: (index: number) => void;
   onRemove: (index: number) => void;
+  onImportFromImage?: () => void;
   maxCount?: number;
   emptyMessage?: string;
   discountApplied?: boolean;
@@ -73,6 +75,7 @@ export function PersonTable({
   onAdd,
   onEdit,
   onRemove,
+  onImportFromImage,
   maxCount = 100,
   emptyMessage,
   discountApplied = false,
@@ -143,18 +146,34 @@ export function PersonTable({
             </Badge>
           )}
         </div>
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          onClick={onAdd}
-          disabled={persons.length >= maxCount}
-          className={cn("touch-target", config.buttonColor)}
-        >
-          <Plus className="mr-1 h-4 w-4" />
-          <span className="hidden sm:inline">Add {config.label}</span>
-          <span className="sm:hidden">Add</span>
-        </Button>
+        <div className="flex items-center gap-2">
+          {onImportFromImage && (
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={onImportFromImage}
+              disabled={persons.length >= maxCount}
+              className={cn("touch-target gap-1.5 text-violet-600 border-violet-200 hover:bg-violet-50 hover:text-violet-700 dark:border-violet-800 dark:hover:bg-violet-950")}
+            >
+              <ImageIcon className="h-4 w-4" />
+              <span className="hidden sm:inline">Import from Image</span>
+              <span className="sm:hidden">Import</span>
+            </Button>
+          )}
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={onAdd}
+            disabled={persons.length >= maxCount}
+            className={cn("touch-target", config.buttonColor)}
+          >
+            <Plus className="mr-1 h-4 w-4" />
+            <span className="hidden sm:inline">Add {config.label}</span>
+            <span className="sm:hidden">Add</span>
+          </Button>
+        </div>
       </div>
 
       {/* Empty state */}
