@@ -94,9 +94,9 @@ export function PersonForm({
           name={`${type}.${index}.nickname`}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Nickname</FormLabel>
+              <FormLabel>Nickname *</FormLabel>
               <FormControl>
-                <Input placeholder="Jun" {...field} value={field.value ?? ""} />
+                <Input placeholder="For ID" {...field} value={field.value ?? ""} />
               </FormControl>
               <FormMessage />
             </FormItem>

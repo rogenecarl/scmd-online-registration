@@ -41,10 +41,9 @@ const personFormSchema = z.object({
     .trim(),
   nickname: z
     .string()
+    .min(1, "Nickname is required")
     .max(50, "Nickname must be 50 characters or less")
-    .trim()
-    .optional()
-    .or(z.literal("")),
+    .trim(),
   age: z
     .number({ message: "Age must be a valid number" })
     .min(1, "Age must be at least 1")
@@ -170,13 +169,12 @@ export function PersonDialog({
               name="nickname"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Nickname</FormLabel>
+                  <FormLabel>Nickname *</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Jun (optional)"
+                      placeholder="For ID"
                       autoComplete="off"
                       {...field}
-                      value={field.value ?? ""}
                     />
                   </FormControl>
                   <FormMessage />

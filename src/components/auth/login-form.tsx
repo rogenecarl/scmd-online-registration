@@ -5,7 +5,6 @@ import { Input } from "@/components/ui/input"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { SignInSchema } from "@/schema"
 import { zodResolver } from "@hookform/resolvers/zod"
-import Link from "next/link"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
@@ -106,12 +105,6 @@ export function LoginInForm() {
                                 <FormItem>
                                     <div className="flex items-center justify-between">
                                         <FormLabel className="text-foreground">Password</FormLabel>
-                                        <Link
-                                            href="/forgot-password"
-                                            className="text-sm font-medium text-primary hover:text-primary/80 transition-colors"
-                                        >
-                                            Forgot password?
-                                        </Link>
                                     </div>
                                     <FormControl>
                                         <div className="relative group">

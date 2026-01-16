@@ -9,10 +9,9 @@ export const cookSchema = z.object({
     .trim(),
   nickname: z
     .string()
+    .min(1, "Nickname is required")
     .max(50, "Nickname must be 50 characters or less")
-    .trim()
-    .optional()
-    .or(z.literal("")),
+    .trim(),
   age: z
     .union([z.string(), z.number()])
     .transform((val) => (typeof val === "string" ? parseInt(val, 10) : val))

@@ -57,7 +57,7 @@ export function Hero() {
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300 mt-10 flex flex-col sm:flex-row items-center gap-4">
             <Button size="lg" asChild className="w-full sm:w-auto shadow-lg shadow-primary/25">
               <Link href="/login">
-                Church President Login
+                 Get Started
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
