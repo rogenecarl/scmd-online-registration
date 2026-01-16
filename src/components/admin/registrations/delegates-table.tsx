@@ -9,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Users } from "lucide-react";
+import { Users, UsersRound } from "lucide-react";
 import type { Gender } from "@/lib/generated/prisma";
 
 type Delegate = {
@@ -18,6 +18,7 @@ type Delegate = {
   nickname: string | null;
   age: number;
   gender: Gender;
+  isSibling: boolean;
   createdAt: Date;
 };
 
@@ -35,8 +36,19 @@ export function DelegatesTable({ delegates }: DelegatesTableProps) {
     );
   }
 
+  const siblingCount = delegates.filter((d) => d.isSibling).length;
+
   return (
     <div className="rounded-lg border">
+      {/* Sibling summary if there are siblings */}
+      {siblingCount > 0 && (
+        <div className="flex items-center gap-2 px-4 py-2 border-b bg-emerald-50/50 dark:bg-emerald-950/20">
+          <UsersRound className="h-4 w-4 text-emerald-600" />
+          <span className="text-xs text-emerald-700 dark:text-emerald-400">
+            {siblingCount} sibling{siblingCount !== 1 ? "s" : ""} in this batch
+          </span>
+        </div>
+      )}
       <Table>
         <TableHeader>
           <TableRow>
@@ -45,6 +57,7 @@ export function DelegatesTable({ delegates }: DelegatesTableProps) {
             <TableHead>Nickname</TableHead>
             <TableHead className="text-center">Age</TableHead>
             <TableHead className="text-center">Gender</TableHead>
+            <TableHead className="text-center">Type</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -62,6 +75,17 @@ export function DelegatesTable({ delegates }: DelegatesTableProps) {
                 <Badge variant={delegate.gender === "MALE" ? "info" : "secondary"}>
                   {delegate.gender}
                 </Badge>
+              </TableCell>
+              <TableCell className="text-center">
+                {delegate.isSibling ? (
+                  <Badge variant="outline" className="bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 border-emerald-300 dark:border-emerald-700">
+                    Sibling
+                  </Badge>
+                ) : (
+                  <Badge variant="outline" className="text-muted-foreground">
+                    Regular
+                  </Badge>
+                )}
               </TableCell>
             </TableRow>
           ))}

@@ -25,6 +25,7 @@ import {
   User,
   Mail,
   Users,
+  UsersRound,
   ChefHat,
   CheckCircle,
   XCircle,
@@ -93,9 +94,33 @@ export function BatchDetail({ batchId }: BatchDetailProps) {
   // Use stored fees (captured at registration time)
   const delegateFee = batch.delegateFeePerPerson;
   const cookFee = batch.cookFeePerPerson;
-  const totalDelegateFees = batch.delegates.length * delegateFee;
-  const totalCookFees = batch.cooks.length * cookFee;
   const totalFees = batch.totalFee;
+
+  // Count regular delegates vs siblings
+  const regularDelegates = batch.delegates.filter((d) => !d.isSibling);
+  const siblings = batch.delegates.filter((d) => d.isSibling);
+  const regularCount = regularDelegates.length;
+  const siblingCount = siblings.length;
+
+  // Get sibling discount fee from event
+  const siblingDiscountFee = batch.isPreRegistration
+    ? batch.registration.event.preRegistrationSiblingDiscount
+    : batch.registration.event.onsiteSiblingDiscount;
+
+  // Sibling discount applies when 3+ siblings are registered AND discount fee is available
+  const siblingDiscountApplies = siblingCount >= 3 && siblingDiscountFee > 0;
+
+  // Calculate fees breakdown
+  const regularDelegateFees = regularCount * delegateFee;
+  const siblingFees = siblingDiscountApplies
+    ? siblingCount * siblingDiscountFee
+    : siblingCount * delegateFee; // If less than 3 siblings, they pay regular rate
+  const totalCookFees = batch.cooks.length * cookFee;
+
+  // Calculate potential savings
+  const potentialSavings = siblingDiscountApplies
+    ? siblingCount * (delegateFee - siblingDiscountFee)
+    : 0;
 
   return (
     <div className="space-y-4 md:space-y-6">
@@ -251,35 +276,126 @@ export function BatchDetail({ batchId }: BatchDetailProps) {
             (recorded at registration time)
           </CardDescription>
         </CardHeader>
-        <CardContent className="p-4 pt-0 md:p-6 md:pt-0">
-          <div className="grid gap-3 md:gap-4 sm:grid-cols-3">
-            <div className="flex items-center gap-3 p-3 md:p-4 rounded-lg bg-muted/50">
-              <Users className="h-6 w-6 md:h-8 md:w-8 text-primary shrink-0" />
-              <div className="min-w-0">
-                <p className="text-xl md:text-2xl font-bold">{batch.delegates.length}</p>
-                <p className="text-xs md:text-sm text-muted-foreground">
-                  Delegates @ {formatCurrency(delegateFee)}
-                </p>
-                <p className="text-sm md:text-base font-medium">{formatCurrency(totalDelegateFees)}</p>
+        <CardContent className="p-4 pt-0 md:p-6 md:pt-0 space-y-4">
+          {/* Fee Breakdown */}
+          <div className="space-y-3">
+            {/* Regular Delegates */}
+            {regularCount > 0 && (
+              <div className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+                <div className="flex items-center gap-3">
+                  <Users className="h-5 w-5 text-primary shrink-0" />
+                  <div>
+                    <p className="text-sm font-medium">Regular Delegates</p>
+                    <p className="text-xs text-muted-foreground">
+                      {regularCount} × {formatCurrency(delegateFee)}
+                    </p>
+                  </div>
+                </div>
+                <p className="text-sm font-semibold">{formatCurrency(regularDelegateFees)}</p>
               </div>
+            )}
+
+            {/* Siblings */}
+            {siblingCount > 0 && (
+              <div className={`flex items-center justify-between p-3 rounded-lg ${
+                siblingDiscountApplies
+                  ? "bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800"
+                  : "bg-muted/50"
+              }`}>
+                <div className="flex items-center gap-3">
+                  <UsersRound className={`h-5 w-5 shrink-0 ${
+                    siblingDiscountApplies ? "text-emerald-600" : "text-primary"
+                  }`} />
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <p className={`text-sm font-medium ${
+                        siblingDiscountApplies ? "text-emerald-700 dark:text-emerald-300" : ""
+                      }`}>
+                        Siblings
+                      </p>
+                      {siblingDiscountApplies && (
+                        <Badge variant="outline" className="text-xs bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-300 border-emerald-300 dark:border-emerald-700">
+                          Discounted
+                        </Badge>
+                      )}
+                    </div>
+                    <p className={`text-xs ${
+                      siblingDiscountApplies ? "text-emerald-600 dark:text-emerald-400" : "text-muted-foreground"
+                    }`}>
+                      {siblingCount} × {formatCurrency(siblingDiscountApplies ? siblingDiscountFee : delegateFee)}
+                    </p>
+                  </div>
+                </div>
+                <p className={`text-sm font-semibold ${
+                  siblingDiscountApplies ? "text-emerald-700 dark:text-emerald-300" : ""
+                }`}>
+                  {formatCurrency(siblingFees)}
+                </p>
+              </div>
+            )}
+
+            {/* Show placeholder if no delegates */}
+            {regularCount === 0 && siblingCount === 0 && (
+              <div className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+                <div className="flex items-center gap-3">
+                  <Users className="h-5 w-5 text-muted-foreground shrink-0" />
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground">No Delegates</p>
+                  </div>
+                </div>
+                <p className="text-sm font-semibold text-muted-foreground">{formatCurrency(0)}</p>
+              </div>
+            )}
+
+            {/* Cooks */}
+            <div className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+              <div className="flex items-center gap-3">
+                <ChefHat className="h-5 w-5 text-primary shrink-0" />
+                <div>
+                  <p className="text-sm font-medium">Cooks</p>
+                  <p className="text-xs text-muted-foreground">
+                    {batch.cooks.length} × {formatCurrency(cookFee)}
+                  </p>
+                </div>
+              </div>
+              <p className="text-sm font-semibold">{formatCurrency(totalCookFees)}</p>
             </div>
-            <div className="flex items-center gap-3 p-3 md:p-4 rounded-lg bg-muted/50">
-              <ChefHat className="h-6 w-6 md:h-8 md:w-8 text-primary shrink-0" />
-              <div className="min-w-0">
-                <p className="text-xl md:text-2xl font-bold">{batch.cooks.length}</p>
-                <p className="text-xs md:text-sm text-muted-foreground">
-                  Cooks @ {formatCurrency(cookFee)}
-                </p>
-                <p className="text-sm md:text-base font-medium">{formatCurrency(totalCookFees)}</p>
-              </div>
+          </div>
+
+          {/* Savings Badge */}
+          {potentialSavings > 0 && (
+            <div className="rounded-lg bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800 p-3 text-center">
+              <p className="text-xs font-medium text-emerald-600 dark:text-emerald-400">
+                Saved {formatCurrency(potentialSavings)} with sibling discount!
+              </p>
             </div>
-            <div className="flex items-center gap-3 p-3 md:p-4 rounded-lg bg-primary/10">
-              <div className="min-w-0">
-                <p className="text-xs md:text-sm text-muted-foreground">Total Amount</p>
-                <p className="text-xl md:text-2xl font-bold text-primary">
-                  {formatCurrency(totalFees)}
-                </p>
-              </div>
+          )}
+
+          {/* Total */}
+          <Separator />
+          <div className="flex items-center justify-between p-3 rounded-lg bg-primary/10">
+            <div className="flex items-center gap-3">
+              <Receipt className="h-5 w-5 text-primary shrink-0" />
+              <p className="text-sm font-semibold">Total Amount</p>
+            </div>
+            <p className="text-xl md:text-2xl font-bold text-primary">
+              {formatCurrency(totalFees)}
+            </p>
+          </div>
+
+          {/* Summary Stats */}
+          <div className="grid grid-cols-3 gap-2 pt-2">
+            <div className="text-center p-2 rounded-lg bg-muted/30">
+              <p className="text-lg md:text-xl font-bold">{batch.delegates.length}</p>
+              <p className="text-xs text-muted-foreground">Total Delegates</p>
+            </div>
+            <div className="text-center p-2 rounded-lg bg-muted/30">
+              <p className="text-lg md:text-xl font-bold">{siblingCount}</p>
+              <p className="text-xs text-muted-foreground">Siblings</p>
+            </div>
+            <div className="text-center p-2 rounded-lg bg-muted/30">
+              <p className="text-lg md:text-xl font-bold">{batch.cooks.length}</p>
+              <p className="text-xs text-muted-foreground">Cooks</p>
             </div>
           </div>
         </CardContent>

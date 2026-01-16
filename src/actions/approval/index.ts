@@ -78,9 +78,11 @@ export type AdminBatchDetail = AdminBatch & {
       startDate: Date;
       endDate: Date;
       preRegistrationFee: number;
+      preRegistrationSiblingDiscount: number;
       preRegistrationStart: Date;
       preRegistrationEnd: Date;
       onsiteRegistrationFee: number;
+      onsiteSiblingDiscount: number;
       cookRegistrationFee: number;
       status: EventStatus;
     };
@@ -104,6 +106,7 @@ export type AdminBatchDetail = AdminBatch & {
     nickname: string | null;
     age: number;
     gender: Gender;
+    isSibling: boolean;
     createdAt: Date;
   }[];
   cooks: {
@@ -164,9 +167,11 @@ export type AdminRegistrationDetail = AdminRegistration & {
     startDate: Date;
     endDate: Date;
     preRegistrationFee: number;
+    preRegistrationSiblingDiscount: number;
     preRegistrationStart: Date;
     preRegistrationEnd: Date;
     onsiteRegistrationFee: number;
+    onsiteSiblingDiscount: number;
     cookRegistrationFee: number;
     status: EventStatus;
   };
@@ -454,9 +459,11 @@ export async function getBatchById(
                 startDate: true,
                 endDate: true,
                 preRegistrationFee: true,
+                preRegistrationSiblingDiscount: true,
                 preRegistrationStart: true,
                 preRegistrationEnd: true,
                 onsiteRegistrationFee: true,
+                onsiteSiblingDiscount: true,
                 cookRegistrationFee: true,
                 status: true,
               },
@@ -482,6 +489,7 @@ export async function getBatchById(
             nickname: true,
             age: true,
             gender: true,
+            isSibling: true,
             createdAt: true,
           },
           orderBy: { createdAt: "asc" },
@@ -719,9 +727,11 @@ export async function getRegistrationById(
             startDate: true,
             endDate: true,
             preRegistrationFee: true,
+            preRegistrationSiblingDiscount: true,
             preRegistrationStart: true,
             preRegistrationEnd: true,
             onsiteRegistrationFee: true,
+            onsiteSiblingDiscount: true,
             cookRegistrationFee: true,
             status: true,
           },
@@ -760,6 +770,7 @@ export async function getRegistrationById(
                 nickname: true,
                 age: true,
                 gender: true,
+                isSibling: true,
                 createdAt: true,
               },
               orderBy: { createdAt: "asc" },
