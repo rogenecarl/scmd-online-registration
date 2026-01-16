@@ -19,15 +19,15 @@ import {
 import { Trash2 } from "lucide-react";
 import type { Control, FieldValues } from "react-hook-form";
 
-// Generic control type that works with CreateRegistrationInput, CreateBatchInput, and UpdateBatchInput
-// All three have delegates and cooks arrays with the same structure
+// Generic control type that works with the internal form structure
 type PersonArrayForm = FieldValues & {
   delegates: { fullName: string; nickname?: string; age: number; gender: "MALE" | "FEMALE" }[];
+  siblings: { fullName: string; nickname?: string; age: number; gender: "MALE" | "FEMALE" }[];
   cooks: { fullName: string; nickname?: string; age: number; gender: "MALE" | "FEMALE" }[];
 };
 
 interface PersonFormProps {
-  type: "delegates" | "cooks";
+  type: "delegates" | "siblings" | "cooks";
   index: number;
   control: Control<PersonArrayForm>;
   onRemove: () => void;
@@ -41,7 +41,18 @@ export function PersonForm({
   onRemove,
   canRemove,
 }: PersonFormProps) {
-  const label = type === "delegates" ? "Delegate" : "Cook";
+  const getLabel = () => {
+    switch (type) {
+      case "delegates":
+        return "Delegate";
+      case "siblings":
+        return "Sibling";
+      case "cooks":
+        return "Cook";
+    }
+  };
+
+  const label = getLabel();
 
   return (
     <div className="rounded-lg border border-border bg-card p-3 md:p-4">

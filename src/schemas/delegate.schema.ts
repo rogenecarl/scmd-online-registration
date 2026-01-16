@@ -20,6 +20,7 @@ export const delegateSchema = z.object({
     .refine((val) => val >= 1, "Age must be at least 1")
     .refine((val) => val <= 120, "Age must be 120 or less"),
   gender: GenderEnum,
+  isSibling: z.boolean().default(false), // Part of sibling group (3+ gets discount)
 });
 
 export type DelegateInput = z.infer<typeof delegateSchema>;

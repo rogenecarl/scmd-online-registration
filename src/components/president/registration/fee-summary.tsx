@@ -1,13 +1,15 @@
 "use client";
 
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/dashboard";
-import { Calculator, Users, ChefHat, Receipt } from "lucide-react";
+import { Calculator, Users, ChefHat, Receipt, UsersRound } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface FeeSummaryProps {
   delegateCount: number;
+  siblingCount: number;
   cookCount: number;
   delegateFee: number;
+  siblingDiscountFee: number;
   cookFee: number;
   feeType: string;
   className?: string;
@@ -23,15 +25,29 @@ function formatCurrency(amount: number): string {
 
 export function FeeSummary({
   delegateCount,
+  siblingCount,
   cookCount,
   delegateFee,
+  siblingDiscountFee,
   cookFee,
   feeType,
   className,
 }: FeeSummaryProps) {
+  // Sibling discount applies when 3+ siblings are registered AND discount fee is available
+  const siblingDiscountApplies = siblingCount >= 3 && siblingDiscountFee > 0;
+
+  // Calculate fees
   const delegateTotal = delegateCount * delegateFee;
+  const siblingTotal = siblingDiscountApplies
+    ? siblingCount * siblingDiscountFee
+    : siblingCount * delegateFee; // If less than 3 siblings, they pay regular rate
   const cookTotal = cookCount * cookFee;
-  const grandTotal = delegateTotal + cookTotal;
+  const grandTotal = delegateTotal + siblingTotal + cookTotal;
+
+  // Calculate potential savings
+  const potentialSavings = siblingCount >= 3 && siblingDiscountFee > 0
+    ? siblingCount * (delegateFee - siblingDiscountFee)
+    : 0;
 
   return (
     <Card className={cn("lg:sticky lg:top-6", className)}>
@@ -49,21 +65,82 @@ export function FeeSummary({
         </div>
 
         {/* Delegates */}
-        <div className="space-y-2">
-          <div className="flex items-center justify-between text-sm">
-            <span className="flex items-center gap-2 text-muted-foreground">
-              <Users className="h-4 w-4" />
-              Delegates
-            </span>
-            <span>{delegateCount}</span>
+        {delegateCount > 0 && (
+          <div className="space-y-2">
+            <div className="flex items-center justify-between text-sm">
+              <span className="flex items-center gap-2 text-muted-foreground">
+                <Users className="h-4 w-4" />
+                Delegates
+              </span>
+              <span>{delegateCount}</span>
+            </div>
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-muted-foreground pl-6">
+                × {formatCurrency(delegateFee)} each
+              </span>
+              <span className="font-medium">{formatCurrency(delegateTotal)}</span>
+            </div>
           </div>
-          <div className="flex items-center justify-between text-sm">
-            <span className="text-muted-foreground pl-6">
-              × {formatCurrency(delegateFee)} each
-            </span>
-            <span className="font-medium">{formatCurrency(delegateTotal)}</span>
+        )}
+
+        {/* Siblings */}
+        {siblingCount > 0 && (
+          <div className="space-y-2">
+            <div className="flex items-center justify-between text-sm">
+              <span className={cn(
+                "flex items-center gap-2",
+                siblingDiscountApplies ? "text-emerald-600" : "text-muted-foreground"
+              )}>
+                <UsersRound className="h-4 w-4" />
+                Siblings
+                {siblingDiscountApplies && (
+                  <span className="text-xs bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-300 px-1.5 py-0.5 rounded">
+                    Discounted
+                  </span>
+                )}
+              </span>
+              <span>{siblingCount}</span>
+            </div>
+            <div className="flex items-center justify-between text-sm">
+              <span className={cn(
+                "pl-6",
+                siblingDiscountApplies ? "text-emerald-600" : "text-muted-foreground"
+              )}>
+                × {formatCurrency(siblingDiscountApplies ? siblingDiscountFee : delegateFee)} each
+              </span>
+              <span className={cn(
+                "font-medium",
+                siblingDiscountApplies && "text-emerald-600"
+              )}>
+                {formatCurrency(siblingTotal)}
+              </span>
+            </div>
+            {siblingCount > 0 && siblingCount < 3 && siblingDiscountFee > 0 && (
+              <p className="text-xs text-amber-600 pl-6">
+                Add {3 - siblingCount} more to get {formatCurrency(siblingDiscountFee)}/sibling
+              </p>
+            )}
           </div>
-        </div>
+        )}
+
+        {/* Show delegates placeholder if none */}
+        {delegateCount === 0 && siblingCount === 0 && (
+          <div className="space-y-2">
+            <div className="flex items-center justify-between text-sm">
+              <span className="flex items-center gap-2 text-muted-foreground">
+                <Users className="h-4 w-4" />
+                Delegates
+              </span>
+              <span>0</span>
+            </div>
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-muted-foreground pl-6">
+                × {formatCurrency(delegateFee)} each
+              </span>
+              <span className="font-medium">{formatCurrency(0)}</span>
+            </div>
+          </div>
+        )}
 
         {/* Cooks */}
         {(cookCount > 0 || cookFee > 0) && (
@@ -96,6 +173,15 @@ export function FeeSummary({
             </span>
           </div>
         </div>
+
+        {/* Savings */}
+        {potentialSavings > 0 && (
+          <div className="rounded-lg bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800 p-3 text-center">
+            <p className="text-xs font-medium text-emerald-600 dark:text-emerald-400">
+              You save {formatCurrency(potentialSavings)} with sibling discount!
+            </p>
+          </div>
+        )}
 
         {/* Note */}
         <p className="text-xs text-muted-foreground">

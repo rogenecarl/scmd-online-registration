@@ -275,6 +275,7 @@ model Delegate {
   nickname  String?
   age       Int
   gender    Gender
+  isSibling Boolean  @default(false) @map("is_sibling") // Part of sibling group (3+ gets discount)
   batchId   String   @map("batch_id")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")

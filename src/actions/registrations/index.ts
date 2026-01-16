@@ -71,6 +71,7 @@ export type BatchWithDetails = {
     nickname: string | null;
     age: number;
     gender: Gender;
+    isSibling: boolean;
   }[];
   cooks: {
     id: string;
@@ -159,8 +160,15 @@ function calculateCurrentFee(event: {
   preRegistrationStart: Date;
   preRegistrationEnd: Date;
   preRegistrationFee: number;
+  preRegistrationSiblingDiscount: number;
   onsiteRegistrationFee: number;
-}): { fee: number; type: "pre-registration" | "onsite"; isPreRegistration: boolean } {
+  onsiteSiblingDiscount: number;
+}): {
+  fee: number;
+  siblingFee: number;
+  type: "pre-registration" | "onsite";
+  isPreRegistration: boolean;
+} {
   const now = new Date();
   const isPreRegistration =
     now >= new Date(event.preRegistrationStart) &&
@@ -168,9 +176,30 @@ function calculateCurrentFee(event: {
 
   return {
     fee: isPreRegistration ? event.preRegistrationFee : event.onsiteRegistrationFee,
+    siblingFee: isPreRegistration
+      ? event.preRegistrationSiblingDiscount
+      : event.onsiteSiblingDiscount,
     type: isPreRegistration ? "pre-registration" : "onsite",
     isPreRegistration,
   };
+}
+
+function calculateDelegateFees(
+  delegates: { isSibling?: boolean }[],
+  regularFee: number,
+  siblingFee: number
+): number {
+  // Count siblings
+  const siblingCount = delegates.filter((d) => d.isSibling).length;
+  const siblingDiscountApplies = siblingCount >= 3 && siblingFee > 0;
+
+  if (siblingDiscountApplies) {
+    const regularCount = delegates.length - siblingCount;
+    return regularCount * regularFee + siblingCount * siblingFee;
+  }
+
+  // No sibling discount - all pay regular fee
+  return delegates.length * regularFee;
 }
 
 // ==========================================
@@ -529,6 +558,7 @@ export async function getMyRegistrationById(
                 nickname: true,
                 age: true,
                 gender: true,
+                isSibling: true,
               },
               orderBy: { createdAt: "asc" },
             },
@@ -635,6 +665,7 @@ export async function getBatchById(
             nickname: true,
             age: true,
             gender: true,
+            isSibling: true,
           },
           orderBy: { createdAt: "asc" },
         },
@@ -729,11 +760,14 @@ export async function createRegistration(
       };
     }
 
-    // Calculate fees
+    // Calculate fees with sibling discount
     const feeInfo = calculateCurrentFee(event);
-    const delegateCount = validated.data.delegates.length;
+    const totalDelegateFees = calculateDelegateFees(
+      validated.data.delegates,
+      feeInfo.fee,
+      feeInfo.siblingFee
+    );
     const cookCount = validated.data.cooks.length;
-    const totalDelegateFees = delegateCount * feeInfo.fee;
     const totalCookFees = cookCount * event.cookRegistrationFee;
     const totalFee = totalDelegateFees + totalCookFees;
 
@@ -758,6 +792,7 @@ export async function createRegistration(
                 nickname: delegate.nickname || null,
                 age: delegate.age,
                 gender: delegate.gender,
+                isSibling: delegate.isSibling ?? false,
               })),
             },
             cooks: {
@@ -839,11 +874,14 @@ export async function createBatch(
       return { success: false, error: "Event has already started" };
     }
 
-    // Calculate fees
+    // Calculate fees with sibling discount
     const feeInfo = calculateCurrentFee(registration.event);
-    const delegateCount = validated.data.delegates.length;
+    const totalDelegateFees = calculateDelegateFees(
+      validated.data.delegates,
+      feeInfo.fee,
+      feeInfo.siblingFee
+    );
     const cookCount = validated.data.cooks.length;
-    const totalDelegateFees = delegateCount * feeInfo.fee;
     const totalCookFees = cookCount * registration.event.cookRegistrationFee;
     const totalFee = totalDelegateFees + totalCookFees;
 
@@ -868,6 +906,7 @@ export async function createBatch(
             nickname: delegate.nickname || null,
             age: delegate.age,
             gender: delegate.gender,
+            isSibling: delegate.isSibling ?? false,
           })),
         },
         cooks: {
@@ -950,11 +989,14 @@ export async function updateBatch(
       return { success: false, error: "Event has already started" };
     }
 
-    // Recalculate fees
+    // Recalculate fees with sibling discount
     const feeInfo = calculateCurrentFee(batch.registration.event);
-    const delegateCount = validated.data.delegates.length;
+    const totalDelegateFees = calculateDelegateFees(
+      validated.data.delegates,
+      feeInfo.fee,
+      feeInfo.siblingFee
+    );
     const cookCount = validated.data.cooks.length;
-    const totalDelegateFees = delegateCount * feeInfo.fee;
     const totalCookFees = cookCount * batch.registration.event.cookRegistrationFee;
     const totalFee = totalDelegateFees + totalCookFees;
 
@@ -976,6 +1018,7 @@ export async function updateBatch(
               nickname: delegate.nickname || null,
               age: delegate.age,
               gender: delegate.gender,
+              isSibling: delegate.isSibling ?? false,
             })),
           },
           cooks: {

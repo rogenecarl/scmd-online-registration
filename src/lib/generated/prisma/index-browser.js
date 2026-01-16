@@ -251,6 +251,7 @@ exports.Prisma.DelegateScalarFieldEnum = {
   nickname: 'nickname',
   age: 'age',
   gender: 'gender',
+  isSibling: 'isSibling',
   batchId: 'batchId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

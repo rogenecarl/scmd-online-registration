@@ -1,3 +1,4 @@
 export { RegistrationForm } from "./registration-form";
-export { PersonForm } from "./person-form";
+export { PersonDialog } from "./person-dialog";
+export { PersonTable } from "./person-table";
 export { FeeSummary } from "./fee-summary";

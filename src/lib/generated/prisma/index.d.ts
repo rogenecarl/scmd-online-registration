@@ -14811,6 +14811,7 @@ export namespace Prisma {
     nickname: string | null
     age: number | null
     gender: $Enums.Gender | null
+    isSibling: boolean | null
     batchId: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -14822,6 +14823,7 @@ export namespace Prisma {
     nickname: string | null
     age: number | null
     gender: $Enums.Gender | null
+    isSibling: boolean | null
     batchId: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -14833,6 +14835,7 @@ export namespace Prisma {
     nickname: number
     age: number
     gender: number
+    isSibling: number
     batchId: number
     createdAt: number
     updatedAt: number
@@ -14854,6 +14857,7 @@ export namespace Prisma {
     nickname?: true
     age?: true
     gender?: true
+    isSibling?: true
     batchId?: true
     createdAt?: true
     updatedAt?: true
@@ -14865,6 +14869,7 @@ export namespace Prisma {
     nickname?: true
     age?: true
     gender?: true
+    isSibling?: true
     batchId?: true
     createdAt?: true
     updatedAt?: true
@@ -14876,6 +14881,7 @@ export namespace Prisma {
     nickname?: true
     age?: true
     gender?: true
+    isSibling?: true
     batchId?: true
     createdAt?: true
     updatedAt?: true
@@ -14974,6 +14980,7 @@ export namespace Prisma {
     nickname: string | null
     age: number
     gender: $Enums.Gender
+    isSibling: boolean
     batchId: string
     createdAt: Date
     updatedAt: Date
@@ -15004,6 +15011,7 @@ export namespace Prisma {
     nickname?: boolean
     age?: boolean
     gender?: boolean
+    isSibling?: boolean
     batchId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -15016,6 +15024,7 @@ export namespace Prisma {
     nickname?: boolean
     age?: boolean
     gender?: boolean
+    isSibling?: boolean
     batchId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -15028,6 +15037,7 @@ export namespace Prisma {
     nickname?: boolean
     age?: boolean
     gender?: boolean
+    isSibling?: boolean
     batchId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -15040,12 +15050,13 @@ export namespace Prisma {
     nickname?: boolean
     age?: boolean
     gender?: boolean
+    isSibling?: boolean
     batchId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type DelegateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "fullName" | "nickname" | "age" | "gender" | "batchId" | "createdAt" | "updatedAt", ExtArgs["result"]["delegate"]>
+  export type DelegateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "fullName" | "nickname" | "age" | "gender" | "isSibling" | "batchId" | "createdAt" | "updatedAt", ExtArgs["result"]["delegate"]>
   export type DelegateInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     batch?: boolean | RegistrationBatchDefaultArgs<ExtArgs>
   }
@@ -15067,6 +15078,7 @@ export namespace Prisma {
       nickname: string | null
       age: number
       gender: $Enums.Gender
+      isSibling: boolean
       batchId: string
       createdAt: Date
       updatedAt: Date
@@ -15499,6 +15511,7 @@ export namespace Prisma {
     readonly nickname: FieldRef<"Delegate", 'String'>
     readonly age: FieldRef<"Delegate", 'Int'>
     readonly gender: FieldRef<"Delegate", 'Gender'>
+    readonly isSibling: FieldRef<"Delegate", 'Boolean'>
     readonly batchId: FieldRef<"Delegate", 'String'>
     readonly createdAt: FieldRef<"Delegate", 'DateTime'>
     readonly updatedAt: FieldRef<"Delegate", 'DateTime'>
@@ -17225,6 +17238,7 @@ export namespace Prisma {
     nickname: 'nickname',
     age: 'age',
     gender: 'gender',
+    isSibling: 'isSibling',
     batchId: 'batchId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -18241,6 +18255,7 @@ export namespace Prisma {
     nickname?: StringNullableFilter<"Delegate"> | string | null
     age?: IntFilter<"Delegate"> | number
     gender?: EnumGenderFilter<"Delegate"> | $Enums.Gender
+    isSibling?: BoolFilter<"Delegate"> | boolean
     batchId?: StringFilter<"Delegate"> | string
     createdAt?: DateTimeFilter<"Delegate"> | Date | string
     updatedAt?: DateTimeFilter<"Delegate"> | Date | string
@@ -18253,6 +18268,7 @@ export namespace Prisma {
     nickname?: SortOrderInput | SortOrder
     age?: SortOrder
     gender?: SortOrder
+    isSibling?: SortOrder
     batchId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -18268,6 +18284,7 @@ export namespace Prisma {
     nickname?: StringNullableFilter<"Delegate"> | string | null
     age?: IntFilter<"Delegate"> | number
     gender?: EnumGenderFilter<"Delegate"> | $Enums.Gender
+    isSibling?: BoolFilter<"Delegate"> | boolean
     batchId?: StringFilter<"Delegate"> | string
     createdAt?: DateTimeFilter<"Delegate"> | Date | string
     updatedAt?: DateTimeFilter<"Delegate"> | Date | string
@@ -18280,6 +18297,7 @@ export namespace Prisma {
     nickname?: SortOrderInput | SortOrder
     age?: SortOrder
     gender?: SortOrder
+    isSibling?: SortOrder
     batchId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -18299,6 +18317,7 @@ export namespace Prisma {
     nickname?: StringNullableWithAggregatesFilter<"Delegate"> | string | null
     age?: IntWithAggregatesFilter<"Delegate"> | number
     gender?: EnumGenderWithAggregatesFilter<"Delegate"> | $Enums.Gender
+    isSibling?: BoolWithAggregatesFilter<"Delegate"> | boolean
     batchId?: StringWithAggregatesFilter<"Delegate"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Delegate"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Delegate"> | Date | string
@@ -19298,6 +19317,7 @@ export namespace Prisma {
     nickname?: string | null
     age: number
     gender: $Enums.Gender
+    isSibling?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     batch: RegistrationBatchCreateNestedOneWithoutDelegatesInput
@@ -19309,6 +19329,7 @@ export namespace Prisma {
     nickname?: string | null
     age: number
     gender: $Enums.Gender
+    isSibling?: boolean
     batchId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -19320,6 +19341,7 @@ export namespace Prisma {
     nickname?: NullableStringFieldUpdateOperationsInput | string | null
     age?: IntFieldUpdateOperationsInput | number
     gender?: EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+    isSibling?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     batch?: RegistrationBatchUpdateOneRequiredWithoutDelegatesNestedInput
@@ -19331,6 +19353,7 @@ export namespace Prisma {
     nickname?: NullableStringFieldUpdateOperationsInput | string | null
     age?: IntFieldUpdateOperationsInput | number
     gender?: EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+    isSibling?: BoolFieldUpdateOperationsInput | boolean
     batchId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -19342,6 +19365,7 @@ export namespace Prisma {
     nickname?: string | null
     age: number
     gender: $Enums.Gender
+    isSibling?: boolean
     batchId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -19353,6 +19377,7 @@ export namespace Prisma {
     nickname?: NullableStringFieldUpdateOperationsInput | string | null
     age?: IntFieldUpdateOperationsInput | number
     gender?: EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+    isSibling?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -19363,6 +19388,7 @@ export namespace Prisma {
     nickname?: NullableStringFieldUpdateOperationsInput | string | null
     age?: IntFieldUpdateOperationsInput | number
     gender?: EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+    isSibling?: BoolFieldUpdateOperationsInput | boolean
     batchId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20209,6 +20235,7 @@ export namespace Prisma {
     nickname?: SortOrder
     age?: SortOrder
     gender?: SortOrder
+    isSibling?: SortOrder
     batchId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -20224,6 +20251,7 @@ export namespace Prisma {
     nickname?: SortOrder
     age?: SortOrder
     gender?: SortOrder
+    isSibling?: SortOrder
     batchId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -20235,6 +20263,7 @@ export namespace Prisma {
     nickname?: SortOrder
     age?: SortOrder
     gender?: SortOrder
+    isSibling?: SortOrder
     batchId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -22584,6 +22613,7 @@ export namespace Prisma {
     nickname?: string | null
     age: number
     gender: $Enums.Gender
+    isSibling?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -22594,6 +22624,7 @@ export namespace Prisma {
     nickname?: string | null
     age: number
     gender: $Enums.Gender
+    isSibling?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -22733,6 +22764,7 @@ export namespace Prisma {
     nickname?: StringNullableFilter<"Delegate"> | string | null
     age?: IntFilter<"Delegate"> | number
     gender?: EnumGenderFilter<"Delegate"> | $Enums.Gender
+    isSibling?: BoolFilter<"Delegate"> | boolean
     batchId?: StringFilter<"Delegate"> | string
     createdAt?: DateTimeFilter<"Delegate"> | Date | string
     updatedAt?: DateTimeFilter<"Delegate"> | Date | string
@@ -23374,6 +23406,7 @@ export namespace Prisma {
     nickname?: string | null
     age: number
     gender: $Enums.Gender
+    isSibling?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -23394,6 +23427,7 @@ export namespace Prisma {
     nickname?: NullableStringFieldUpdateOperationsInput | string | null
     age?: IntFieldUpdateOperationsInput | number
     gender?: EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+    isSibling?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -23404,6 +23438,7 @@ export namespace Prisma {
     nickname?: NullableStringFieldUpdateOperationsInput | string | null
     age?: IntFieldUpdateOperationsInput | number
     gender?: EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+    isSibling?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -23414,6 +23449,7 @@ export namespace Prisma {
     nickname?: NullableStringFieldUpdateOperationsInput | string | null
     age?: IntFieldUpdateOperationsInput | number
     gender?: EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+    isSibling?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
