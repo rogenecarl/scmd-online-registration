@@ -1,9 +1,18 @@
 "use client";
 
+import { useState } from "react";
 import { useAuth } from "@/hooks";
 import { useMobileNav } from "@/contexts";
-import { Menu, Bell, ChevronLeft, Church } from "lucide-react";
+import { Menu, Bell, ChevronLeft, Church, LogOut, Loader2, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+  SheetFooter,
+} from "@/components/ui/sheet";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -20,9 +29,15 @@ export function MobileHeader({
   showBackButton = false,
   backHref,
 }: MobileHeaderProps) {
-  const { user } = useAuth();
+  const { user, signOut, isLoading } = useAuth();
   const { toggleSidebar } = useMobileNav();
   const router = useRouter();
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+
+  const handleSignOut = () => {
+    setIsUserMenuOpen(false);
+    signOut();
+  };
 
   const getInitials = (name?: string | null) => {
     if (!name) return "U";
@@ -100,7 +115,13 @@ export function MobileHeader({
           </span>
         </Button>
 
-        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-primary/20 to-violet-500/20 text-sm font-semibold ring-2 ring-border">
+        {/* User Avatar - Clickable for user menu */}
+        <button
+          type="button"
+          onClick={() => setIsUserMenuOpen(true)}
+          className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-primary/20 to-violet-500/20 text-sm font-semibold ring-2 ring-border touch-target transition-transform active:scale-95"
+          aria-label="Open user menu"
+        >
           {user?.image ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
@@ -111,8 +132,69 @@ export function MobileHeader({
           ) : (
             getInitials(user?.name)
           )}
-        </div>
+        </button>
       </div>
+
+      {/* User Menu Sheet */}
+      <Sheet open={isUserMenuOpen} onOpenChange={setIsUserMenuOpen}>
+        <SheetContent side="bottom" className="rounded-t-2xl safe-area-bottom">
+          <SheetHeader className="text-left pb-2">
+            <SheetTitle>Account</SheetTitle>
+            <SheetDescription>Manage your account settings</SheetDescription>
+          </SheetHeader>
+
+          {/* User Info */}
+          <div className="flex items-center gap-4 px-4 py-3 rounded-lg bg-muted/50">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-primary/20 to-violet-500/20 text-base font-semibold ring-2 ring-border">
+              {user?.image ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={user.image}
+                  alt={user.name || "User"}
+                  className="h-full w-full rounded-full object-cover"
+                />
+              ) : (
+                getInitials(user?.name)
+              )}
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="font-medium truncate">{user?.name || "User"}</p>
+              <p className="text-sm text-muted-foreground truncate">{user?.email}</p>
+            </div>
+          </div>
+
+          {/* Menu Options */}
+          <div className="flex flex-col gap-1 mt-4">
+            <button
+              type="button"
+              onClick={() => {
+                setIsUserMenuOpen(false);
+                router.push("/settings");
+              }}
+              className="flex items-center gap-3 px-4 py-3 rounded-lg text-left hover:bg-accent transition-colors touch-target"
+            >
+              <Settings className="h-5 w-5 text-muted-foreground" />
+              <span className="font-medium">Settings</span>
+            </button>
+          </div>
+
+          <SheetFooter className="mt-4 pt-4 border-t">
+            <Button
+              variant="destructive"
+              className="w-full gap-2 touch-target"
+              onClick={handleSignOut}
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <LogOut className="h-4 w-4" />
+              )}
+              Sign Out
+            </Button>
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
     </header>
   );
 }

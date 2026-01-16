@@ -55,6 +55,7 @@ function EventCard({ event, index }: { event: PublicEvent; index: number }) {
               alt={event.name}
               fill
               className="object-cover transition-transform duration-500 group-hover:scale-105"
+              unoptimized
             />
           ) : (
             <div className="flex h-full items-center justify-center bg-gradient-to-br from-primary/20 via-violet-500/20 to-blue-500/20">

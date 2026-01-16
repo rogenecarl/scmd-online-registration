@@ -63,7 +63,7 @@ export function HowItWorks() {
           </h2>
           <p className="mt-4 text-lg text-muted-foreground">
             Register your church delegates for SCMD events in four simple steps.
-            Our streamlined process makes event registration effortless.
+            Our streamlined process makes delegate registration quick and effortless.
           </p>
         </ScrollAnimation>
 

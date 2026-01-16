@@ -86,13 +86,13 @@ export function Features() {
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
             Everything you need for{" "}
             <span className="bg-gradient-to-r from-primary via-violet-600 to-primary bg-clip-text text-transparent dark:from-white dark:via-violet-400 dark:to-white">
-              event registration
+              delegate registration
             </span>
           </h2>
           <p className="mt-4 text-lg text-muted-foreground">
-            A complete solution for managing church event registrations.
-            From delegate sign-ups to admin approvals, everything is
-            streamlined and organized.
+            A complete platform for registering delegates to church events.
+            Submit registrations, track approvals, and coordinate your
+            church&apos;s participation — all in one place.
           </p>
         </ScrollAnimation>
 

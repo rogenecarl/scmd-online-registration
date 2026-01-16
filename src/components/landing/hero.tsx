@@ -38,19 +38,19 @@ export function Hero() {
         <div className="flex flex-col items-center text-center">
           {/* Headline */}
           <h1 className="animate-in fade-in slide-in-from-bottom-4 duration-700 max-w-4xl text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl xl:text-7xl">
-            Register for{" "}
             <span className="relative">
               <span className="relative z-10 bg-gradient-to-r from-primary via-violet-600 to-primary bg-clip-text text-transparent dark:from-white dark:via-violet-400 dark:to-white">
-                Church Events
+                Event Registration
               </span>
             </span>
+            {" "}for Church Delegates
           </h1>
 
           {/* Subheadline */}
           <p className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-200 mt-6 max-w-2xl text-lg text-muted-foreground sm:text-xl">
-            Streamline your church event registration process. Manage delegates,
-            track approvals, and coordinate across divisions — all in one
-            centralized platform designed for SCMD churches.
+            Easily register your church delegates for SCMD events. Manage
+            registrations, track approval status, and coordinate across
+            divisions — all in one centralized platform.
           </p>
 
           {/* CTA Buttons */}
@@ -72,15 +72,15 @@ export function Hero() {
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-500 mt-16 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
             <FeaturePill
               icon={<Users className="h-4 w-4" />}
-              text="Delegate management"
+              text="Register delegates"
             />
             <FeaturePill
               icon={<Calendar className="h-4 w-4" />}
-              text="Event scheduling"
+              text="Browse events"
             />
             <FeaturePill
               icon={<ClipboardCheck className="h-4 w-4" />}
-              text="Approval workflow"
+              text="Track approvals"
             />
           </div>
 
@@ -89,7 +89,7 @@ export function Hero() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <StatCard label="Divisions" value="8" />
               <StatCard label="Churches" value="78" />
-              <StatCard label="event available" value="1" />
+              <StatCard label="Active Events" value="1" />
             </div>
           </div>
         </div>

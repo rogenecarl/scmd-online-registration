@@ -20,8 +20,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SCDM UFY Online Registration",
-  description: "Next.js 16 Starter Kit with Authentication, TailwindCSS, and more. better auth, prisma orm",
+  title: "SCMD Event Registration",
+  description: "Event registration platform for SCMD churches. Register delegates for church events, manage approvals, and coordinate across divisions.",
   icons: {
     icon: "/logo.webp",
   },

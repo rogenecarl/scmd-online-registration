@@ -2,7 +2,7 @@
 
 import type { AdminApprovedParticipant } from "@/actions/approval";
 import { Badge } from "@/components/ui/badge";
-import { Users, Heart, ChefHat, Church } from "lucide-react";
+import { Church } from "lucide-react";
 
 export type Column<T> = {
   key: keyof T | string;
@@ -17,24 +17,19 @@ export type Column<T> = {
 
 const typeConfig = {
   delegate: {
-    icon: Users,
     label: "Delegate",
-    variant: "default" as const,
     className: "bg-blue-100 text-blue-700 hover:bg-blue-100",
   },
   sibling: {
-    icon: Heart,
-    label: "Sibling",
-    variant: "secondary" as const,
-    className: "bg-pink-100 text-pink-700 hover:bg-pink-100",
+    label: "Delegate",
+    suffix: "(Sibling)",
+    className: "bg-blue-100 text-blue-700 hover:bg-blue-100",
   },
   cook: {
-    icon: ChefHat,
     label: "Cook",
-    variant: "outline" as const,
     className: "bg-amber-100 text-amber-700 hover:bg-amber-100",
   },
-};
+} as const;
 
 const genderConfig = {
   MALE: {
@@ -86,12 +81,15 @@ export function getAdminParticipantsColumns(): Column<AdminApprovedParticipant>[
       mobilePriority: "primary",
       render: (participant) => {
         const config = typeConfig[participant.type];
-        const Icon = config.icon;
         return (
-          <Badge className={config.className}>
-            <Icon className="h-3 w-3 mr-1" />
-            {config.label}
-          </Badge>
+          <div className="flex items-center justify-center gap-1.5">
+            <Badge className={config.className}>
+              {config.label}
+            </Badge>
+            {"suffix" in config && (
+              <span className="text-xs text-muted-foreground">{config.suffix}</span>
+            )}
+          </div>
         );
       },
     },
