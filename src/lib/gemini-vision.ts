@@ -71,22 +71,34 @@ If you cannot extract any valid person data from the image, return an empty arra
     const result = await genAI.models.generateContent({
       model: MODEL_NAME,
       contents: [
+        { text: prompt },
         {
-          role: "user",
-          parts: [
-            { text: prompt },
-            {
-              inlineData: {
-                mimeType: mimeType,
-                data: base64Content,
-              },
-            },
-          ],
+          inlineData: {
+            mimeType: mimeType,
+            data: base64Content,
+          },
         },
       ],
     });
 
-    const text = result.text?.trim() ?? "";
+    // Access the text - this can throw if content was blocked
+    let text: string;
+    try {
+      text = result.text?.trim() ?? "";
+    } catch (textError) {
+      console.error("Error accessing response text:", textError);
+      return {
+        success: false,
+        error: "The image could not be processed. It may have been blocked by content filters or the format is not supported.",
+      };
+    }
+
+    if (!text) {
+      return {
+        success: false,
+        error: "No text was extracted from the image. Please try with a clearer image.",
+      };
+    }
 
     // Clean up the response - remove markdown code blocks if present
     let jsonText = text;
