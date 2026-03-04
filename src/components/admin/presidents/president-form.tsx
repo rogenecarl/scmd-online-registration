@@ -104,18 +104,9 @@ export function PresidentForm({ mode, initialData }: PresidentFormProps) {
     }
   };
 
-  const noChurchesAvailable =
-    mode === "create" && (!churches || churches.length === 0);
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 max-w-md">
-        {noChurchesAvailable && (
-          <div className="rounded-lg border border-yellow-200 bg-yellow-50 p-4 text-sm text-yellow-800">
-            All churches already have presidents assigned. Create a new church
-            first or deactivate an existing president.
-          </div>
-        )}
 
         <FormField
           control={form.control}
@@ -136,7 +127,7 @@ export function PresidentForm({ mode, initialData }: PresidentFormProps) {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email Address</FormLabel>
+              <FormLabel>Email Address <span className="text-destructive">*</span></FormLabel>
               <FormControl>
                 <Input
                   type="email"
@@ -159,7 +150,7 @@ export function PresidentForm({ mode, initialData }: PresidentFormProps) {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel>Password <span className="text-destructive">*</span></FormLabel>
                   <FormControl>
                     <Input
                       type="password"
@@ -181,7 +172,7 @@ export function PresidentForm({ mode, initialData }: PresidentFormProps) {
               name="confirmPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Confirm Password</FormLabel>
+                  <FormLabel>Confirm Password <span className="text-destructive">*</span></FormLabel>
                   <FormControl>
                     <Input
                       type="password"
@@ -205,7 +196,7 @@ export function PresidentForm({ mode, initialData }: PresidentFormProps) {
               <Select
                 onValueChange={field.onChange}
                 defaultValue={field.value ?? undefined}
-                disabled={churchesLoading || noChurchesAvailable}
+                disabled={churchesLoading}
               >
                 <FormControl>
                   <SelectTrigger>
@@ -227,7 +218,7 @@ export function PresidentForm({ mode, initialData }: PresidentFormProps) {
               </Select>
               {mode === "create" && (
                 <FormDescription>
-                  Only churches without presidents are shown
+                  Optional. Only churches without presidents are shown.
                 </FormDescription>
               )}
               <FormMessage />
@@ -245,7 +236,7 @@ export function PresidentForm({ mode, initialData }: PresidentFormProps) {
           >
             Cancel
           </Button>
-          <Button type="submit" disabled={isPending || noChurchesAvailable} className="touch-target">
+          <Button type="submit" disabled={isPending} className="touch-target">
             {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             {mode === "create" ? "Create President" : "Save Changes"}
           </Button>

@@ -4,9 +4,10 @@ export const seedPresidentSchema = z
   .object({
     name: z
       .string()
-      .min(1, "Name is required")
       .max(100, "Name must be 100 characters or less")
-      .trim(),
+      .trim()
+      .optional()
+      .or(z.literal("")),
     email: z
       .string()
       .min(1, "Email is required")
@@ -25,8 +26,9 @@ export const seedPresidentSchema = z
     confirmPassword: z.string().min(1, "Please confirm password"),
     churchId: z
       .string()
-      .min(1, "Church is required")
-      .cuid("Invalid church selected"),
+      .cuid("Invalid church selected")
+      .optional()
+      .or(z.literal("")),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
@@ -36,10 +38,10 @@ export const seedPresidentSchema = z
 export const updatePresidentSchema = z.object({
   name: z
     .string()
-    .min(1, "Name is required")
     .max(100, "Name must be 100 characters or less")
     .trim()
-    .optional(),
+    .optional()
+    .or(z.literal("")),
   email: z
     .string()
     .email("Invalid email address")
@@ -47,7 +49,11 @@ export const updatePresidentSchema = z.object({
     .toLowerCase()
     .trim()
     .optional(),
-  churchId: z.string().cuid("Invalid church selected").optional(),
+  churchId: z
+    .string()
+    .cuid("Invalid church selected")
+    .optional()
+    .or(z.literal("")),
 });
 
 export const resetPasswordSchema = z

@@ -214,26 +214,29 @@ export async function seedPresident(
       };
     }
 
-    // Verify church exists and doesn't have a president
-    const church = await prisma.church.findUnique({
-      where: { id: validated.data.churchId },
-      include: { presidents: { select: { id: true } } },
-    });
+    // Verify church exists and doesn't have a president (if churchId provided)
+    const churchId = validated.data.churchId || null;
+    if (churchId) {
+      const church = await prisma.church.findUnique({
+        where: { id: churchId },
+        include: { presidents: { select: { id: true } } },
+      });
 
-    if (!church) {
-      return {
-        success: false,
-        error: "Selected church does not exist",
-        fieldErrors: { churchId: ["Invalid church"] },
-      };
-    }
+      if (!church) {
+        return {
+          success: false,
+          error: "Selected church does not exist",
+          fieldErrors: { churchId: ["Invalid church"] },
+        };
+      }
 
-    if (church.presidents.length > 0) {
-      return {
-        success: false,
-        error: "This church already has a president assigned",
-        fieldErrors: { churchId: ["Church already has a president"] },
-      };
+      if (church.presidents.length > 0) {
+        return {
+          success: false,
+          error: "This church already has a president assigned",
+          fieldErrors: { churchId: ["Church already has a president"] },
+        };
+      }
     }
 
     // Hash password using Better Auth's crypto
@@ -250,10 +253,10 @@ export async function seedPresident(
       await tx.user.create({
         data: {
           id: userId,
-          name: validated.data.name,
+          name: validated.data.name || validated.data.email.split("@")[0],
           email: validated.data.email,
           role: "PRESIDENT",
-          churchId: validated.data.churchId,
+          churchId,
           emailVerified: false,
         },
       });
@@ -348,11 +351,15 @@ export async function updatePresident(
       }
     }
 
-    // Build update data
-    const updateData: { name?: string; email?: string; churchId?: string } = {};
-    if (validated.data.name) updateData.name = validated.data.name;
+    // Build update data — empty strings clear the field
+    const updateData: { name?: string; email?: string; churchId?: string | null } = {};
+    if (validated.data.name !== undefined) {
+      updateData.name = validated.data.name || undefined;
+    }
     if (validated.data.email) updateData.email = validated.data.email;
-    if (validated.data.churchId) updateData.churchId = validated.data.churchId;
+    if (validated.data.churchId !== undefined) {
+      updateData.churchId = validated.data.churchId || null;
+    }
 
     const president = await prisma.user.update({
       where: { id },
