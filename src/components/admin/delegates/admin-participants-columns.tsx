@@ -2,7 +2,8 @@
 
 import type { AdminApprovedParticipant } from "@/actions/approval";
 import { Badge } from "@/components/ui/badge";
-import { Church } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Church, Pencil } from "lucide-react";
 
 export type Column<T> = {
   key: keyof T | string;
@@ -42,7 +43,9 @@ const genderConfig = {
   },
 };
 
-export function getAdminParticipantsColumns(): Column<AdminApprovedParticipant>[] {
+export function getAdminParticipantsColumns(
+  onEdit?: (participant: AdminApprovedParticipant) => void
+): Column<AdminApprovedParticipant>[] {
   return [
     {
       key: "fullName",
@@ -51,7 +54,14 @@ export function getAdminParticipantsColumns(): Column<AdminApprovedParticipant>[
       mobileFullWidth: true,
       render: (participant) => (
         <div>
-          <span className="font-medium">{participant.fullName}</span>
+          <div className="flex items-center gap-1.5">
+            <span className="font-medium">{participant.fullName}</span>
+            {participant.isDiscounted && (
+              <Badge className="bg-emerald-100 text-emerald-700 hover:bg-emerald-100 text-[10px] px-1.5 py-0">
+                Discounted
+              </Badge>
+            )}
+          </div>
           {participant.nickname && (
             <p className="text-xs text-muted-foreground">
               &quot;{participant.nickname}&quot;
@@ -129,6 +139,26 @@ export function getAdminParticipantsColumns(): Column<AdminApprovedParticipant>[
             Batch #{participant.batchNumber}
           </p>
         </div>
+      ),
+    },
+    {
+      key: "actions",
+      header: "",
+      className: "w-12",
+      mobilePriority: "primary",
+      render: (participant) => (
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-8 w-8"
+          onClick={(e) => {
+            e.stopPropagation();
+            onEdit?.(participant);
+          }}
+        >
+          <Pencil className="h-4 w-4" />
+          <span className="sr-only">Edit</span>
+        </Button>
       ),
     },
   ];

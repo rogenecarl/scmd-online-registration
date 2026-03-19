@@ -257,6 +257,7 @@ model RegistrationBatch {
   delegateFeePerPerson Int     @default(0) @map("delegate_fee_per_person")
   cookFeePerPerson     Int     @default(0) @map("cook_fee_per_person")
   isPreRegistration    Boolean @default(false) @map("is_pre_registration")
+  isDiscounted         Boolean @default(false) @map("is_discounted") // Admin-added discounted registration
 
   // Relations
   registration Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)

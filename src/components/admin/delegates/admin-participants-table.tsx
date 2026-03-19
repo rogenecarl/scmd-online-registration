@@ -21,10 +21,13 @@ import {
   useDivisionsForFilter,
 } from "@/hooks/use-registrations";
 import { getAdminParticipantsColumns } from "./admin-participants-columns";
+import { EditParticipantDialog } from "./edit-participant-dialog";
+import { AddParticipantsDialog } from "./add-participants-dialog";
 import { useDebounce } from "@/hooks/use-debounce";
-import { Users, Heart, ChefHat, Search, UsersRound, Church } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Users, Heart, ChefHat, Search, UsersRound, Church, Plus } from "lucide-react";
 import { DEFAULT_PAGE_SIZE } from "@/lib/pagination";
-import type { AdminParticipantType } from "@/actions/approval";
+import type { AdminApprovedParticipant, AdminParticipantType } from "@/actions/approval";
 import type { Gender } from "@/lib/generated/prisma";
 
 const TYPE_OPTIONS: { value: AdminParticipantType | "ALL"; label: string }[] = [
@@ -49,6 +52,9 @@ export function AdminParticipantsTable() {
   const [churchFilter, setChurchFilter] = useState<string>("ALL");
   const [divisionFilter, setDivisionFilter] = useState<string>("ALL");
   const [genderFilter, setGenderFilter] = useState<Gender | "ALL">("ALL");
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [editingParticipant, setEditingParticipant] = useState<AdminApprovedParticipant | null>(null);
+  const [addDialogOpen, setAddDialogOpen] = useState(false);
   const debouncedSearch = useDebounce(search, 300);
 
   const handleSearchChange = (value: string) => {
@@ -95,7 +101,12 @@ export function AdminParticipantsTable() {
     divisionId: divisionFilter !== "ALL" ? divisionFilter : undefined,
   });
 
-  const columns = getAdminParticipantsColumns();
+  const handleEdit = (participant: AdminApprovedParticipant) => {
+    setEditingParticipant(participant);
+    setEditDialogOpen(true);
+  };
+
+  const columns = getAdminParticipantsColumns(handleEdit);
 
   if (isLoading) {
     return (
@@ -331,6 +342,10 @@ export function AdminParticipantsTable() {
             </SelectTrigger>
             {genderSelectContent}
           </Select>
+          <Button onClick={() => setAddDialogOpen(true)} size="sm">
+            <Plus className="h-4 w-4 mr-1.5" />
+            Add Participants
+          </Button>
         </div>
 
         {/* Mobile filter sheet */}
@@ -379,6 +394,11 @@ export function AdminParticipantsTable() {
             </Select>
           </FilterGroup>
         </MobileFilterSheet>
+
+        {/* Mobile Add Button */}
+        <Button onClick={() => setAddDialogOpen(true)} size="sm" className="md:hidden shrink-0">
+          <Plus className="h-4 w-4" />
+        </Button>
       </div>
 
       {/* Table or Empty State */}
@@ -408,6 +428,17 @@ export function AdminParticipantsTable() {
           description="Once registrations are approved, delegates, siblings, and cooks will appear here"
         />
       )}
+
+      <EditParticipantDialog
+        open={editDialogOpen}
+        onOpenChange={setEditDialogOpen}
+        participant={editingParticipant}
+      />
+
+      <AddParticipantsDialog
+        open={addDialogOpen}
+        onOpenChange={setAddDialogOpen}
+      />
     </div>
   );
 }

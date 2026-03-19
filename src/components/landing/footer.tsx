@@ -47,8 +47,14 @@ export function Footer() {
             {/* Brand Column */}
             <div className="col-span-2 md:col-span-4 lg:col-span-1 mb-8 lg:mb-0">
               <Link href="/" className="flex items-center gap-2 group">
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-lg shadow-primary/25">
-                  <Image src={"/logo.webp"} alt="Logo" width={30} height={20} priority />
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-lg shadow-primary/25 transition-all duration-300 group-hover:scale-105 group-hover:shadow-xl group-hover:shadow-primary/30">
+                  <Image
+                    src={"/logo.webp"}
+                    alt="Logo"
+                    width={30}
+                    height={20}
+                    priority
+                  />
                 </div>
                 <span className="text-lg font-semibold tracking-tight">
                   SCMD Events
@@ -69,9 +75,11 @@ export function Footer() {
                     <li key={link.label}>
                       <Link
                         href={link.href}
-                        className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                        className="group/link inline-flex items-center text-sm text-muted-foreground transition-colors duration-200 hover:text-foreground"
                       >
-                        {link.label}
+                        <span className="transition-transform duration-200 group-hover/link:translate-x-0.5">
+                          {link.label}
+                        </span>
                       </Link>
                     </li>
                   ))}
@@ -84,7 +92,8 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="border-t border-border py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
-            &copy; {new Date().getFullYear()} SCMD Online Registration. All rights reserved.
+            &copy; {new Date().getFullYear()} SCMD Online Registration. All
+            rights reserved.
           </p>
           <p className="text-sm text-muted-foreground">
             South Central Mindanao District

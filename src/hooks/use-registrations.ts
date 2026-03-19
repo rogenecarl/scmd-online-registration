@@ -37,8 +37,12 @@ import {
   getAdminParticipantsSummary,
   getEventsWithApprovedParticipantsAdmin,
   getChurchesWithApprovedParticipants,
+  adminUpdateParticipant,
+  adminAddParticipants,
   type RegistrationFilters,
   type AdminParticipantsFilters,
+  type AdminEditParticipantInput,
+  type AdminAddParticipantsInput,
 } from "@/actions/approval";
 import type {
   CreateRegistrationInput,
@@ -596,6 +600,44 @@ export function useChurchesWithApprovedParticipants(
       const result = await getChurchesWithApprovedParticipants(filters);
       if (!result.success) throw new Error(result.error);
       return result.data;
+    },
+  });
+}
+
+export function useAdminUpdateParticipant() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (input: AdminEditParticipantInput) => {
+      const result = await adminUpdateParticipant(input);
+      if (!result.success) throw new Error(result.error);
+      return result.data;
+    },
+    onSuccess: () => {
+      toast.success("Participant updated successfully");
+      queryClient.invalidateQueries({ queryKey: queryKeys.adminParticipants.all });
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || "Failed to update participant");
+    },
+  });
+}
+
+export function useAdminAddParticipants() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (input: AdminAddParticipantsInput) => {
+      const result = await adminAddParticipants(input);
+      if (!result.success) throw new Error(result.error);
+      return result.data;
+    },
+    onSuccess: () => {
+      toast.success("Discounted participants added successfully");
+      queryClient.invalidateQueries({ queryKey: queryKeys.adminParticipants.all });
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || "Failed to add participants");
     },
   });
 }

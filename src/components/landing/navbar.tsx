@@ -41,7 +41,9 @@ export function Navbar() {
     }
 
     if (isLoading) {
-      return <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />;
+      return (
+        <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+      );
     }
 
     if (isAuthenticated) {
@@ -140,7 +142,7 @@ export function Navbar() {
   return (
     <header
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
+        "fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-out",
         isScrolled
           ? "bg-background/80 backdrop-blur-xl border-b border-border/50 shadow-sm"
           : "bg-transparent"
@@ -150,8 +152,14 @@ export function Navbar() {
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 group">
-            <div className="relative flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-lg shadow-primary/25 transition-transform group-hover:scale-105">
-              <Image src={"/logo.webp"} alt="Logo" width={30} height={20} priority />
+            <div className="relative flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-lg shadow-primary/25 transition-all duration-300 group-hover:scale-105 group-hover:shadow-xl group-hover:shadow-primary/30">
+              <Image
+                src={"/logo.webp"}
+                alt="Logo"
+                width={30}
+                height={20}
+                priority
+              />
             </div>
             <span className="text-lg font-semibold tracking-tight">
               SCMD Events
@@ -165,7 +173,7 @@ export function Navbar() {
                 <a
                   key={link.href}
                   href={link.href}
-                  className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+                  className="relative text-sm font-medium text-muted-foreground transition-colors duration-200 hover:text-foreground after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-foreground after:transition-all after:duration-300 hover:after:w-full"
                 >
                   {link.label}
                 </a>
@@ -173,7 +181,7 @@ export function Navbar() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+                  className="relative text-sm font-medium text-muted-foreground transition-colors duration-200 hover:text-foreground after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-foreground after:transition-all after:duration-300 hover:after:w-full"
                 >
                   {link.label}
                 </Link>
@@ -205,7 +213,7 @@ export function Navbar() {
         <div
           className={cn(
             "md:hidden overflow-hidden transition-all duration-300 ease-in-out",
-            isMobileMenuOpen ? "max-h-80 pb-4" : "max-h-0"
+            isMobileMenuOpen ? "max-h-80 opacity-100 pb-4" : "max-h-0 opacity-0"
           )}
         >
           <div className="flex flex-col gap-2 pt-2">

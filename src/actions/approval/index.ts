@@ -1167,6 +1167,7 @@ export type AdminApprovedParticipant = {
   divisionName: string;
   batchNumber: number;
   registrationId: string;
+  isDiscounted: boolean;
 };
 
 export type AdminParticipantsFilters = {
@@ -1302,6 +1303,7 @@ export async function getAdminApprovedParticipants(
             divisionName: church.division.name,
             batchNumber: batch.batchNumber,
             registrationId: batch.registration.id,
+            isDiscounted: batch.isDiscounted,
           }));
         participants.push(...delegates);
       }
@@ -1325,6 +1327,7 @@ export async function getAdminApprovedParticipants(
             divisionName: church.division.name,
             batchNumber: batch.batchNumber,
             registrationId: batch.registration.id,
+            isDiscounted: batch.isDiscounted,
           }));
         participants.push(...siblings);
       }
@@ -1346,6 +1349,7 @@ export async function getAdminApprovedParticipants(
           divisionName: church.division.name,
           batchNumber: batch.batchNumber,
           registrationId: batch.registration.id,
+          isDiscounted: batch.isDiscounted,
         }));
         participants.push(...cooks);
       }
@@ -1522,6 +1526,180 @@ export async function getChurchesWithApprovedParticipants(
   } catch (error) {
     console.error("Failed to fetch churches with approved participants:", error);
     return { success: false, error: "Failed to fetch churches" };
+  }
+}
+
+// ==========================================
+// ADMIN EDIT PARTICIPANT
+// ==========================================
+
+export type AdminEditParticipantInput = {
+  id: string;
+  type: "delegate" | "sibling" | "cook";
+  fullName: string;
+  nickname: string;
+  age: number;
+  gender: Gender;
+};
+
+export async function adminUpdateParticipant(
+  input: AdminEditParticipantInput
+): Promise<ActionResponse<{ id: string }>> {
+  await requireRole("ADMIN");
+
+  try {
+    const { id, type, fullName, nickname, age, gender } = input;
+
+    if (type === "cook") {
+      const cook = await prisma.cook.findUnique({
+        where: { id },
+        include: { batch: { select: { status: true } } },
+      });
+      if (!cook) return { success: false, error: "Cook not found" };
+
+      await prisma.cook.update({
+        where: { id },
+        data: { fullName, nickname: nickname || null, age, gender },
+      });
+    } else {
+      // delegate or sibling
+      const delegate = await prisma.delegate.findUnique({
+        where: { id },
+        include: { batch: { select: { status: true } } },
+      });
+      if (!delegate) return { success: false, error: "Delegate not found" };
+
+      await prisma.delegate.update({
+        where: { id },
+        data: { fullName, nickname: nickname || null, age, gender },
+      });
+    }
+
+    revalidatePath("/admin/delegates");
+    return { success: true, data: { id } };
+  } catch (error) {
+    console.error("Failed to update participant:", error);
+    return { success: false, error: "Failed to update participant" };
+  }
+}
+
+// ==========================================
+// ADMIN ADD DISCOUNTED PARTICIPANTS
+// ==========================================
+
+export type AdminAddParticipantsInput = {
+  eventId: string;
+  churchId: string;
+  delegates: {
+    fullName: string;
+    nickname: string;
+    age: number;
+    gender: "MALE" | "FEMALE";
+  }[];
+  cooks: {
+    fullName: string;
+    nickname: string;
+    age: number;
+    gender: "MALE" | "FEMALE";
+  }[];
+  registrationFee: number;
+  remarks: string;
+};
+
+export async function adminAddParticipants(
+  input: AdminAddParticipantsInput
+): Promise<ActionResponse<{ batchId: string }>> {
+  await requireRole("ADMIN");
+
+  try {
+    const session = await getServerSession();
+    if (!session) return { success: false, error: "Not authenticated" };
+
+    const { eventId, churchId, delegates, cooks, registrationFee, remarks } = input;
+
+    if (delegates.length === 0 && cooks.length === 0) {
+      return { success: false, error: "At least one delegate or cook is required" };
+    }
+
+    // Verify event and church exist
+    const [event, church] = await Promise.all([
+      prisma.event.findUnique({ where: { id: eventId } }),
+      prisma.church.findUnique({ where: { id: churchId } }),
+    ]);
+
+    if (!event) return { success: false, error: "Event not found" };
+    if (!church) return { success: false, error: "Church not found" };
+
+    // Find or create registration for this church+event
+    let registration = await prisma.registration.findUnique({
+      where: { eventId_churchId: { eventId, churchId } },
+      include: { batches: { orderBy: { batchNumber: "desc" }, take: 1 } },
+    });
+
+    const nextBatchNumber = registration
+      ? (registration.batches[0]?.batchNumber ?? 0) + 1
+      : 1;
+
+    if (!registration) {
+      // Find a president for this church to assign as the registration owner
+      const president = await prisma.user.findFirst({
+        where: { role: "PRESIDENT", church: { id: churchId } },
+      });
+
+      // Use admin as fallback if no president is found
+      const presidentId = president?.id ?? session.user.id;
+
+      registration = await prisma.registration.create({
+        data: {
+          eventId,
+          churchId,
+          presidentId,
+        },
+        include: { batches: { orderBy: { batchNumber: "desc" }, take: 1 } },
+      });
+    }
+
+    // Calculate total fee
+    const totalParticipants = delegates.length + cooks.length;
+    const totalFee = registrationFee * totalParticipants;
+
+    // Create the batch with APPROVED status and isDiscounted flag
+    const batch = await prisma.registrationBatch.create({
+      data: {
+        registrationId: registration.id,
+        batchNumber: nextBatchNumber,
+        status: "APPROVED",
+        isDiscounted: true,
+        remarks: remarks || "Discounted registration",
+        totalFee,
+        delegateFeePerPerson: registrationFee,
+        cookFeePerPerson: registrationFee,
+        reviewedAt: new Date(),
+        reviewedBy: session.user.id,
+        delegates: {
+          create: delegates.map((d) => ({
+            fullName: d.fullName,
+            nickname: d.nickname || null,
+            age: d.age,
+            gender: d.gender,
+          })),
+        },
+        cooks: {
+          create: cooks.map((c) => ({
+            fullName: c.fullName,
+            nickname: c.nickname || null,
+            age: c.age,
+            gender: c.gender,
+          })),
+        },
+      },
+    });
+
+    revalidatePath("/admin/delegates");
+    return { success: true, data: { batchId: batch.id } };
+  } catch (error) {
+    console.error("Failed to add discounted participants:", error);
+    return { success: false, error: "Failed to add discounted participants" };
   }
 }
 

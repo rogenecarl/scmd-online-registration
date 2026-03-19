@@ -242,7 +242,8 @@ exports.Prisma.RegistrationBatchScalarFieldEnum = {
   totalFee: 'totalFee',
   delegateFeePerPerson: 'delegateFeePerPerson',
   cookFeePerPerson: 'cookFeePerPerson',
-  isPreRegistration: 'isPreRegistration'
+  isPreRegistration: 'isPreRegistration',
+  isDiscounted: 'isDiscounted'
 };
 
 exports.Prisma.DelegateScalarFieldEnum = {

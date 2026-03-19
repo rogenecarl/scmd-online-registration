@@ -13520,6 +13520,7 @@ export namespace Prisma {
     delegateFeePerPerson: number | null
     cookFeePerPerson: number | null
     isPreRegistration: boolean | null
+    isDiscounted: boolean | null
   }
 
   export type RegistrationBatchMaxAggregateOutputType = {
@@ -13537,6 +13538,7 @@ export namespace Prisma {
     delegateFeePerPerson: number | null
     cookFeePerPerson: number | null
     isPreRegistration: boolean | null
+    isDiscounted: boolean | null
   }
 
   export type RegistrationBatchCountAggregateOutputType = {
@@ -13554,6 +13556,7 @@ export namespace Prisma {
     delegateFeePerPerson: number
     cookFeePerPerson: number
     isPreRegistration: number
+    isDiscounted: number
     _all: number
   }
 
@@ -13587,6 +13590,7 @@ export namespace Prisma {
     delegateFeePerPerson?: true
     cookFeePerPerson?: true
     isPreRegistration?: true
+    isDiscounted?: true
   }
 
   export type RegistrationBatchMaxAggregateInputType = {
@@ -13604,6 +13608,7 @@ export namespace Prisma {
     delegateFeePerPerson?: true
     cookFeePerPerson?: true
     isPreRegistration?: true
+    isDiscounted?: true
   }
 
   export type RegistrationBatchCountAggregateInputType = {
@@ -13621,6 +13626,7 @@ export namespace Prisma {
     delegateFeePerPerson?: true
     cookFeePerPerson?: true
     isPreRegistration?: true
+    isDiscounted?: true
     _all?: true
   }
 
@@ -13725,6 +13731,7 @@ export namespace Prisma {
     delegateFeePerPerson: number
     cookFeePerPerson: number
     isPreRegistration: boolean
+    isDiscounted: boolean
     _count: RegistrationBatchCountAggregateOutputType | null
     _avg: RegistrationBatchAvgAggregateOutputType | null
     _sum: RegistrationBatchSumAggregateOutputType | null
@@ -13761,6 +13768,7 @@ export namespace Prisma {
     delegateFeePerPerson?: boolean
     cookFeePerPerson?: boolean
     isPreRegistration?: boolean
+    isDiscounted?: boolean
     registration?: boolean | RegistrationDefaultArgs<ExtArgs>
     reviewer?: boolean | RegistrationBatch$reviewerArgs<ExtArgs>
     delegates?: boolean | RegistrationBatch$delegatesArgs<ExtArgs>
@@ -13783,6 +13791,7 @@ export namespace Prisma {
     delegateFeePerPerson?: boolean
     cookFeePerPerson?: boolean
     isPreRegistration?: boolean
+    isDiscounted?: boolean
     registration?: boolean | RegistrationDefaultArgs<ExtArgs>
     reviewer?: boolean | RegistrationBatch$reviewerArgs<ExtArgs>
   }, ExtArgs["result"]["registrationBatch"]>
@@ -13802,6 +13811,7 @@ export namespace Prisma {
     delegateFeePerPerson?: boolean
     cookFeePerPerson?: boolean
     isPreRegistration?: boolean
+    isDiscounted?: boolean
     registration?: boolean | RegistrationDefaultArgs<ExtArgs>
     reviewer?: boolean | RegistrationBatch$reviewerArgs<ExtArgs>
   }, ExtArgs["result"]["registrationBatch"]>
@@ -13821,9 +13831,10 @@ export namespace Prisma {
     delegateFeePerPerson?: boolean
     cookFeePerPerson?: boolean
     isPreRegistration?: boolean
+    isDiscounted?: boolean
   }
 
-  export type RegistrationBatchOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "registrationId" | "batchNumber" | "status" | "remarks" | "receiptImage" | "reviewedAt" | "reviewedBy" | "createdAt" | "updatedAt" | "totalFee" | "delegateFeePerPerson" | "cookFeePerPerson" | "isPreRegistration", ExtArgs["result"]["registrationBatch"]>
+  export type RegistrationBatchOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "registrationId" | "batchNumber" | "status" | "remarks" | "receiptImage" | "reviewedAt" | "reviewedBy" | "createdAt" | "updatedAt" | "totalFee" | "delegateFeePerPerson" | "cookFeePerPerson" | "isPreRegistration" | "isDiscounted", ExtArgs["result"]["registrationBatch"]>
   export type RegistrationBatchInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     registration?: boolean | RegistrationDefaultArgs<ExtArgs>
     reviewer?: boolean | RegistrationBatch$reviewerArgs<ExtArgs>
@@ -13863,6 +13874,7 @@ export namespace Prisma {
       delegateFeePerPerson: number
       cookFeePerPerson: number
       isPreRegistration: boolean
+      isDiscounted: boolean
     }, ExtArgs["result"]["registrationBatch"]>
     composites: {}
   }
@@ -14304,6 +14316,7 @@ export namespace Prisma {
     readonly delegateFeePerPerson: FieldRef<"RegistrationBatch", 'Int'>
     readonly cookFeePerPerson: FieldRef<"RegistrationBatch", 'Int'>
     readonly isPreRegistration: FieldRef<"RegistrationBatch", 'Boolean'>
+    readonly isDiscounted: FieldRef<"RegistrationBatch", 'Boolean'>
   }
     
 
@@ -17226,7 +17239,8 @@ export namespace Prisma {
     totalFee: 'totalFee',
     delegateFeePerPerson: 'delegateFeePerPerson',
     cookFeePerPerson: 'cookFeePerPerson',
-    isPreRegistration: 'isPreRegistration'
+    isPreRegistration: 'isPreRegistration',
+    isDiscounted: 'isDiscounted'
   };
 
   export type RegistrationBatchScalarFieldEnum = (typeof RegistrationBatchScalarFieldEnum)[keyof typeof RegistrationBatchScalarFieldEnum]
@@ -18153,6 +18167,7 @@ export namespace Prisma {
     delegateFeePerPerson?: IntFilter<"RegistrationBatch"> | number
     cookFeePerPerson?: IntFilter<"RegistrationBatch"> | number
     isPreRegistration?: BoolFilter<"RegistrationBatch"> | boolean
+    isDiscounted?: BoolFilter<"RegistrationBatch"> | boolean
     registration?: XOR<RegistrationScalarRelationFilter, RegistrationWhereInput>
     reviewer?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     delegates?: DelegateListRelationFilter
@@ -18174,6 +18189,7 @@ export namespace Prisma {
     delegateFeePerPerson?: SortOrder
     cookFeePerPerson?: SortOrder
     isPreRegistration?: SortOrder
+    isDiscounted?: SortOrder
     registration?: RegistrationOrderByWithRelationInput
     reviewer?: UserOrderByWithRelationInput
     delegates?: DelegateOrderByRelationAggregateInput
@@ -18198,6 +18214,7 @@ export namespace Prisma {
     delegateFeePerPerson?: IntFilter<"RegistrationBatch"> | number
     cookFeePerPerson?: IntFilter<"RegistrationBatch"> | number
     isPreRegistration?: BoolFilter<"RegistrationBatch"> | boolean
+    isDiscounted?: BoolFilter<"RegistrationBatch"> | boolean
     registration?: XOR<RegistrationScalarRelationFilter, RegistrationWhereInput>
     reviewer?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     delegates?: DelegateListRelationFilter
@@ -18219,6 +18236,7 @@ export namespace Prisma {
     delegateFeePerPerson?: SortOrder
     cookFeePerPerson?: SortOrder
     isPreRegistration?: SortOrder
+    isDiscounted?: SortOrder
     _count?: RegistrationBatchCountOrderByAggregateInput
     _avg?: RegistrationBatchAvgOrderByAggregateInput
     _max?: RegistrationBatchMaxOrderByAggregateInput
@@ -18244,6 +18262,7 @@ export namespace Prisma {
     delegateFeePerPerson?: IntWithAggregatesFilter<"RegistrationBatch"> | number
     cookFeePerPerson?: IntWithAggregatesFilter<"RegistrationBatch"> | number
     isPreRegistration?: BoolWithAggregatesFilter<"RegistrationBatch"> | boolean
+    isDiscounted?: BoolWithAggregatesFilter<"RegistrationBatch"> | boolean
   }
 
   export type DelegateWhereInput = {
@@ -19199,6 +19218,7 @@ export namespace Prisma {
     delegateFeePerPerson?: number
     cookFeePerPerson?: number
     isPreRegistration?: boolean
+    isDiscounted?: boolean
     registration: RegistrationCreateNestedOneWithoutBatchesInput
     reviewer?: UserCreateNestedOneWithoutReviewedBatchesInput
     delegates?: DelegateCreateNestedManyWithoutBatchInput
@@ -19220,6 +19240,7 @@ export namespace Prisma {
     delegateFeePerPerson?: number
     cookFeePerPerson?: number
     isPreRegistration?: boolean
+    isDiscounted?: boolean
     delegates?: DelegateUncheckedCreateNestedManyWithoutBatchInput
     cooks?: CookUncheckedCreateNestedManyWithoutBatchInput
   }
@@ -19237,6 +19258,7 @@ export namespace Prisma {
     delegateFeePerPerson?: IntFieldUpdateOperationsInput | number
     cookFeePerPerson?: IntFieldUpdateOperationsInput | number
     isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
+    isDiscounted?: BoolFieldUpdateOperationsInput | boolean
     registration?: RegistrationUpdateOneRequiredWithoutBatchesNestedInput
     reviewer?: UserUpdateOneWithoutReviewedBatchesNestedInput
     delegates?: DelegateUpdateManyWithoutBatchNestedInput
@@ -19258,6 +19280,7 @@ export namespace Prisma {
     delegateFeePerPerson?: IntFieldUpdateOperationsInput | number
     cookFeePerPerson?: IntFieldUpdateOperationsInput | number
     isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
+    isDiscounted?: BoolFieldUpdateOperationsInput | boolean
     delegates?: DelegateUncheckedUpdateManyWithoutBatchNestedInput
     cooks?: CookUncheckedUpdateManyWithoutBatchNestedInput
   }
@@ -19277,6 +19300,7 @@ export namespace Prisma {
     delegateFeePerPerson?: number
     cookFeePerPerson?: number
     isPreRegistration?: boolean
+    isDiscounted?: boolean
   }
 
   export type RegistrationBatchUpdateManyMutationInput = {
@@ -19292,6 +19316,7 @@ export namespace Prisma {
     delegateFeePerPerson?: IntFieldUpdateOperationsInput | number
     cookFeePerPerson?: IntFieldUpdateOperationsInput | number
     isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
+    isDiscounted?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type RegistrationBatchUncheckedUpdateManyInput = {
@@ -19309,6 +19334,7 @@ export namespace Prisma {
     delegateFeePerPerson?: IntFieldUpdateOperationsInput | number
     cookFeePerPerson?: IntFieldUpdateOperationsInput | number
     isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
+    isDiscounted?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type DelegateCreateInput = {
@@ -20157,6 +20183,7 @@ export namespace Prisma {
     delegateFeePerPerson?: SortOrder
     cookFeePerPerson?: SortOrder
     isPreRegistration?: SortOrder
+    isDiscounted?: SortOrder
   }
 
   export type RegistrationBatchAvgOrderByAggregateInput = {
@@ -20181,6 +20208,7 @@ export namespace Prisma {
     delegateFeePerPerson?: SortOrder
     cookFeePerPerson?: SortOrder
     isPreRegistration?: SortOrder
+    isDiscounted?: SortOrder
   }
 
   export type RegistrationBatchMinOrderByAggregateInput = {
@@ -20198,6 +20226,7 @@ export namespace Prisma {
     delegateFeePerPerson?: SortOrder
     cookFeePerPerson?: SortOrder
     isPreRegistration?: SortOrder
+    isDiscounted?: SortOrder
   }
 
   export type RegistrationBatchSumOrderByAggregateInput = {
@@ -21458,6 +21487,7 @@ export namespace Prisma {
     delegateFeePerPerson?: number
     cookFeePerPerson?: number
     isPreRegistration?: boolean
+    isDiscounted?: boolean
     registration: RegistrationCreateNestedOneWithoutBatchesInput
     delegates?: DelegateCreateNestedManyWithoutBatchInput
     cooks?: CookCreateNestedManyWithoutBatchInput
@@ -21477,6 +21507,7 @@ export namespace Prisma {
     delegateFeePerPerson?: number
     cookFeePerPerson?: number
     isPreRegistration?: boolean
+    isDiscounted?: boolean
     delegates?: DelegateUncheckedCreateNestedManyWithoutBatchInput
     cooks?: CookUncheckedCreateNestedManyWithoutBatchInput
   }
@@ -21649,6 +21680,7 @@ export namespace Prisma {
     delegateFeePerPerson?: IntFilter<"RegistrationBatch"> | number
     cookFeePerPerson?: IntFilter<"RegistrationBatch"> | number
     isPreRegistration?: BoolFilter<"RegistrationBatch"> | boolean
+    isDiscounted?: BoolFilter<"RegistrationBatch"> | boolean
   }
 
   export type UserCreateWithoutSessionsInput = {
@@ -22377,6 +22409,7 @@ export namespace Prisma {
     delegateFeePerPerson?: number
     cookFeePerPerson?: number
     isPreRegistration?: boolean
+    isDiscounted?: boolean
     reviewer?: UserCreateNestedOneWithoutReviewedBatchesInput
     delegates?: DelegateCreateNestedManyWithoutBatchInput
     cooks?: CookCreateNestedManyWithoutBatchInput
@@ -22396,6 +22429,7 @@ export namespace Prisma {
     delegateFeePerPerson?: number
     cookFeePerPerson?: number
     isPreRegistration?: boolean
+    isDiscounted?: boolean
     delegates?: DelegateUncheckedCreateNestedManyWithoutBatchInput
     cooks?: CookUncheckedCreateNestedManyWithoutBatchInput
   }
@@ -22813,6 +22847,7 @@ export namespace Prisma {
     delegateFeePerPerson?: number
     cookFeePerPerson?: number
     isPreRegistration?: boolean
+    isDiscounted?: boolean
     registration: RegistrationCreateNestedOneWithoutBatchesInput
     reviewer?: UserCreateNestedOneWithoutReviewedBatchesInput
     cooks?: CookCreateNestedManyWithoutBatchInput
@@ -22833,6 +22868,7 @@ export namespace Prisma {
     delegateFeePerPerson?: number
     cookFeePerPerson?: number
     isPreRegistration?: boolean
+    isDiscounted?: boolean
     cooks?: CookUncheckedCreateNestedManyWithoutBatchInput
   }
 
@@ -22865,6 +22901,7 @@ export namespace Prisma {
     delegateFeePerPerson?: IntFieldUpdateOperationsInput | number
     cookFeePerPerson?: IntFieldUpdateOperationsInput | number
     isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
+    isDiscounted?: BoolFieldUpdateOperationsInput | boolean
     registration?: RegistrationUpdateOneRequiredWithoutBatchesNestedInput
     reviewer?: UserUpdateOneWithoutReviewedBatchesNestedInput
     cooks?: CookUpdateManyWithoutBatchNestedInput
@@ -22885,6 +22922,7 @@ export namespace Prisma {
     delegateFeePerPerson?: IntFieldUpdateOperationsInput | number
     cookFeePerPerson?: IntFieldUpdateOperationsInput | number
     isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
+    isDiscounted?: BoolFieldUpdateOperationsInput | boolean
     cooks?: CookUncheckedUpdateManyWithoutBatchNestedInput
   }
 
@@ -22901,6 +22939,7 @@ export namespace Prisma {
     delegateFeePerPerson?: number
     cookFeePerPerson?: number
     isPreRegistration?: boolean
+    isDiscounted?: boolean
     registration: RegistrationCreateNestedOneWithoutBatchesInput
     reviewer?: UserCreateNestedOneWithoutReviewedBatchesInput
     delegates?: DelegateCreateNestedManyWithoutBatchInput
@@ -22921,6 +22960,7 @@ export namespace Prisma {
     delegateFeePerPerson?: number
     cookFeePerPerson?: number
     isPreRegistration?: boolean
+    isDiscounted?: boolean
     delegates?: DelegateUncheckedCreateNestedManyWithoutBatchInput
   }
 
@@ -22953,6 +22993,7 @@ export namespace Prisma {
     delegateFeePerPerson?: IntFieldUpdateOperationsInput | number
     cookFeePerPerson?: IntFieldUpdateOperationsInput | number
     isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
+    isDiscounted?: BoolFieldUpdateOperationsInput | boolean
     registration?: RegistrationUpdateOneRequiredWithoutBatchesNestedInput
     reviewer?: UserUpdateOneWithoutReviewedBatchesNestedInput
     delegates?: DelegateUpdateManyWithoutBatchNestedInput
@@ -22973,6 +23014,7 @@ export namespace Prisma {
     delegateFeePerPerson?: IntFieldUpdateOperationsInput | number
     cookFeePerPerson?: IntFieldUpdateOperationsInput | number
     isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
+    isDiscounted?: BoolFieldUpdateOperationsInput | boolean
     delegates?: DelegateUncheckedUpdateManyWithoutBatchNestedInput
   }
 
@@ -23023,6 +23065,7 @@ export namespace Prisma {
     delegateFeePerPerson?: number
     cookFeePerPerson?: number
     isPreRegistration?: boolean
+    isDiscounted?: boolean
   }
 
   export type SessionUpdateWithoutUserInput = {
@@ -23139,6 +23182,7 @@ export namespace Prisma {
     delegateFeePerPerson?: IntFieldUpdateOperationsInput | number
     cookFeePerPerson?: IntFieldUpdateOperationsInput | number
     isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
+    isDiscounted?: BoolFieldUpdateOperationsInput | boolean
     registration?: RegistrationUpdateOneRequiredWithoutBatchesNestedInput
     delegates?: DelegateUpdateManyWithoutBatchNestedInput
     cooks?: CookUpdateManyWithoutBatchNestedInput
@@ -23158,6 +23202,7 @@ export namespace Prisma {
     delegateFeePerPerson?: IntFieldUpdateOperationsInput | number
     cookFeePerPerson?: IntFieldUpdateOperationsInput | number
     isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
+    isDiscounted?: BoolFieldUpdateOperationsInput | boolean
     delegates?: DelegateUncheckedUpdateManyWithoutBatchNestedInput
     cooks?: CookUncheckedUpdateManyWithoutBatchNestedInput
   }
@@ -23176,6 +23221,7 @@ export namespace Prisma {
     delegateFeePerPerson?: IntFieldUpdateOperationsInput | number
     cookFeePerPerson?: IntFieldUpdateOperationsInput | number
     isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
+    isDiscounted?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type ChurchCreateManyDivisionInput = {
@@ -23346,6 +23392,7 @@ export namespace Prisma {
     delegateFeePerPerson?: number
     cookFeePerPerson?: number
     isPreRegistration?: boolean
+    isDiscounted?: boolean
   }
 
   export type RegistrationBatchUpdateWithoutRegistrationInput = {
@@ -23361,6 +23408,7 @@ export namespace Prisma {
     delegateFeePerPerson?: IntFieldUpdateOperationsInput | number
     cookFeePerPerson?: IntFieldUpdateOperationsInput | number
     isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
+    isDiscounted?: BoolFieldUpdateOperationsInput | boolean
     reviewer?: UserUpdateOneWithoutReviewedBatchesNestedInput
     delegates?: DelegateUpdateManyWithoutBatchNestedInput
     cooks?: CookUpdateManyWithoutBatchNestedInput
@@ -23380,6 +23428,7 @@ export namespace Prisma {
     delegateFeePerPerson?: IntFieldUpdateOperationsInput | number
     cookFeePerPerson?: IntFieldUpdateOperationsInput | number
     isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
+    isDiscounted?: BoolFieldUpdateOperationsInput | boolean
     delegates?: DelegateUncheckedUpdateManyWithoutBatchNestedInput
     cooks?: CookUncheckedUpdateManyWithoutBatchNestedInput
   }
@@ -23398,6 +23447,7 @@ export namespace Prisma {
     delegateFeePerPerson?: IntFieldUpdateOperationsInput | number
     cookFeePerPerson?: IntFieldUpdateOperationsInput | number
     isPreRegistration?: BoolFieldUpdateOperationsInput | boolean
+    isDiscounted?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type DelegateCreateManyBatchInput = {

@@ -82,7 +82,10 @@ export function Features() {
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <ScrollAnimation animation="fade-up" className="text-center max-w-3xl mx-auto mb-16 sm:mb-20">
+        <ScrollAnimation
+          animation="fade-up"
+          className="text-center max-w-3xl mx-auto mb-16 sm:mb-20"
+        >
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
             Everything you need for{" "}
             <span className="bg-gradient-to-r from-primary via-violet-600 to-primary bg-clip-text text-transparent dark:from-white dark:via-violet-400 dark:to-white">
@@ -119,27 +122,29 @@ function FeatureCard({
   return (
     <ScrollAnimation
       animation="fade-up"
-      delay={index * 100}
+      delay={index * 80}
       duration={500}
       threshold={0.05}
     >
-      <div className="group relative h-full rounded-2xl border border-border bg-card/50 backdrop-blur-sm p-6 transition-all duration-300 hover:border-border/80 hover:bg-card hover:shadow-xl hover:shadow-black/5 dark:hover:shadow-black/20 hover:-translate-y-1">
+      <div className="group relative h-full rounded-2xl border border-border bg-card/50 backdrop-blur-sm p-6 transition-all duration-300 ease-out hover:border-border/80 hover:bg-card hover:shadow-xl hover:shadow-black/5 dark:hover:shadow-black/20 hover:-translate-y-1.5">
         {/* Icon */}
         <div
-          className={`inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${feature.gradient} text-white shadow-lg shadow-black/10 mb-4 transition-transform group-hover:scale-110`}
+          className={`inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${feature.gradient} text-white shadow-lg shadow-black/10 mb-4 transition-all duration-300 ease-out group-hover:scale-110 group-hover:shadow-xl group-hover:shadow-black/15`}
         >
           <Icon className="h-6 w-6" />
         </div>
 
         {/* Content */}
-        <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
+        <h3 className="text-lg font-semibold mb-2 transition-colors duration-300 group-hover:text-foreground">
+          {feature.title}
+        </h3>
         <p className="text-sm text-muted-foreground leading-relaxed">
           {feature.description}
         </p>
 
         {/* Hover Gradient */}
         <div
-          className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-[0.03] transition-opacity pointer-events-none`}
+          className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-[0.04] transition-opacity duration-500 pointer-events-none`}
         />
       </div>
     </ScrollAnimation>

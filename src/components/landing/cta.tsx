@@ -22,10 +22,19 @@ export function CTA() {
         {/* Gradient Background */}
         <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent" />
 
-        {/* Gradient Orbs */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[600px] w-[600px] rounded-full bg-primary/10 blur-[128px]" />
-        <div className="absolute top-1/4 left-1/4 h-64 w-64 rounded-full bg-violet-500/10 blur-[100px]" />
-        <div className="absolute bottom-1/4 right-1/4 h-64 w-64 rounded-full bg-blue-500/10 blur-[100px]" />
+        {/* Floating Gradient Orbs */}
+        <div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[600px] w-[600px] rounded-full bg-primary/10 blur-[128px]"
+          style={{ animation: "cta-float 20s ease-in-out infinite" }}
+        />
+        <div
+          className="absolute top-1/4 left-1/4 h-64 w-64 rounded-full bg-violet-500/10 blur-[100px]"
+          style={{ animation: "cta-float 24s ease-in-out infinite reverse" }}
+        />
+        <div
+          className="absolute bottom-1/4 right-1/4 h-64 w-64 rounded-full bg-blue-500/10 blur-[100px]"
+          style={{ animation: "cta-float 22s ease-in-out infinite 3s" }}
+        />
 
         {/* Grid Pattern */}
         <div
@@ -41,7 +50,7 @@ export function CTA() {
         <div className="mx-auto max-w-4xl text-center">
           {/* Badge */}
           <ScrollAnimation animation="fade-up">
-            <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-sm font-medium text-primary mb-8">
+            <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-sm font-medium text-primary mb-8 transition-colors duration-300 hover:border-primary/40 hover:bg-primary/10">
               <span className="relative flex h-2 w-2">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
@@ -63,9 +72,9 @@ export function CTA() {
           {/* Subheadline */}
           <ScrollAnimation animation="fade-up" delay={200}>
             <p className="mt-6 text-lg text-muted-foreground max-w-2xl mx-auto">
-              Church presidents can easily register delegates for upcoming events.
-              Track your registration status and manage your church&apos;s participation
-              all in one place.
+              Church presidents can easily register delegates for upcoming
+              events. Track your registration status and manage your
+              church&apos;s participation all in one place.
             </p>
           </ScrollAnimation>
 
@@ -75,7 +84,7 @@ export function CTA() {
               {benefits.map((benefit) => (
                 <div
                   key={benefit}
-                  className="flex items-center gap-2 text-sm text-muted-foreground"
+                  className="flex items-center gap-2 text-sm text-muted-foreground transition-colors duration-200 hover:text-foreground"
                 >
                   <Check className="h-4 w-4 text-emerald-500 flex-shrink-0" />
                   <span>{benefit}</span>
@@ -90,18 +99,18 @@ export function CTA() {
               <Button
                 size="lg"
                 asChild
-                className="w-full sm:w-auto text-base shadow-lg shadow-primary/25"
+                className="group w-full sm:w-auto text-base shadow-lg shadow-primary/25 transition-all duration-300 hover:shadow-xl hover:shadow-primary/30 hover:scale-[1.02] active:scale-[0.98]"
               >
                 <Link href="/login">
                   Login to Register
-                  <ArrowRight className="ml-2 h-4 w-4" />
+                  <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                 </Link>
               </Button>
               <Button
                 variant="outline"
                 size="lg"
                 asChild
-                className="w-full sm:w-auto text-base"
+                className="w-full sm:w-auto text-base transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
               >
                 <Link href="#features">View Features</Link>
               </Button>
@@ -116,6 +125,27 @@ export function CTA() {
           </ScrollAnimation>
         </div>
       </div>
+
+      <style jsx>{`
+        @keyframes cta-float {
+          0%,
+          100% {
+            transform: translate(-50%, -50%) scale(1);
+          }
+          25% {
+            transform: translate(calc(-50% + 40px), calc(-50% - 30px))
+              scale(1.05);
+          }
+          50% {
+            transform: translate(calc(-50% - 30px), calc(-50% + 40px))
+              scale(0.95);
+          }
+          75% {
+            transform: translate(calc(-50% + 20px), calc(-50% + 20px))
+              scale(1.02);
+          }
+        }
+      `}</style>
     </section>
   );
 }

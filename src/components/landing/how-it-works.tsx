@@ -40,7 +40,10 @@ const steps = [
 
 export function HowItWorks() {
   return (
-    <section id="how-it-works" className="relative py-24 sm:py-32 bg-background">
+    <section
+      id="how-it-works"
+      className="relative py-24 sm:py-32 bg-background"
+    >
       {/* Background */}
       <div className="absolute inset-0 overflow-hidden">
         <div
@@ -54,7 +57,10 @@ export function HowItWorks() {
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <ScrollAnimation animation="fade-up" className="text-center max-w-3xl mx-auto mb-16 sm:mb-20">
+        <ScrollAnimation
+          animation="fade-up"
+          className="text-center max-w-3xl mx-auto mb-16 sm:mb-20"
+        >
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
             How it{" "}
             <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent dark:from-emerald-400 dark:to-teal-400">
@@ -63,15 +69,25 @@ export function HowItWorks() {
           </h2>
           <p className="mt-4 text-lg text-muted-foreground">
             Register your church delegates for SCMD events in four simple steps.
-            Our streamlined process makes delegate registration quick and effortless.
+            Our streamlined process makes delegate registration quick and
+            effortless.
           </p>
         </ScrollAnimation>
 
         {/* Steps Grid */}
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
-          {steps.map((item, index) => (
-            <StepCard key={item.step} item={item} index={index} />
-          ))}
+        <div className="relative">
+          {/* Connecting line - desktop */}
+          <div className="hidden lg:block absolute top-8 left-[12.5%] right-[12.5%] z-0">
+            <ScrollAnimation animation="fade" duration={1200}>
+              <div className="w-full h-px border-t-2 border-dashed border-muted-foreground/15" />
+            </ScrollAnimation>
+          </div>
+
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+            {steps.map((item, index) => (
+              <StepCard key={item.step} item={item} index={index} />
+            ))}
+          </div>
         </div>
       </div>
     </section>
@@ -96,13 +112,13 @@ function StepCard({
     >
       <div className="group relative flex flex-col items-center text-center">
         {/* Step Number */}
-        <div className="absolute -top-4 left-1/2 -translate-x-1/2 text-6xl font-bold text-muted-foreground/10 select-none">
+        <div className="absolute -top-4 left-1/2 -translate-x-1/2 text-6xl font-bold text-muted-foreground/10 select-none transition-all duration-500 group-hover:text-muted-foreground/20 group-hover:scale-110">
           {item.step}
         </div>
 
         {/* Icon Container */}
         <div
-          className={`relative z-10 mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br ${item.gradient} text-white shadow-lg shadow-black/10 transition-transform group-hover:scale-110`}
+          className={`relative z-10 mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br ${item.gradient} text-white shadow-lg shadow-black/10 transition-all duration-300 ease-out group-hover:scale-110 group-hover:shadow-xl group-hover:shadow-black/15 group-hover:-translate-y-1`}
         >
           <Icon className="h-8 w-8" />
         </div>
