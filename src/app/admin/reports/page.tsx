@@ -16,14 +16,18 @@ import {
   ReportFilters,
   ExportButton,
   ExportTriggerButton,
+  ExportDocxButton,
+  ExportPdfButton,
   type ReportFiltersState,
 } from "@/components/admin/reports";
 import {
   useEventsForExport,
   useDivisionsForExport,
+  useChurchesForExport,
   useExportRegistrations,
 } from "@/hooks/use-dashboard";
-import type { ExportData, ExportFilters } from "@/actions/dashboard";
+import type { ExportData } from "@/actions/dashboard";
+import type { ExportFilters } from "@/actions/dashboard";
 import { format } from "date-fns";
 import {
   FileSpreadsheet,
@@ -43,6 +47,8 @@ export default function ReportsPage() {
     useEventsForExport();
   const { data: divisions = [], isLoading: isLoadingDivisions } =
     useDivisionsForExport();
+  const { data: churches = [], isLoading: isLoadingChurches } =
+    useChurchesForExport(filters.divisionId);
   const exportMutation = useExportRegistrations();
 
   const handleGenerateExport = useCallback(() => {
@@ -51,6 +57,7 @@ export default function ReportsPage() {
       eventId: filters.eventId,
       status: filters.status,
       divisionId: filters.divisionId,
+      churchId: filters.churchId,
       dateFrom: filters.dateFrom ? new Date(filters.dateFrom) : undefined,
       dateTo: filters.dateTo ? new Date(filters.dateTo) : undefined,
     };
@@ -145,21 +152,55 @@ export default function ReportsPage() {
             onFiltersChange={setFilters}
             events={events}
             divisions={divisions}
+            churches={churches}
             isLoadingEvents={isLoadingEvents}
             isLoadingDivisions={isLoadingDivisions}
+            isLoadingChurches={isLoadingChurches}
           />
 
-          <div className="flex items-center gap-4 pt-4 border-t">
+          <div className="flex flex-wrap items-center gap-3 pt-4 border-t">
             <ExportTriggerButton
               onExport={handleGenerateExport}
               isLoading={exportMutation.isPending}
             />
             {exportData && (
-              <ExportButton
-                data={exportData}
-                isLoading={false}
-                filename="scmd-registrations"
-              />
+              <>
+                <ExportButton
+                  data={exportData}
+                  isLoading={false}
+                  filename="scmd-registrations"
+                />
+                <ExportDocxButton
+                  filters={{
+                    eventId: filters.eventId,
+                    status: filters.status,
+                    divisionId: filters.divisionId,
+                    churchId: filters.churchId,
+                    dateFrom: filters.dateFrom
+                      ? new Date(filters.dateFrom)
+                      : undefined,
+                    dateTo: filters.dateTo
+                      ? new Date(filters.dateTo)
+                      : undefined,
+                  }}
+                  hasData={exportData.rows.length > 0}
+                />
+                <ExportPdfButton
+                  filters={{
+                    eventId: filters.eventId,
+                    status: filters.status,
+                    divisionId: filters.divisionId,
+                    churchId: filters.churchId,
+                    dateFrom: filters.dateFrom
+                      ? new Date(filters.dateFrom)
+                      : undefined,
+                    dateTo: filters.dateTo
+                      ? new Date(filters.dateTo)
+                      : undefined,
+                  }}
+                  hasData={exportData.rows.length > 0}
+                />
+              </>
             )}
           </div>
         </CardContent>

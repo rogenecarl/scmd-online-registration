@@ -423,6 +423,7 @@ export type ExportFilters = {
   eventId?: string;
   status?: RegistrationStatus;
   divisionId?: string;
+  churchId?: string;
   dateFrom?: Date;
   dateTo?: Date;
 };
@@ -492,6 +493,7 @@ export async function exportRegistrations(
     const where: {
       registration?: {
         eventId?: string;
+        churchId?: string;
         church?: { divisionId?: string };
       };
       status?: RegistrationStatus;
@@ -506,7 +508,12 @@ export async function exportRegistrations(
       where.status = filters.status;
     }
 
-    if (filters.divisionId) {
+    if (filters.churchId) {
+      where.registration = {
+        ...where.registration,
+        churchId: filters.churchId,
+      };
+    } else if (filters.divisionId) {
       where.registration = {
         ...where.registration,
         church: { divisionId: filters.divisionId },
@@ -705,6 +712,225 @@ export async function getEventsForExport(): Promise<
   }
 }
 
+// ==========================================
+// CHURCH-GROUPED EXPORT (for DOCX/PDF)
+// ==========================================
+
+export type ChurchCamper = {
+  name: string;
+  nickname: string;
+  age: number;
+  gender: "MALE" | "FEMALE";
+  isPreRegistration: boolean;
+};
+
+export type ChurchCook = {
+  name: string;
+  nickname: string;
+  age: number;
+  gender: "MALE" | "FEMALE";
+};
+
+export type ChurchExportEntry = {
+  eventName: string;
+  division: string;
+  divisionCoordinator: string;
+  church: string;
+  hostPastor: string;
+  preRegistrationFee: number;
+  onsiteRegistrationFee: number;
+  cookRegistrationFee: number;
+  campers: ChurchCamper[];
+  cooks: ChurchCook[];
+  totalDelegates: number;
+  totalCooks: number;
+  totalMoney: number;
+};
+
+export type ChurchExportData = {
+  entries: ChurchExportEntry[];
+  generatedAt: Date;
+  filters: ExportFilters;
+};
+
+/**
+ * Export registrations grouped by church for DOCX/PDF export
+ * Each church becomes one page/section in the document
+ */
+export async function exportRegistrationsByChurch(
+  filters: ExportFilters
+): Promise<ActionResponse<ChurchExportData>> {
+  await requireRole("ADMIN");
+
+  try {
+    // Build where clause for registrations
+    const batchWhere: {
+      registration?: {
+        eventId?: string;
+        churchId?: string;
+        church?: { divisionId?: string };
+      };
+      status?: RegistrationStatus;
+      createdAt?: { gte?: Date; lte?: Date };
+    } = {};
+
+    if (filters.eventId) {
+      batchWhere.registration = {
+        ...batchWhere.registration,
+        eventId: filters.eventId,
+      };
+    }
+
+    if (filters.status) {
+      batchWhere.status = filters.status;
+    }
+
+    if (filters.churchId) {
+      batchWhere.registration = {
+        ...batchWhere.registration,
+        churchId: filters.churchId,
+      };
+    } else if (filters.divisionId) {
+      batchWhere.registration = {
+        ...batchWhere.registration,
+        church: { divisionId: filters.divisionId },
+      };
+    }
+
+    if (filters.dateFrom || filters.dateTo) {
+      batchWhere.createdAt = {};
+      if (filters.dateFrom) batchWhere.createdAt.gte = filters.dateFrom;
+      if (filters.dateTo) batchWhere.createdAt.lte = filters.dateTo;
+    }
+
+    const batches = await prisma.registrationBatch.findMany({
+      where: batchWhere,
+      select: {
+        isPreRegistration: true,
+        totalFee: true,
+        delegateFeePerPerson: true,
+        cookFeePerPerson: true,
+        registration: {
+          select: {
+            event: {
+              select: {
+                name: true,
+                preRegistrationFee: true,
+                onsiteRegistrationFee: true,
+                cookRegistrationFee: true,
+              },
+            },
+            church: {
+              select: {
+                id: true,
+                name: true,
+                division: {
+                  select: {
+                    name: true,
+                    coordinator: {
+                      select: { name: true },
+                    },
+                  },
+                },
+                pastor: {
+                  select: { name: true },
+                },
+              },
+            },
+          },
+        },
+        delegates: {
+          select: {
+            fullName: true,
+            nickname: true,
+            age: true,
+            gender: true,
+          },
+        },
+        cooks: {
+          select: {
+            fullName: true,
+            nickname: true,
+            age: true,
+            gender: true,
+          },
+        },
+      },
+      orderBy: [
+        { registration: { church: { division: { name: "asc" } } } },
+        { registration: { church: { name: "asc" } } },
+        { createdAt: "asc" },
+      ],
+    });
+
+    // Group by church
+    const churchMap = new Map<string, ChurchExportEntry>();
+
+    for (const batch of batches) {
+      const churchId = batch.registration.church.id;
+      const church = batch.registration.church;
+      const event = batch.registration.event;
+
+      if (!churchMap.has(churchId)) {
+        churchMap.set(churchId, {
+          eventName: event.name,
+          division: church.division.name,
+          divisionCoordinator: church.division.coordinator?.name || "",
+          church: church.name,
+          hostPastor: church.pastor?.name || "",
+          preRegistrationFee: event.preRegistrationFee,
+          onsiteRegistrationFee: event.onsiteRegistrationFee,
+          cookRegistrationFee: event.cookRegistrationFee,
+          campers: [],
+          cooks: [],
+          totalDelegates: 0,
+          totalCooks: 0,
+          totalMoney: 0,
+        });
+      }
+
+      const entry = churchMap.get(churchId)!;
+
+      // Add delegates as campers
+      for (const delegate of batch.delegates) {
+        entry.campers.push({
+          name: delegate.fullName,
+          nickname: delegate.nickname || "",
+          age: delegate.age,
+          gender: delegate.gender,
+          isPreRegistration: batch.isPreRegistration,
+        });
+      }
+
+      // Add cooks
+      for (const cook of batch.cooks) {
+        entry.cooks.push({
+          name: cook.fullName,
+          nickname: cook.nickname || "",
+          age: cook.age,
+          gender: cook.gender,
+        });
+      }
+
+      entry.totalDelegates += batch.delegates.length;
+      entry.totalCooks += batch.cooks.length;
+      entry.totalMoney += batch.totalFee;
+    }
+
+    return {
+      success: true,
+      data: {
+        entries: Array.from(churchMap.values()),
+        generatedAt: new Date(),
+        filters,
+      },
+    };
+  } catch (error) {
+    console.error("Failed to export registrations by church:", error);
+    return { success: false, error: "Failed to export registrations" };
+  }
+}
+
 /**
  * Get list of divisions for export filter dropdown
  */
@@ -726,5 +952,32 @@ export async function getDivisionsForExport(): Promise<
   } catch (error) {
     console.error("Failed to fetch divisions for export:", error);
     return { success: false, error: "Failed to fetch divisions" };
+  }
+}
+
+/**
+ * Get list of churches for export filter dropdown
+ * Optionally filtered by division
+ */
+export async function getChurchesForExport(
+  divisionId?: string
+): Promise<ActionResponse<{ id: string; name: string; divisionId: string }[]>> {
+  await requireRole("ADMIN");
+
+  try {
+    const churches = await prisma.church.findMany({
+      where: divisionId ? { divisionId } : undefined,
+      select: {
+        id: true,
+        name: true,
+        divisionId: true,
+      },
+      orderBy: { name: "asc" },
+    });
+
+    return { success: true, data: churches };
+  } catch (error) {
+    console.error("Failed to fetch churches for export:", error);
+    return { success: false, error: "Failed to fetch churches" };
   }
 }

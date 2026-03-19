@@ -18,6 +18,7 @@ export interface ReportFiltersState {
   eventId?: string;
   status?: RegistrationStatus;
   divisionId?: string;
+  churchId?: string;
   dateFrom?: string;
   dateTo?: string;
 }
@@ -27,8 +28,10 @@ interface ReportFiltersProps {
   onFiltersChange: (filters: ReportFiltersState) => void;
   events: { id: string; name: string; startDate: Date }[];
   divisions: { id: string; name: string }[];
+  churches: { id: string; name: string; divisionId: string }[];
   isLoadingEvents?: boolean;
   isLoadingDivisions?: boolean;
+  isLoadingChurches?: boolean;
 }
 
 const STATUS_OPTIONS: { value: RegistrationStatus; label: string }[] = [
@@ -42,17 +45,21 @@ export function ReportFilters({
   onFiltersChange,
   events,
   divisions,
+  churches,
   isLoadingEvents,
   isLoadingDivisions,
+  isLoadingChurches,
 }: ReportFiltersProps) {
   const updateFilter = <K extends keyof ReportFiltersState>(
     key: K,
     value: ReportFiltersState[K] | undefined
   ) => {
-    onFiltersChange({
-      ...filters,
-      [key]: value,
-    });
+    const updated = { ...filters, [key]: value };
+    // Clear church when division changes
+    if (key === "divisionId") {
+      updated.churchId = undefined;
+    }
+    onFiltersChange(updated);
   };
 
   const clearFilters = () => {
@@ -63,12 +70,18 @@ export function ReportFilters({
     filters.eventId ||
     filters.status ||
     filters.divisionId ||
+    filters.churchId ||
     filters.dateFrom ||
     filters.dateTo;
 
+  // Filter churches by selected division
+  const filteredChurches = filters.divisionId
+    ? churches.filter((c) => c.divisionId === filters.divisionId)
+    : churches;
+
   return (
     <div className="space-y-4">
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {/* Event Filter */}
         <div className="space-y-2">
           <Label htmlFor="event-filter">Event</Label>
@@ -111,6 +124,36 @@ export function ReportFilters({
               {divisions.map((division) => (
                 <SelectItem key={division.id} value={division.id}>
                   {division.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* Church Filter */}
+        <div className="space-y-2">
+          <Label htmlFor="church-filter">Church</Label>
+          <Select
+            value={filters.churchId || "all"}
+            onValueChange={(value) =>
+              updateFilter("churchId", value === "all" ? undefined : value)
+            }
+            disabled={isLoadingChurches || filteredChurches.length === 0}
+          >
+            <SelectTrigger id="church-filter">
+              <SelectValue
+                placeholder={
+                  !filters.divisionId
+                    ? "Select a division first"
+                    : "All Churches"
+                }
+              />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Churches</SelectItem>
+              {filteredChurches.map((church) => (
+                <SelectItem key={church.id} value={church.id}>
+                  {church.name}
                 </SelectItem>
               ))}
             </SelectContent>

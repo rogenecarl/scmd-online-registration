@@ -1,9 +1,12 @@
 "use client";
 
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Download, Loader2 } from "lucide-react";
-import type { ExportData, ExportRow } from "@/actions/dashboard";
+import { Download, Loader2, FileText, FileSpreadsheet } from "lucide-react";
+import type { ExportData, ExportRow, ExportFilters } from "@/actions/dashboard";
+import { useExportByChurch } from "@/hooks/use-dashboard";
 import { format } from "date-fns";
+import { toast } from "sonner";
 
 interface ExportButtonProps {
   data: ExportData | undefined;
@@ -126,6 +129,7 @@ export function ExportButton({
     <Button
       onClick={handleExport}
       disabled={disabled || isLoading || !hasData}
+      variant="outline"
       className="gap-2"
     >
       {isLoading ? (
@@ -135,7 +139,7 @@ export function ExportButton({
         </>
       ) : (
         <>
-          <Download className="h-4 w-4" />
+          <FileSpreadsheet className="h-4 w-4" />
           Download CSV
         </>
       )}
@@ -173,6 +177,102 @@ export function ExportTriggerButton({
         <>
           <Download className="h-4 w-4" />
           Generate Export
+        </>
+      )}
+    </Button>
+  );
+}
+
+/**
+ * DOCX export button - fetches church-grouped data and generates DOCX
+ */
+interface DocxPdfExportButtonProps {
+  filters: ExportFilters;
+  hasData: boolean;
+}
+
+export function ExportDocxButton({ filters, hasData }: DocxPdfExportButtonProps) {
+  const [isGenerating, setIsGenerating] = useState(false);
+  const exportByChurch = useExportByChurch();
+
+  const handleExport = async () => {
+    setIsGenerating(true);
+    try {
+      const data = await exportByChurch.mutateAsync(filters);
+      if (data.entries.length === 0) {
+        toast.error("No data to export");
+        return;
+      }
+      const { generateDocx } = await import("@/lib/export-docx");
+      await generateDocx(data);
+      toast.success("DOCX file downloaded");
+    } catch {
+      // error handled by mutation
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  return (
+    <Button
+      onClick={handleExport}
+      disabled={!hasData || isGenerating}
+      variant="outline"
+      className="gap-2"
+    >
+      {isGenerating ? (
+        <>
+          <Loader2 className="h-4 w-4 animate-spin" />
+          Generating...
+        </>
+      ) : (
+        <>
+          <FileText className="h-4 w-4" />
+          Export DOCX
+        </>
+      )}
+    </Button>
+  );
+}
+
+export function ExportPdfButton({ filters, hasData }: DocxPdfExportButtonProps) {
+  const [isGenerating, setIsGenerating] = useState(false);
+  const exportByChurch = useExportByChurch();
+
+  const handleExport = async () => {
+    setIsGenerating(true);
+    try {
+      const data = await exportByChurch.mutateAsync(filters);
+      if (data.entries.length === 0) {
+        toast.error("No data to export");
+        return;
+      }
+      const { generatePdf } = await import("@/lib/export-pdf");
+      generatePdf(data);
+      toast.success("PDF file downloaded");
+    } catch {
+      // error handled by mutation
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  return (
+    <Button
+      onClick={handleExport}
+      disabled={!hasData || isGenerating}
+      variant="outline"
+      className="gap-2"
+    >
+      {isGenerating ? (
+        <>
+          <Loader2 className="h-4 w-4 animate-spin" />
+          Generating...
+        </>
+      ) : (
+        <>
+          <FileText className="h-4 w-4" />
+          Export PDF
         </>
       )}
     </Button>

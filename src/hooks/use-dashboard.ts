@@ -6,8 +6,10 @@ import {
   getPresidentDashboard,
   getAdminDashboard,
   exportRegistrations,
+  exportRegistrationsByChurch,
   getEventsForExport,
   getDivisionsForExport,
+  getChurchesForExport,
   type ExportFilters,
 } from "@/actions/dashboard";
 import { toast } from "sonner";
@@ -71,6 +73,21 @@ export function useDivisionsForExport() {
 }
 
 /**
+ * Get churches for export filter dropdown
+ * Filtered by division when divisionId is provided
+ */
+export function useChurchesForExport(divisionId?: string) {
+  return useQuery({
+    queryKey: [...queryKeys.churches.all, "export", divisionId ?? "all"],
+    queryFn: async () => {
+      const result = await getChurchesForExport(divisionId);
+      if (!result.success) throw new Error(result.error);
+      return result.data;
+    },
+  });
+}
+
+/**
  * Export registrations with filters
  * Returns data that can be converted to CSV
  */
@@ -83,6 +100,22 @@ export function useExportRegistrations() {
     },
     onSuccess: () => {
       toast.success("Export data generated successfully");
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || "Failed to export registrations");
+    },
+  });
+}
+
+/**
+ * Export registrations grouped by church for DOCX/PDF
+ */
+export function useExportByChurch() {
+  return useMutation({
+    mutationFn: async (filters: ExportFilters) => {
+      const result = await exportRegistrationsByChurch(filters);
+      if (!result.success) throw new Error(result.error);
+      return result.data;
     },
     onError: (error: Error) => {
       toast.error(error.message || "Failed to export registrations");
