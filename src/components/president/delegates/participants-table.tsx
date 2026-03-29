@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { PaginatedDataTable } from "@/components/dashboard/paginated-data-table";
 import { Input } from "@/components/ui/input";
 import {
@@ -57,14 +57,14 @@ export function ParticipantsTable() {
   };
 
   // Build filters
-  const filters = {
+  const filters = useMemo(() => ({
     page,
     pageSize,
     search: debouncedSearch || undefined,
     type: typeFilter !== "ALL" ? typeFilter : undefined,
     eventId: eventFilter !== "ALL" ? eventFilter : undefined,
     gender: genderFilter !== "ALL" ? genderFilter : undefined,
-  };
+  }), [page, pageSize, debouncedSearch, typeFilter, eventFilter, genderFilter]);
 
   const { data, isLoading, error, isFetching } = useApprovedParticipants(filters);
   const { data: summary } = useApprovedParticipantsSummary();

@@ -39,10 +39,12 @@ import {
   getChurchesWithApprovedParticipants,
   adminUpdateParticipant,
   adminAddParticipants,
+  adminDeleteParticipant,
   type RegistrationFilters,
   type AdminParticipantsFilters,
   type AdminEditParticipantInput,
   type AdminAddParticipantsInput,
+  type AdminDeleteParticipantInput,
 } from "@/actions/approval";
 import type {
   CreateRegistrationInput,
@@ -619,6 +621,25 @@ export function useAdminUpdateParticipant() {
     },
     onError: (error: Error) => {
       toast.error(error.message || "Failed to update participant");
+    },
+  });
+}
+
+export function useAdminDeleteParticipant() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (input: AdminDeleteParticipantInput) => {
+      const result = await adminDeleteParticipant(input);
+      if (!result.success) throw new Error(result.error);
+      return result.data;
+    },
+    onSuccess: () => {
+      toast.success("Participant deleted successfully");
+      queryClient.invalidateQueries({ queryKey: queryKeys.adminParticipants.all });
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || "Failed to delete participant");
     },
   });
 }

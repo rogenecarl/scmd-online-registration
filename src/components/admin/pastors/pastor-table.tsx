@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { PaginatedDataTable } from "@/components/dashboard/paginated-data-table";
 import { Input } from "@/components/ui/input";
 import {
@@ -30,11 +30,13 @@ export function PastorTable() {
     setPage(1);
   };
 
-  const { data, isLoading, error, isFetching } = usePastors({
+  const filters = useMemo(() => ({
     page,
     pageSize,
     search: debouncedSearch,
-  });
+  }), [page, pageSize, debouncedSearch]);
+
+  const { data, isLoading, error, isFetching } = usePastors(filters);
   const deleteMutation = useDeletePastor();
   const confirmDialog = useConfirmDialog();
 

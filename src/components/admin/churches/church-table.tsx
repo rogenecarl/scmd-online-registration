@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { PaginatedDataTable } from "@/components/dashboard/paginated-data-table";
 import { Input } from "@/components/ui/input";
 import {
@@ -46,12 +46,14 @@ export function ChurchTable() {
     setPage(1);
   };
 
-  const { data, isLoading, error, isFetching } = useChurches({
+  const filters = useMemo(() => ({
     page,
     pageSize,
     search: debouncedSearch || undefined,
     divisionId: divisionId === "all" ? undefined : divisionId || undefined,
-  });
+  }), [page, pageSize, debouncedSearch, divisionId]);
+
+  const { data, isLoading, error, isFetching } = useChurches(filters);
   const { data: divisions } = useDivisionsForSelect();
   const deleteMutation = useDeleteChurch();
   const confirmDialog = useConfirmDialog();

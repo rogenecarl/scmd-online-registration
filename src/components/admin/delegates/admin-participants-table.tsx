@@ -22,6 +22,7 @@ import {
 } from "@/hooks/use-registrations";
 import { getAdminParticipantsColumns } from "./admin-participants-columns";
 import { EditParticipantDialog } from "./edit-participant-dialog";
+import { DeleteParticipantDialog } from "./delete-participant-dialog";
 import { AddParticipantsDialog } from "./add-participants-dialog";
 import { useDebounce } from "@/hooks/use-debounce";
 import { Button } from "@/components/ui/button";
@@ -54,6 +55,8 @@ export function AdminParticipantsTable() {
   const [genderFilter, setGenderFilter] = useState<Gender | "ALL">("ALL");
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [editingParticipant, setEditingParticipant] = useState<AdminApprovedParticipant | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [deletingParticipant, setDeletingParticipant] = useState<AdminApprovedParticipant | null>(null);
   const [addDialogOpen, setAddDialogOpen] = useState(false);
   const debouncedSearch = useDebounce(search, 300);
 
@@ -73,8 +76,8 @@ export function AdminParticipantsTable() {
     handleFilterChange();
   };
 
-  // Build filters
-  const filters = {
+  // Memoize all filter objects to prevent unnecessary re-renders and refetches
+  const filters = useMemo(() => ({
     page,
     pageSize,
     search: debouncedSearch || undefined,
@@ -83,7 +86,7 @@ export function AdminParticipantsTable() {
     churchId: churchFilter !== "ALL" ? churchFilter : undefined,
     divisionId: divisionFilter !== "ALL" ? divisionFilter : undefined,
     gender: genderFilter !== "ALL" ? genderFilter : undefined,
-  };
+  }), [page, pageSize, debouncedSearch, typeFilter, eventFilter, churchFilter, divisionFilter, genderFilter]);
 
   // Summary filters (without pagination, search, type, gender)
   const summaryFilters = useMemo(() => ({
@@ -92,21 +95,28 @@ export function AdminParticipantsTable() {
     divisionId: divisionFilter !== "ALL" ? divisionFilter : undefined,
   }), [eventFilter, churchFilter, divisionFilter]);
 
+  const churchFilters = useMemo(() => ({
+    eventId: eventFilter !== "ALL" ? eventFilter : undefined,
+    divisionId: divisionFilter !== "ALL" ? divisionFilter : undefined,
+  }), [eventFilter, divisionFilter]);
+
   const { data, isLoading, error, isFetching } = useAdminApprovedParticipants(filters);
   const { data: summary } = useAdminParticipantsSummary(summaryFilters);
   const { data: events } = useEventsWithApprovedParticipantsAdmin();
   const { data: divisions } = useDivisionsForFilter();
-  const { data: churches } = useChurchesWithApprovedParticipants({
-    eventId: eventFilter !== "ALL" ? eventFilter : undefined,
-    divisionId: divisionFilter !== "ALL" ? divisionFilter : undefined,
-  });
+  const { data: churches } = useChurchesWithApprovedParticipants(churchFilters);
 
   const handleEdit = (participant: AdminApprovedParticipant) => {
     setEditingParticipant(participant);
     setEditDialogOpen(true);
   };
 
-  const columns = getAdminParticipantsColumns(handleEdit);
+  const handleDelete = (participant: AdminApprovedParticipant) => {
+    setDeletingParticipant(participant);
+    setDeleteDialogOpen(true);
+  };
+
+  const columns = getAdminParticipantsColumns(handleEdit, handleDelete);
 
   if (isLoading) {
     return (
@@ -433,6 +443,12 @@ export function AdminParticipantsTable() {
         open={editDialogOpen}
         onOpenChange={setEditDialogOpen}
         participant={editingParticipant}
+      />
+
+      <DeleteParticipantDialog
+        open={deleteDialogOpen}
+        onOpenChange={setDeleteDialogOpen}
+        participant={deletingParticipant}
       />
 
       <AddParticipantsDialog

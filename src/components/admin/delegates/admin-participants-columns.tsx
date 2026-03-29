@@ -3,7 +3,7 @@
 import type { AdminApprovedParticipant } from "@/actions/approval";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Church, Pencil } from "lucide-react";
+import { Church, Pencil, Trash2 } from "lucide-react";
 
 export type Column<T> = {
   key: keyof T | string;
@@ -44,7 +44,8 @@ const genderConfig = {
 };
 
 export function getAdminParticipantsColumns(
-  onEdit?: (participant: AdminApprovedParticipant) => void
+  onEdit?: (participant: AdminApprovedParticipant) => void,
+  onDelete?: (participant: AdminApprovedParticipant) => void
 ): Column<AdminApprovedParticipant>[] {
   return [
     {
@@ -144,21 +145,35 @@ export function getAdminParticipantsColumns(
     {
       key: "actions",
       header: "",
-      className: "w-12",
+      className: "w-20",
       mobilePriority: "primary",
       render: (participant) => (
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-8 w-8"
-          onClick={(e) => {
-            e.stopPropagation();
-            onEdit?.(participant);
-          }}
-        >
-          <Pencil className="h-4 w-4" />
-          <span className="sr-only">Edit</span>
-        </Button>
+        <div className="flex items-center gap-1">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8"
+            onClick={(e) => {
+              e.stopPropagation();
+              onEdit?.(participant);
+            }}
+          >
+            <Pencil className="h-4 w-4" />
+            <span className="sr-only">Edit</span>
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
+            onClick={(e) => {
+              e.stopPropagation();
+              onDelete?.(participant);
+            }}
+          >
+            <Trash2 className="h-4 w-4" />
+            <span className="sr-only">Delete</span>
+          </Button>
+        </div>
       ),
     },
   ];

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { PaginatedDataTable } from "@/components/dashboard/paginated-data-table";
 import { Input } from "@/components/ui/input";
 import {
@@ -54,12 +54,14 @@ export function EventTable() {
     setPage(1);
   };
 
-  const { data, isLoading, error, isFetching } = useEvents({
+  const filters = useMemo(() => ({
     page,
     pageSize,
     search: debouncedSearch || undefined,
     status: statusFilter === "ALL" ? undefined : statusFilter,
-  });
+  }), [page, pageSize, debouncedSearch, statusFilter]);
+
+  const { data, isLoading, error, isFetching } = useEvents(filters);
   const deleteMutation = useDeleteEvent();
   const confirmDialog = useConfirmDialog();
 

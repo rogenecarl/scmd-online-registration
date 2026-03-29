@@ -1584,6 +1584,52 @@ export async function adminUpdateParticipant(
 }
 
 // ==========================================
+// ADMIN DELETE PARTICIPANT
+// ==========================================
+
+export type AdminDeleteParticipantInput = {
+  id: string;
+  type: "delegate" | "sibling" | "cook";
+};
+
+export async function adminDeleteParticipant(
+  input: AdminDeleteParticipantInput
+): Promise<ActionResponse<{ id: string }>> {
+  await requireRole("ADMIN");
+
+  try {
+    const { id, type } = input;
+
+    if (type === "cook") {
+      const cook = await prisma.cook.findUnique({
+        where: { id },
+      });
+      if (!cook) return { success: false, error: "Cook not found" };
+
+      await prisma.cook.delete({
+        where: { id },
+      });
+    } else {
+      // delegate or sibling
+      const delegate = await prisma.delegate.findUnique({
+        where: { id },
+      });
+      if (!delegate) return { success: false, error: "Delegate not found" };
+
+      await prisma.delegate.delete({
+        where: { id },
+      });
+    }
+
+    revalidatePath("/admin/delegates");
+    return { success: true, data: { id } };
+  } catch (error) {
+    console.error("Failed to delete participant:", error);
+    return { success: false, error: "Failed to delete participant" };
+  }
+}
+
+// ==========================================
 // ADMIN ADD DISCOUNTED PARTICIPANTS
 // ==========================================
 
