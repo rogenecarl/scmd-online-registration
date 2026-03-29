@@ -1166,8 +1166,10 @@ export type AdminApprovedParticipant = {
   divisionId: string;
   divisionName: string;
   batchNumber: number;
+  batchId: string;
   registrationId: string;
   isDiscounted: boolean;
+  registrationFee: number;
 };
 
 export type AdminParticipantsFilters = {
@@ -1237,9 +1239,16 @@ export async function getAdminApprovedParticipants(
     // Get all approved batches
     const approvedBatches = await prisma.registrationBatch.findMany({
       where: whereClause,
-      include: {
+      select: {
+        id: true,
+        batchNumber: true,
+        isDiscounted: true,
+        delegateFeePerPerson: true,
+        cookFeePerPerson: true,
+        createdAt: true,
         registration: {
-          include: {
+          select: {
+            id: true,
             event: {
               select: { id: true, name: true },
             },
@@ -1302,8 +1311,10 @@ export async function getAdminApprovedParticipants(
             divisionId: church.division.id,
             divisionName: church.division.name,
             batchNumber: batch.batchNumber,
+            batchId: batch.id,
             registrationId: batch.registration.id,
             isDiscounted: batch.isDiscounted,
+            registrationFee: batch.delegateFeePerPerson,
           }));
         participants.push(...delegates);
       }
@@ -1326,8 +1337,10 @@ export async function getAdminApprovedParticipants(
             divisionId: church.division.id,
             divisionName: church.division.name,
             batchNumber: batch.batchNumber,
+            batchId: batch.id,
             registrationId: batch.registration.id,
             isDiscounted: batch.isDiscounted,
+            registrationFee: batch.delegateFeePerPerson,
           }));
         participants.push(...siblings);
       }
@@ -1348,8 +1361,10 @@ export async function getAdminApprovedParticipants(
           divisionId: church.division.id,
           divisionName: church.division.name,
           batchNumber: batch.batchNumber,
+          batchId: batch.id,
           registrationId: batch.registration.id,
           isDiscounted: batch.isDiscounted,
+          registrationFee: batch.cookFeePerPerson,
         }));
         participants.push(...cooks);
       }
@@ -1540,6 +1555,8 @@ export type AdminEditParticipantInput = {
   nickname: string;
   age: number;
   gender: Gender;
+  registrationFee: number;
+  batchId: string;
 };
 
 export async function adminUpdateParticipant(
@@ -1548,7 +1565,7 @@ export async function adminUpdateParticipant(
   await requireRole("ADMIN");
 
   try {
-    const { id, type, fullName, nickname, age, gender } = input;
+    const { id, type, fullName, nickname, age, gender, registrationFee, batchId } = input;
 
     if (type === "cook") {
       const cook = await prisma.cook.findUnique({
@@ -1572,6 +1589,30 @@ export async function adminUpdateParticipant(
       await prisma.delegate.update({
         where: { id },
         data: { fullName, nickname: nickname || null, age, gender },
+      });
+    }
+
+    // Update batch fee and recalculate totalFee
+    const batch = await prisma.registrationBatch.findUnique({
+      where: { id: batchId },
+      include: {
+        _count: { select: { delegates: true, cooks: true } },
+      },
+    });
+
+    if (batch) {
+      const isCook = type === "cook";
+      const newDelegateFee = isCook ? batch.delegateFeePerPerson : registrationFee;
+      const newCookFee = isCook ? registrationFee : batch.cookFeePerPerson;
+      const newTotalFee = (batch._count.delegates * newDelegateFee) + (batch._count.cooks * newCookFee);
+
+      await prisma.registrationBatch.update({
+        where: { id: batchId },
+        data: {
+          delegateFeePerPerson: newDelegateFee,
+          cookFeePerPerson: newCookFee,
+          totalFee: newTotalFee,
+        },
       });
     }
 

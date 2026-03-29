@@ -36,6 +36,7 @@ type EditParticipantFormValues = {
   nickname: string;
   age: number;
   gender: "MALE" | "FEMALE";
+  registrationFee: number;
 };
 
 interface EditParticipantDialogProps {
@@ -57,6 +58,7 @@ export function EditParticipantDialog({
       nickname: "",
       age: 0,
       gender: "MALE",
+      registrationFee: 0,
     },
   });
 
@@ -67,6 +69,7 @@ export function EditParticipantDialog({
         nickname: participant.nickname ?? "",
         age: participant.age,
         gender: participant.gender,
+        registrationFee: participant.registrationFee,
       });
     }
   }, [participant, open, form]);
@@ -82,6 +85,8 @@ export function EditParticipantDialog({
         nickname: data.nickname.trim(),
         age: Number(data.age),
         gender: data.gender,
+        registrationFee: Number(data.registrationFee),
+        batchId: participant.batchId,
       });
       onOpenChange(false);
     } catch {
@@ -197,6 +202,30 @@ export function EditParticipantDialog({
                 )}
               />
             </div>
+
+            <FormField
+              control={form.control}
+              name="registrationFee"
+              rules={{
+                required: "Registration fee is required",
+                min: { value: 0, message: "Fee cannot be negative" },
+              }}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Registration Fee (PHP)</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      min={0}
+                      placeholder="Enter registration fee"
+                      {...field}
+                      onChange={(e) => field.onChange(Number(e.target.value))}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
             <DialogFooter className="gap-2 sm:gap-0">
               <Button

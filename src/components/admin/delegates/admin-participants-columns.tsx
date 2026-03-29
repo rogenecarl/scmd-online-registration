@@ -130,6 +130,18 @@ export function getAdminParticipantsColumns(
       },
     },
     {
+      key: "registrationFee",
+      header: "Fee",
+      className: "text-center",
+      mobilePriority: "secondary",
+      mobileLabel: "Fee",
+      render: (participant) => (
+        <span className="text-muted-foreground">
+          PHP {participant.registrationFee.toLocaleString()}
+        </span>
+      ),
+    },
+    {
       key: "eventName",
       header: "Event",
       mobilePriority: "hidden",
