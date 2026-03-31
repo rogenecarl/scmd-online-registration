@@ -48,11 +48,11 @@ function AddBatchContent() {
 
   // Check if adding is allowed
   const now = new Date();
-  const eventStarted = event.startDate ? now >= new Date(event.startDate) : false;
+  const eventEnded = event.endDate ? now >= new Date(event.endDate) : false;
   const eventStatus = String(event.status);
   const eventNotOpen = !["UPCOMING", "ONGOING"].includes(eventStatus);
 
-  if (eventStarted || eventNotOpen) {
+  if (eventEnded || eventNotOpen) {
     return (
       <div className="space-y-4 md:space-y-6">
         <PageHeader title="Add More Delegates">
@@ -65,8 +65,8 @@ function AddBatchContent() {
           icon={AlertCircle}
           title="Registration Closed"
           description={
-            eventStarted
-              ? "The event has already started."
+            eventEnded
+              ? "The event has already ended."
               : "This event is no longer open for registration."
           }
         />

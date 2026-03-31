@@ -125,12 +125,12 @@ function RegistrationDetailContent() {
 
   // Check if adding more is allowed (before event starts and event is open)
   const now = new Date();
-  const eventStarted = registration.event.startDate
-    ? now >= new Date(registration.event.startDate)
+  const eventEnded = registration.event.endDate
+    ? now >= new Date(registration.event.endDate)
     : false;
   const eventStatus = String(registration.event.status);
   const eventNotOpen = !["UPCOMING", "ONGOING"].includes(eventStatus);
-  const canAddMore = !eventStarted && !eventNotOpen;
+  const canAddMore = !eventEnded && !eventNotOpen;
 
   return (
     <div className="space-y-4 md:space-y-6">

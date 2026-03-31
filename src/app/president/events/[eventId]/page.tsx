@@ -60,8 +60,8 @@ function EventDetailContent() {
     );
   }
 
-  const eventStarted = isPast(new Date(event.startDate));
-  const canRegister = !event.hasRegistration && !eventStarted;
+  const eventEnded = isPast(new Date(event.endDate));
+  const canRegister = !event.hasRegistration && !eventEnded;
 
   return (
     <div className="space-y-4 md:space-y-6">
@@ -170,16 +170,16 @@ function EventDetailContent() {
                 <div className="flex items-start gap-3 sm:col-span-2">
                   <div className={cn(
                     "flex h-8 w-8 md:h-10 md:w-10 shrink-0 items-center justify-center rounded-lg",
-                    eventStarted ? "bg-red-500/10 text-red-600" : "bg-emerald-500/10 text-emerald-600"
+                    eventEnded ? "bg-red-500/10 text-red-600" : "bg-emerald-500/10 text-emerald-600"
                   )}>
                     <Clock className="h-4 w-4 md:h-5 md:w-5" />
                   </div>
                   <div className="min-w-0">
                     <p className="text-xs md:text-sm font-medium text-muted-foreground">Registration Status</p>
-                    <p className={cn("text-sm md:text-base font-semibold", eventStarted && "text-red-600")}>
-                      {eventStarted ? "Registration Closed" : "Registration Open"}
+                    <p className={cn("text-sm md:text-base font-semibold", eventEnded && "text-red-600")}>
+                      {eventEnded ? "Registration Closed" : "Registration Open"}
                     </p>
-                    {eventStarted && (
+                    {eventEnded && (
                       <Badge variant="destructive" className="mt-1">Closed</Badge>
                     )}
                   </div>

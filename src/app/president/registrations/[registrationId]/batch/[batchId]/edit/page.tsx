@@ -72,11 +72,11 @@ function EditBatchContent() {
 
   // Check if editing is allowed (before event starts and event is open)
   const now = new Date();
-  const eventStarted = event.startDate ? now >= new Date(event.startDate) : false;
+  const eventEnded = event.endDate ? now >= new Date(event.endDate) : false;
   const eventStatus = String(event.status);
   const eventNotOpen = !["UPCOMING", "ONGOING"].includes(eventStatus);
 
-  if (eventStarted || eventNotOpen) {
+  if (eventEnded || eventNotOpen) {
     return (
       <div className="space-y-4 md:space-y-6">
         <PageHeader title="Edit Batch">
@@ -89,7 +89,7 @@ function EditBatchContent() {
           icon={AlertCircle}
           title="Editing Closed"
           description={
-            eventStarted
+            eventEnded
               ? "The event has already started. Editing is no longer allowed."
               : "This event is no longer open for registration changes."
           }

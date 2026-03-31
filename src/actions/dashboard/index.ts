@@ -143,11 +143,10 @@ export async function getPresidentDashboard(): Promise<
       pendingBatchesCount,
       approvedBatchesCount,
     ] = await Promise.all([
-      // Active events (UPCOMING or ONGOING with registration still open)
+      // Active events (UPCOMING or ONGOING)
       prisma.event.count({
         where: {
           status: { in: ["UPCOMING", "ONGOING"] },
-          startDate: { gt: now },
         },
       }),
       // Total delegates across all batches for this church
@@ -225,7 +224,6 @@ export async function getPresidentDashboard(): Promise<
     const upcomingEvents = await prisma.event.findMany({
       where: {
         status: { in: ["UPCOMING", "ONGOING"] },
-        startDate: { gt: now },
       },
       select: {
         id: true,

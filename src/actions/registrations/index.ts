@@ -219,7 +219,6 @@ export async function getAvailableEvents(): Promise<ActionResponse<AvailableEven
     const events = await prisma.event.findMany({
       where: {
         status: { in: ["UPCOMING", "ONGOING"] },
-        startDate: { gt: now },
       },
       include: {
         registrations: {
@@ -343,8 +342,8 @@ export async function getEventForRegistration(
       return { success: false, error: "This event is not open for registration" };
     }
 
-    if (now >= new Date(event.startDate)) {
-      return { success: false, error: "Event has already started" };
+    if (now >= new Date(event.endDate)) {
+      return { success: false, error: "Event has already ended" };
     }
 
     const registration = event.registrations[0] || null;
@@ -739,8 +738,8 @@ export async function createRegistration(
       return { success: false, error: "This event is not open for registration" };
     }
 
-    if (now >= new Date(event.startDate)) {
-      return { success: false, error: "Event has already started" };
+    if (now >= new Date(event.endDate)) {
+      return { success: false, error: "Event has already ended" };
     }
 
     // Check if registration already exists
@@ -870,8 +869,8 @@ export async function createBatch(
       return { success: false, error: "This event is not open for registration" };
     }
 
-    if (now >= new Date(registration.event.startDate)) {
-      return { success: false, error: "Event has already started" };
+    if (now >= new Date(registration.event.endDate)) {
+      return { success: false, error: "Event has already ended" };
     }
 
     // Calculate fees with sibling discount
@@ -985,8 +984,8 @@ export async function updateBatch(
       return { success: false, error: "This event is not open for registration" };
     }
 
-    if (now >= new Date(batch.registration.event.startDate)) {
-      return { success: false, error: "Event has already started" };
+    if (now >= new Date(batch.registration.event.endDate)) {
+      return { success: false, error: "Event has already ended" };
     }
 
     // Recalculate fees with sibling discount
